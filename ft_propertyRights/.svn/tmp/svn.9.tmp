@@ -1,0 +1,270 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Project;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.ProjectService;
+import com.app.cq.service.StatisticsService;
+import com.google.common.collect.Maps;
+import com.sqds.utils.Collections3;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+@Controller
+@RequestMapping("/cq/statistics/*")
+public class StatisticsController {
+
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private StatisticsService statisticsService;
+    @Autowired
+    private ProjectService projectService;
+
+    /**
+     * 家庭柱状图
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("familyMsg")
+    public void familyMsg(HttpServletRequest request, ModelMap modelMap) {
+        List<String> projectNameList = this.projectService.getProjectCount();
+        String groupArray = "";
+        if (Collections3.isNotEmpty(projectNameList)) {
+            for (String projectName : projectNameList) {
+                groupArray = groupArray + "'" + projectName + "',";
+            }
+        }
+        modelMap.addAttribute("groupArray", groupArray);
+    }
+
+    /**
+     * 获取各项目家庭数据
+     */
+    @RequestMapping("getFamilyMsg")
+    @ResponseBody
+    public List getFamilyMsg() {
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        String familyCountStr = "";
+        String projectNameStr = "";
+
+        List<String> projectNameList = this.projectService.getProjectCount();
+        Map<String, String> projectCount = this.statisticsService.getFamilyCount();
+        if (!Collections3.isEmpty(projectCount) && !Collections3.isEmpty(projectNameList)) {
+            for (String projectName1 : projectNameList) {
+                for (String projectName : projectCount.keySet()) {
+                    if (projectName.equals(projectName1)) {
+                        String familyCount = projectCount.get(projectName) == null ? String.valueOf(0) : projectCount.get(projectName);
+                        familyCountStr += familyCount + ",";
+                        projectNameStr += projectName + ",";
+                    }
+                }
+            }
+        }
+        String[] splitCount = familyCountStr.split(",");
+        String[] splitName = projectNameStr.split(",");
+        String splitCount1 = "";
+        for (int i = 0; i < splitCount.length; i++) {
+            if (i == splitCount.length - 1) {
+                splitCount1 += splitCount[i];
+            } else {
+                splitCount1 += splitCount[i] + ",";
+            }
+        }
+
+        map1.put("name", splitName[0]);
+        map1.put("data", "[" + splitCount1 + "]");
+        list.add(map1);
+        return list;
+    }
+
+
+    /**
+     * 合同柱状图
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("contractCount")
+    public void contractCount(HttpServletRequest request, ModelMap modelMap) {
+        this.familyMsg(request, modelMap);
+    }
+
+    /**
+     * 获取各项目合同数据
+     */
+    @RequestMapping("getContractMsg")
+    @ResponseBody
+    public List getContractMsg() {
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        String familyCountStr = "";
+        String projectNameStr = "";
+
+        List<String> projectNameList = this.projectService.getProjectCount();
+        Map<String, String> contractCount = this.statisticsService.getContractCount();
+        if (!Collections3.isEmpty(contractCount) && !Collections3.isEmpty(projectNameList)) {
+            for (String projectName1 : projectNameList) {
+                for (String projectName : contractCount.keySet()) {
+                    if (projectName.equals(projectName1)) {
+                        String familyCount = contractCount.get(projectName) == null ? String.valueOf(0) : contractCount.get(projectName);
+                        familyCountStr += familyCount + ",";
+                        projectNameStr += projectName + ",";
+                    }
+                }
+            }
+        }
+        String[] splitCount = familyCountStr.split(",");
+        String[] splitName = projectNameStr.split(",");
+        String splitCount1 = "";
+        for (int i = 0; i < splitCount.length; i++) {
+            if (i == splitCount.length - 1) {
+                splitCount1 += splitCount[i];
+            } else {
+                splitCount1 += splitCount[i] + ",";
+            }
+        }
+
+        map1.put("name", splitName[0]);
+        map1.put("data", "[" + splitCount1 + "]");
+        list.add(map1);
+        return list;
+    }
+
+
+    /**
+     * 房源信息柱状图
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("houseMsg")
+    public void houseMsg(HttpServletRequest request, ModelMap modelMap) {
+        List<DataDict> houseTypeList = this.dataDictService.getDataDictList("居室");
+        String groupArray = "";
+        if (Collections3.isNotEmpty(houseTypeList)) {
+            for (DataDict dataDict : houseTypeList) {
+                groupArray = groupArray + "'" + dataDict.getAttributeName() + "',";
+            }
+        }
+        modelMap.addAttribute("groupArray", groupArray);
+    }
+
+
+    /**
+     * 获取房源信息数据
+     */
+    @RequestMapping("getHouseMsg")
+    @ResponseBody
+    public List getHouseMsg() {
+        List list = new ArrayList();
+
+        String houseNumCount = "";
+        List<Project> projectList = this.projectService.listAll();
+        List<DataDict> houseTypeList = this.dataDictService.getDataDictList("居室");
+        Map<String, Map> houseCount = this.statisticsService.getHouseCount();
+        if (!Collections3.isEmpty(houseCount) && !Collections3.isEmpty(projectList) && !Collections3.isEmpty(houseTypeList)) {
+            for (Project project : projectList){
+                Map map = Maps.newHashMap();
+                for (DataDict dataDict : houseTypeList) {
+                    for (String houseTypeName : houseCount.keySet()) {
+                        if (dataDict.getAttributeName().equals(houseTypeName)) {
+                            for (Object projectId:houseCount.get(houseTypeName).keySet()) {
+                                if ((Integer)projectId == project.getId()){
+                                    BigInteger houseNum = (BigInteger) houseCount.get(houseTypeName).get(project.getId());
+                                    houseNumCount += houseNum.toString() + ",";
+                                }
+                            }
+                        }
+                    }
+                }
+                map.put("name","" + project.getProjectName());
+                map.put("data","[" + houseNumCount.substring(0,houseNumCount.length() - 1) + "]");
+                map.put("stack", "'male" + project.getId() + "'");
+                list.add(map);
+                houseNumCount = "";
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 影像文件信息
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("videoCount")
+    public void videoCount(HttpServletRequest request, ModelMap modelMap) {
+        this.familyMsg(request,modelMap);
+    }
+
+    /**
+     * 获取各项目影像文件数据
+     */
+    @RequestMapping("getVideoMsg")
+    @ResponseBody
+    public List getVideoMsg() {
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        String familyCountStr = "";
+        String projectNameStr = "";
+
+        List<String> projectNameList = this.projectService.getProjectCount();
+        Map<String, String> projectCount = this.statisticsService.getVideoCount();
+        if (!Collections3.isEmpty(projectCount) && !Collections3.isEmpty(projectNameList)) {
+            for (String projectName1 : projectNameList) {
+                for (String projectName : projectCount.keySet()) {
+                    if (projectName.equals(projectName1)) {
+                        String familyCount = projectCount.get(projectName) == null ? String.valueOf(0) : projectCount.get(projectName);
+                        familyCountStr += familyCount + ",";
+                        projectNameStr += projectName + ",";
+                    }
+                }
+            }
+        }
+        String[] splitCount = familyCountStr.split(",");
+        String[] splitName = projectNameStr.split(",");
+        String splitCount1 = "";
+        for (int i = 0; i < splitCount.length; i++) {
+            if (i == splitCount.length - 1) {
+                splitCount1 += splitCount[i];
+            } else {
+                splitCount1 += splitCount[i] + ",";
+            }
+        }
+
+        map1.put("name", splitName[0]);
+        map1.put("data", "[" + splitCount1 + "]");
+        list.add(map1);
+        return list;
+    }
+
+
+    /**
+     * 核验情况统计
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("checkStatistics")
+    public void checkStatistics(HttpServletRequest request, ModelMap modelMap) {
+        Map<String, Map<String, List<String>>> checkStatistics = this.statisticsService.getCheckStatistics();
+        List<String> projectNameList = this.projectService.getProjectCount();
+        modelMap.addAttribute("projectNameList",projectNameList);
+        modelMap.addAttribute("totalMap",checkStatistics);
+    }
+}

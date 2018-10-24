@@ -1,0 +1,187 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <%@include file="/static/common/common.jsp" %>
+</head>
+<body>
+<div class="title">
+    <h3 style="color: #00AEAE;/*text-align: center*/">学历信息复核</h3>
+</div>
+<div class="container-fluid" style="margin-top: 30px;">
+    <div style="float: left;width: 25%;height: 50%;margin-top: 15px">
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="fieldName">项目名称：</td>
+                <td class="fieldValue">
+                    ${family.projectName}
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">申请编号：</td>
+                <td class="fieldValue">
+                    ${family.familyCode}
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">姓名：</td>
+                <td class="fieldValue">${family.name}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">证件号码：</td>
+                <td class="fieldValue">${family.idCard}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">婚姻状况：</td>
+                <td class="fieldValue">
+                    <tags:dataDict dataDict="婚姻状况" value="${family.marryStatus}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">年龄：</td>
+                <td class="fieldValue">${family.age}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">户籍所在地：</td>
+                <td class="fieldValue">${family.address}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">工作地（社保缴纳地）：</td>
+                <td class="fieldValue">
+                    <tags:dataDict dataDict="工作地（社保缴纳地）" value="${family.workUnit}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">京籍是否是本区：</td>
+                <td class="fieldValue"><tags:dataDict dataDict="是否" value="${family.thisArea}" /></td>
+            </tr>
+            <tr>
+                <td class="fieldName">申请日期：</td>
+                <td class="fieldValue">
+                    <fmt:formatDate value="${family.applyDate}" pattern="yyyy-MM-dd" />
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">学历层次：</td>
+                <td class="fieldValue"><tags:dataDict value="${family.education}" dataDict="学历层次"/></td>
+            </tr>
+            <tr>
+                <td class="fieldName">学历证书在线验证码：</td>
+                <td class="fieldValue">${family.educationCode}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">学习形式：</td>
+                <td class="fieldValue">${family.learning}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="content data_table_height_auto" id="pdf" style="float: right;width: 65%;">
+        <iframe id="printPDF" name="printPDF" src="${filePath}" style="width: 90%;border: 1px;height: 74%"></iframe>
+    </div><br/>
+    <div class="text-center footer">
+        <button type="button" class="btn btn-primary" <c:if test="${family.educationStatus eq 2}"> disabled </c:if>
+                onclick="javascript:check('2')"><i
+                class="fa fa-check"></i> 审核通过
+        </button>
+        <button type="button" class="btn btn-primary" <c:if test="${family.educationStatus eq 3}"> disabled </c:if>
+                onclick="backData(${family.id})"><i
+                class="fa fa-check"></i> 审核不通过
+        </button>
+        <button type="button" class="btn btn-primary" onclick="javascript:history.back();"><i
+                class="fa fa-backward"></i> 返回
+        </button>
+    </div>
+</div>
+
+<%--退回原因--%>
+<div class="modal fade" id="myModalCs" tabindex="-1" role="dialog" aria-labelledby="myModalLabe1"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="myFormCs" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel2">请填写不通过原因</h4>
+                </div>
+                <div class="modal-body" id="modalBodyCs">
+                    <input type="hidden" name="familyId" value="${family.id}">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="active text-right" style="width: 20%;">不通过原因：</td>
+                            <td>
+                                <textarea id="reasonCs" class="form-control" style="width: 100%;height: 200px;"
+                                          name="problem"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button id="subButtonCs" type="button" class="btn btn-primary" onclick="submitData()">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    function check(type) {
+        if (confirm("确定更改审核状态吗？")) {
+            $.get("updateEducationStatus", {
+                type: type,
+                familyId:${family.id},
+                _date: new Date().getTime()
+            }, function (data) {
+                window.location.href = "reviewList?<tags:searchParams/>";
+            })
+        }
+    }
+    function wrapData(v) {
+        var reg = /^[-\+]?\d+(\.\d+)?$/;
+        v = !reg.test(v) ? 0 : v;
+        return v;
+    }
+    function eduQuery(){
+        alert("复核成功");
+        location.href="reviewList.jsp";
+    }
+
+    function backData(familyId) {
+//        $.get(url, {familyId: familyId, _date: new Date().getTime()}, function (data) {
+//            $("#modalBodyCs").html(data);
+//        });
+        $("#myModalCs").modal();
+        $("input[name='familyId']").val(familyId);
+    }
+    function submitData() {
+        var reasonCs = $("#reasonCs").val();
+        if (reasonCs != "") {
+            $.ajax({
+                url: "backData",
+                method: "post",
+                data: $("#myFormCs").serialize(),
+                success: function (data) {
+                    if (data.code == "0000") {
+                        window.location.href = "reviewList?<tags:searchParams/>";
+                    } else {
+                        alert(data.message);
+                    }
+                }
+
+            });
+        } else {
+            alert("必须填写不通过原因！");
+        }
+    }
+</script>
+</html>

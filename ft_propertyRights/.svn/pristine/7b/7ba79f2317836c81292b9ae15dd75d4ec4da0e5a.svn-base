@@ -1,0 +1,484 @@
+
+#header {
+    background-color: #fff;
+    display: block;
+    height: 62px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    border-bottom: 1px solid #e4e5e7;
+}
+
+#header {
+    height: auto !important;
+}
+
+
+
+#header .navbar-default {
+    background: #0d88cc !important;
+    color: #fff;
+    height: auto !important;
+    border: none !important;
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+}
+
+
+.navbar {
+    /*position: relative;*/
+    min-height: 50px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+}
+
+#logo {
+    /*width: 185px !important;*/
+    padding: 12px 12px 18px 18px;
+    float: left;
+    height: 56px;
+    margin-right: 10px;
+}
+
+#logo.light-version {
+    background-color: #0d88cc;
+    border: none !important;
+    text-align: center;
+}
+
+
+.header-link {
+    padding: 19px 20px 17px 20px;
+    background: #0d88cc;
+    color: #ffffff;
+    border: none;
+
+    font-size: 18px;
+    float: left;
+    cursor: pointer;
+}
+
+.nav-active {
+    color: #0d88cc;
+    font-weight: bolder;
+    background-color: #ffffff;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+}
+
+.header-linkInfo {
+    padding: 19px 10px 17px 10px;
+    background: #0d88cc;
+    color: #eeeeee;
+    border: none;
+
+    font-size: 16px;
+    float: right;
+    cursor: pointer;
+}
+
+
+#wrapper {
+    width: 100%;
+    padding: 5px 0 0 0 ;
+    /*background: #f1f3f6;*/
+    /*transition: all 0.4s ease 0s;*/
+    /*position: relative;*/
+    min-height: 100%;
+}
+
+body {
+    font-family: PingFang SC,Helvetica Neue,Hiragino Sans GB,Microsoft Yahei,WenQuanYi Micro Hei,sans-serif;
+}
+
+.navbar {
+    margin-bottom: 0;
+    min-height: 60px;
+}
+
+.navbar-brand {
+    margin-top: 4px;
+    font-family: Lato, sans-serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: #aaa;
+}
+
+.navbar-brand img {
+    height: 30px;
+    display: inline;
+    margin-top: -5px;
+    margin-right: 3px;
+}
+
+.navbar-toggle {
+    margin-top: 22px;
+}
+
+.navbar-jumbotron .navbar {
+    min-height: 83px;
+}
+
+.navbar-jumbotron .navbar-brand {
+    margin-top: 14px;
+}
+
+.navbar-jumbotron .main-nav {
+    margin-top: 17px;
+}
+
+.main-nav {
+    margin-top: 4px;
+    letter-spacing: 1px;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.jumbotron {
+    background-color: #e6522c;
+    background-image: url("/assets/jumbotron-background-cb04e0f2d6d.png");
+    text-align: center;
+    font-family: Lato, sans-serif;
+    text-shadow: rgba(0, 0, 0, 0.2) 0px 2px 0px;
+    margin-bottom: 0px;
+    padding: 40px 0;
+}
+
+.jumbotron h1 {
+    margin-top: 30px;
+    font-size: 52px;
+    font-weight: 300;
+    color: #fff;
+}
+
+.jumbotron .subtitle {
+    font-weight: 300;
+    font-size: 32px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 20px;
+}
+
+.jumbotron a.btn {
+    border: none;
+    background-color: rgba(0,0,0,0.15);
+    color: #fff;
+    padding: 20px 25px 20px 25px;
+    margin: 15px 10px 0 10px;
+    text-transform: uppercase;
+}
+
+.jumbotron a.btn:hover {
+    background-color: rgba(0,0,0,0.25);
+    color: #fff;
+}
+
+.newsbar {
+    background-color: #eee;
+    text-align: center;
+    font-family: Lato, sans-serif;
+    padding: 25px 0;
+    font-size: 24px;
+    font-weight: 300;
+    margin-bottom: 50px;
+}
+
+.feature-item {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    cursor: pointer;
+}
+
+.feature-item:hover {
+    background-color: #fad9d1;
+    border-radius: 3px;
+}
+
+.feature-item a {
+    text-decoration: none;
+    color: none;
+}
+
+.feature-item h2 {
+    color: #333;
+    font-weight: 300;
+    font-size: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
+}
+
+.feature-item .fa {
+    margin-right: 5px;
+    color: #e6522c;
+}
+
+.feature-item p {
+    font-size: 16px;
+    line-height: 1.8em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    color: #111;
+}
+
+.top-hr {
+    margin-top: 30px;
+}
+
+.quote {
+    margin: 25px 0 25px 0;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    text-align: center;
+}
+
+.quote-text {
+    width: 60%;
+    margin: auto;
+    font-size: 22px;
+    font-style: italic;
+    color: #be3511;
+}
+
+.quote-source {
+    font-size: 16px;
+    margin-top: 15px;
+    margin-left: 50px;
+}
+
+.open-source {
+    margin: 25px 0 20px 0;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    text-align: center;
+}
+
+.open-source h1 {
+    margin-top: 0;
+    font-weight: 300;
+}
+
+.open-source p {
+    width: 50%;
+    margin: auto;
+    font-size: 20px;
+}
+
+.open-source .github-stars {
+    margin-top: 20px;
+    width: 160px;
+    height: 30px;
+}
+
+.trusted-by {
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    padding-bottom: 10px;
+}
+
+.logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 64px;
+}
+
+footer {
+    font-size: 12px;
+    color: #333;
+}
+
+/* Downloads related styles. */
+.download h2 {
+    margin-top: 2em;
+}
+
+.download-selection {
+    clear: both;
+}
+
+.download .alert {
+    clear: both;
+}
+
+.download-selection .btn-group {
+    padding-right: 1em;
+}
+
+.downloads .checksum {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Docs-related styles. */
+.side-nav-col {
+    z-index: 100;
+}
+
+.side-nav {
+    margin-top: 20px;
+    padding: 5px 20px 20px 7px;
+}
+
+.side-nav .fa {
+    width: 20px;
+    color: #555;
+}
+
+.side-nav a {
+    color: #333;
+}
+
+.side-nav > li {
+    width: 100%;
+}
+
+.side-nav .nav-header {
+    display: block;
+    /*margin: 20px auto 15px auto;*/
+    font-size: 16px;
+    height: 26px;
+    line-height: 26px;
+}
+
+.side-nav .nav-header a, .side-nav .nav-header {
+    color: #337ab7;
+    /*text-transform: uppercase;*/
+    text-decoration: none;
+}
+
+.side-nav ul.active li.active {
+    border-left: 3px solid #e6522c;
+    margin-left: -2px;
+    font-weight: bold;
+}
+
+.side-nav li ul li {
+    border-left: 1px solid #e9eff2;
+}
+
+.doc-content {
+    font-size: 14px;
+    border-left: solid #cccccc 1px;
+
+}
+
+.doc-content > h1 {
+    color: #337ab7;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin: 40px 0 10px 0;
+}
+
+.doc-content > h1 a {
+    color: #337ab7;
+}
+.doc-contentInfo {
+    font-size: 14px;
+    border-left: solid #cccccc 0px;
+
+}
+
+.doc-contentInfo > h1 {
+    color: #337ab7;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin: 40px 0 10px 0;
+}
+
+.doc-contentInfo > h1 a {
+    color: #337ab7;
+}
+
+/* TABLES */
+.table-bordered {
+    border: 1px solid #cccccc;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+    background-color: #ebebeb;
+    border-bottom-width: 1px;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+    border: 1px solid #cccccc;
+}
+.table > thead > tr > th {
+    border-bottom: 1px solid #cccccc;
+    vertical-align: bottom;
+}
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    border-top: 1px solid #cccccc;
+    line-height: 1.42857;
+    padding: 14px 4px 14px 4px;
+    vertical-align: top;
+}
+
+.table .fieldName{
+    width:15%;
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+    background-color: #ebebeb;
+}
+
+.table .fieldValue{
+    width:35%;
+}
+
+.notice{
+    text-align: center;
+}
+.noticeInfo{
+    font-size: 10px;
+    margin-right: 20px
+}
+
+.notice-content{
+    font-size: 14px;
+    border-left: solid #cccccc 1px;
+    min-height: 500px;
+    text-align: justify;
+}
+.people-logo-intable {
+    width: 28px;
+    height: 28px;
+    margin-left: 2px;
+    margin-bottom: 4px
+}
+
+
+.title-panel{
+    font-weight: bold;
+    border-left: solid 3px #e6522c;
+    margin: 10px 0px;
+    padding-left: 5px;
+}
+
+.subNav{
+    background: #ffffff;
+    font-weight: bolder;
+    width: 254px;
+    text-align: right;
+}
+
+.subNav:hover{
+    background: #0d88cc;
+}
+
+.nav-tabs{
+    font-weight: bold;
+}

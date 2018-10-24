@@ -1,0 +1,175 @@
+package com.app.cq.web.cq;
+
+
+import com.app.cq.model.Family;
+import com.app.cq.service.FamilyService;
+import com.app.cq.utils.ReadExcel;
+import com.sqds.exception.SqdsException;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+@Controller
+@RequestMapping("/cq/compareInfo/*")
+public class CompareInfoController {
+    @Autowired
+    private FamilyService familyService;
+
+
+    @RequestMapping("innerExcelIndex")
+    public void innerExcelIndex(){
+    }
+    @RequestMapping("innerExcelIndex2")
+    public void innerExcelIndex2(){
+    }
+
+
+    /**
+     * 家庭信息上传
+     * @param request
+     * @param map
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("comparison")
+    public String comparison(HttpServletRequest request , ModelMap map) throws Exception {
+        //上传文件
+        byte[] filePath = Servlets.uploadFile(request,"file");
+        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+        List list = ReadExcel.read(excelInputStream,0,true);
+        List<Family> familyList=familyService.listAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < list.size() ; i++) {
+            if (i > 0){
+                List row = (List) list.get(i);
+                if (!"".equals((String)row.get(0))) {
+                    Family family = new Family();
+
+                    String familyCode = (String)row.get(1);
+                    String name = (String) row.get(2);
+                    String applyDate1 = (String) row.get(3);
+                    if (applyDate1.contains("/")){
+                        applyDate1 = applyDate1.replace("/","-");
+                    }
+                    Date applyDate = sdf.parse(applyDate1);
+                    String cardType = (String) row.get(4);
+                    String idCard = (String) row.get(5);
+                    String contactName = (String) row.get(6);
+                    String phone = (String) row.get(7);
+                    String currentAddres = (String) row.get(8);
+                    String postCode = (String) row.get(9);
+                    String memo = (String) row.get(10);
+
+                    for (Family family1:familyList) {
+                        if (family1.getFamilyCode().equals(familyCode)){
+                            throw new SqdsException("申请编号重复,请核验");
+                        }
+                    }
+
+                    family.setFamilyCode(familyCode);
+                    family.setName(name);
+                    family.setApplyDate(applyDate);
+                    if ("身份证".equals(cardType.trim())){
+                        family.setCardType(1);
+                    }
+                    if ("警官证".equals(cardType.trim())){
+                        family.setCardType(2);
+                    }
+                    family.setIdCard(idCard);
+                    family.setContactName(contactName);
+                    family.setPhone(phone);
+                    family.setCurrentAddres(currentAddres);
+                    family.setPostCode(postCode);
+                    family.setMemo(memo);
+                    familyService.save(family);
+                }
+            }
+        }
+        return "redirect:/cq/compareInfo/innerExcelIndex";
+    }
+
+
+    /**
+     * 摇号上传
+     * @param request
+     * @param map
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("comparison1")
+    public String comparison1(HttpServletRequest request , ModelMap map) throws Exception {
+        //上传文件
+        byte[] filePath = Servlets.uploadFile(request,"file");
+        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+        List list = ReadExcel.read(excelInputStream,0,true);
+        List<Family> familyList=familyService.listAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < list.size() ; i++) {
+            if (i > 0){
+                List row = (List) list.get(i);
+                if (!"".equals((String)row.get(0))) {
+                    Family family = new Family();
+
+                    String familyCode = (String)row.get(1);
+                    String name = (String) row.get(2);
+                    String applyDate1 = (String) row.get(3);
+                    if (applyDate1.contains("/")){
+                        applyDate1 = applyDate1.replace("/","-");
+                    }
+                    Date applyDate = sdf.parse(applyDate1);
+                    String cardType = (String) row.get(4);
+                    String idCard = (String) row.get(5);
+                    String contactName = (String) row.get(6);
+                    String phone = (String) row.get(7);
+                    String currentAddres = (String) row.get(8);
+                    String postCode = (String) row.get(9);
+                    String memo = (String) row.get(10);
+                    String shakingBatch = (String) row.get(11);
+                    String shakingCode = (String) row.get(12);
+                    String shakingGroup = (String) row.get(13);
+                    String shakingResult = (String) row.get(14);
+
+                    for (Family family1:familyList) {
+                        if (family1.getFamilyCode().equals(familyCode)){
+                            throw new SqdsException("申请编号重复,请核验");
+                        }
+                    }
+
+                    family.setFamilyCode(familyCode);
+                    family.setName(name);
+                    family.setApplyDate(applyDate);
+                    if ("身份证".equals(cardType.trim())){
+                        family.setCardType(1);
+                    }
+                    if ("警官证".equals(cardType.trim())){
+                        family.setCardType(2);
+                    }
+                    family.setIdCard(idCard);
+                    family.setContactName(contactName);
+                    family.setPhone(phone);
+                    family.setCurrentAddres(currentAddres);
+                    family.setPostCode(postCode);
+                    family.setMemo(memo);
+                    family.setShakingBatch(shakingBatch);
+                    family.setShakingCode(shakingCode);
+                    family.setShakingGroup(shakingGroup);
+                    family.setShakingResult(shakingResult);
+                    familyService.save(family);
+                }
+            }
+        }
+        return "redirect:/cq/compareInfo/innerExcelIndex2";
+    }
+}

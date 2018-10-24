@@ -1,0 +1,514 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta content=always name=referrer>
+    <meta name="renderer" content="webkit">
+    <title>综合统计查询</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/style/css.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/plugin/powerful-album-view/dist/viewer.css">
+
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+    <script src="../static/plugin/powerful-album-view/dist/viewer.js"></script>
+    <script src="../static/plugin/powerful-album-view/assets/js/main.js"></script>
+    <style>
+        table {
+            borde: 1px;
+        }
+    </style>
+</head>
+<body style="overflow: hidden;">
+<%--<jsp:include page="navigation.jsp"/>--%>
+<%--<jsp:include page="sideNav.jsp"/>--%>
+<div class="content">
+    <div class=" doc-content" style="position: relative;padding-left: 20px;padding-right: 20px;">
+        <h1 id="installing" class="page-header"><i class="fa fa-book"></i> <b>综合统计查询</b></h1>
+        <form class="form-inline">
+            <table class="table table-bordered">
+                <tr>
+                    <td rowspan="13"
+                        style="vertical-align: middle;text-align:center; width: 10%; font-weight: bold">
+                        申请家庭信息
+                    </td>
+                    <td class="fieldName" style="width: 10%">项目名称：</td>
+                    <td>
+                        <input type="hidden" name="search_signState_stringArray" value=""/>
+                        <a href="javascript:void(0);" name="search_grouping_string" isMore="true" value=""
+                           class="btn btn-primary btn-sm">全部</a>
+                        <a href="javascript:void(0);" name="search_grouping_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">槐新雅筑</a>
+                        <a href="javascript:void(0);" name="search_grouping_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">动感花园</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">申请编号：</td>
+                    <td><input class="form-control" type="text" size="25"></td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">申请人：</td>
+                    <td><input class="form-control" type="text" size="25"></td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">身份证号：</td>
+                    <td><input class="form-control" type="text" size="25"></td>
+
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">户籍：</td>
+                    <td><input class="form-control" type="text" size="25"></td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">通讯地址：</td>
+                    <td><input class="form-control" type="text" size="25"></td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">联系电话：</td>
+                    <td><input class="form-control" type="text" size="25"></td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">分配状态：</td>
+                    <td>
+                        <input type="hidden" name="search_signState_stringArray" value=""/>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true" value=""
+                           class="btn btn-primary btn-sm">全部</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">已分配</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">未分配</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">审核状态：</td>
+                    <td>
+                        <input type="hidden" name="search_signState_stringArray" value=""/>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true" value=""
+                           class="btn btn-primary btn-sm">全部</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">已审核</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">未审核</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">复核状态：</td>
+                    <td>
+                        <input type="hidden" name="search_signState_stringArray" value=""/>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true" value=""
+                           class="btn btn-primary btn-sm">全部</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">已复核</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">未复核</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">京籍是否本区：</td>
+                    <td>
+                        <input type="hidden" name="search_signState_stringArray" value=""/>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true" value=""
+                           class="btn btn-primary btn-sm">全部</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">是</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">否</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">是否优先组：</td>
+                    <td>
+                        <input type="hidden" name="search_signState_stringArray" value=""/>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true" value=""
+                           class="btn btn-primary btn-sm">全部</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">是</a>
+                        <a href="javascript:void(0);" name="search_signState_string" isMore="true"
+                           value="${village.value}"
+                           class="btn btn-link btn-sm one">否</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">面积：</td>
+                    <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                              type="text" size="10">&nbsp;平米
+                    </td>
+                </tr>
+            </table>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" style="width: 1500px;height: 1500px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span
+                                    aria-hidden="true">&times;</span><span
+                                    class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel">筛选导出信息</h4>
+                        </div>
+                        <style>
+                            .checkbox label input {
+                                width: 20px;
+                                height: 20px;
+                            }
+
+                            .checkbox label {
+                                font-size: 18px
+                            }
+                        </style>
+                        <div class="modal-body" id="modalBody">
+                            <table>
+                                <tr>
+                                    <td width="50%">
+                                        <h2>一、申请家庭信息
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox"
+                                                       style="width: 20px;height: 20px;font-size: 22px"
+                                                       class="checkAll${status.count} form-control"/>全选/反选
+                                            </label>
+                                        </h2>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>项目名称
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>申请编号
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>申请人
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>身份证号
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>通讯地址
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>联系电话
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>年龄
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>前配偶姓名
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>前配偶姓名证件类型
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>前配偶姓名证件号码
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>离婚日期
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>摇号批次
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>摇号编号
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>摇号组别
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>摇号结果
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>审核状态
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>复核状态
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>京籍本区
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>京籍非本区
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>优先组
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>非优先组
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td width="50%">
+                                        <h2>二、合同信息
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox"
+                                                       style="width: 20px;height: 20px;font-size: 22px"
+                                                       class="checkAll${status.count} form-control"/>全选/反选
+                                            </label>
+                                        </h2>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>合同编号
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>经办人
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>合同签订时间
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>合同状态
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>销售价格
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>产权比例
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>产权人姓名
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>产权人身份证号
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>数据状态
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>锁定人员
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>锁定日期
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>备注
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">&nbsp;
+                                            <label class="checkbox-inline">
+                                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                                       name="${child.key}"
+                                                       class="checkItem${status.count} form-control"/>操作备注
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="modal-footer" style="text-align: right;">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button class="btn btn-primary btn-sm" type="button"
+                                        onclick=""><i
+                                        class="fa fa-save"></i>&nbsp;导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <button class="btn btn-primary" type="button" onclick="location.href='familyList.jsp';"><i
+                        class="fa fa-search"></i>&nbsp;查询
+                </button>
+                <button class="btn btn-primary" type="button" onclick="chooseData();"><i class="fa fa-search"></i>&nbsp;筛选导出
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    function chooseData() {
+        $("#myModal").modal();
+    }
+
+    function searchForm() {
+        $("#myForm").submit();
+    }
+    function setPropertyValues(name) {
+        var inputValues = "";
+        $("a[name='" + name + "']").each(function () {
+            var has = $(this).hasClass("btn-primary");
+            if (has) {
+                var isMore = $(this).attr("isMore");
+                if (isMore == "true") {
+                    if (inputValues != "") {
+                        inputValues = inputValues + ",";
+                    }
+                    inputValues = inputValues + $(this).attr("value");
+                } else {
+                    inputValues = $(this).attr("value");
+                }
+
+
+            }
+        });
+        $("input:hidden[name='" + name + "Array']").val(inputValues);
+    }
+    $(function () {
+        $("table tr td a").click(function () {
+            var name = $(this).attr("name");
+            var v = $(this).attr("value");
+            var has = $(this).hasClass("btn-primary");
+            if (v == "") {//全部
+                if (!has) {
+                    $(this).addClass("btn-primary");
+                }
+                $("a[name='" + name + "'][value!='']").removeClass("btn-primary");
+            } else {
+                $("a[name='" + name + "'][value='']").removeClass("btn-primary");
+                if (has) {
+                    $(this).removeClass("btn-primary");
+                } else {
+                    $(this).addClass("btn-primary");
+                }
+                var isMore = $(this).attr("isMore");
+                if (isMore == "false") {
+                    $("a[name='" + name + "'][value!='" + v + "']").removeClass("btn-primary");
+                }
+            }
+            setPropertyValues(name);
+        });
+    });
+</script>
+</html>

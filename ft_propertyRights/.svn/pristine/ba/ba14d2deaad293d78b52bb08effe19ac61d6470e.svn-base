@@ -1,0 +1,193 @@
+package com.app.cq.service;
+
+import com.app.cq.model.House;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+/**
+ * Created by jmdf on 2018/8/9.
+ */
+@Service
+public class HouseService extends HibernateDao<House>{
+    /**
+     * 房源列表
+     * 根据项目，楼栋查所有房源
+     */
+    public PageInfo<House> houseList(PageInfo<House> pageInfo){
+        List<Object> dataList = new Vector<>();
+        StringBuffer hql = new StringBuffer("from House h inner join fetch h.project hp where 1=1 ");
+
+        //项目限制
+        Integer projectId = (Integer) pageInfo.getParameter("projectId");
+        if (projectId != null) {
+            hql.append(" and hp.id=?");
+            dataList.add(projectId);
+        }
+
+        //楼号限制
+        /*String buildNum = (String)pageInfo.getParameter("buildNum");
+        if (buildNum != null) {
+            hql.append(" and h.buildNum=?");
+            dataList.add(buildNum);
+        }*/
+        hql.append(" order by h.buildNum ");
+
+        return list(pageInfo, hql.toString(), dataList.toArray());
+    }
+
+    /**
+     * 按照项目，楼号信息
+     */
+    public List getHouseNumInfo(int projectId) {
+        //String sql = "select id,buildNum from House where projectId='" + projectId +"' order by buildNum";
+        String sql = "select distinct buildNum from House where projectId='" + projectId +"' order by buildNum";
+        List<List> list = super.getSession().createSQLQuery(sql).list();
+        return list;
+    }
+
+    /**
+     * 取得所有单元
+     *
+     * @param projectUuid
+     * @param buildNum
+     */
+    public List<String> distinctUnit(Integer projectUuid, String buildNum) {
+        String hql = "select distinct h.unitNum from House h where projectId=:projectUuid and h.buildNum=:buildNum order by h.unitNum desc";
+        Query query = this.getSession().createSQLQuery(hql).setParameter("projectUuid", projectUuid).setString("buildNum", buildNum);
+        return query.list();
+    }
+
+    /**
+     * 取得单元最大的房号
+     *
+     * @param projectUuid
+     * @param buildNum
+     * @return
+     */
+    public Map<String, String> getMaxRoomByUnit(Integer projectUuid, String buildNum) {
+        String hql = "select h.unitNum as unitNum, max(substring(h.houseNum,3,2)) as maxRoom from House h where h.project.id = ? and h.buildNum = ? group by h.unitNum";
+        Query query = this.getSession().createQuery(hql).setParameter(0, projectUuid).setString(1, buildNum).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map> list = query.list();
+        Map<String, String> resultMap = Maps.newHashMap();
+        if (Collections3.isNotEmpty(list)) {
+            for (Map map : list) {
+                String unitNum = map.get("unitNum").toString();
+                String maxRoom = map.get("maxRoom").toString();
+                resultMap.put(unitNum, maxRoom);
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取最大房间号(楼层)
+     *
+     * @param projectUuid
+     * @param buildingNum
+     * @return
+     */
+    public int getMaxFloor(Integer projectUuid, String buildingNum) {
+        String hql = "select max(substring(h.houseNum,1,2)) from House h where h.project.id = ? and h.buildNum = ?";
+        List list = this.getSession().createQuery(hql).setParameter(0, projectUuid).setString(1, buildingNum).list();
+        int maxFh = 0;
+        if (Collections3.isNotEmpty(list) && list.size() > 0) {
+            Object o = list.get(0);
+            if (o != null) {
+                maxFh = Integer.valueOf(String.valueOf(o));
+            }
+        }
+        return maxFh;
+    }
+
+    /**
+     * 根据项目、楼号查询该楼下的所有房源数据
+     *
+     * @param projectUuid
+     * @param buildingNum
+     * @return
+     */
+    public List<House> listHouse(Integer projectUuid, String buildingNum) {
+        return list("from House h inner join fetch h.project p where p.id = ? and h.buildNum= ? order by h.buildNum,h.unitNum,h.houseNum", projectUuid, buildingNum);
+    }
+
+    /**
+     * 单元、房号、居室
+     *
+     * @param projectUuid
+     * @param buildNum
+     * @return
+     */
+    public Map<String, Map<String, String>> getHouseTypeByProjectIdAndBuildNum(Integer projectUuid, String buildNum) {
+
+        String sql = "select distinct unitNum,SUBSTRING(houseNum,3,2) as num,houseType from House where projectId =:projectUuid and buildNum = :buildNum group by buildNum,unitNum,houseNum,houseType ";
+        Query query = this.getSession().createSQLQuery(sql).setInteger("projectUuid", projectUuid).setString("buildNum", buildNum);
+        List<Map> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+        Map<String, Map<String, String>> map = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(list)) {
+            Map<String, String> childItemMap = null;
+            for (Map m : list) {
+                String unitNum = m.get("unitNum").toString();
+                String num = m.get("num").toString();
+                String houseType = m.get("houseType").toString();
+                childItemMap = map.get(unitNum);
+                childItemMap = Collections3.isEmpty(childItemMap) ? Maps.<String, String>newLinkedHashMap() : childItemMap;
+
+                childItemMap.put(num, houseType);
+                map.put(unitNum, childItemMap);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 查项目下所有楼号
+     */
+    public List<Integer> buildingNumList(Integer projectId) {
+        String sql="SELECT DISTINCT buildNum FROM house WHERE projectId="+projectId;
+        return getSession().createSQLQuery(sql).list();
+    }
+
+    /**
+     * 项目楼号单元房号查房子
+     */
+    public House getUniHouse(Integer projectId,String buildNum,String unitNum,String houseNum) {
+        String hql="from House h where h.project.id=? and h.buildNum=? and h.unitNum=? and h.houseNum=?";
+        House house = (House)getSession().createQuery(hql).setParameter(0, projectId).setParameter(1, buildNum).setParameter(2, unitNum).setParameter(3, houseNum).uniqueResult();
+        return house;
+    }
+
+    /**
+     * 转租房源列表
+     */
+    public PageInfo<House> getZuHouseList(PageInfo<House> pageInfo){
+        List<Object> dataList = new Vector<>();
+        StringBuffer hql = new StringBuffer("from House h where 1=1 ");
+        hql.append(" and h.status=?");
+        dataList.add(3);
+        hql.append(" order by h.buildNum ");
+
+        return list(pageInfo, hql.toString(), dataList.toArray());
+    }
+
+    /**
+     * 转售房源列表
+     */
+    public PageInfo<House> getSaleHouseList(PageInfo<House> pageInfo){
+        List<Object> dataList = new Vector<>();
+        StringBuffer hql = new StringBuffer("from House h where 1=1 ");
+        hql.append(" and h.status=?");
+        dataList.add(4);
+        hql.append(" order by h.buildNum ");
+
+        return list(pageInfo, hql.toString(), dataList.toArray());
+    }
+
+}

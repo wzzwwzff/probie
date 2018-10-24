@@ -1,0 +1,152 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>房源情况统计</title>
+    <%@include file="/static/common/common.jsp" %>
+    <style>
+        html, body {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="title">
+    <h4>房源情况统计</h4>
+</div>
+<div class="content">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center" style="vertical-align: middle" rowspan="3">项目名称</th>
+            <th class="text-center" style="vertical-align: middle" rowspan="3">楼号</th>
+            <th class="text-center" colspan="18">居室类型</th>
+        </tr>
+        <tr>
+            <th class="text-center" colspan="6">一居</th>
+            <th class="text-center" colspan="6">二居</th>
+            <th class="text-center" colspan="6">三居</th>
+        </tr>
+        <tr>
+            <th class="text-center">总套数/套</th>
+            <th class="text-center">总面积/㎡</th>
+            <th class="text-center">可选/套</th>
+            <th class="text-center">可选面积/㎡</th>
+            <th class="text-center">已选/套</th>
+            <th class="text-center">已选面积/㎡</th>
+            <th class="text-center">总套数/套</th>
+            <th class="text-center">总面积/㎡</th>
+            <th class="text-center">可选/套</th>
+            <th class="text-center">可选面积/㎡</th>
+            <th class="text-center">已选/套</th>
+            <th class="text-center">已选面积/㎡</th>
+            <th class="text-center">总套数/套</th>
+            <th class="text-center">总面积/㎡</th>
+            <th class="text-center">可选/套</th>
+            <th class="text-center">可选面积/㎡</th>
+            <th class="text-center">已选/套</th>
+            <th class="text-center">已选面积/㎡</th>
+        </tr>
+        </thead>
+        <tbody>
+    <c:forEach items="${totalMap}" var="totalMap1" varStatus="status">
+        <tr>
+            <td class="text-center" rowspan="${fn:length(totalMap1.value) + 1}" style="vertical-align: middle;">${totalMap1.key}</td>
+        </tr>
+        <c:set var="firstKey" value="${totalMap1.key}" />
+        <c:forEach items="${totalMap1.value}" var="countMap" varStatus="status1">
+        <tr>
+            <td class="text-center">${countMap.key}号楼</td>
+            <td class="text-center">${countMap.value[0]}</td>
+            <td class="text-center">${countMap.value[1]}</td>
+            <td class="text-center">${countMap.value[2]}</td>
+            <td class="text-center">${countMap.value[3]}</td>
+            <td class="text-center">${countMap.value[4]}</td>
+            <td class="text-center">${countMap.value[5]}</td>
+            <td class="text-center">${countMap.value[6]}</td>
+            <td class="text-center">${countMap.value[7]}</td>
+            <td class="text-center">${countMap.value[8]}</td>
+            <td class="text-center">${countMap.value[9]}</td>
+            <td class="text-center">${countMap.value[10]}</td>
+            <td class="text-center">${countMap.value[11]}</td>
+            <td class="text-center">${countMap.value[12]}</td>
+            <td class="text-center">${countMap.value[13]}</td>
+            <td class="text-center">${countMap.value[14]}</td>
+            <td class="text-center">${countMap.value[15]}</td>
+            <td class="text-center">${countMap.value[16]}</td>
+            <td class="text-center">${countMap.value[17]}</td>
+        </tr>
+        <c:set var="len" value="${len + 1}" />
+        </c:forEach>
+
+        <tr style="color: green;">
+            <td class="text-center" colspan="2">合计</td>
+            <td class="text-center">${total[firstKey][0]}</td>
+            <td class="text-center">${total[firstKey][1]}</td>
+            <td class="text-center">${total[firstKey][2]}</td>
+            <td class="text-center">${total[firstKey][3]}</td>
+            <td class="text-center">${total[firstKey][4]}</td>
+            <td class="text-center">${total[firstKey][5]}</td>
+            <td class="text-center">${total[firstKey][6]}</td>
+            <td class="text-center">${total[firstKey][7]}</td>
+            <td class="text-center">${total[firstKey][8]}</td>
+            <td class="text-center">${total[firstKey][9]}</td>
+            <td class="text-center">${total[firstKey][10]}</td>
+            <td class="text-center">${total[firstKey][11]}</td>
+            <td class="text-center">${total[firstKey][12]}</td>
+            <td class="text-center">${total[firstKey][13]}</td>
+            <td class="text-center">${total[firstKey][14]}</td>
+            <td class="text-center">${total[firstKey][15]}</td>
+            <td class="text-center">${total[firstKey][16]}</td>
+            <td class="text-center">${total[firstKey][17]}</td>
+        </tr>
+    </c:forEach>
+        <tr style="color: green;">
+            <td class="text-center" colspan="2">总计</td>
+            <td class="text-center">${zongTotal[0]}</td>
+            <td class="text-center">${zongTotal[1]}</td>
+            <td class="text-center">${zongTotal[2]}</td>
+            <td class="text-center">${zongTotal[3]}</td>
+            <td class="text-center">${zongTotal[4]}</td>
+            <td class="text-center">${zongTotal[5]}</td>
+            <td class="text-center">${zongTotal[6]}</td>
+            <td class="text-center">${zongTotal[7]}</td>
+            <td class="text-center">${zongTotal[8]}</td>
+            <td class="text-center">${zongTotal[9]}</td>
+            <td class="text-center">${zongTotal[10]}</td>
+            <td class="text-center">${zongTotal[11]}</td>
+            <td class="text-center">${zongTotal[12]}</td>
+            <td class="text-center">${zongTotal[13]}</td>
+            <td class="text-center">${zongTotal[14]}</td>
+            <td class="text-center">${zongTotal[15]}</td>
+            <td class="text-center">${zongTotal[16]}</td>
+            <td class="text-center">${zongTotal[17]}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="footer">
+    <button class="btn btn-primary btn-sm" id="excelBtn"><i class="fa fa-file-excel-o"></i>&nbsp;导出Excel
+    </button>
+</div>
+<script>
+    $(function () {
+        $("#excelBtn").click(function () {
+            $(".table").table2excel({
+                exclude: ".noExl",
+                name: "房源情况统计",
+                filename: "房源情况统计",
+                exclude_img: true,
+                exclude_links: true,
+                exclude_inputs: true
+            });
+        });
+    });
+</script>
+</body>
+</html>

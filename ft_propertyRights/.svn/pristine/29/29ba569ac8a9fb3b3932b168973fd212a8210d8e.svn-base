@@ -1,0 +1,55 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta content=always name=referrer>
+    <meta name="renderer" content="webkit">
+    <link href="../static/style/login.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row" style="margin-top: 120px;font-size: 40px;color: #00AEAE;text-align: center">
+        学历信息复核
+    </div>
+    <div class="row" style="margin-top: 80px;text-align: center;background-color: #F0F0F0;margin-left: 100px;margin-right: 100px">
+        <div style="text-align: center;width: 600px;margin-left: 450px;">
+            <form class="form-horizontal jumbotron" role="form" name="submitForm" id="submitForm" style="margin-top: 20px;background: #F0F0F0;">
+                <div class="form-group" style="width: 400px;padding-left: 10px;">
+                    &nbsp;&nbsp;姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：<input class="active" type="text" name="username" id="username" style="width: 280px">
+                </div>
+                <div class="form-group" style="width: 580px">
+                    &nbsp;证件号码：<input class="active" type="text" name="idCard" id="idCard" style="width: 280px">
+                    <span style="color: #ADADAD">身份证号(或军人证件号码等)</span>
+                    <%--<input class="form-control" type="password" name="password" id="password" placeholder="请输入证件号码">--%>
+                </div>
+                <div class="form-group" style="width: 400px;padding-left: 25px;">
+                    验&nbsp;&nbsp;证&nbsp;&nbsp;码：<input class="active" type="text" name="code" id="code" style="width: 200px">
+                    <a>&nbsp;<img id="licenceImg" src="../static/login/image/8869.jpg" alt='验证码,看不清楚? 请点击刷新验证码' style="width: 80px;height: 42px;"></a>
+                </div>
+                <div class="form-group" style="margin-bottom: 0px;">
+                    <button type="button" class="btn btn-lg" style="height: 40px;width: 100px; letter-spacing: 5px;margin-bottom: 5px;margin-right: 130px;background-color: #00CACA" onclick="eduQuery();">
+                        <span style="color: white">查询</span>
+                    </button>
+                    <span id="logining_info" style="font-size: 20px;"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function eduQuery(){
+        alert("复核成功");
+        location.href="reviewList.jsp";
+    }
+</script>
+</html>

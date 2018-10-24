@@ -1,0 +1,40 @@
+#-------------------------------------------------------------------------------
+# Hibernate Settings
+
+hibernate.show_sql=false
+hibernate.hbm2ddl.auto=update
+hibernate.format_sql=false
+hibernate.use_sql_comments=true
+
+#mysql database setting
+jdbc.url=jdbc:mysql://localhost:3306/ft_propertyrights?useUnicode=true&characterEncoding=utf-8
+#jdbc.url=jdbc:mysql://192.168.1.223:3306/frame_mysql?useUnicode=true&characterEncoding=utf-8
+jdbc.databaseName=ft_propertyrights
+jdbc.username=root
+jdbc.password=okok
+hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+
+#sqlserver database setting
+#jdbc.url=jdbc:jtds:sqlserver://127.0.0.1:1433/tz_kywg
+#jdbc.databaseName=tz_kywg
+#jdbc.username=sa
+#jdbc.password=ok
+#hibernate.dialect=org.hibernate.dialect.SQLServerDialect
+
+#connection pool settings
+#jdbc.pool.maxIdle=60
+jdbc.maxActive=20
+
+#other setting
+
+login.code.show=true
+login.key.used=false
+permission.validation=false
+
+access.log=true
+access.log.store=file
+
+#pdf打印预览中背景图片路径
+url=http://localhost:8080/static/image/bg.jpg
+#生成二维码展示路径前缀
+bitUrl=http://localhost:8080

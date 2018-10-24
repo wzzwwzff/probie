@@ -1,0 +1,62 @@
+package com.app.cq.service;
+
+import com.app.cq.model.Contract;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Vector;
+
+/**
+ * Created by jmdf on 2018/8/9.
+ */
+@Service
+public class ContractService extends HibernateDao<Contract>{
+
+    /**
+     * 合同列表
+     */
+    public PageInfo<Contract> contractList(PageInfo<Contract> pageInfo) {
+        String hql = " from Contract c inner join fetch c.family f left join fetch c.house h order by f.projectName,f.familyCode,c.id";
+        return this.list(pageInfo, hql);
+    }
+
+    /**
+     * 取得合同信息关联家庭房源
+     */
+    public List<Contract> listByFamilyId(Integer familyId){
+        String hql = "from Contract c inner join fetch c.family f left join fetch c.house h where c.family.id=? order by c.id";
+        return list(hql, familyId);
+    }
+
+    /**
+     * 根据家庭id查询合同信息
+     */
+    public Contract getContractByfamilyid(Integer familyId) {
+        String hql = "from Contract where familyId=?";
+        return findUnique(hql, familyId);
+    }
+
+    /**
+     * 根据房源id查询合同信息
+     */
+    public Contract getContractByhouseid(Integer houseId) {
+        String hql = "from Contract where houseId=?";
+        return findUnique(hql, houseId);
+    }
+
+    /**
+     * 合同备案列表
+     */
+    public PageInfo<Contract> baList(PageInfo<Contract> pageInfo) {
+        List<Object> dataList = new Vector<>();
+        StringBuffer hql = new StringBuffer("from Contract c where 1=1 ");
+        hql.append(" and c.status>?");
+        dataList.add(1);
+        hql.append(" order by c.contractCode ");
+
+        return list(pageInfo, hql.toString(), dataList.toArray());
+    }
+
+}

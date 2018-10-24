@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="frame_mysql_aop:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="frame_mysql_aop-1.0.war">
+      <element id="artifact" artifact-name="frame_mysql_aop:war exploded" />
+    </root>
+  </artifact>
+</component>

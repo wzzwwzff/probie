@@ -1,0 +1,94 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Project;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.ProjectService;
+import com.app.cq.service.StatisticsService;
+import com.google.common.collect.Maps;
+import com.sqds.utils.Collections3;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/cq/statistics/*")
+public class StatisticsController {
+
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private StatisticsService statisticsService;
+    @Autowired
+    private ProjectService projectService;
+
+    /**
+     * 家庭柱状图
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("familyMsg")
+    public void familyMsg(HttpServletRequest request, ModelMap modelMap){
+        List<String> projectNameList = this.projectService.getProjectCount();
+        String groupArray = "";
+        if (Collections3.isNotEmpty(projectNameList)){
+            for (String projectName : projectNameList) {
+                groupArray = groupArray + "'" + projectName + "',";
+            }
+        }
+        modelMap.addAttribute("groupArray",groupArray);
+    }
+
+    /**
+     * 获取各组别签约数据
+     */
+    @RequestMapping("getFamilyMsg")
+    @ResponseBody
+    public List getFamilyMsg(){
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        Map map2 = Maps.newHashMap();
+        Map map3 = Maps.newHashMap();
+        String familyCountStr = "";
+        String projectNameStr = "";
+
+        List<String> projectNameList = this.projectService.getProjectCount();
+        Map<String, String> projectCount = this.statisticsService.getProjectCount();
+        if (!Collections3.isEmpty(projectCount) && !Collections3.isEmpty(projectNameList)){
+            for (String projectName1 : projectNameList){
+                for (String projectName  : projectCount.keySet()) {
+                    if (projectName.equals(projectName1)){
+                        String familyCount = projectCount.get(projectName) == null ? String.valueOf(0) : projectCount.get(projectName);
+                        familyCountStr += familyCount + ",";
+                        projectNameStr += projectName + ",";
+                    }
+                }
+            }
+        }
+        String[] splitCount = familyCountStr.split(",");
+        String[] splitName = projectNameStr.split(",");
+        String splitCount1 = "";
+        for (int i = 0; i <splitCount.length ; i++) {
+            if (i == splitCount.length - 1){
+                splitCount1 += splitCount[i];
+            }else {
+                splitCount1 += splitCount[i] + ",";
+            }
+        }
+
+        map1.put("name", splitName[0]);
+        map1.put("data", "[" + splitCount1 + "]");
+        list.add(map1);
+        return list;
+    }
+}

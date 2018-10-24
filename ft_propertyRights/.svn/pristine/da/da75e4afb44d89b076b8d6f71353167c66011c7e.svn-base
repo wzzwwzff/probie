@@ -1,0 +1,89 @@
+package com.app.cq.web.cq;
+
+import com.app.cq.exception.Response;
+import com.app.cq.model.Family;
+import com.app.cq.service.FamilyService;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.StringUtils;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+
+/**
+ * 审核、复核控制层
+ * Created by jmdf on 2018/8/13.
+ */
+@Controller
+@RequestMapping("/cq/audit/*")
+public class AuditController {
+    @Resource
+    private FamilyService familyService;
+
+    /**
+     * 审核列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("auditList")
+    public void auditList(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = familyService.listForHand(pageInfo);
+        modelMap.put("pageInfo",pageInfo);
+    }
+
+    /**
+     * 批量导入审核状态
+     */
+    @RequestMapping("batchStatus")
+    public void batchStatus(){
+
+    }
+
+    /**
+     * 批量导入审核状态
+     *
+     * @return
+     */
+    @RequestMapping("batchStatusSave")
+    @ResponseBody
+    public Response batchStatusSave(HttpServletRequest request) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        String content = ParamUtils.getString(request, "content", "");
+        Map<String,Family> familyMap = familyService.getFamilyMap();
+        int i = 0;
+        if (StringUtils.isNotEmpty(content)) {
+            String[] rowStrs = content.split("\r\n");
+            for (String row : rowStrs) {
+                String[] colStrs = row.split("\t");
+                String familyCode = colStrs[0].trim().toUpperCase();
+                Integer houseStatus = Integer.valueOf(colStrs[1].trim());
+                Integer socialStatus = Integer.valueOf(colStrs[2].trim());
+                Integer marriageStatus = Integer.valueOf(colStrs[3].trim());
+                Integer ageStatus = Integer.valueOf(colStrs[4].trim());
+
+                Family family = familyMap.get(familyCode);
+                if (family != null) {
+                    family.setHouseStatus(houseStatus);
+                    family.setSocialStatus(socialStatus);
+                    family.setMarriageStatus(marriageStatus);
+                    family.setAgeStatus(ageStatus);
+                    familyService.save(family);
+                    i++;
+                }
+            }
+        }
+        Response response = new Response();
+        response.setCode("1111");
+        response.setMessage("本次共更新了"+ i + "条数据！");
+
+        return response;
+    }
+}

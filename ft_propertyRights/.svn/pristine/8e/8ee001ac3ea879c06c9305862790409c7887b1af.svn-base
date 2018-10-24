@@ -1,0 +1,40 @@
+package com.app.cq.utils;
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+
+/**
+ * excel导出方法
+ * Created by wcf-pc on 2016/12/26.
+ */
+public class RedirectAttributesExcel {
+
+    /**
+     * 举例
+     * String[] theads = new String[]{"姓名", "身份证号", "房屋坐落"};
+     * <p/>
+     * List dataList = Lists.newArrayList();
+     * dataList.add(Arrays.asList(new String[]{"张三", "1101119807215771", "北京市长安街1号院"}));
+     * dataList.add(Arrays.asList(new String[]{"李四", "1101119807215772", "北京市长安街2号院"}));
+     * dataList.add(Arrays.asList(new String[]{"王五", "1101119807215773", "北京市长安街3号院"}));
+     * <p/>
+     * RedirectAttributesExcel.addFlashAttribute(redirectAttributes, "家庭信息台账", "excel通用导出测试", theads, dataList);
+     * <p/>
+     * <p/>
+     * 保存导出excel数据
+     *
+     * @param redirectAttributes
+     * @param fileName           文件名称
+     * @param title              标题
+     * @param theads             列标题
+     * @param dataList           显示内容
+     */
+    public static void addFlashAttribute(RedirectAttributes redirectAttributes, String fileName, String title, String[] theads, List dataList, String familyPerson) {
+        redirectAttributes.addFlashAttribute("fileName", fileName);
+        redirectAttributes.addFlashAttribute("title", title);
+        redirectAttributes.addFlashAttribute("theads", theads);
+        redirectAttributes.addFlashAttribute("dataList", dataList);
+        redirectAttributes.addFlashAttribute("familyPerson", familyPerson);
+    }
+}

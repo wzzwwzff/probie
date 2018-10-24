@@ -1,0 +1,90 @@
+package com.app.cq.map;
+
+import com.google.common.collect.Maps;
+
+import java.util.Map;
+
+/**
+ * 综合导出excel时使用的map
+ * Created by lsh on 2017/7/27.
+ */
+public class ContractExcelMap {
+
+    /**
+     * 申请家庭信息Map
+     *
+     * @return
+     */
+    public static Map familyMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("f_projectName", "项目名称");
+        map.put("f_familyCode", "申请编号");
+        map.put("f_name", "申请人");
+        map.put("f_idCard", "身份证号");
+        map.put("f_currentAddres", "通讯地址");
+        map.put("f_phone", "联系电话");
+        map.put("f_age", "年龄");
+        map.put("f_exSpouseName", "前配偶姓名");
+        map.put("f_exCardType", "前配偶证件类型");
+        map.put("f_exIdCard", "前配偶证件号码");
+        map.put("f_divorceDate", "离婚日期");
+        map.put("f_shakingBatch", "摇号批次");
+        map.put("f_shakingCode", "摇号编号");
+        map.put("f_shakingGroup", "摇号组别");
+        map.put("f_shakingResult", "摇号结果");
+        map.put("f_houseStatus", "住房审核状态");
+        map.put("f_seniorityStatus", "资格复核状态");
+        map.put("f_thisArea", "京籍是否是本区");
+//        map.put("f_nothisArea", "京籍非本区");
+        map.put("f_firstOrNot", "是否优先组");
+//        map.put("f_nofirstOrNot", "非优先组");
+        return map;
+    }
+
+    /**
+     * 合同信息
+     *
+     * @return
+     */
+    public static Map baseInfoMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("contractCode", "合同编号");
+        map.put("person", "经办人");
+        map.put("signDate", "合同签订时间");
+        map.put("status", "合同状态");
+        map.put("price", "销售价格");
+        map.put("propertyRight", "产权比例");
+        map.put("name", "产权人姓名");
+        map.put("idCard", "产权人身份证号");
+        map.put("status", "数据状态");
+        map.put("operatePerson", "锁定人员");
+        map.put("operateDate", "锁定日期");
+        map.put("memo", "备注");
+        map.put("operateMemo", "操作备注");
+        return map;
+    }
+
+    /**
+     * 标题Map
+     *
+     * @return
+     */
+    public static Map<String, Map> jspShowMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("申请家庭信息", familyMap());
+        map.put("合同信息", baseInfoMap());
+        return map;
+    }
+
+    /**
+     * 总Map
+     *
+     * @return
+     */
+    public static Map excelMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.putAll(familyMap());
+        map.putAll(baseInfoMap());
+        return map;
+    }
+}

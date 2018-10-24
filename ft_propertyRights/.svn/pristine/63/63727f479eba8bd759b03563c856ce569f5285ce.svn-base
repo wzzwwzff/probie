@@ -1,0 +1,178 @@
+package com.app.cq.model;
+
+import javax.persistence.*;
+import java.util.Date;
+
+/**
+ * 学历复核信息表
+ * Created by jmdf on 2018/8/10.
+ */
+@Table(name = "Education")
+@Entity
+public class Education {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;                   //主键
+    private Date updateDate;            //更新日期
+    private String name;                //姓名
+    private Integer sex;                //性别   1:男 2：女
+    private Date birthDate;             //出生日期
+    private Date entranceDate;          //入学日期
+    private Date graducationDate;        //毕（结）业日期
+    private String educationCategory;    //学历类别
+    private String level;                   //层次
+    private String schoolName;              //学校名称
+    private String length;                 //学制
+    private String major;                   //专业
+    private String learning;                //学习形式
+    private String certificateCode;        //证书编号
+    private String graducation;             //毕（结）业
+    private String headmaster;              //校（院）长姓名
+    private String educationCode;            //在线验证
+    @Column(columnDefinition = "TEXT")
+    private String matters;                 //注意事项
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public Date getEntranceDate() {
+        return entranceDate;
+    }
+
+    public void setEntranceDate(Date entranceDate) {
+        this.entranceDate = entranceDate;
+    }
+
+    public Date getGraducationDate() {
+        return graducationDate;
+    }
+
+    public void setGraducationDate(Date graducationDate) {
+        this.graducationDate = graducationDate;
+    }
+
+    public String getEducationCategory() {
+        return educationCategory;
+    }
+
+    public void setEducationCategory(String educationCategory) {
+        this.educationCategory = educationCategory;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getLearning() {
+        return learning;
+    }
+
+    public void setLearning(String learning) {
+        this.learning = learning;
+    }
+
+    public String getCertificateCode() {
+        return certificateCode;
+    }
+
+    public void setCertificateCode(String certificateCode) {
+        this.certificateCode = certificateCode;
+    }
+
+    public String getGraducation() {
+        return graducation;
+    }
+
+    public void setGraducation(String graducation) {
+        this.graducation = graducation;
+    }
+
+    public String getHeadmaster() {
+        return headmaster;
+    }
+
+    public void setHeadmaster(String headmaster) {
+        this.headmaster = headmaster;
+    }
+
+    public String getEducationCode() {
+        return educationCode;
+    }
+
+    public void setEducationCode(String educationCode) {
+        this.educationCode = educationCode;
+    }
+
+    public String getMatters() {
+        return matters;
+    }
+
+    public void setMatters(String matters) {
+        this.matters = matters;
+    }
+}

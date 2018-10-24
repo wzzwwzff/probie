@@ -1,0 +1,36 @@
+package com.app.cq.service;
+
+import com.app.cq.model.Contract;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by jmdf on 2018/8/9.
+ */
+@Service
+public class ContractService extends HibernateDao<Contract>{
+
+    /**
+     * 合同列表
+     *
+     * @param pageInfo
+     * @return
+     */
+    public PageInfo<Contract> contractList(PageInfo<Contract> pageInfo) {
+        String hql = " from Contract c inner join fetch c.family f left join fetch c.house h order by f.projectName,f.familyCode,c.id";
+        return this.list(pageInfo, hql);
+    }
+
+    /**
+     * 取得合同信息关联家庭房源
+     * @param familyId
+     * @return
+     */
+    public List<Contract> listByFamilyId(Integer familyId){
+        String hql = "from Contract c inner join fetch c.family f left join fetch c.house h where c.family.id=? order by c.id";
+        return list(hql, familyId);
+    }
+}

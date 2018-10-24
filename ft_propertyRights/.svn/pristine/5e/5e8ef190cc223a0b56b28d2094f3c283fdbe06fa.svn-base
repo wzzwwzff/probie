@@ -1,0 +1,112 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <%@include file="/static/common/common.jsp" %>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row" style="margin-top: 20px;font-size: 35px;color: #00AEAE;text-align: center">
+        学历信息复核
+    </div>
+    <div style="width: 1800px;margin-top: 25px;">
+    <div style="float: left;width: 25%;height: 50%;margin-top: 15px;">
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="fieldName">项目名称：</td>
+                <td class="fieldValue">
+                    ${family.projectName}
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">申请编号：</td>
+                <td class="fieldValue">
+                    ${family.familyCode}
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">姓名：</td>
+                <td class="fieldValue">${family.name}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">证件号码：</td>
+                <td class="fieldValue">${family.idCard}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">婚姻状况：</td>
+                <td class="fieldValue">
+                    <tags:dataDict dataDict="婚姻状况" value="${family.marryStatus}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">年龄：</td>
+                <td class="fieldValue">${family.age}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">户籍所在地：</td>
+                <td class="fieldValue">${family.address}</td>
+            </tr>
+            <tr>
+                <td class="fieldName">工作地（社保缴纳地）：</td>
+                <td class="fieldValue">
+                    <tags:dataDict dataDict="工作地（社保缴纳地）" value="${family.workUnit}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">京籍是否是本区：</td>
+                <td class="fieldValue"><tags:dataDict dataDict="是否" value="${family.thisArea}" /></td>
+            </tr>
+            <tr>
+                <td class="fieldName">申请日期：</td>
+                <td class="fieldValue">
+                    <fmt:formatDate value="${family.applyDate}" pattern="yyyy-MM-dd" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="content" style="float: right;margin-right: 20px;width: 70%;">
+        <div id="pdf" class="data_table_height_auto">
+            <iframe id="printPDF" name="printPDF" src="${filePath}" style="width: 90%;border: 1px;height: 74%"></iframe>
+        </div>
+    </div>
+    </div>
+
+    <div style="float: left;margin-left: 7%;margin-top: 5%;">
+        <button type="button" class="btn btn-primary" <c:if test="${family.educationStatus eq 2}"> disabled </c:if>
+                onclick="javascript:check('2')"><i
+                class="fa fa-check"></i> 审核通过
+        </button>
+        <button type="button" class="btn btn-primary" <c:if test="${family.educationStatus eq 3}"> disabled </c:if>
+                onclick="javascript:check('3')"><i
+                class="fa fa-check"></i> 审核不通过
+        </button>
+    </div>
+
+</div>
+</body>
+<script>
+    function check(type) {
+        if (confirm("确定更改审核状态吗？")) {
+            $.get("updateEducationStatus", {
+                type: type,
+                familyId:${family.id},
+                _date: new Date().getTime()
+            }, function (data) {
+                window.location.href = "reviewList?<tags:searchParams/>";
+            })
+        }
+    }
+    function wrapData(v) {
+        var reg = /^[-\+]?\d+(\.\d+)?$/;
+        v = !reg.test(v) ? 0 : v;
+        return v;
+    }
+    function eduQuery(){
+        alert("复核成功");
+        location.href="reviewList.jsp";
+    }
+</script>
+</html>

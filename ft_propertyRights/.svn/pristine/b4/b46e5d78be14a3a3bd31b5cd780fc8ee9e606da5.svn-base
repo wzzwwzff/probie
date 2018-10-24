@@ -1,0 +1,149 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>房源楼盘展示</title>
+    <%@include file="/static/common/common.jsp" %>
+    <link rel="stylesheet" href="${ctx}/static/plugin/zTree_v3-master/css/zTreeStyle/zTreeStyle.css">
+    <script src="${ctx}/static/plugin/zTree_v3-master/js/jquery.ztree.core.js"></script>
+    <style>
+        html, body {
+            background: #f3f3f4;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="title" style=" background: #f3f3f4;"><h4>房源配组情况汇总</h4></div>
+<div class="content" style=" background: #f3f3f4;">
+    <table style="width: 100%;">
+        <tr>
+            <td style="vertical-align: top;width: 210px;">
+                <div class="clients-list">
+                    <span id="loadFamily"><img src="/static/image/loading.gif"/>信息加载中...</span>
+                    <ul id="treeFamily" class="ztree"></ul>
+                </div>
+            </td>
+            <td style="vertical-align: top;padding-left: 10px;">
+                <div id="message" class="alert alert-warning fade in">
+                    请选择左侧房源
+                </div>
+                <div class="clients-list" id="content_cata">
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<%--<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">房屋状态操作</h4>
+            </div>
+            <div class="modal-body" id="myModalBoday">
+                <form id="inputForm" action="houseStatus" method="post">
+                    <input type="hidden" name="houseId" id="houseId" value=""/>
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                        <tr>
+                            <td class="fieldName">房号</td>
+                            <td class="text-left" id="number"></td>
+                        </tr>
+                        <tr>
+                            <td class="fieldName">操作说明</td>
+                            <td class="fieldValue">
+                                <input size="50%" type="text" name="opMemo" id="opMemoInfo" value="" />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success"  data-dismiss="modal" onclick="toSubmit(1)">标记未选</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="toSubmit(3);">标记伪选</button>
+            </div>
+        </div>
+    </div>
+</div>--%>
+<script type="text/javascript">
+    var setting = {
+        async: {
+            enable: true
+            //            url: "dataJson"
+        },
+        callback: {
+            beforeAsync: beforeAsync,
+            onAsyncSuccess: onAsyncSuccess,
+            onClick: onClick
+        },
+        view: {
+            nameIsHTML: true
+        }
+    };
+
+    var buildNum;
+    var id;
+    var houseId;
+    function onClick() {
+        var nodes = zTree.getSelectedNodes();
+        if (nodes.length > 0) {
+            id = nodes[0].id;//id
+            if (id == null || id == "")
+                return;
+            buildNum = nodes[0].name.substring(0,nodes[0].name.length-2);
+            houseId=nodes[0].houseId;
+            loadBuildNumInfo();
+        }
+    }
+
+    function loadBuildNumInfo() {//加载楼盘图
+        var url = "housePicChooses";
+        $.get(url,{id:id,buildNum:buildNum,houseId:houseId},function(data){
+            $("#content_cata").html(data);
+        });
+    }
+    function beforeAsync() {
+        $("#loadFamily").show();
+    }
+    function onAsyncSuccess() {
+        $("#loadFamily").hide();
+    }
+    var zTree;
+    $(document).ready(function () {
+        initTree();
+    });
+    function initTree(){
+        setting.async.url="dataJson";
+        $.fn.zTree.init($("#treeFamily"), setting);
+        zTree = $.fn.zTree.getZTreeObj("treeFamily");
+    }
+
+    /*function toSubmit(type) {//提交修改后的房屋状态
+        $.ajax({
+            url: "houseStatus?status=" + type,
+            data: $("#inputForm").serialize(),
+            error: function (request) {
+                alert("error");
+            },
+            success: function (data) {
+                loadBuildNumInfo();
+            }
+
+        });
+    }*/
+    function addOrEdit(id, num,opMemo) {//打开弹出层
+        $("#myModal").modal({backdrop: false});
+        $("#number").html(num);
+        $("#houseId").val(id);
+        $("#propertyRight").val(opMemo);
+    }
+</script>
+</body>
+</html>

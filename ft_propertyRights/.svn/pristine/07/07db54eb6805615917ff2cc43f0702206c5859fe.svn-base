@@ -1,0 +1,24 @@
+package com.app.cq.service;
+
+import com.app.cq.model.Project;
+import com.sqds.hibernate.HibernateDao;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by jmdf on 2018/8/9.
+ */
+@Service
+public class ProjectService extends HibernateDao<Project>{
+
+    /**
+     * 获取项目名称
+     */
+    public List<String> getProjectCount() {
+        String sql = "select projectName from project group by projectName order by projectName ";
+        List<String> mapList =  this.getSession().createSQLQuery(sql).list();
+        return mapList;
+    }
+
+}

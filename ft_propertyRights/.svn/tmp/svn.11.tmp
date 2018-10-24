@@ -1,0 +1,168 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Contract;
+import com.app.cq.model.Family;
+import com.app.cq.model.Project;
+import com.app.cq.service.ContractService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.ProjectService;
+import com.app.cq.service.StatisticsService;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/cq/statistics/*")
+public class StatisticsController {
+
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private StatisticsService statisticsService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private ContractService contractService;
+
+    /**
+     * 家庭柱状图
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("familyMsg")
+    public void familyMsg(HttpServletRequest request, ModelMap modelMap){
+        List<String> projectNameList = this.projectService.getProjectCount();
+        String groupArray = "";
+        if (Collections3.isNotEmpty(projectNameList)){
+            for (String projectName : projectNameList) {
+                groupArray = groupArray + "'" + projectName + "',";
+            }
+        }
+        modelMap.addAttribute("groupArray",groupArray);
+    }
+
+
+    /**
+     * 获取各组别签约数据
+     */
+    @RequestMapping("getFamilyMsg")
+    @ResponseBody
+    public List getFamilyMsg(){
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        Map map2 = Maps.newHashMap();
+        Map map3 = Maps.newHashMap();
+        String familyCountStr = "";
+        String projectNameStr = "";
+
+        List<String> projectNameList = this.projectService.getProjectCount();
+        Map<String, String> projectCount = this.statisticsService.getProjectCount();
+        if (!Collections3.isEmpty(projectCount) && !Collections3.isEmpty(projectNameList)){
+            for (String projectName1 : projectNameList){
+                for (String projectName  : projectCount.keySet()) {
+                    if (projectName.equals(projectName1)){
+                        String familyCount = projectCount.get(projectName) == null ? String.valueOf(0) : projectCount.get(projectName);
+                        familyCountStr += familyCount + ",";
+                        projectNameStr += projectName + ",";
+                    }
+                }
+            }
+        }
+        String[] splitCount = familyCountStr.split(",");
+        String[] splitName = projectNameStr.split(",");
+        String splitCount1 = "";
+        for (int i = 0; i <splitCount.length ; i++) {
+            if (i == splitCount.length - 1){
+                splitCount1 += splitCount[i];
+            }else {
+                splitCount1 += splitCount[i] + ",";
+            }
+        }
+
+        map1.put("name", splitName[0]);
+        map1.put("data", "[" + splitCount1 + "]");
+        list.add(map1);
+        return list;
+    }
+
+    /**
+     * 数据综合查询
+     * @param request
+     * @param model
+     */
+    @RequestMapping("dataQuery")
+    public void dailyDataExport(HttpServletRequest request, ModelMap model) {
+        Map<String,String> projectName = this.dataDictService.getMapByParentAttributeNameForName("项目名称");
+        model.addAttribute("projectName",projectName);
+
+        Map<String, String> allotStatus = this.dataDictService.getMapByParentAttributeNameForName("分配状态");
+        model.addAttribute("allotStatus", allotStatus);
+
+        Map<String, String> houseStatusMap = this.dataDictService.getMapByParentAttributeNameForName("住房审核状态");
+        model.addAttribute("houseStatusMap", houseStatusMap);
+
+        Map<String, String> socialStatusMap = this.dataDictService.getMapByParentAttributeNameForName("社保审核状态");
+        model.addAttribute("socialStatusMap", socialStatusMap);
+
+        Map<String, String> marriageStatusMap = this.dataDictService.getMapByParentAttributeNameForName("婚姻审核状态");
+        model.addAttribute("marriageStatusMap", marriageStatusMap);
+
+        Map<String, String> ageStatusMap = this.dataDictService.getMapByParentAttributeNameForName("年龄审核状态");
+        model.addAttribute("ageStatusMap", ageStatusMap);
+
+        Map<String, String> educationStatusMap = this.dataDictService.getMapByParentAttributeNameForName("学历审核状态");
+        model.addAttribute("educationStatusMap", educationStatusMap);
+
+        Map<String, String> seniorityStatusMap = this.dataDictService.getMapByParentAttributeNameForName("资格审核状态");
+        model.addAttribute("seniorityStatusMap", seniorityStatusMap);
+
+        Map<String, String> reviewStatusMap = this.dataDictService.getMapByParentAttributeNameForName("复核状态");
+        model.addAttribute("reviewStatusMap", reviewStatusMap);
+
+        Map<String, String> isBeijingArea = this.dataDictService.getMapByParentAttributeNameForName("京籍是否本区");
+        model.addAttribute("isBeijingArea", isBeijingArea);
+
+        Map<String, String> isFirstGroup = this.dataDictService.getMapByParentAttributeNameForName("是否优先组");
+        model.addAttribute("isFirstGroup", isFirstGroup);
+
+    }
+
+    /**
+     * 综合查询
+     */
+    @RequestMapping("result")
+    public void result(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo = this.statisticsService.getListForCompositeSearch(pageInfo, request);
+        modelMap.addAttribute("postValue", pageInfo.getPostValue());
+        modelMap.addAttribute("pageInfo", pageInfo);
+    }
+
+    /**
+     * 综合查询
+     */
+    @RequestMapping("view")
+    public void view(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Contract contract = this.contractService.getContractByfamilyid(familyId);
+
+        modelMap.addAttribute("contract",contract);
+    }
+}

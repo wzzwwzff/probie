@@ -1,0 +1,138 @@
+package com.app.cq.web.cq;
+
+
+import com.app.cq.model.Family;
+import com.app.cq.service.FamilyService;
+import com.app.cq.utils.UploadUtils;
+import com.sqds.exception.SqdsException;
+import com.sqds.spring.UploadInfo;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+@Controller
+@RequestMapping("/cq/compareInfo/*")
+public class CompareInfoController {
+    @Autowired
+    private FamilyService familyService;
+
+
+    @RequestMapping("innerExcelIndex")
+    public void innerExcelIndex(){
+    }
+
+    @RequestMapping
+    public String comparison(HttpServletRequest request , ModelMap map) throws IOException {
+        //处理文件上传
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM");//定义路径
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS"); //定义文件名
+        Date d = new Date();
+        //上传文件
+        UploadInfo filePath = UploadUtils.uploadFile(request,"/uploads/"+sdf.format(d), "excel", sdf1.format(d)+"");
+        List<Family> mList=familyService.listAll();
+        String fileName=/*System.getProperty("project.root") + "/" +*/filePath.getSaveFilename();
+        File file=new File(fileName);
+        Workbook wb=null;
+        try{
+            wb=Workbook.getWorkbook(file);
+            if(wb==null){
+                throw new SqdsException("无数据，请重新导入！");
+            }
+            Sheet[] sheet=wb.getSheets();
+            if(sheet!=null&&sheet.length>0){
+                int i=0;
+                int rowNum=sheet[i].getRows();
+                for(int j=1;j<rowNum;j++){
+                    Cell[] cells=sheet[i].getRow(j);
+                    if(cells!=null&&cells.length > 0){
+                        for (Family family:mList ) {
+                            if (cells[1].getContents().equals(family.getFamilyCode()) || cells[5].getContents().equals(family.getIdCard()) ) {
+                                throw new SqdsException("导入数据失败<br/>失败原因分析：申请编号或身份证号已存在");
+                            }
+                        }
+                        Family family = new Family();
+                        if (cells[1]!=null){
+                            family.setFamilyCode(cells[1].getContents());
+                        }else {
+                            family.setFamilyCode("");
+                        }
+                        if (cells[2]!=null){
+                            family.setName(cells[2].getContents());
+                        }else {
+                            family.setName("");
+                        }
+                        if (cells[3]!=null){
+                            family.setApplyDate(sdf.parse(cells[3].getContents()));
+                        }else {
+                            family.setFamilyCode("");
+                        }
+                        if (cells[4]!=null){
+                            if (cells[4].getContents().equals("身份证")){
+                                family.setCardType(1);
+                            }
+                            if (cells[4].getContents().equals("警官证")){
+                                family.setCardType(2);
+                            }
+                        }else {
+                            family.setCardType(0);
+                        }
+                        if (cells[5]!=null){
+                            family.setIdCard(cells[5].getContents());
+                        }else {
+                            family.setIdCard("");
+                        }
+                        if (cells[6]!=null){
+                            family.setContactName(cells[6].getContents());
+                        }else {
+                            family.setContactName("");
+                        }
+                        if (cells[7]!=null){
+                            family.setPhone(cells[7].getContents());
+                        }else {
+                            family.setPhone("");
+                        }
+                        if (cells[8]!=null){
+                            family.setCurrentAddres(cells[8].getContents());
+                        }else {
+                            family.setCurrentAddres("");
+                        }
+                        if (cells[9]!=null){
+                            family.setPostCode(cells[9].getContents());
+                        }else {
+                            family.setPostCode("");
+                        }
+                        if (cells[10]!=null){
+                            family.setMemo(cells[10].getContents());
+                        }else {
+                            family.setMemo("");
+                        }
+                        familyService.save(family);
+                    }
+                }
+            }
+
+
+        }catch(Exception e){
+            throw new SqdsException("导入失败<br/>失败原因分析：1.未使用正确的Excel模版&nbsp;&nbsp;2.模版内容填写不规范");
+        }finally{
+            if(file.exists()){
+                file.delete();
+            }
+            if(wb!=null){
+                wb.close();
+            }
+        }
+        return "redirect:/family/form.do";
+    }
+}

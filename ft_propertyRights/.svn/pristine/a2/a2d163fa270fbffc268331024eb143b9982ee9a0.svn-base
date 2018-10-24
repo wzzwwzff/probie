@@ -1,0 +1,303 @@
+package com.app.cq.service;
+
+import com.app.cq.en.DataPhase;
+import com.app.cq.exception.Precondition;
+import com.app.cq.model.Contract;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.sqds.exception.SqdsException;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.utils.StringUtils;
+import com.sqds.web.ParamUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+
+/**
+ * Created by jmdf on 2018/8/1.
+ */
+@Service
+public class FamilyService extends HibernateDao<Family>{
+
+    @Autowired
+    private HistoryInfoService historyInfoService;
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private ContractService contractService;
+    @Autowired
+    private ActionInfoService actionInfoService;
+    @Autowired
+    private EducationService educationService;
+    @Autowired
+    private FileUploadService fileUploadService;
+
+    /**
+     * 本市户籍家庭基础信息
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listThisCity(PageInfo<Family> pageInfo, HttpServletRequest request){
+        StringBuffer hql = new StringBuffer("from Family where familyType = 1 order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+    /**
+     * 持有效证家庭基础信息
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listHold(PageInfo<Family> pageInfo, HttpServletRequest request){
+        StringBuffer hql = new StringBuffer("from Family where familyType = 2 order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+    /**
+     * 驻京现役军人或者武警家庭基础信息
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listArmy(PageInfo<Family> pageInfo, HttpServletRequest request){
+        StringBuffer hql = new StringBuffer("from Family where familyType = 3 order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+    /**
+     * 五年及以上缴纳社保家庭基础信息
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listSocial(PageInfo<Family> pageInfo, HttpServletRequest request){
+        StringBuffer hql = new StringBuffer("from Family where familyType = 4 order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+    /**
+     * 五年及以上缴纳个税家庭基础信息
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listPersonal(PageInfo<Family> pageInfo, HttpServletRequest request){
+        StringBuffer hql = new StringBuffer("from Family where familyType = 5 order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+    /**
+     * 摇号信息
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listSearch(PageInfo<Family> pageInfo, HttpServletRequest request){
+        StringBuffer hql = new StringBuffer("from Family order by shakingBatch,id");
+        return this.list(pageInfo,hql.toString());
+    }
+
+    /**
+     * 家庭信息
+     * @param educationCode
+     * @return
+     */
+    public Family findByEducationCode(String educationCode){
+        String hql = "from Family where educationCode = ?";
+        return this.findUnique(hql,educationCode);
+    }
+
+    /**
+     * 保存
+     */
+    public synchronized void saveFamily(HttpServletRequest request, Family family){
+        save(family);
+
+        //保存在册人口
+        String[] familyIdArray  = ParamUtils.getStringParameters(request, "fp_id");
+
+        if (familyIdArray  != null && familyIdArray .length > 0) {
+            String[] familyPersonName = ParamUtils.getStringParameters(request, "fp_name");
+            String[] familyPersonCardType = ParamUtils.getStringParameters(request, "fp_cardType");
+            String[] familyPersonIdCard = ParamUtils.getStringParameters(request, "fp_idCard");
+            String[] familyPersonRelationShip = ParamUtils.getStringParameters(request, "fp_relationShip");
+            String[] familyPersonAddress = ParamUtils.getStringParameters(request, "fp_address");
+            FamilyPerson familyPerson = null;
+            for (int i = 0; i < familyIdArray .length; i++) {
+                if (StringUtils.isEmpty(familyPersonName[i].trim())) {
+                    if (StringUtils.isNotEmpty(familyIdArray[i])) {
+                        this.familyPersonService.deleteByFamilyId(Integer.valueOf(familyIdArray[i]));
+                    }
+                    continue;
+                }
+                familyPerson = null;
+                if (StringUtils.isNotEmpty(familyIdArray[i])) {
+                    familyPerson = this.familyPersonService.get(Integer.valueOf(familyIdArray[i]));
+                }
+
+                if (familyPerson == null) {
+                    familyPerson = new FamilyPerson();
+                    familyPerson.setFamily(family);
+                }
+                familyPerson.setName(familyPersonName[i]);
+                familyPerson.setCardType(Integer.valueOf(familyPersonCardType[i]));
+                familyPerson.setIdCard(familyPersonIdCard[i]);
+                familyPerson.setRelationShip(familyPersonRelationShip[i]);
+                familyPerson.setAddress(familyPersonAddress[i]);
+                this.familyPersonService.save(familyPerson);
+            }
+        }
+
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(family.getId());
+        List<Contract> contractList = this.contractService.listByFamilyId(family.getId());
+        //保存历史记录
+        this.historyInfoService.saveHistoryInfo(request,family,familyPersonList,contractList, DataPhase.FAMILY.getIndex());
+    }
+
+
+    /**
+     * 删除family及对应人员
+     * @param familyId
+     */
+    public void  deleteByFamilyId(Integer familyId){
+        Family family = this.get(familyId);
+        if (family == null) {
+            throw new SqdsException("家庭信息不存在");
+        }
+
+        educationService.deleteByFamilyId(familyId);
+        fileUploadService.deleteByFamilyId(familyId);
+        familyPersonService.deleteByFamilyId(familyId);
+        actionInfoService.deleteByFamilyId(familyId);
+        this.delete(familyId);
+    }
+
+    /**
+     * 已上报家庭信息列表
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listForHand(PageInfo<Family> pageInfo){
+        StringBuffer hql = new StringBuffer("from Family where dataStatus = 2 order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+
+    /**
+     * 得到familyMap<申请编号，Family>
+     * @return
+     */
+    public Map<String, Family> getFamilyMap() {
+        String hql = "from Family order by familyCode";
+        List<Family> familyList = list(hql);
+        Map<String, Family> map = new HashMap<>();
+        if (Collections3.isNotEmpty(familyList)) {
+            for (Family family : familyList) {
+                map.put(family.getFamilyCode(), family);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 编号重复验证
+     * @param familyCode
+     * @param familyId
+     * @return
+     */
+    public Family checkRepeat(String familyCode, Integer familyId) {
+        String hql = "from Family where familyCode=? and id!=?";
+        return findUnique(hql, familyCode, familyId);
+    }
+
+    /**
+     * 信息导出
+     */
+    public PageInfo<Family> familyAndFamilyPerson(PageInfo<Family> pageInfo, HttpServletRequest request) {
+        StringBuffer hql = new StringBuffer("from Family f left join fetch f.FamilyPerson order by f.id");
+        return this.list(pageInfo, hql.toString());
+    }
+
+    /**
+     * 查询身份证号或姓名 like param 的家庭
+     * @param param
+     * @return
+     */
+    public List<Family> listByParam(String param) {
+        StringBuffer hql = new StringBuffer("from Family fy where 1=1 ");
+        List<Object> data = new ArrayList<Object>();
+        if (param == null || param.equals("")) {
+            return this.list(hql.toString());
+        }
+        hql.append("and ( fy.familyCode like ? ");
+                data.add("%" + param + "%");
+        hql.append("or fy.name like ? )");
+                data.add("%" + param + "%");
+        hql.append("or fy.idCard like ? )");
+                data.add("%" + param + "%");
+        List<Family> list = this.list(hql.toString(), data.toArray());
+        return list;
+    }
+
+
+    /**
+     * 学历验证码不为空
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listEducationCheck(PageInfo<Family> pageInfo, HttpServletRequest request){
+        StringBuffer hql = new StringBuffer("from Family where educationCode is not null and educationCode <> '' and educationStatus <> 2 order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+    /**
+     * 学历验证码为空
+     *@param pageInfo
+     * @return
+     */
+    public PageInfo<Family> listEducationNull(PageInfo<Family> pageInfo, HttpServletRequest request){
+        StringBuffer hql = new StringBuffer("from Family where educationCode is null or educationCode = '' order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+
+    /**
+     * 根据familyType
+     *@param familyType
+     * @return
+     */
+    public PageInfo<Family> selectByFamilyType(PageInfo<Family> pageInfo,Integer familyType){
+        StringBuffer sql = new StringBuffer("from Family where familyType = "+familyType + "order by id");
+        return this.list(pageInfo,sql.toString());
+    }
+
+    /**
+     * 根据申请编号查家庭信息
+     */
+    public Family selectFamilyByFamilyCode(String familyCode) {
+        String hql = "from Family f where f.familyCode=?";
+        Family family = (Family)getSession().createQuery(hql).setParameter(0, familyCode).uniqueResult();
+        return family;
+    }
+
+    /**
+     * 已签约家庭信息列表
+     */
+    public PageInfo<Family> signList(PageInfo<Family> pageInfo){
+        StringBuffer hql = new StringBuffer("from Family where signStatus = 2 order by id");
+        return this.list(pageInfo,hql.toString());
+    }
+
+    /**
+     * 查询所有已上报且未通过学历复核的家庭
+     * @return
+     */
+    public PageInfo<Family> selectNoEducation(PageInfo<Family> pageInfo){
+        StringBuffer sql = new StringBuffer("from Family where dataStatus = 2 and educationTrouble <> null and educationTrouble <> '' order by id");
+        return this.list(pageInfo,sql.toString());
+    }
+
+    //学历复核不通过
+    public void saveProblem(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInteger(request, "familyId", 0);
+        String problem = ParamUtils.getString(request, "problem", "");
+        Family family = this.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "0001", "该数据有错！");
+        family.setEducationStatus(3);
+        family.setEducationTrouble(problem);
+        this.save(family);
+    }
+
+
+}

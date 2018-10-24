@@ -1,0 +1,193 @@
+package com.app.cq.model;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * Created by jmdf on 2018/8/1.
+ */
+@Table(name = "house")
+@Entity
+public class House {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;           //主键
+    private String buildNum;      //楼号
+    private String unitNum;       //单元号
+    private String houseNum;        //房间号
+    private String typeCode;        //户型编号
+    private Integer houseType;      //居室  数据字典
+    private BigDecimal buildArea;   //预测建筑面积
+    private String scale;           //产权比例
+    private String direction;       //朝向
+    private Date chooseDate;        //分配日期
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer status;         //分配状态 1.未分配 2.已分配 3.分配后出租 4.分配后转售给个人 5.分配后回购
+    private BigDecimal price;       //销售价格
+    private String name;            //产权人姓名
+    private String idCard;           //产权人身份证号
+
+    private String rentName;           //分配后租房人/转售人姓名
+    private String rentIdCard;         //分配后租房人/转售人身份证号
+    private Date rentDate;               //分配后出租日期/转售日期/回购日期
+
+    @Column(columnDefinition = "TEXT")
+    private String memo;//备注
+
+    @ManyToOne
+    @JoinColumn(name = "projectId")
+    private Project project;//安置项目
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getBuildNum() {
+        return buildNum;
+    }
+
+    public void setBuildNum(String buildNum) {
+        this.buildNum = buildNum;
+    }
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
+    }
+
+    public String getHouseNum() {
+        return houseNum;
+    }
+
+    public void setHouseNum(String houseNum) {
+        this.houseNum = houseNum;
+    }
+
+    public String getTypeCode() {
+        return typeCode;
+    }
+
+    public void setTypeCode(String typeCode) {
+        this.typeCode = typeCode;
+    }
+
+    public Integer getHouseType() {
+        return houseType;
+    }
+
+    public void setHouseType(Integer houseType) {
+        this.houseType = houseType;
+    }
+
+    public BigDecimal getBuildArea() {
+        return buildArea;
+    }
+
+    public void setBuildArea(BigDecimal buildArea) {
+        this.buildArea = buildArea;
+    }
+
+    public String getScale() {
+        return scale;
+    }
+
+    public void setScale(String scale) {
+        this.scale = scale;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
+    public Date getChooseDate() {
+        return chooseDate;
+    }
+
+    public void setChooseDate(Date chooseDate) {
+        this.chooseDate = chooseDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getRentName() {
+        return rentName;
+    }
+
+    public void setRentName(String rentName) {
+        this.rentName = rentName;
+    }
+
+    public String getRentIdCard() {
+        return rentIdCard;
+    }
+
+    public void setRentIdCard(String rentIdCard) {
+        this.rentIdCard = rentIdCard;
+    }
+
+    public Date getRentDate() {
+        return rentDate;
+    }
+
+    public void setRentDate(Date rentDate) {
+        this.rentDate = rentDate;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+}

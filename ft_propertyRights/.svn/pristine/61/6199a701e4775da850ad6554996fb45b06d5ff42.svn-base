@@ -1,0 +1,35 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div id="header">
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div id="logo" class="light-version" style="padding-right: 50px;font-size: 25px;">
+            丰台区共有产权住房管理系统
+        </div>
+        <a href="/project/index.jsp">
+            <div class="header-link">共有产权项目管理</div>
+        </a>
+        <a href="/family/list.jsp">
+            <div class="header-link">申请家庭信息管理</div>
+        </a>
+        <a href="/fileInfo/uploadList.jsp">
+            <div class="header-link">电子影像资料管理</div>
+        </a>
+        <a href="/audit/auditList.jsp">
+            <div class="header-link">资格核验管理</div>
+        </a>
+        <a href="/contract/list.jsp">
+            <div class="header-link">合同备案管理</div>
+        </a>
+        <a href="/complain/list.jsp">
+            <div class="header-link">投诉记录反馈管理</div>
+        </a>
+        <a href="/statistics/main.jsp">
+            <div class="header-link nav-active">数据查询统计管理</div>
+        </a>
+        <a href="#">
+            <div class="header-link">系统配置管理</div>
+        </a>
+        <%--<div class="header-linkInfo"><i class="fa fa-user"></i>用户：吴新宇</div>--%>
+        <%--<div class="header-linkInfo"><i class="fa fa-key"></i>修改密码</div>--%>
+        <div class="header-linkInfo"><i class="fa fa-eject"></i>退出</div>
+    </div>
+</div>

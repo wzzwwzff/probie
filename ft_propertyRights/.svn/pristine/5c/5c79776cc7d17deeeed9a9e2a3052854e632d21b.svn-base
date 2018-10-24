@@ -1,0 +1,150 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>家庭信息统计</title>
+    <%@include file="/static/common/common.jsp" %>
+    <script src="/static/plugin/highcharts/highcharts.js"></script>
+    <style>
+        .ul {
+            list-style: none;
+        }
+
+        .ul li {
+            float: left;
+            margin-left: 45px;
+        }
+
+        .ul li img {
+            width: 35px;
+            height: 35px;
+        }
+    </style>
+</head>
+<body style="overflow-y: hidden;">
+<div class="container-fluid">
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-lg-12 text-center" style="font-size: 35px;font-weight: bold;margin-bottom: 10px;">家庭信息统计展示</div>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-lg-12 text-center">
+            <div id="chart1" style="height: 600px;"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#chart1').highcharts({
+            chart: {
+                type: 'column',
+                style: {
+                    overflow: "none"
+                },
+                events: {
+                    load: function () {
+                        var chart = this;
+                        loadFamily(chart);
+                        //定时器 10秒刷新一次
+//                        setInterval(function () {
+//                            loadFamily(chart);
+//                        }, 50000);
+                    }
+                }
+            },
+            title: {
+                text: ''
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                type: 'category',
+                categories: [${groupArray}],
+                rotation: 0,
+                labels: {
+                    //rotation: -45, // 设置轴标签旋转角度
+                    style: {
+                        fontSize: '20',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            yAxis: {
+                tickPositions: [0,5 ,10 , 50, 100, 150, 200, 250, 300, 350, 400],// 指定竖轴坐标点的值
+                min: 0,
+                title: {
+                    text: '',
+                    style:{
+                        fontSize:'28px',
+                        fontWeight:'bold'
+                    }
+                },
+                stackLabels: {
+                    y: 0,
+                    enabled: true,
+                    rotation: -45,
+                    style: {
+                        fontSize: '25px',
+                        fontWeight: 'bold',
+                        color: '#000'
+                    },
+                    useHTML: true,
+                    formatter: function () {
+                        return this.total;
+                    }
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: '<span style="font-size:25px;color:{point.color}">{point.name}家庭: {point.y} 户</span>'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    animation: false,
+                    pointWidth:120, //柱子宽度
+                    dataLabels: {
+                        useHTML:false,
+                        style: {fontSize: '20px'},
+                        enabled: false,
+                        rotation: -90,
+                        color: '#000000',
+                        formatter: function () {
+                            return this.y;
+                        }
+                    }
+                }
+            },
+            series: [{
+//                name: '总数量',
+//                data: [
+//                    ['项目一', 100],
+//                    ['项目二', 200],
+//                    ['项目三', 300]
+//                ]
+            }]
+        })
+
+        function loadFamily(chart) {
+            var series = chart.series;
+            while (series.length > 0) {//移除原始数据
+                series[0].remove(false);
+            }
+            $.ajax({
+                url: "/cq/statistics/getFamilyMsg",
+                success: function (dataJson) {
+                    var data = dataJson;
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        data[i].data = JSON.parse(data[i].data);
+                        chart.addSeries(data[i]);
+                    }
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

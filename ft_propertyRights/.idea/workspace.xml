@@ -1,0 +1,2004 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" readonly="true" id="278780b3-f907-48be-ae0c-8f4e721ef9eb" name="Default" comment="" />
+    <list id="d89a53ca-ba4a-45d0-ba85-eef83aeb5719" name="not commit" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_6.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_1.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jsoup_jsoup_1_7_3.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_6.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_2.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_1_1.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/ft_propertyRights_war_exploded.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/ft_propertyRights_war_exploded.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ft_propertyRights.iml" afterPath="$PROJECT_DIR$/ft_propertyRights.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" />
+    </list>
+    <ignored path="tz_kywg.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <ignored path="target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <file path="$PROJECT_DIR$/.idea/workspace.xml" ignored="false" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" show_ignored="true" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="tz_kywg" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="list.jsp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/list.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="23" column="71" lean-forward="true" selection-start-line="23" selection-start-column="71" selection-end-line="23" selection-end-column="71" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fileSel.jsp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/common/file/fileSel.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="HTML File" />
+        <option value="Class" />
+        <option value="Jsp File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>loadFamily</find>
+      <find>addOrEdit</find>
+      <find>houseMsg</find>
+      <find>图例</find>
+      <find>myModal</find>
+      <find>housePicChooses</find>
+      <find>myModalBoday</find>
+      <find>housemsg</find>
+      <find>myModalCs</find>
+      <find>excelfo</find>
+      <find>pageinfo.</find>
+      <find>cancelCheck</find>
+      <find>showRight</find>
+      <find>refreshMyPage</find>
+      <find>fileupload</find>
+      <find>saveEducationFromHTML</find>
+      <find>window.location.href</find>
+      <find>findByFId</find>
+      <find>pre</find>
+      <find>comparison</find>
+      <find>precondition</find>
+      <find>inner</find>
+      <find>handleHTML</find>
+      <find>educationqu</find>
+      <find>projectri</find>
+      <find>fileBatchCheck</find>
+      <find>message</find>
+      <find>validateIsExists</find>
+      <find>delete</find>
+      <find>backData</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>申请人信息</replace>
+    </replaceStrings>
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/statistics/videoCount.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/service/ProjectService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/StatisticsController.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/statistics/excelForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/model/Family.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/excelForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/contract/contractRegisit.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/static/js/common.js" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/contract/contractMsg.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/view.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/contract/loadBuildPic.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/holdList.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/armyList.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/personalList.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/searchList.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/socialList.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/service/ActionInfoService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/service/ContractService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/service/FileUploadService.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/list.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/educationView.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/statistics/houseMsg.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/AuditController.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/checkStatusForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/checkForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/checkHoldForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/checkArmyForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/checkSocialForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/checkPersonalForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/educationList.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/auditList.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/common/file/educationListSel.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/compareInfo/innerExcelIndex.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/service/StatisticsService.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/statistics/mainView.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/FamilyController.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/personalForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/holdForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/form.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/socialForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/armyForm.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/educationQuery.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/statistics/fenleiCount.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/model/FamilyPerson.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/CompareInfoController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/service/FamilyPersonService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/service/EducationService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/ContractController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/service/FamilyService.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/reviewList.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/EducationCheckController.java" />
+      </list>
+    </option>
+  </component>
+  <component name="JavaeeView">
+    <option name="frameworksView" value="false" />
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="cq" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="cq" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="cq" type="462c0819:PsiDirectoryNode" />
+              <item name="family" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frame_mysql_aop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ft_propertyRights" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="vcs.Subversion" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://F:/projects/ft_propertyRights/src/main/webapp/WEB-INF/pages/cq/compareInfo/innerExcelIndex2.jsp&#10;signSave&#9;PSI&#9;JAVA://com.app.cq.web.cq.SignController#signSave" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\static\common" />
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\WEB-INF\pages\cq\statistics" />
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\WEB-INF\pages\cq" />
+      <recent name="F:\projects\ft_propertyRights\src\main\java\com\app\cq\web\cq" />
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\static\style" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.app.cq.exception" />
+      <recent name="com.app.cq.aop" />
+      <recent name="com.app.cq.web.dataBackDown" />
+      <recent name="com.app.cq.task" />
+      <recent name="com.app.cq.web.cq" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\static\common" />
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\static" />
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\WEB-INF\pages\cq\common\file" />
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\WEB-INF\templates" />
+      <recent name="F:\projects\ft_propertyRights\src\main\webapp\WEB-INF\pages\cq\compareInfo" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Maven.maven">
+    <configuration default="true" type="ArquillianJUnit" factoryName="">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="passParentEnv" value="true" />
+      <setting name="launchBrowser" value="false" />
+      <setting name="launchBrowserUrl" value="" />
+      <setting name="depsClasspath" value="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="tz_kywg" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="0" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="SELECTED_CLOUD_DEVICE_CONFIGURATION_ID" value="0" />
+      <option name="SELECTED_CLOUD_DEVICE_PROJECT_ID" value="" />
+      <option name="IS_VALID_CLOUD_MATRIX_SELECTION" value="false" />
+      <option name="INVALID_CLOUD_MATRIX_SELECTION_ERROR" value="" />
+      <option name="IS_VALID_CLOUD_DEVICE_SELECTION" value="false" />
+      <option name="INVALID_CLOUD_DEVICE_SELECTION_ERROR" value="" />
+      <option name="CLOUD_DEVICE_SERIAL_NUMBER" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="0" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="SELECTED_CLOUD_DEVICE_CONFIGURATION_ID" value="0" />
+      <option name="SELECTED_CLOUD_DEVICE_PROJECT_ID" value="" />
+      <option name="IS_VALID_CLOUD_MATRIX_SELECTION" value="false" />
+      <option name="INVALID_CLOUD_MATRIX_SELECTION_ERROR" value="" />
+      <option name="IS_VALID_CLOUD_DEVICE_SELECTION" value="false" />
+      <option name="INVALID_CLOUD_DEVICE_SELECTION_ERROR" value="" />
+      <option name="CLOUD_DEVICE_SERIAL_NUMBER" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="ArquillianTestNG" factoryName="">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="myFilePath" />
+      <option name="GLUE" />
+      <option name="myNameFilter" />
+      <option name="myGeneratedName" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" package_name="" scope="Class">
+      <option name="BCName" value="" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="moduleName" value="" />
+      <option name="trusted" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnitTestDiscovery" factoryName="JUnit Test Discovery" changeList="All">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JarApplication" factoryName="JAR Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="SCRATCH_FILE_ID" value="0" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list />
+            </option>
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNGTestDiscovery" factoryName="TestNG Test Discovery" changeList="All">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
+      <deployment />
+      <server-settings />
+      <predefined_log_file id="Tomcat" enabled="true" />
+      <predefined_log_file id="Tomcat Catalina" enabled="true" />
+      <predefined_log_file id="Tomcat Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="osgi.bnd.run" factoryName="Run Launcher">
+      <method />
+    </configuration>
+    <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
+      <method />
+    </configuration>
+    <configuration name="maven" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings">
+          <MavenRunnerSettings>
+            <option name="environmentProperties">
+              <map />
+            </option>
+            <option name="jreName" value="#USE_PROJECT_JDK" />
+            <option name="mavenProperties">
+              <map />
+            </option>
+            <option name="passParentEnv" value="true" />
+            <option name="runMavenInBackground" value="true" />
+            <option name="skipTests" value="false" />
+            <option name="vmOptions" value="-Xms1024m -Xmx1024m -XX:PermSize=2048M -XX:MaxNewSize=2048m -XX:MaxPermSize=2048m" />
+          </MavenRunnerSettings>
+        </option>
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="tomcat7:run" />
+              </list>
+            </option>
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration" myUseAcceleration="nothing" cleanupOnStartRun="true">
+    <configuration useDefault="false">C:\Users\jmdf\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="F:\projects\ft_propertyRights" />
+          <option name="myCopyRoot" value="F:\projects\ft_propertyRights" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="F:\projects\ft_propertyRights\.idea" />
+          <option name="myCopyRoot" value="F:\projects\ft_propertyRights\.idea" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="F:\projects\ft_propertyRights" />
+          <option name="myCopyRoot" value="F:\projects\ft_propertyRights" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="278780b3-f907-48be-ae0c-8f4e721ef9eb" name="Default" comment="" />
+      <changelist id="d89a53ca-ba4a-45d0-ba85-eef83aeb5719" name="not commit" comment="" />
+      <created>1517274475474</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1517274475474</updated>
+      <workItem from="1517274476693" duration="11094000" />
+      <workItem from="1517287892374" duration="19829000" />
+      <workItem from="1517360606713" duration="25982000" />
+      <workItem from="1517473993491" duration="1567000" />
+      <workItem from="1517532512793" duration="1517000" />
+      <workItem from="1517539796821" duration="50000" />
+      <workItem from="1517540820554" duration="23000" />
+      <workItem from="1517550874351" duration="11418000" />
+      <workItem from="1517712260355" duration="6770000" />
+      <workItem from="1517732167569" duration="10000" />
+      <workItem from="1517732273453" duration="15000" />
+      <workItem from="1517732718256" duration="133000" />
+      <workItem from="1517815230090" duration="7951000" />
+      <workItem from="1517877970406" duration="7232000" />
+      <workItem from="1517967687398" duration="2521000" />
+      <workItem from="1517971685187" duration="54000" />
+      <workItem from="1517979584380" duration="6948000" />
+      <workItem from="1518051886563" duration="4014000" />
+      <workItem from="1518062743392" duration="628000" />
+      <workItem from="1518073537780" duration="41000" />
+      <workItem from="1519437111131" duration="2035000" />
+      <workItem from="1519631171513" duration="4535000" />
+      <workItem from="1519692707010" duration="713000" />
+      <workItem from="1519694383720" duration="796000" />
+      <workItem from="1519710394243" duration="65000" />
+      <workItem from="1519720906745" duration="67000" />
+      <workItem from="1519805714792" duration="571000" />
+      <workItem from="1519807849450" duration="2468000" />
+      <workItem from="1519810766005" duration="635000" />
+      <workItem from="1519864985978" duration="7185000" />
+      <workItem from="1519883506451" duration="2666000" />
+      <workItem from="1520233865199" duration="2386000" />
+      <workItem from="1520238324747" duration="2806000" />
+      <workItem from="1520330293619" duration="862000" />
+      <workItem from="1520384186822" duration="2197000" />
+      <workItem from="1520386561972" duration="1967000" />
+      <workItem from="1520389132706" duration="4862000" />
+      <workItem from="1520490539191" duration="2868000" />
+      <workItem from="1520556244422" duration="801000" />
+      <workItem from="1520817537583" duration="19141000" />
+      <workItem from="1520901391869" duration="25678000" />
+      <workItem from="1520988308756" duration="1494000" />
+      <workItem from="1520990137620" duration="23718000" />
+      <workItem from="1521074645154" duration="26355000" />
+      <workItem from="1521161599077" duration="13675000" />
+      <workItem from="1521451780690" duration="179000" />
+      <workItem from="1521453090103" duration="1259000" />
+      <workItem from="1521506421035" duration="3991000" />
+      <workItem from="1521527467174" duration="85000" />
+      <workItem from="1521679634575" duration="2521000" />
+      <workItem from="1521686849815" duration="613000" />
+      <workItem from="1521713766670" duration="48000" />
+      <workItem from="1522048907110" duration="134000" />
+      <workItem from="1522057078552" duration="380000" />
+      <workItem from="1522057720451" duration="13073000" />
+      <workItem from="1522112384339" duration="417000" />
+      <workItem from="1522113727067" duration="917000" />
+      <workItem from="1522114759804" duration="526000" />
+      <workItem from="1522133861776" duration="7315000" />
+      <workItem from="1522143779931" duration="124000" />
+      <workItem from="1522229558609" duration="161000" />
+      <workItem from="1522231506126" duration="1630000" />
+      <workItem from="1522302476193" duration="178000" />
+      <workItem from="1522540363523" duration="20015000" />
+      <workItem from="1522571912689" duration="3841000" />
+      <workItem from="1522630390507" duration="792000" />
+      <workItem from="1522649975825" duration="3193000" />
+      <workItem from="1522716218507" duration="1161000" />
+      <workItem from="1522719971811" duration="5540000" />
+      <workItem from="1522747903497" duration="256000" />
+      <workItem from="1522748432260" duration="357000" />
+      <workItem from="1522749503100" duration="646000" />
+      <workItem from="1523070536298" duration="3404000" />
+      <workItem from="1523149294900" duration="132000" />
+      <workItem from="1523152388279" duration="24353000" />
+      <workItem from="1523235134145" duration="10498000" />
+      <workItem from="1523322130265" duration="20230000" />
+      <workItem from="1523407699183" duration="5763000" />
+      <workItem from="1523414173361" duration="26082000" />
+      <workItem from="1523494307014" duration="28919000" />
+      <workItem from="1523668787344" duration="14917000" />
+      <workItem from="1523746540050" duration="7415000" />
+      <workItem from="1523777519791" duration="300000" />
+      <workItem from="1523841291726" duration="1461000" />
+      <workItem from="1523847170272" duration="2483000" />
+      <workItem from="1523859029430" duration="33000" />
+      <workItem from="1523867410488" duration="2171000" />
+      <workItem from="1523928523540" duration="619000" />
+      <workItem from="1523930353784" duration="2620000" />
+      <workItem from="1523937511516" duration="606000" />
+      <workItem from="1523941440462" duration="13701000" />
+      <workItem from="1524011914786" duration="8208000" />
+      <workItem from="1524099234355" duration="11543000" />
+      <workItem from="1524216581586" duration="2101000" />
+      <workItem from="1527141664204" duration="80000" />
+      <workItem from="1527145901017" duration="122000" />
+      <workItem from="1527146553440" duration="47000" />
+      <workItem from="1528077056836" duration="50000" />
+      <workItem from="1529640978816" duration="408000" />
+      <workItem from="1529651838002" duration="43000" />
+      <workItem from="1530251805525" duration="34000" />
+      <workItem from="1530251872416" duration="1201000" />
+      <workItem from="1530253166010" duration="251000" />
+      <workItem from="1530760417216" duration="167000" />
+      <workItem from="1533275211112" duration="117000" />
+      <workItem from="1533275457669" duration="2358000" />
+      <workItem from="1533279129950" duration="1093000" />
+      <workItem from="1533802863057" duration="299000" />
+      <workItem from="1533803223243" duration="1026000" />
+      <workItem from="1533805658519" duration="3920000" />
+      <workItem from="1533862591197" duration="11709000" />
+      <workItem from="1533883227986" duration="10261000" />
+      <workItem from="1534122312904" duration="6421000" />
+      <workItem from="1534322979683" duration="6934000" />
+      <workItem from="1534380292220" duration="684000" />
+      <workItem from="1534380988446" duration="7043000" />
+      <workItem from="1534388503652" duration="9616000" />
+      <workItem from="1534405424547" duration="2017000" />
+      <workItem from="1534407615530" duration="6154000" />
+      <workItem from="1534413925015" duration="4248000" />
+      <workItem from="1534467217543" duration="1331000" />
+      <workItem from="1534468782762" duration="7301000" />
+      <workItem from="1534476285963" duration="6705000" />
+      <workItem from="1534490631054" duration="3291000" />
+      <workItem from="1534494099325" duration="1911000" />
+      <workItem from="1534496230669" duration="4246000" />
+      <workItem from="1534727076526" duration="25794000" />
+      <workItem from="1534813194439" duration="12473000" />
+      <workItem from="1534831307871" duration="17314000" />
+      <workItem from="1534848953055" duration="1599000" />
+      <workItem from="1534899702810" duration="24111000" />
+      <workItem from="1534930526116" duration="2711000" />
+      <workItem from="1534937238613" duration="34000" />
+      <workItem from="1534985339074" duration="4194000" />
+      <workItem from="1534989680132" duration="11585000" />
+      <workItem from="1535010848462" duration="7395000" />
+      <workItem from="1535071448714" duration="19158000" />
+      <workItem from="1535096629949" duration="4397000" />
+      <workItem from="1535101403932" duration="4823000" />
+      <workItem from="1535248846050" duration="721000" />
+      <workItem from="1535249818178" duration="4533000" />
+      <workItem from="1535256692539" duration="17278000" />
+      <workItem from="1535331337094" duration="28263000" />
+      <workItem from="1535417633489" duration="8966000" />
+      <workItem from="1535434576650" duration="6358000" />
+      <workItem from="1535504508599" duration="590000" />
+      <workItem from="1535505381865" duration="672000" />
+      <workItem from="1535509362117" duration="811000" />
+      <workItem from="1535511018943" duration="641000" />
+      <workItem from="1535521237238" duration="642000" />
+      <workItem from="1535528369218" duration="165000" />
+      <workItem from="1535529023829" duration="5679000" />
+      <workItem from="1535593026222" duration="9293000" />
+      <workItem from="1535618677801" duration="4852000" />
+      <workItem from="1535677751184" duration="2487000" />
+      <workItem from="1535693821866" duration="1752000" />
+      <workItem from="1535696539180" duration="490000" />
+      <workItem from="1535697331262" duration="17000" />
+      <workItem from="1535698457387" duration="1536000" />
+      <workItem from="1535936466524" duration="225000" />
+      <workItem from="1536114242328" duration="1902000" />
+      <workItem from="1536125804186" duration="174000" />
+      <workItem from="1536126660930" duration="5745000" />
+      <workItem from="1536132892533" duration="8247000" />
+      <workItem from="1536196154728" duration="7136000" />
+      <workItem from="1536224295594" duration="1429000" />
+      <workItem from="1536228604199" duration="594000" />
+      <workItem from="1536282160182" duration="1800000" />
+      <workItem from="1536284194009" duration="1018000" />
+      <workItem from="1536286751967" duration="2007000" />
+      <workItem from="1536293287197" duration="1334000" />
+      <workItem from="1536301088681" duration="645000" />
+      <workItem from="1536303878694" duration="1504000" />
+      <workItem from="1536305958891" duration="2872000" />
+      <workItem from="1536541643006" duration="4438000" />
+      <workItem from="1536563393189" duration="597000" />
+      <workItem from="1536566721136" duration="1718000" />
+      <workItem from="1536628551632" duration="1232000" />
+      <workItem from="1536649494017" duration="1556000" />
+      <workItem from="1536715977783" duration="1376000" />
+      <workItem from="1536718314206" duration="16000" />
+      <workItem from="1536733861059" duration="1537000" />
+      <workItem from="1536912882656" duration="2769000" />
+      <workItem from="1537079625021" duration="30000" />
+      <workItem from="1537080856992" duration="4788000" />
+      <workItem from="1537170781942" duration="121000" />
+      <workItem from="1537237139167" duration="617000" />
+      <workItem from="1537867809820" duration="22000" />
+      <workItem from="1538096175743" duration="5778000" />
+      <workItem from="1538101972394" duration="9760000" />
+      <workItem from="1538117329606" duration="80000" />
+      <workItem from="1538212886442" duration="47000" />
+      <workItem from="1538216622616" duration="378000" />
+      <workItem from="1538267878930" duration="2836000" />
+      <workItem from="1539161941773" duration="5984000" />
+      <workItem from="1539500372315" duration="31000" />
+      <workItem from="1539598242477" duration="357000" />
+      <workItem from="1539668042621" duration="169000" />
+      <workItem from="1540199322806" duration="26000" />
+    </task>
+    <task id="LOCAL-00224" summary="模板修改">
+      <created>1534499579119</created>
+      <option name="number" value="00224" />
+      <option name="presentableId" value="LOCAL-00224" />
+      <option name="project" value="LOCAL" />
+      <updated>1534499579119</updated>
+    </task>
+    <task id="LOCAL-00225" summary="form选择框样式统一，导出家庭统一方法，批量导入返回页面修改，学历复核pdf添加">
+      <created>1534756220120</created>
+      <option name="number" value="00225" />
+      <option name="presentableId" value="LOCAL-00225" />
+      <option name="project" value="LOCAL" />
+      <updated>1534756220121</updated>
+    </task>
+    <task id="LOCAL-00226" summary="数据统计管理前台页面">
+      <created>1534759232126</created>
+      <option name="number" value="00226" />
+      <option name="presentableId" value="LOCAL-00226" />
+      <option name="project" value="LOCAL" />
+      <updated>1534759232127</updated>
+    </task>
+    <task id="LOCAL-00227" summary="数据管理">
+      <created>1534759298110</created>
+      <option name="number" value="00227" />
+      <option name="presentableId" value="LOCAL-00227" />
+      <option name="project" value="LOCAL" />
+      <updated>1534759298110</updated>
+    </task>
+    <task id="LOCAL-00228" summary="家庭信息柱状图">
+      <created>1534814986114</created>
+      <option name="number" value="00228" />
+      <option name="presentableId" value="LOCAL-00228" />
+      <option name="project" value="LOCAL" />
+      <updated>1534814986115</updated>
+    </task>
+    <task id="LOCAL-00229" summary="合同表加入项目id">
+      <created>1534816235111</created>
+      <option name="number" value="00229" />
+      <option name="presentableId" value="LOCAL-00229" />
+      <option name="project" value="LOCAL" />
+      <updated>1534816235111</updated>
+    </task>
+    <task id="LOCAL-00230" summary="映像文件柱状图，合同数量柱状图，家庭信息柱状图，房源信息柱状图，核验情况统计">
+      <created>1534917162113</created>
+      <option name="number" value="00230" />
+      <option name="presentableId" value="LOCAL-00230" />
+      <option name="project" value="LOCAL" />
+      <updated>1534917162113</updated>
+    </task>
+    <task id="LOCAL-00231" summary="房源情况统计，导出excel">
+      <created>1534929846109</created>
+      <option name="number" value="00231" />
+      <option name="presentableId" value="LOCAL-00231" />
+      <option name="project" value="LOCAL" />
+      <updated>1534929846109</updated>
+    </task>
+    <task id="LOCAL-00232" summary="项目户型展示调整，导出excel调整">
+      <created>1534930554110</created>
+      <option name="number" value="00232" />
+      <option name="presentableId" value="LOCAL-00232" />
+      <option name="project" value="LOCAL" />
+      <updated>1534930554110</updated>
+    </task>
+    <task id="LOCAL-00233">
+      <created>1534987204104</created>
+      <option name="number" value="00233" />
+      <option name="presentableId" value="LOCAL-00233" />
+      <option name="project" value="LOCAL" />
+      <updated>1534987204104</updated>
+    </task>
+    <task id="LOCAL-00234" summary="家庭信息form修改，统计调整">
+      <created>1534990210114</created>
+      <option name="number" value="00234" />
+      <option name="presentableId" value="LOCAL-00234" />
+      <option name="project" value="LOCAL" />
+      <updated>1534990210115</updated>
+    </task>
+    <task id="LOCAL-00235" summary="模板单元格格式修改，状态审核修改，柱状图刻度">
+      <created>1534992508109</created>
+      <option name="number" value="00235" />
+      <option name="presentableId" value="LOCAL-00235" />
+      <option name="project" value="LOCAL" />
+      <updated>1534992508109</updated>
+    </task>
+    <task id="LOCAL-00236" summary="资格核验添加修改状态">
+      <created>1534994312108</created>
+      <option name="number" value="00236" />
+      <option name="presentableId" value="LOCAL-00236" />
+      <option name="project" value="LOCAL" />
+      <updated>1534994312108</updated>
+    </task>
+    <task id="LOCAL-00237" summary="资格核验修改页面转跳调整">
+      <created>1534995172108</created>
+      <option name="number" value="00237" />
+      <option name="presentableId" value="LOCAL-00237" />
+      <option name="project" value="LOCAL" />
+      <updated>1534995172108</updated>
+    </task>
+    <task id="LOCAL-00238" summary="家庭日期显示问题">
+      <created>1534999388109</created>
+      <option name="number" value="00238" />
+      <option name="presentableId" value="LOCAL-00238" />
+      <option name="project" value="LOCAL" />
+      <updated>1534999388109</updated>
+    </task>
+    <task id="LOCAL-00239" summary="家庭查看统一页面">
+      <created>1535014709121</created>
+      <option name="number" value="00239" />
+      <option name="presentableId" value="LOCAL-00239" />
+      <option name="project" value="LOCAL" />
+      <updated>1535014709121</updated>
+    </task>
+    <task id="LOCAL-00240" summary="家庭表单样式调整">
+      <created>1535018259115</created>
+      <option name="number" value="00240" />
+      <option name="presentableId" value="LOCAL-00240" />
+      <option name="project" value="LOCAL" />
+      <updated>1535018259115</updated>
+    </task>
+    <task id="LOCAL-00241" summary="导入日期优化，批量导入加入家庭类型，模板调整，房源统计柱状图宽度调整">
+      <created>1535021544112</created>
+      <option name="number" value="00241" />
+      <option name="presentableId" value="LOCAL-00241" />
+      <option name="project" value="LOCAL" />
+      <updated>1535021544112</updated>
+    </task>
+    <task id="LOCAL-00242" summary="模板更改，查看页面优化，学历复核优化，导入导出、表单增加字段">
+      <created>1535084881115</created>
+      <option name="number" value="00242" />
+      <option name="presentableId" value="LOCAL-00242" />
+      <option name="project" value="LOCAL" />
+      <updated>1535084881116</updated>
+    </task>
+    <task id="LOCAL-00243" summary="表单字段添加，导入，模板修改">
+      <created>1535090379111</created>
+      <option name="number" value="00243" />
+      <option name="presentableId" value="LOCAL-00243" />
+      <option name="project" value="LOCAL" />
+      <updated>1535090379111</updated>
+    </task>
+    <task id="LOCAL-00244" summary="新增学历信息列表，学历信息查看，按钮优化，导出数字格式调整，学历复核页面优化">
+      <created>1535099745114</created>
+      <option name="number" value="00244" />
+      <option name="presentableId" value="LOCAL-00244" />
+      <option name="project" value="LOCAL" />
+      <updated>1535099745114</updated>
+    </task>
+    <task id="LOCAL-00245" summary="学历审核方法修改">
+      <created>1535101595103</created>
+      <option name="number" value="00245" />
+      <option name="presentableId" value="LOCAL-00245" />
+      <option name="project" value="LOCAL" />
+      <updated>1535101595103</updated>
+    </task>
+    <task id="LOCAL-00246" summary="新增分类统计">
+      <created>1535104578113</created>
+      <option name="number" value="00246" />
+      <option name="presentableId" value="LOCAL-00246" />
+      <option name="project" value="LOCAL" />
+      <updated>1535104578113</updated>
+    </task>
+    <task id="LOCAL-00247" summary="新增分类统计是否是优先家庭">
+      <created>1535105596123</created>
+      <option name="number" value="00247" />
+      <option name="presentableId" value="LOCAL-00247" />
+      <option name="project" value="LOCAL" />
+      <updated>1535105596123</updated>
+    </task>
+    <task id="LOCAL-00248" summary="影像文件统计方法修改，家庭表单优化，申请家庭核验列表修改">
+      <created>1535262529124</created>
+      <option name="number" value="00248" />
+      <option name="presentableId" value="LOCAL-00248" />
+      <option name="project" value="LOCAL" />
+      <updated>1535262529125</updated>
+    </task>
+    <task id="LOCAL-00249" summary="影像文件统计修改">
+      <created>1535266633113</created>
+      <option name="number" value="00249" />
+      <option name="presentableId" value="LOCAL-00249" />
+      <option name="project" value="LOCAL" />
+      <updated>1535266633113</updated>
+    </task>
+    <task id="LOCAL-00250" summary="柱状图方法调整">
+      <created>1535270709110</created>
+      <option name="number" value="00250" />
+      <option name="presentableId" value="LOCAL-00250" />
+      <option name="project" value="LOCAL" />
+      <updated>1535270709110</updated>
+    </task>
+    <task id="LOCAL-00251" summary="房源信息柱状图修改">
+      <created>1535279007111</created>
+      <option name="number" value="00251" />
+      <option name="presentableId" value="LOCAL-00251" />
+      <option name="project" value="LOCAL" />
+      <updated>1535279007111</updated>
+    </task>
+    <task id="LOCAL-00252" summary="导入导出调整，影像文件统计方法修改，模板修改">
+      <created>1535335943135</created>
+      <option name="number" value="00252" />
+      <option name="presentableId" value="LOCAL-00252" />
+      <option name="project" value="LOCAL" />
+      <updated>1535335943136</updated>
+    </task>
+    <task id="LOCAL-00253" summary="导入调整">
+      <created>1535339657111</created>
+      <option name="number" value="00253" />
+      <option name="presentableId" value="LOCAL-00253" />
+      <option name="project" value="LOCAL" />
+      <updated>1535339657111</updated>
+    </task>
+    <task id="LOCAL-00254" summary="学历复核调整，导出字段补充，跨行调整">
+      <created>1535348553122</created>
+      <option name="number" value="00254" />
+      <option name="presentableId" value="LOCAL-00254" />
+      <option name="project" value="LOCAL" />
+      <updated>1535348553123</updated>
+    </task>
+    <task id="LOCAL-00255" summary="学历复核状态调整，添加返回按钮，查看页面调整">
+      <created>1535358223108</created>
+      <option name="number" value="00255" />
+      <option name="presentableId" value="LOCAL-00255" />
+      <option name="project" value="LOCAL" />
+      <updated>1535358223109</updated>
+    </task>
+    <task id="LOCAL-00256" summary="退">
+      <created>1535360747109</created>
+      <option name="number" value="00256" />
+      <option name="presentableId" value="LOCAL-00256" />
+      <option name="project" value="LOCAL" />
+      <updated>1535360747109</updated>
+    </task>
+    <task id="LOCAL-00257" summary="家庭查看页面调整">
+      <created>1535361323112</created>
+      <option name="number" value="00257" />
+      <option name="presentableId" value="LOCAL-00257" />
+      <option name="project" value="LOCAL" />
+      <updated>1535361323112</updated>
+    </task>
+    <task id="LOCAL-00258" summary="优化调整">
+      <created>1535364083108</created>
+      <option name="number" value="00258" />
+      <option name="presentableId" value="LOCAL-00258" />
+      <option name="project" value="LOCAL" />
+      <updated>1535364083108</updated>
+    </task>
+    <task id="LOCAL-00259" summary="bug修复，优化调整">
+      <created>1535366996109</created>
+      <option name="number" value="00259" />
+      <option name="presentableId" value="LOCAL-00259" />
+      <option name="project" value="LOCAL" />
+      <updated>1535366996109</updated>
+    </task>
+    <task id="LOCAL-00260" summary="家庭删除补充调整">
+      <created>1535423678115</created>
+      <option name="number" value="00260" />
+      <option name="presentableId" value="LOCAL-00260" />
+      <option name="project" value="LOCAL" />
+      <updated>1535423678115</updated>
+    </task>
+    <task id="LOCAL-00261" summary="学历核验调优">
+      <created>1535426702119</created>
+      <option name="number" value="00261" />
+      <option name="presentableId" value="LOCAL-00261" />
+      <option name="project" value="LOCAL" />
+      <updated>1535426702120</updated>
+    </task>
+    <task id="LOCAL-00262" summary="学历不通过导出方法调整">
+      <created>1535435135123</created>
+      <option name="number" value="00262" />
+      <option name="presentableId" value="LOCAL-00262" />
+      <option name="project" value="LOCAL" />
+      <updated>1535435135123</updated>
+    </task>
+    <task id="LOCAL-00263" summary="家庭日期BUG修复，表单调优">
+      <created>1535597827113</created>
+      <option name="number" value="00263" />
+      <option name="presentableId" value="LOCAL-00263" />
+      <option name="project" value="LOCAL" />
+      <updated>1535597827113</updated>
+    </task>
+    <task id="LOCAL-00264" summary="日期优化调整">
+      <created>1535598770114</created>
+      <option name="number" value="00264" />
+      <option name="presentableId" value="LOCAL-00264" />
+      <option name="project" value="LOCAL" />
+      <updated>1535598770114</updated>
+    </task>
+    <task id="LOCAL-00265" summary="批量导入添加字段">
+      <created>1535619290124</created>
+      <option name="number" value="00265" />
+      <option name="presentableId" value="LOCAL-00265" />
+      <option name="project" value="LOCAL" />
+      <updated>1535619290124</updated>
+    </task>
+    <task id="LOCAL-00266" summary="表单删除家庭成员">
+      <created>1536197433111</created>
+      <option name="number" value="00266" />
+      <option name="presentableId" value="LOCAL-00266" />
+      <option name="project" value="LOCAL" />
+      <updated>1536197433111</updated>
+    </task>
+    <task id="LOCAL-00267" summary="导入优化">
+      <created>1536653196108</created>
+      <option name="number" value="00267" />
+      <option name="presentableId" value="LOCAL-00267" />
+      <option name="project" value="LOCAL" />
+      <updated>1536653196108</updated>
+    </task>
+    <task id="LOCAL-00268" summary="学历核验优化">
+      <created>1538108795113</created>
+      <option name="number" value="00268" />
+      <option name="presentableId" value="LOCAL-00268" />
+      <option name="project" value="LOCAL" />
+      <updated>1538108795113</updated>
+    </task>
+    <task id="LOCAL-00269" summary="根据项目进行学历核验">
+      <created>1538110764111</created>
+      <option name="number" value="00269" />
+      <option name="presentableId" value="LOCAL-00269" />
+      <option name="project" value="LOCAL" />
+      <updated>1538110764111</updated>
+    </task>
+    <task id="LOCAL-00270" summary="调整">
+      <created>1538110818109</created>
+      <option name="number" value="00270" />
+      <option name="presentableId" value="LOCAL-00270" />
+      <option name="project" value="LOCAL" />
+      <updated>1538110818109</updated>
+    </task>
+    <task id="LOCAL-00271" summary="学历复核调整">
+      <created>1538114684109</created>
+      <option name="number" value="00271" />
+      <option name="presentableId" value="LOCAL-00271" />
+      <option name="project" value="LOCAL" />
+      <updated>1538114684109</updated>
+    </task>
+    <task id="LOCAL-00272" summary="学历复核不通过功能，新增正在更新、更新成功弹窗">
+      <created>1539167837110</created>
+      <option name="number" value="00272" />
+      <option name="presentableId" value="LOCAL-00272" />
+      <option name="project" value="LOCAL" />
+      <updated>1539167837110</updated>
+    </task>
+    <option name="localTasksCounter" value="273" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="930571000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32719395" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4626219" sideWeight="0.5154584" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.122068234" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30552545" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29577464" sideWeight="0.48987207" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.4978678" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23507462" sideWeight="0.49295774" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18923241" sideWeight="0.5070422" order="5" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4626219" sideWeight="0.48454157" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5053929" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32719395" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48862407" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="影像文件统计修改" />
+    <MESSAGE value="柱状图方法调整" />
+    <MESSAGE value="房源信息柱状图修改" />
+    <MESSAGE value="导入导出调整，影像文件统计方法修改，模板修改" />
+    <MESSAGE value="导入调整" />
+    <MESSAGE value="学历复核调整，导出字段补充，跨行调整" />
+    <MESSAGE value="学历复核状态调整，添加返回按钮，查看页面bug调整" />
+    <MESSAGE value="学历复核状态调整，添加返回按钮，查看页面调整" />
+    <MESSAGE value="退" />
+    <MESSAGE value="家庭查看页面调整" />
+    <MESSAGE value="优化调整" />
+    <MESSAGE value="bug修复，优化调整" />
+    <MESSAGE value="家庭删除补充调整" />
+    <MESSAGE value="学历核验调优" />
+    <MESSAGE value="学历不通过导出方法调整" />
+    <MESSAGE value="家庭日期BUG修复，表单调优" />
+    <MESSAGE value="日期优化调整" />
+    <MESSAGE value="批量导入添加字段" />
+    <MESSAGE value="表单删除家庭成员" />
+    <MESSAGE value="导入优化" />
+    <MESSAGE value="学历核验优化" />
+    <MESSAGE value="根据项目进行学历核验" />
+    <MESSAGE value="调整" />
+    <MESSAGE value="学历复核调整" />
+    <MESSAGE value="学历复核不通过功能，新增正在更新、更新成功弹窗" />
+    <option name="LAST_COMMIT_MESSAGE" value="学历复核不通过功能，新增正在更新、更新成功弹窗" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="177" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/vo/Response.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/file/right.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="9" column="37" lean-forward="false" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/static/plugin/uploadify/uploadify.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/static/common/common.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/file/fileList.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1700">
+          <caret line="68" column="36" lean-forward="false" selection-start-line="68" selection-start-column="36" selection-end-line="68" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/file/fileUpload.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1525">
+          <caret line="61" column="71" lean-forward="false" selection-start-line="61" selection-start-column="71" selection-end-line="61" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/service/FamilyPersonService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/form.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3925">
+          <caret line="157" column="39" lean-forward="false" selection-start-line="157" selection-start-column="39" selection-end-line="157" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/view.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1525">
+          <caret line="17" column="42" lean-forward="true" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/holdList.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1275">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="151" column="27" lean-forward="true" selection-start-line="151" selection-start-column="27" selection-end-line="151" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/FamilyController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1995">
+          <caret line="168" column="37" lean-forward="false" selection-start-line="168" selection-start-column="37" selection-end-line="168" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-aop/4.2.8.RELEASE/spring-aop-4.2.8.RELEASE-sources.jar!/org/springframework/aop/framework/CglibAopProxy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="719" column="0" lean-forward="false" selection-start-line="719" selection-start-column="0" selection-end-line="719" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-aop/4.2.8.RELEASE/spring-aop-4.2.8.RELEASE-sources.jar!/org/springframework/aop/framework/ReflectiveMethodInvocation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="156" column="0" lean-forward="false" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-tx/4.2.8.RELEASE/spring-tx-4.2.8.RELEASE-sources.jar!/org/springframework/transaction/interceptor/TransactionInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/utils/HttpClientUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="133" column="25" lean-forward="false" selection-start-line="133" selection-start-column="25" selection-end-line="133" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/tags/searchDataDict.tag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="14" column="51" lean-forward="false" selection-start-line="14" selection-start-column="51" selection-end-line="14" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.2.8.RELEASE/spring-core-4.2.8.RELEASE.jar!/org/springframework/cglib/proxy/MethodProxy.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/model/Education.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="22" column="19" lean-forward="false" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/service/EducationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="625">
+          <caret line="35" column="54" lean-forward="false" selection-start-line="35" selection-start-column="54" selection-end-line="35" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/common/file/educationSel.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="11" column="42" lean-forward="false" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/app/framework/framework-core/1.6.0/framework-core-1.6.0.jar!/com/sqds/exception/SqdsException.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/exception/AjaxException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="9" column="11" lean-forward="false" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/model/ActionInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/model/FileInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/exception/Precondition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="16" column="29" lean-forward="false" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/educationQuery.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4275">
+          <caret line="171" column="30" lean-forward="false" selection-start-line="171" selection-start-column="22" selection-end-line="171" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/service/FamilyService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="249" column="73" lean-forward="true" selection-start-line="249" selection-start-column="73" selection-end-line="249" selection-end-column="73" />
+          <folding>
+            <element signature="e#7748#7756#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/ProjectController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="36" column="20" lean-forward="false" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/FileManagerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="28" column="13" lean-forward="false" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/service/FileUploadService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="130" column="16" lean-forward="false" selection-start-line="130" selection-start-column="16" selection-end-line="130" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/file/project/projectRight.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="295" column="33" lean-forward="false" selection-start-line="295" selection-start-column="19" selection-end-line="295" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/FileUploadController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="384" column="23" lean-forward="false" selection-start-line="384" selection-start-column="23" selection-end-line="384" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/contract/checkForm.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-805">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/contract/form.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-55">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="3297" column="0" lean-forward="false" selection-start-line="3297" selection-start-column="0" selection-end-line="3297" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/static/js/common.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="40" column="13" lean-forward="true" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/contract/list.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="91" column="48" lean-forward="false" selection-start-line="91" selection-start-column="48" selection-end-line="91" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/ContractController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-810">
+          <caret line="245" column="0" lean-forward="true" selection-start-line="245" selection-start-column="0" selection-end-line="245" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/static/image/loading.gif">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/AuditController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10425">
+          <caret line="444" column="7" lean-forward="false" selection-start-line="444" selection-start-column="7" selection-end-line="444" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/reviewList.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2400">
+          <caret line="96" column="7" lean-forward="false" selection-start-line="96" selection-start-column="7" selection-end-line="96" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/EducationCheckController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4625">
+          <caret line="208" column="40" lean-forward="false" selection-start-line="208" selection-start-column="40" selection-end-line="208" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/model/Family.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="18" column="39" lean-forward="false" selection-start-line="18" selection-start-column="39" selection-end-line="18" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/app/cq/web/cq/CompareInfoController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/project/excelForm.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5850">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/audit/excelNameList.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6375">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/excelForm.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1535340437733" expanded="true" signature="4301:5848" ph="..." />
+            <marker date="1535340437733" expanded="true" signature="4327:5837" ph="..." />
+            <marker date="1535340437733" expanded="true" signature="4359:5546" ph="..." />
+            <marker date="1535340437733" expanded="true" signature="4394:5513" ph="..." />
+            <marker date="1535340437733" expanded="true" signature="4479:5477" ph="..." />
+            <marker date="1535340437733" expanded="true" signature="4620:4979" ph="..." />
+            <marker date="1535340437733" expanded="true" signature="4657:4944" ph="..." />
+            <marker date="1535340437733" expanded="true" signature="5283:5435" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/checkStatusForm.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/family/list.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="23" column="71" lean-forward="true" selection-start-line="23" selection-start-column="71" selection-end-line="23" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/cq/common/file/fileSel.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>tz_kywg:war</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Web</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>fjqz_bspq</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: antlr:antlr:2.7.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

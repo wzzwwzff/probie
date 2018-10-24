@@ -1,0 +1,294 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="/static/common/common.jsp" %>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" style="width: 1500px;height: 1500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span
+                        aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">筛选导出信息</h4>
+            </div>
+            <style>
+                .checkbox label input {
+                    width: 20px;
+                    height: 20px;
+                }
+
+                .checkbox{
+                    font-size: 18px;
+                    padding-left: 6px;
+                    padding-top: 2px;
+                }
+            </style>
+            <div class="modal-body" id="modalBody">
+                <table>
+                    <tr>
+                        <td width="50%" class="tit" id="rh">
+                            <h2>一、申请家庭信息
+                                <label class="checkbox-inline">
+                                    <input type="checkbox"
+                                           style="width: 20px;height: 20px;font-size: 22px"
+                                           class="all"/>全选/反选
+                                </label>
+                            </h2>
+                            <label class="checkbox checkbox-inline" style="padding-left: 17px">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_projectName" value="项目名称"
+                                       class="rh"/>项目名称
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_familyCode"
+                                       class="rh"/>申请编号
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_name"
+                                       class="rh"/>申请人
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_age"
+                                       class="rh"/>年龄
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_applyDate"
+                                       class="rh"/>申请日期
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_cardType"
+                                       class="rh"/>证件类型
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_idCard"
+                                       class="rh"/>身份证号
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_currentAddres"
+                                       class="rh"/>通讯地址
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_phone"
+                                       class="rh"/>联系电话
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_address"
+                                       class="rh"/>户籍所在地
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_exSpouseName"
+                                       class="rh"/>前配偶姓名
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_exCardType"
+                                       class="rh"/>前配偶证件类型
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_exIdCard"
+                                       class="rh"/>前配偶证件号码
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_divorceDate"
+                                       class="rh"/>离婚日期
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_shakingBatch"
+                                       class="rh"/>摇号批次
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_shakingCode"
+                                       class="rh"/>摇号编号
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_shakingGroup"
+                                       class="rh"/>摇号组别
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_shakingResult"
+                                       class="rh"/>摇号结果
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_houseStatus"
+                                       class="rh"/>住房审核状态
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_seniorityStatus"
+                                       class="rh"/>资格复核状态
+                            </label>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_thisArea"
+                                       class="rh"/>京籍是否是本区
+                            </label>
+                            <%--<label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_nothisArea"
+                                       class="rh"/>京籍非本区
+                            </label>--%>
+                            <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_firstOrNot"
+                                       class="rh"/>是否优先组
+                            </label>
+                           <%-- <label class="checkbox checkbox-inline">
+                                <input style="width: 20px;height: 20px;" type="checkbox"
+                                       name="f_nofirstOrNot"
+                                       class="rh"/>非优先组
+                            </label>--%>
+                        </td>
+                        <td width="50%" class="tit" id="rd">
+                            <h2>二、合同信息
+                                <label class="checkbox-inline">
+                                    <input type="checkbox"
+                                           style="width: 20px;height: 20px;font-size: 22px"
+                                           class="all"/>全选/反选
+                                </label>
+                            </h2>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="contractCode"
+                                           class="rd"/>合同编号
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="person"
+                                           class="rd"/>经办人
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="signDate"
+                                           class="rd"/>合同签订时间
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="status"
+                                           class="rd"/>合同状态
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="price"
+                                           class="rd"/>销售价格
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="propertyRight"
+                                           class="rd"/>产权比例
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="name"
+                                           class="rd"/>产权人姓名
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="idCard"
+                                           class="rd"/>产权人身份证号
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="status"
+                                           class="rd"/>数据状态
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="operatePerson"
+                                           class="rd"/>锁定人员
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="operateDate"
+                                           class="rd"/>锁定日期
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="memo"
+                                           class="rd"/>备注
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="operateMemo"
+                                           class="rd"/>操作备注
+                                </label>
+                            </div>
+                            <div class="checkbox">&nbsp;
+                                <label class="checkbox checkbox-inline">
+                                    <input style="width: 20px;height: 20px;" type="checkbox"
+                                           name="reason"
+                                           class="rd"/>退回原因
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="modal-footer" style="text-align: right;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="resultExcel()"><i class="fa fa-save"></i>&nbsp;导出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function chooseData() {
+        $("#myModal").modal();
+    }
+
+    function resultExcel() {
+        location.href = "resultExcel?" + $("#myForm").serialize();
+    }
+
+    $(function () {
+        $("input:checkbox[index]").click(function () {
+            var index = $(this).attr("index");
+            var bl = $(this).is(":checked");
+            $(".checkItem" + index).each(function (key, val) {
+                $(val).prop("checked", bl);
+            });
+        });
+    });
+</script>
+

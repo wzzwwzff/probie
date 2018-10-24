@@ -1,0 +1,151 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>合同信息台账</title>
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta content=always name=referrer>
+    <meta name="renderer" content="webkit">
+
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+
+    <link rel="stylesheet" href="../static/style/css.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body style="overflow: hidden;">
+<%--<jsp:include page="navigation.jsp"/>--%>
+<%--<jsp:include page="sideNav.jsp"/>--%>
+<div class="content">
+    <div class=" doc-content" style="position: relative;padding-left: 20px;padding-right: 20px;">
+        <h1 id="installing" class="page-header"><i class="fa fa-book"></i> <b>合同信息台账</b></h1>
+        <div class="search_content">
+            <div style="float: left">
+                <form class="form-inline" role="form">
+                    项目名称：<input type="text" class="form-control" placeholder="请输入项目名称">
+                    家庭购房人：<input type="text" class="form-control">
+                    身份证号：<input type="text" class="form-control">
+                    合同状态：
+                    <select class="form-control">
+                        <option>-请选择-</option>
+                        <option>已签约</option>
+                        <option>未签约</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-search"></i> 查询</button>
+                    <a href="合同信息台账.xls" class="btn btn-primary btn-sm"><i
+                            class="fa fa-file-excel-o"></i> 导出合同信息台账</a>
+                </form>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th style="text-align: center;" width="5%">序号</th>
+                <th style="text-align: center;">合同编号</th>
+                <th style="text-align: center;">产权人姓名</th>
+                <th style="text-align: center;">身份证号</th>
+                <th style="text-align: center;">项目名称</th>
+                <th style="text-align: center;">楼号</th>
+                <th style="text-align: center;">单元</th>
+                <th style="text-align: center;">房号</th>
+                <th style="text-align: center;">合同签订日期</th>
+                <th style="text-align: center;">产权比例</th>
+                <th style="text-align: center;">数据状态</th>
+                <th style="text-align: center;">详情</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="text-align: center;">1</td>
+                <td style="text-align: center;">HXYZ-OOO1</td>
+                <td style="text-align: center;">张瑜</td>
+                <td style="text-align: center;">110152487923547815</td>
+                <td style="text-align: center;">槐新雅筑</td>
+                <td style="text-align: center;">1#</td>
+                <td style="text-align: center;">3</td>
+                <td style="text-align: center;">0205</td>
+                <td style="text-align: center;">2018-05-25</td>
+                <td style="text-align: center;">50%</td>
+                <td style="text-align: center;">未锁定</td>
+                <td style="text-align: center;">
+                    <a href="/family/view.jsp"><i class="fa fa-eye"></i>查看</a>&nbsp;&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">2</td>
+                <td style="text-align: center;">HXYZ-OOO4</td>
+                <td style="text-align: center;">秦舞阳</td>
+                <td style="text-align: center;">110151479623547815</td>
+                <td style="text-align: center;">槐新雅筑</td>
+                <td style="text-align: center;">1#</td>
+                <td style="text-align: center;">2</td>
+                <td style="text-align: center;">0205</td>
+                <td style="text-align: center;">2018-05-26</td>
+                <td style="text-align: center;">50%</td>
+                <td style="text-align: center;color: red;">已上报</td>
+                <td style="text-align: center;">
+                    <a href="/family/view.jsp"><i class="fa fa-eye"></i>查看</a>&nbsp;&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">3</td>
+                <td style="text-align: center;">HXYZ-OOO5</td>
+                <td style="text-align: center;">李欣</td>
+                <td style="text-align: center;">110152487354717815</td>
+                <td style="text-align: center;">槐新雅筑</td>
+                <td style="text-align: center;">1#</td>
+                <td style="text-align: center;">3</td>
+                <td style="text-align: center;">0805</td>
+                <td style="text-align: center;">2018-05-27</td>
+                <td style="text-align: center;">50%</td>
+                <td style="text-align: center;">未锁定</td>
+                <td style="text-align: center;">
+                    <a href="/family/view.jsp"><i class="fa fa-eye"></i>查看</a>&nbsp;&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">4</td>
+                <td style="text-align: center;">HXYZ-OO11</td>
+                <td style="text-align: center;">何超</td>
+                <td style="text-align: center;">11015248735479815</td>
+                <td style="text-align: center;">槐新雅筑</td>
+                <td style="text-align: center;">1#</td>
+                <td style="text-align: center;">3</td>
+                <td style="text-align: center;">1205</td>
+                <td style="text-align: center;">2018-05-31</td>
+                <td style="text-align: center;">50%</td>
+                <td style="text-align: center;">未锁定</td>
+                <td style="text-align: center;">
+                    <a href="/family/view.jsp"><i class="fa fa-eye"></i>查看</a>&nbsp;&nbsp;
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div aria-label="Page navigation">
+            <ul class="pagination">
+                <li>
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li>
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

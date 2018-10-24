@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 34px;
+        }
+        @page {
+            margin: 18.6mm 18.6mm 18.6mm 18.6mm
+        }
+
+        body {
+            font-family: SimSun;
+            font-size: 10mm;
+            line-height: 200%;
+        }
+
+        @page {
+            size: 420mm 297mm;
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+    </style>
+</head>
+<body>
+<div style="width: 100%">
+    <table style="width: 100%">
+        <tr>
+            <td>
+                姓名：${education.name?default("")}
+            </td>
+            <td>
+                学制：${education.length?default("")}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                性别：${sex?default("")}
+            </td>
+            <td>
+                学习形式：${education.learning?default("")}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                出生日期：${birthDate?default("")}
+            </td>
+            <td>
+                专业：${education.major?default("")}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                更新日期：${updateDate?default("")}
+            </td>
+            <td>
+                证书编号：${education.certificateCode?default("")}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                入学日期：${entranceDate?default("")}
+            </td>
+            <td>
+                毕（结）业：${education.graducation?default("")}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                毕业日期：${graducationDate?default("")}
+            </td>
+            <td>
+                校（院）长名字：${education.headmaster?default("")}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                学历类别：${education.educationCategory?default("")}
+            </td>
+            <td>
+                在线验证：${education.educationCode?default("")}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                层次：${education.level?default("")}
+            </td>
+            <td>
+                注意事项：${education.matters?default("")}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                学校名称：${education.schoolName?default("")}
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

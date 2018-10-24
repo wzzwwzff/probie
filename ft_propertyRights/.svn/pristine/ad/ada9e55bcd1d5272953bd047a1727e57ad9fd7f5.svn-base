@@ -1,0 +1,14 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div class="side-nav-col" style="border: 0px solid #ff0000;width: 270px;position: fixed">
+    <ul class="nav navbar-nav side-nav">
+
+        <li class="active">
+            <span class="nav-header"><i class="fa fa-hand-o-right"></i> <a href="#"><b>数据查询统计管理</b></a></span>
+            <ul class="nav active">
+                <li class="active"><a href="dataQuery.jsp"><i class="fa fa-book"></i> 综合统计查询</a></li>
+                <%--<li ><a href="fileList.jsp"><i class="fa fa-file-o"></i> 档案资料列表</a></li>--%>
+            </ul>
+        </li>
+
+    </ul>
+</div>

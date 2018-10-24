@@ -1,0 +1,147 @@
+package com.app.cq.model;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 项目及合同档案表
+ * Created by jmdf on 2018/8/9.
+ */
+@Table(name = "projectFile")
+@Entity
+public class ProjectFile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    private Integer type;       //文件类型 1文件夹，2文件
+    private String fileName;    //文件名称
+    private String fileSize;    //文件大小
+    private String filePath;     //文件路径
+    private String uploadPerson;//创建人
+    private Date uploadDate;    //上传日期
+    private String userIp;      //上传ip
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer validFlag;     //是否有效  1.是 2.否
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parentId")
+    private ProjectFile parent;//上一级文件
+
+    @OneToMany(mappedBy = "parent")
+    private List<ProjectFile> sonList;//下一级文件
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contractId")
+    private Contract contract;//合同
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "projectId")
+    private Project project;//项目
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getUploadPerson() {
+        return uploadPerson;
+    }
+
+    public void setUploadPerson(String uploadPerson) {
+        this.uploadPerson = uploadPerson;
+    }
+
+    public Date getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(Date uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
+    public String getUserIp() {
+        return userIp;
+    }
+
+    public void setUserIp(String userIp) {
+        this.userIp = userIp;
+    }
+
+    public Integer getValidFlag() {
+        return validFlag;
+    }
+
+    public void setValidFlag(Integer validFlag) {
+        this.validFlag = validFlag;
+    }
+
+    public ProjectFile getParent() {
+        return parent;
+    }
+
+    public void setParent(ProjectFile parent) {
+        this.parent = parent;
+    }
+
+    public List<ProjectFile> getSonList() {
+        return sonList;
+    }
+
+    public void setSonList(List<ProjectFile> sonList) {
+        this.sonList = sonList;
+    }
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+}

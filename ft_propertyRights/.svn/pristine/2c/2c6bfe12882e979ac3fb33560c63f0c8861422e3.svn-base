@@ -1,0 +1,220 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>档案上报管理</title>
+    <%@include file="/static/common/common.jsp" %>
+    <script src="/static/plugin/powerful-album-view/dist/viewer.js"></script>
+    <script src="/static/plugin/powerful-album-view/assets/js/main.js"></script>
+    <link href="/static/plugin/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+    <script src="/static/plugin/uploadify/jquery.uploadify.min.js"></script>
+    <link rel="stylesheet" href="/static/plugin/powerful-album-view/dist/viewer.css">
+</head>
+<body>
+<div class="widget">
+    <div class="doc-content">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 300px;vertical-align: top;text-align: left;" colspan="2">
+                    <div class="widget" style="width: 100%;">
+                        <div class="widget-header" style="table-layout: fixed;">
+                            <h4 id="installing" class="title"><i class="fa fa-binoculars"></i>
+                                <b>影像资料上报【申请人：${family.name}；申请编号：${family.familyCode}】
+                                    <button class="btn btn-primary btn-sm" type="button"
+                                            onclick="history.back()"><i
+                                            class="fa fa-backward"></i>&nbsp;返回列表
+                                    </button>
+                                </b></h4>
+                            <%--<div class="title resizeLayout  text-left"
+                                 style="width: 280px; text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                                <a href="javascript:openModel();" title="点击查看详情"
+                                   style="border-bottom: 1px solid #000000;">申请编号：${family.familyCode}申请人${family.name}</a>
+                            </div>
+                            <span class="tools">
+                                <button type="button" class="btn btn-sm btn-default" onclick="history.back()">
+                                    <i class="fa fa-backward"></i>&nbsp;返回
+                                </button>
+                            </span>--%>
+                        </div>
+
+                    </div>
+                    <%--</div>--%>
+                    <%--</div>--%>
+                </td>
+
+            </tr>
+            <tr>
+                <td style="width: 300px;vertical-align: top;text-align: left;">
+                    <div class="widget-body data_form_height_auto">
+                        <%--<div class="viewport">--%>
+                        <%--<div class="overview" style="top: 0px;">--%>
+                        <%--只显示当前公司--%>
+                        <p>注：（<font style="color: red;">全部</font><font>/</font><font
+                                style="color: green;">已审核</font>）</p>
+                        <c:if test="${!(empty companyType)}">
+                            <div class="featured-articles-container">
+                                <h4 style="font-size: 16px" class="heading">
+                                    <a href="javascript:void(0)" class="allTree">影像资料</a>
+                                </h4>
+                                <div class="articles oneTree">
+                                    <c:forEach items="${resultMap[companyType]}" var="cataName"
+                                               varStatus="status">
+                                        <%--javascript:void(0);禁止用href方法--%>
+                                        <a href="javascript:void(0);" class="fileType" fileType="${cataName}"
+                                           onclick="showRight('${cataName}')"><span
+                                                class="label-bullet">&nbsp;</span>
+                                            <font
+                                                    style="color: red;font-size: 20px;font-weight: bold;"><span
+                                                    id="${cataName}_all">${empty shMap[cataName][0] ? 0 : shMap[cataName][0]}</span></font><font
+                                                    style="font-size: 20px;">/</font><font
+                                                    style="color: green;font-size: 20px;font-weight: bold;"><span
+                                                    id="${cataName}_ys">${empty shMap[cataName][1] ? 0 : shMap[cataName][1]}</span></font>
+                                            <tags:dataDict
+                                                    dataDict="${companyType eq '01' ? '影像资料' :  ''}"
+                                                    value="${cataName}"/></a>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                        </c:if>
+                    </div>
+                </td>
+                <td style="vertical-align: top;" class="text-left">
+                    <div id="checkRight"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 50%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">基本信息</h4>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="active" style="text-align: right;width: 20%;">村落</td>
+                            <td class="text-left" style="width:30%;"><%--<tags:dataDict dataDict="村落"
+                                                                                    value="${family.village}"/>--%></td>
+                            <td class="active" style="text-align: right;width: 20%;">编号</td>
+                            <%--<td class="text-left" style="width: 30%;">${family.fileNum}</td>--%>
+                        </tr>
+                        <tr>
+                            <td class="active" style="text-align: right;">初始登记人</td>
+                            <td class="text-left">${family.name}</td>
+                            <td class="active" style="text-align: right;">门牌号</td>
+                            <td class="text-left">${family.address}</td>
+                        </tr>
+                        <tr>
+                            <td class="active" style="text-align: right;">宅基地使用权人</td>
+                            <%--<td class="text-left">${family.sName}</td>--%>
+                            <td class="active" style="text-align: right;">通讯地址</td>
+                            <%--<td class="text-left">${family.telAddress}</td>--%>
+                        </tr>
+                        <%--<tr>--%>
+                        <%--<td class="active" style="text-align: right;width: 15%;">门牌号</td>--%>
+                        <%--<td class="text-left" colspan="3">${family.address}</td>--%>
+                        <%--</tr>--%>
+                        <%--<tr>--%>
+                        <%--<td class="active" style="text-align: right;">宅基地类型</td>--%>
+                        <%--<td class="text-left"><tags:dataDict dataDict="宅基地类型" value="${family.zjdType}"/></td>--%>
+                        <%--<td class="active" style="text-align: right;">认定宅基地面积【㎡】</td>--%>
+                        <%--<td class="text-left">${family.firmlyZjdArea}</td>--%>
+                        <%--</tr>--%>
+                        <%--<tr>--%>
+                        <%--<td class="active" style="text-align: right;">是否</td>--%>
+                        <%--<td class="text-left"><tags:dataDict dataDict="是否" value="${family.fBuyHouse}"/></td>--%>
+                        <%--<td class="active" style="text-align: right;">认定经营面积【㎡】</td>--%>
+                        <%--<td class="text-left">${family.bussArea}</td>--%>
+                        <%--</tr>--%>
+                    </table>
+                </div>
+                <%--<div class="modal-footer">--%>
+                <%--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>--%>
+                <%--<button type="button" class="btn btn-primary" onclick="saveForm();">保存</button>--%>
+                <%--</div>--%>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //全局变量
+    var buttonClick = null;
+
+    function refreshMyPage() {
+        if (buttonClick != null) {
+            showRight(buttonClick);
+        }
+    }
+
+    //    处理树形结构
+    $(".allTree").click(function () {
+        var display = $(".oneTree").css("display");
+        var one = $(this).parent().parent().find("div").eq(0);
+        if (display == "none") {
+            one.show();
+        } else {
+            one.hide();
+        }
+    });
+
+    function showRight(fileType) {
+        $("#checkRight").html("加载中，请稍后！");
+        //审核map
+        $.get("shMap", {
+            uuid: "${family.id}",
+            fileType: fileType,
+            _time: new Date().getTime(),
+            typeCheck: "${typeCheck}"
+        }, function (data) {
+            $("#" + fileType + "_all").text(data.result[0]);
+            $("#" + fileType + "_ys").text(data.result[1]);
+        });
+        $.get("checkRight", {
+            uuid: "${family.id}",
+            fileType: fileType,
+            _time: new Date().getTime(),
+            typeCheck: "${typeCheck}"
+        }, function (data) {
+            $("#checkRight").html(data);
+        });
+
+    }
+
+    $(".fileType").click(function () {
+        $(".fileType").removeClass("btn-warning");
+        $(this).addClass("btn-warning");
+    });
+
+    $(function () {
+        /*
+         var companyType = "${companyType}";
+         var showMenu = companyType + "01";
+         if (companyType == "" || companyType == null) {
+         showMenu = "0101";
+         }
+         */
+        var showMenu = $("a[fileType]:eq(0)").attr("fileType");
+        showRight(showMenu);
+        $(".fileType").each(function () {
+            if ($(this).attr("fileType") == showMenu) {
+                $(this).addClass("btn-warning");
+            }
+        });
+    });
+
+    //基本信息查看
+    function openModel() {
+        $("#myModal").modal();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+package com.app.cq.service;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.utils.Collections3;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class StatisticsService extends HibernateDao {
+
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private DataDictService dataDictService;
+
+    /**
+     * 获取项目名称，每个项目的家庭数量
+     *
+     * @return
+     */
+    public Map<String, String> getFamilyCount() {
+        String sql = "select projectName,count(id) as familyCount from family group by projectName order by projectName ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, String> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                String projectName = mapList.get(i)[0].toString();
+                String familyCount = mapList.get(i)[1].toString();
+                resultMap.put(projectName,familyCount);
+            }
+        }
+        return resultMap;
+    }
+    /**
+     * 获取项目名称，每个项目的合同数量
+     *
+     * @return
+     */
+    public Map<String, String> getContractCount() {
+        String sql = "select projectId,count(id) as projectCount from contract group by projectId order by projectId ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, String> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                Integer projectId = (Integer) mapList.get(i)[0];
+                String projectName = projectService.get(projectId).getProjectName();
+                String familyCount = mapList.get(i)[1].toString();
+                resultMap.put(projectName,familyCount);
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据项目和居室分组获取项目名称，居室，套数
+     *
+     * @return
+     */
+    public Map<String, Map> getHouseCount() {
+        String sql = "select projectId,houseType,count(id) as houseCount from house group by houseType,projectId order by houseType,projectId ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, Map> resultMap = Maps.newLinkedHashMap();
+        Integer holdHouseType = null;
+        if (Collections3.isNotEmpty(mapList)) {
+            Map<Integer, BigInteger> resultMap1 = Maps.newLinkedHashMap();
+            for (int i = 0; i <mapList.size() ; i++) {
+                Integer projectId = (Integer) mapList.get(i)[0];
+                Integer houseType = (Integer) mapList.get(i)[1];
+                BigInteger houseCount = (BigInteger) mapList.get(i)[2];
+                String houseTypeName = "";
+                List<DataDict> houseTypeDataDictList = dataDictService.getDataDictList("居室");
+                for (DataDict dataDict:houseTypeDataDictList) {
+                    if (houseType == Integer.valueOf(dataDict.getAttributeValue())){
+                        houseTypeName = dataDict.getAttributeName();
+                    }
+                }
+                if (holdHouseType != null && houseType != holdHouseType){
+                    resultMap1 = Maps.newLinkedHashMap();
+                }
+                resultMap1.put(projectId,houseCount);
+                holdHouseType = houseType;
+                resultMap.put(houseTypeName,resultMap1);
+            }
+        }
+        return resultMap;
+    }
+
+
+    /**
+     * 获取项目名称，每个项目的影像文件数量
+     *
+     * @return
+     */
+    public Map<String, String> getVideoCount() {
+        String sql = "select projectId,count(id) as fileCount from fileInfo group by projectId order by projectId ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, String> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                Integer projectId = (Integer) mapList.get(i)[0];
+                String projectName = this.projectService.get(projectId).getProjectName();
+                String fileCount = mapList.get(i)[1].toString();
+                resultMap.put(projectName,fileCount);
+            }
+        }
+        return resultMap;
+    }
+    /**
+     * 核验情况统计
+     *
+     * @return
+     */
+    public Map<String, Map<String,List<String>>> getCheckStatistics() {
+        String sql = "SELECT projectName,familyType,count(id)," +
+                "sum(case when houseStatus = 1 and socialStatus = 1 and marriageStatus = 1 and ageStatus = 1 and educationStatus = 1 and otherStatus = 1 then 1 ELSE 0 end) as notCheck," +
+                "sum(case when houseStatus = 2 and socialStatus = 2 and marriageStatus = 2 and ageStatus = 2 and educationStatus = 2 and otherStatus = 2 then 1 ELSE 0 end) as noCheck," +
+                "sum(case when houseStatus = 3 and socialStatus = 3 and marriageStatus = 3 and ageStatus = 3 and educationStatus = 3 and otherStatus = 3 then 1 ELSE 0 end) as Checked " +
+                "FROM family GROUP BY projectName,familyType ORDER BY projectName,familyType";
+        List mapList =  this.getSession().createSQLQuery(sql).list();
+        Map<String, Map<String,List<String>>> resultMap = Maps.newLinkedHashMap();
+        Map<String,List<String>> resultMap1 = Maps.newLinkedHashMap();
+        List<String> resultList = new ArrayList<>();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                String projectName = (String) mapList.get(0);
+                String familyTypeId = (String) mapList.get(1);
+                String totalCount = (String) mapList.get(2);
+                String notCheck = (String) mapList.get(3);
+                String noCheck = (String) mapList.get(4);
+                String checked = (String) mapList.get(5);
+                resultList.add(totalCount);
+                resultList.add(notCheck);
+                resultList.add(noCheck);
+                resultList.add(checked);
+                resultMap1.put(familyTypeId,resultList);
+                resultMap.put(projectName,resultMap1);
+            }
+        }
+        return resultMap;
+    }
+}

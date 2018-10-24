@@ -1,0 +1,130 @@
+package com.app.cq.web.cq;
+
+import com.app.cq.model.House;
+import com.app.cq.service.HouseService;
+import com.sqds.page.PageInfo;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * Created by jmdf on 2018/8/10.
+ */
+@Controller
+@RequestMapping("/cq/house/*")
+public class HouseController {
+
+    @Resource
+    private HouseService houseService;
+
+    /**
+     * 房屋转租管理
+     * @param request
+     * @return
+     */
+    @RequestMapping("turnzuMag")
+    public void turnzuMag(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<House> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = this.houseService.houseList(pageInfo);
+        modelMap.put("pageInfo",pageInfo);
+    }
+
+    /**
+     * 房屋转售管理
+     * @param request
+     * @return
+     */
+    @RequestMapping("turnSaleMag")
+    public void turnSaleMag(HttpServletRequest request,ModelMap modelMap){
+        turnzuMag(request,modelMap);
+    }
+
+    /**
+     * 转租信息查看
+     * @param request
+     * @return
+     */
+    @RequestMapping("turnzuView")
+    public void turnzuView(HttpServletRequest request,ModelMap modelMap){
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        House house = this.houseService.get(houseId);
+        modelMap.addAttribute("house",house);
+    }
+
+    /**
+     * 转租信息登记
+     * @param request
+     * @return
+     */
+    @RequestMapping("turnzuForm")
+    public void turnzuForm(HttpServletRequest request,ModelMap modelMap){
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        House house = this.houseService.get(houseId);
+        modelMap.addAttribute("house",house);
+    }
+
+    /**
+     * 转租信息保存
+     * @param request
+     * @return
+     */
+    @RequestMapping("turnzuSave")
+    public String turnzuSave(HttpServletRequest request,ModelMap modelMap){
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        House house = this.houseService.get(houseId);
+        if(house == null){
+            house = new House();
+        }
+        Servlets.bind(request,house);
+        this.houseService.save(house);
+        return "redirect:turnzuMag?" + request.getAttribute("searchParams");
+    }
+
+    /**
+     * 转售信息查看
+     * @param request
+     * @return
+     */
+    @RequestMapping("turnSaleView")
+    public void turnSaleView(HttpServletRequest request,ModelMap modelMap){
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        House house = this.houseService.get(houseId);
+        modelMap.addAttribute("house",house);
+    }
+
+    /**
+     * 转售信息登记
+     * @param request
+     * @return
+     */
+    @RequestMapping("turnSaleForm")
+    public void turnSaleForm(HttpServletRequest request,ModelMap modelMap){
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        House house = this.houseService.get(houseId);
+        modelMap.addAttribute("house",house);
+    }
+
+    /**
+     * 转售信息保存
+     * @param request
+     * @return
+     */
+    @RequestMapping("turnSaleSave")
+    public String turnSaleSave(HttpServletRequest request,ModelMap modelMap){
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        House house = this.houseService.get(houseId);
+        if(house == null){
+            house = new House();
+        }
+        Servlets.bind(request,house);
+        this.houseService.save(house);
+        return "redirect:turnzuMag?" + request.getAttribute("searchParams");
+    }
+
+}

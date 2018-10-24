@@ -1,0 +1,168 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Education;
+import com.app.cq.model.Family;
+import com.app.cq.service.EducationService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.utils.HttpClientUtil;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+@Controller
+@RequestMapping("/cq/education/*")
+public class EducationCheckController {
+    @Autowired
+    private EducationService educationService;
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private DataDictService dataDictService;
+
+    /**
+     * 获取html
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public String getHTML(HttpServletRequest request,String educationCode) throws IOException, InterruptedException {
+            String html = HttpClientUtil.getWebPage("https://www.chsi.com.cn/xlcx/bg.do?vcode=" + educationCode);
+            if(html.indexOf("请输入验证码以继续当前操作") > 0){
+//                System.out.println(html);
+                String regex = "(?is)name='capachatok'.*?value='(.*?)'.*?cap=(.*?)'";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(html);
+
+                if(matcher.find()){
+                    System.out.println("#########");
+                    String capachatok = matcher.group(1);
+                    String cap = matcher.group(2);
+                    System.out.println(capachatok);
+                    System.out.println(cap);
+                    System.out.println("@@@@@");
+
+                    String html1 = HttpClientUtil.getWebPage("https://www.chsi.com.cn/capachaimg.jpg?cap="+cap);
+
+                    Thread.sleep(1000);
+                    String html2 = HttpClientUtil.getWebPage("https://www.chsi.com.cn/xlcx/yzm.do?capachatok="+capachatok+"&cap="+cap);
+                    System.out.println(html2);
+                    System.out.println("=====================");
+
+                    Thread.sleep(2000);
+                    return html2;
+                }
+//                Thread.sleep(5000);
+//                return;
+            }else {
+                System.out.println(html);
+                return html;
+            }
+//            System.out.println("-------------------------"+i);
+//            Thread.sleep(1000);
+        return html;
+    }
+
+    /**
+     * 判断学历核验错误原因
+     */
+    public boolean judge(Family family,Education education){
+        boolean a = true;
+        String educationTrouble = "";
+        String name = education.getName();
+        String learning = education.getLearning();
+        String level = education.getLevel();
+        if (!StringUtils.getNotNullString(family.getName()).equals(name)){
+            a=false;
+            educationTrouble += "姓名不一致,";
+        };
+        List<DataDict> educationLevels = dataDictService.getDataDictList("学历层次");
+        Integer levelCheck = 0;
+        for (DataDict dataDict : educationLevels){
+            if (dataDict.getAttributeName().equals(level)){
+                levelCheck = Integer.valueOf(dataDict.getAttributeValue());
+            }
+        }
+
+        if (!StringUtils.getNotNullString(family.getLearning()).equals(learning)){
+            a=false;
+            educationTrouble += "学习形式不一致,";
+        }
+
+        if (levelCheck != family.getEducation()){
+            a=false;
+            educationTrouble += "学历层次不一致";
+        };
+        family.setEducationTrouble(educationTrouble);
+        if (a == true){
+            family.setEducationStatus(2);
+            family.setEducationTrouble("");
+        }
+        if (a == false){
+            family.setEducationStatus(3);
+        }
+        if (family.getEducationStatus() == 1){
+            family.setEducationTrouble("");
+        }
+        this.familyService.save(family);
+        return a;
+    }
+
+    /**
+     * 解析html
+     */
+    @RequestMapping("handleHTML")
+    public String handleHTML(HttpServletRequest request){
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        PageInfo<Family> pageInfo1 = this.familyService.listEducationNull(pageInfo, request);
+        for (Family family:pageInfo1.getResult()) {
+            family.setEducationStatus(1);
+            this.familyService.save(family);
+        }
+        //清除其他通过和未审核错误信息
+//        List<Family> families = familyService.listAll();
+//        for (Family family : families) {
+//            family.setEducationTrouble("");
+//            familyService.save(family);
+//        }
+        List<Family> result = familyService.listEducationCheck(pageInfo, request).getResult();
+        for (int i = 0; i <result.size() ; i++) {
+            String html = null;
+            String educationCode = result.get(i).getEducationCode();
+            try {
+                html = this.getHTML(request,educationCode);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Family family = this.familyService.findByEducationCode(educationCode);
+            Education education = this.educationService.findByFId(family.getId());
+            System.out.println(html + "_+_+_+_+_+___+__+_");
+            Document doc = Jsoup.parse(html);
+
+            String text = doc.body().text(); // "An example link"
+            if (education == null){
+                this.educationService.saveEducationFromHTML(text,family);
+                Education education1 = this.educationService.findByFId(family.getId());
+                this.judge(family,education1);
+                return "redirect:/cq/audit/reviewList";
+            }else {
+                this.judge(family,education);
+                return "redirect:/cq/audit/reviewList";
+            }
+        }
+        return "redirect:/cq/audit/reviewList";
+    }
+}

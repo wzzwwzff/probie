@@ -1,0 +1,32 @@
+package com.app.cq.service;
+
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.utils.Collections3;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class StatisticsService extends HibernateDao {
+
+    /**
+     * 获取项目名称，每个项目的家庭数量
+     *
+     * @return
+     */
+    public Map<String, String> getProjectCount() {
+        String sql = "select projectName,count(id) as familyCount from family group by projectName order by projectName ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, String> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                String projectName = mapList.get(i)[0].toString();
+                String familyCount = mapList.get(i)[1].toString();
+                resultMap.put(projectName,familyCount);
+            }
+        }
+        return resultMap;
+    }
+}

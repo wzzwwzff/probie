@@ -1,0 +1,105 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta content=always name=referrer>
+    <meta name="renderer" content="webkit">
+    <title>学历信息查看</title>
+    <%@include file="/static/common/common.jsp" %>
+</head>
+<body>
+<body>
+<div class="title">
+    <h4 style="color: #0d88cc">学历信息查看</h4>
+</div>
+<div class="content">
+    <div class=" doc-content"
+         style="position: relative;">
+        <fieldset>
+            <legend>一、申请人信息</legend>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td class="fieldName">姓名：</td>
+                    <td class="fieldValue">
+                        ${education.name}
+                    </td>
+                    <td class="fieldName">更新日期：</td>
+                    <td class="fieldValue">
+                        <fmt:formatDate value="${education.updateDate}" pattern="yyyy-MM-dd" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">性别：</td>
+                    <td class="fieldValue"><tags:dataDict dataDict="性别" value="${education.sex}" /></td>
+                    <td class="fieldName">学历类别：</td>
+                    <td class="fieldValue">${education.educationCategory}</td>
+                </tr>
+                <tr>
+                    <td class="fieldName">学历层次：</td>
+                    <td class="fieldValue">
+                        ${education.level}
+                    </td>
+                    <td class="fieldName">学习形式：</td>
+                    <td class="fieldValue">${education.learning}</td>
+                </tr>
+                <tr>
+                    <td class="fieldName">学制：</td>
+                    <td class="fieldValue">${education.length}</td>
+                    <td class="fieldName">毕（结）业日期</td>
+                    <td class="fieldValue">
+                        <fmt:formatDate value="${education.graducationDate}" pattern="yyyy-MM-dd" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">入学日期：</td>
+                    <td class="fieldValue"><fmt:formatDate value="${education.entranceDate}" pattern="yyyy-MM-dd" /></td>
+                    <td class="fieldName">学校名称：</td>
+                    <td class="fieldValue">
+                        ${education.schoolName}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">专业：</td>
+                    <td class="fieldValue">
+                        ${education.major}
+                    </td>
+                    <td class="fieldName">证书编号：</td>
+                    <td class="fieldValue">
+                        ${education.certificateCode}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">校（院）长姓名：</td>
+                    <td class="fieldValue">
+                        ${education.headmaster}
+                    </td>
+                    <td class="fieldName">学历在线验证码：</td>
+                    <td class="fieldValue">
+                        ${education.educationCode}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">注意事项：</td>
+                    <td class="fieldValue" colspan="3">
+                        ${education.matters}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </fieldset><br/>
+        <div class="text-center footer">
+            <button type="button" class="btn btn-white" onclick="javascript:history.back();"><i
+                    class="fa fa-backward"></i> 返回
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

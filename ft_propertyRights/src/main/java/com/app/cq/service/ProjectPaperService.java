@@ -1,0 +1,80 @@
+package com.app.cq.service;
+
+import com.app.cq.exception.Precondition;
+import com.app.cq.model.ProjectFile;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.StringUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by jmdf on 2018/8/9.
+ */
+@Service
+public class ProjectPaperService extends HibernateDao<ProjectFile>{
+
+    /**
+     * 根据项目id查询项目资料
+     * @param projectId
+     * @return
+     */
+    public PageInfo<ProjectFile> getProjectPaperByid(PageInfo pageInfo,Integer projectId){
+        String hql = "from ProjectFile where projectId=? order by id";
+        return list(pageInfo,hql, projectId);
+    }
+
+    /**
+     * 根据合同id查询合同资料
+     * @param projectId
+     * @return
+     */
+    public PageInfo<ProjectFile> getContractPaperByid(PageInfo pageInfo,Integer projectId){
+        String hql = "from ProjectFile where contractId=? order by id";
+        return list(pageInfo,hql, projectId);
+    }
+
+    /**
+     * 项目合同资料专用查询
+     *
+     * @param uuid
+     * @return
+     */
+    public List<ProjectFile> getFileInfoListForInCheck(Integer uuid) {
+        StringBuffer hql = new StringBuffer("from ProjectFile where parentId = '" + uuid + "' order by uploadDate");
+        return this.list(hql.toString());
+    }
+
+    /**
+     * 项目合同资料删除查询
+     *
+     * @param uuid
+     * @return
+     */
+    public List<ProjectFile> getFileInfoListBack(Integer uuid) {
+        StringBuffer hql = new StringBuffer("from ProjectFile where and parentId = '" + uuid + "'");
+        return this.getSession().createQuery(hql.toString()).list();
+    }
+
+    /**
+     * 项目合同公用删除上传文件
+     *
+     * @param fileInfoUuid
+     */
+    public void deleteProandConFile(String fileInfoUuid) {
+        StringBuffer sql = new StringBuffer("DELETE FROM projectfile where id = '" + fileInfoUuid + "'");
+        this.getSession().createSQLQuery(sql.toString()).executeUpdate();
+    }
+
+    /**
+     * 项目资料下载
+     * @param ids
+     * @return
+     */
+    public List<ProjectFile> listByIds(String ids) {
+        Precondition.checkAjaxArguement(StringUtils.isNotEmpty(ids), "0002", "该数据不存在！");
+        StringBuffer hql = new StringBuffer("from ProjectFile where id in(" + ids + ")");
+        return this.list(hql.toString());
+    }
+}

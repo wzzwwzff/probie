@@ -1,0 +1,84 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <title>房屋转租管理</title>
+    <%@include file="/static/common/common.jsp" %>
+</head>
+<body style="overflow: hidden;">
+<div class="title">
+    <h3>房屋转租管理</h3>
+</div>
+<div class="content">
+    <div class=" doc-content">
+        <div class="search_content resizeLayout" style="margin-top: 5px;">
+            <form class="form-inline" role="form" id="search">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">产权人姓名</div>
+                        <tags:searchInput name="name" className="form-control" fieldType="string" operator="like"/>
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">身份证号</div>
+                        <tags:searchInput name="idCard" className="form-control" fieldType="string" operator="like"/>
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">分配状态</div>
+                        <tags:searchDataDict name="status" className="form-control" fieldType="integer" dataDict="分配状态"/>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</button>&nbsp;&nbsp;
+                <a class="btn btn-primary btn-sm refresh" href="turnzuMag">
+                    <i class="fa fa-refresh">&nbsp;刷新</i>
+                </a>
+            </form>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th style="text-align: center;" width="5%">序号</th>
+                <th style="text-align: center;">产权人姓名</th>
+                <th style="text-align: center;">身份证号</th>
+                <th style="text-align: center;">项目名称</th>
+                <th style="text-align: center;">楼号</th>
+                <th style="text-align: center;">单元</th>
+                <th style="text-align: center;">房号</th>
+                <th style="text-align: center;">转租人姓名</th>
+                <th style="text-align: center;">转租人身份证号</th>
+                <th style="text-align: center;">租赁合同签订日期</th>
+                <th style="text-align: center;">分配状态</th>
+                <th style="text-align: center;">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${pageInfo.result}" var="house" varStatus="status">
+                <c:if test="${house.status eq 3}">
+                    <tr>
+                        <td class="text-center">${status.count}</td>
+                        <td class="text-center">${house.name}</td>
+                        <td class="text-center">${house.idCard}</td>
+                        <td class="text-center"><tags:dataDict dataDict="项目名称" value="${house.project.projectName}"/></td>
+                        <td class="text-center">${house.buildNum}</td>
+                        <td class="text-center">${house.unitNum}</td>
+                        <td class="text-center">${house.houseNum}</td>
+                        <td class="text-center">${house.rentName}</td>
+                        <td class="text-center">${house.rentIdCard}</td>
+                        <td class="text-center"><fmt:formatDate value="${house.rentDate}" pattern="yyyy-MM-dd"/></td>
+                        <td class="text-center"><tags:dataDict dataDict="分配状态" value="${house.status}"/></td>
+                        <td class="text-center">
+                            <a href="turnzuView?houseId=${house.id}"><i class="fa fa-eye"></i>查看</a>&nbsp;&nbsp;
+                            <c:if test="${contract.status ne 3}">
+                                <a href="turnzuForm?houseId=${house.id}"><i class="fa fa-edit"></i>登记转租人信息</a>&nbsp;&nbsp;
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:if>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

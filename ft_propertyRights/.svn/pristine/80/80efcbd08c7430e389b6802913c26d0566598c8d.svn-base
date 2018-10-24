@@ -1,0 +1,226 @@
+package com.app.cq.web.cq;
+
+import com.app.cq.exception.Precondition;
+import com.app.cq.model.Contract;
+import com.app.cq.model.Family;
+import com.app.cq.model.House;
+import com.app.cq.service.ContractService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.HouseService;
+import com.app.permission.utils.UserSession;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.StringUtils;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jmdf on 2018/8/9.
+ */
+@Controller
+@RequestMapping("/cq/contract/*")
+public class ContractController {
+    @Resource
+    private FamilyService familyService;
+    @Resource
+    private ContractService contractService;
+    @Resource
+    private HouseService houseService;
+
+    /**
+     * 合同信息登记入口
+     */
+    @RequestMapping("start")
+    public void start(){
+
+    }
+
+    /**
+     * 合同信息列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Contract> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = this.contractService.contractList(pageInfo);
+        modelMap.put("pageInfo",pageInfo);
+    }
+
+    /**
+     * 合同信息表单
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request, ModelMap modelMap) {
+        Integer contractId = ParamUtils.getInt(request, "contractId", 0);
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+
+        Family  family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null, "数据错误，请重试！");
+
+        Contract  contract = this.contractService.get(contractId);
+
+        if (contract == null) {
+            contract = new Contract();
+        }
+
+        modelMap.addAttribute("contract", contract);
+        modelMap.addAttribute("family", family);
+        modelMap.addAttribute("person", UserSession.getUserFromSession(request).getRealName());
+    }
+
+    /**
+     * 合同信息保存
+     * @param request
+     * @return
+     */
+    @RequestMapping("save")
+    public String save(HttpServletRequest request){
+        Integer contractId = ParamUtils.getInt(request, "contractId", 0);
+        Contract  contract = this.contractService.get(contractId);
+
+        if (contract == null) {
+            contract = new Contract();
+        }
+        Servlets.bind(request,contract);
+        this.contractService.save(contract);
+
+        return "redirect:list?" +"&"+request.getAttribute("searchParams");
+    }
+
+    /**
+     * 查找家庭信息
+     * @param request
+     * @param response
+     */
+    @RequestMapping("ajaxFamilyInfo")
+    @ResponseBody
+    public void ajaxFamilyInfo(HttpServletRequest request,HttpServletResponse response) {
+        String query = ParamUtils.getString(request,"query","");
+        List<Family> list = this.familyService.listByParam(query);
+        if (list == null || list.size() == 0) {
+            return;
+        }
+        StringBuffer jsonstr = new StringBuffer();
+        // json数据格式
+        /**
+         * { query:'Li', // Original request suggestions:['Liberia','Libyan Arab
+         * Jamahiriya','Liechtenstein','Lithuania'], // List of suggestions
+         * data:['LR','LY','LI','LT'] // Optional parameter: list of keys for
+         * suggestion options; used in callback functions. }
+         */
+        jsonstr.append("{query:'" + query + "',suggestions:[");
+        int index = list.size();
+        int i = 0;
+        for (Family family : list) {
+            String str = StringUtils.getNotNullString(family.getName()) + "   "
+                    + StringUtils.getNotNullString(family.getIdCard())+ "    "
+                    +StringUtils.getNotNullString(family.getFamilyCode());
+            jsonstr.append("'" + str + "'");
+            if ((i + 1) != index) {
+                jsonstr.append(",");
+            }
+            i += 1;
+        }
+        jsonstr.append("],data:[");
+        i = 0;// 初始化i
+        for (Family family : list) {
+            String str = StringUtils.getNotNullString(family.getFamilyCode());
+            jsonstr.append("'" + str + "'");
+            if ((i + 1) != index) {
+                jsonstr.append(",");
+            }
+            i += 1;
+        }
+        jsonstr.append("]}");
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            response.setContentType("application/json; charset=utf-8");
+            // 防止JSP页面缓存造成ajax数据不刷新
+            response.setHeader("Cache-Control", "no-store");
+            response.setHeader("Pragma", "no-cache");
+            response.setDateHeader("Expires", 0);
+
+            out.print(jsonstr.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
+
+
+    /**
+     * 验证家庭信息是否存在
+     *
+     * @param request
+     */
+    @RequestMapping("validateIsExists")
+    @ResponseBody
+    public Map validateIsExists(HttpServletRequest request) {
+
+        String familyCode = ParamUtils.getString(request, "familyCode", "");
+
+        Family family = null;
+        int status = 1;
+        String message = "";
+
+        try {
+            family = this.familyService.findOneByProperty("familyCode",familyCode);
+        } catch (Exception e) {
+            status = 3;
+            message = "输入数据有误";
+        }
+
+        int familyId = 0;
+        if (family == null) {
+            status = 2;
+            message = "找不到该户数据，请检查输入内容是否正确";
+        }
+
+        if (status == 1) {
+            familyId = family.getId();
+        }
+
+        Map map = new HashMap();
+        map.put("status", status);
+        map.put("message", message);
+        map.put("familyId", familyId);
+        return map;
+    }
+
+    /**
+     * 删除
+     * @param request
+     * @return
+     */
+    @RequestMapping("delete")
+    @ResponseBody
+    public Map<String,String> delete(ServletRequest request){
+        Integer contractId = ParamUtils.getInt(request, "contractId", 0);
+        Contract  contract = this.contractService.get(contractId);
+
+        Precondition.checkSqdsArguement(contract != null, "数据错误，请重试！");
+        this.contractService.delete(contract.getId());
+        Map<String,String> map = new HashMap<String, String>();
+        map.put("success","true");
+        return map;
+    }
+}

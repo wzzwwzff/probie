@@ -1,0 +1,141 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>核验情况统计</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        html, body {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="title">
+    <h4>核验情况统计</h4>
+</div>
+<div class="content">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center" style="vertical-align: middle" rowspan="2">项目名称</th>
+            <th class="text-center" style="vertical-align: middle" rowspan="2">家庭类别</th>
+            <th class="text-center" style="vertical-align: middle" rowspan="2">总户数</th>
+            <th class="text-center" style="vertical-align: middle" rowspan="2">未审核</th>
+            <th class="text-center" style="vertical-align: middle" colspan="2">已审核</th>
+        </tr>
+        <tr>
+            <th class="text-center">今日审核通过</th>
+            <th class="text-center">累计审核通过</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center" style="vertical-align: middle;" rowspan="5">槐新雅筑</td>
+            <td class="text-center">本市户籍</td>
+            <td class="text-center">600</td>
+            <td class="text-center">400</td>
+            <td class="text-center">50</td>
+            <td class="text-center">200</td>
+        </tr>
+        <tr>
+            <td class="text-center">持有效证</td>
+            <td class="text-center">400</td>
+            <td class="text-center">300</td>
+            <td class="text-center">50</td>
+            <td class="text-center">100</td>
+        </tr>
+        <tr>
+            <td class="text-center">驻京现役军人或武警</td>
+            <td class="text-center">650</td>
+            <td class="text-center">350</td>
+            <td class="text-center">200</td>
+            <td class="text-center">300</td>
+        </tr>
+        <tr>
+            <td class="text-center">5年及以上缴纳社保</td>
+            <td class="text-center">350</td>
+            <td class="text-center">150</td>
+            <td class="text-center">100</td>
+            <td class="text-center">200</td>
+        </tr>
+        <tr>
+            <td class="text-center">5年及以上缴纳个税</td>
+            <td class="text-center">700</td>
+            <td class="text-center">500</td>
+            <td class="text-center">100</td>
+            <td class="text-center">200</td>
+        </tr>
+        <tr>
+            <td class="text-center" colspan="2" style="vertical-align: middle;">合计</td>
+            <td class="text-center">2700</td>
+            <td class="text-center">1700</td>
+            <td class="text-center">500</td>
+            <td class="text-center">1000</td>
+        </tr>
+        <tr>
+            <td class="text-center" style="vertical-align: middle;" rowspan="5">城建家园</td>
+            <td class="text-center">本市户籍</td>
+            <td class="text-center">900</td>
+            <td class="text-center">600</td>
+            <td class="text-center">200</td>
+            <td class="text-center">300</td>
+        </tr>
+        <tr>
+            <td class="text-center">持有效证</td>
+            <td class="text-center">800</td>
+            <td class="text-center">200</td>
+            <td class="text-center">200</td>
+            <td class="text-center">600</td>
+        </tr>
+        <tr>
+            <td class="text-center">驻京现役军人或武警</td>
+            <td class="text-center">500</td>
+            <td class="text-center">300</td>
+            <td class="text-center">100</td>
+            <td class="text-center">200</td>
+        </tr>
+        <tr>
+            <td class="text-center">5年及以上缴纳社保</td>
+            <td class="text-center">800</td>
+            <td class="text-center">300</td>
+            <td class="text-center">200</td>
+            <td class="text-center">500</td>
+        </tr>
+        <tr>
+            <td class="text-center">5年及以上缴纳个税</td>
+            <td class="text-center">600</td>
+            <td class="text-center">300</td>
+            <td class="text-center">200</td>
+            <td class="text-center">300</td>
+        </tr>
+        <tr>
+            <td class="text-center" colspan="2" style="vertical-align: middle;">合计</td>
+            <td class="text-center">3600</td>
+            <td class="text-center">1700</td>
+            <td class="text-center">900</td>
+            <td class="text-center">1900</td>
+        </tr>
+        <tr style="color: green;">
+            <td class="text-center" colspan="2">合计</td>
+            <td class="text-center">6300</td>
+            <td class="text-center">3400</td>
+            <td class="text-center">1400</td>
+            <td class="text-center">2900</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="footer">
+    <button class="btn btn-primary" id="excelBtn"><i class="fa fa-file-excel-o"></i>&nbsp;导出Excel
+    </button>
+</div>
+</body>
+</html>

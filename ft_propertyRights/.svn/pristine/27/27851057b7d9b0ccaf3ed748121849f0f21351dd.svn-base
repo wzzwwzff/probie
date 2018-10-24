@@ -1,0 +1,423 @@
+package com.app.cq.service;
+
+import com.app.cq.model.Contract;
+import com.app.cq.model.Family;
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Project;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.web.ParamUtils;
+import org.apache.logging.log4j.util.Strings;
+import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class StatisticsService extends HibernateDao {
+
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private DataDictService dataDictService;
+
+    /**
+     * 获取项目名称，每个项目的家庭数量
+     *
+     * @return
+     */
+    public Map<String, String> getFamilyCount() {
+        String sql = "select projectName,count(id) as familyCount from family group by projectName order by projectName ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, String> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                String projectName = mapList.get(i)[0].toString();
+                String familyCount = mapList.get(i)[1].toString();
+                resultMap.put(projectName,familyCount);
+            }
+        }
+        return resultMap;
+    }
+    /**
+     * 获取项目名称，每个项目的合同数量
+     *
+     * @return
+     */
+    public Map<String, String> getContractCount() {
+        String sql = "select projectId,count(id) as projectCount from contract group by projectId order by projectId ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, String> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                Integer projectId = (Integer) mapList.get(i)[0];
+                String projectName = projectService.get(projectId).getProjectName();
+                String familyCount = mapList.get(i)[1].toString();
+                resultMap.put(projectName,familyCount);
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据项目和居室分组获取项目名称，居室，套数
+     *
+     * @return
+     */
+    public Map<String, Map> getHouseCount() {
+        String sql = "select projectId,houseType,count(id) as houseCount from house group by houseType,projectId order by houseType,projectId ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, Map> resultMap = Maps.newLinkedHashMap();
+        Integer holdHouseType = null;
+        if (Collections3.isNotEmpty(mapList)) {
+            Map<Integer, BigInteger> resultMap1 = Maps.newLinkedHashMap();
+            for (int i = 0; i <mapList.size() ; i++) {
+                Integer projectId = (Integer) mapList.get(i)[0];
+                Integer houseType = (Integer) mapList.get(i)[1];
+                BigInteger houseCount = (BigInteger) mapList.get(i)[2];
+                String houseTypeName = "";
+                List<DataDict> houseTypeDataDictList = dataDictService.getDataDictList("居室");
+                for (DataDict dataDict:houseTypeDataDictList) {
+                    if (houseType == Integer.valueOf(dataDict.getAttributeValue())){
+                        houseTypeName = dataDict.getAttributeName();
+                    }
+                }
+                if (holdHouseType != null && houseType != holdHouseType){
+                    resultMap1 = Maps.newLinkedHashMap();
+                }
+                resultMap1.put(projectId,houseCount);
+                holdHouseType = houseType;
+                resultMap.put(houseTypeName,resultMap1);
+            }
+        }
+        return resultMap;
+    }
+
+
+    /**
+     * 获取项目名称，每个项目的影像文件数量
+     *
+     * @return
+     */
+    public Map<String, String> getVideoCount() {
+        String sql = "select projectId,count(id) as fileCount from fileInfo group by projectId order by projectId ";
+        List<Object[]> mapList = (List<Object[]>) this.getSession().createSQLQuery(sql).list();
+        Map<String, String> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                Integer projectId = (Integer) mapList.get(i)[0];
+                String projectName = this.projectService.get(projectId).getProjectName();
+                String fileCount = mapList.get(i)[1].toString();
+                resultMap.put(projectName,fileCount);
+            }
+        }
+        return resultMap;
+    }
+    /**
+     * 核验情况统计
+     *
+     * @return
+     */
+    public Map<String, Map<String,List<String>>> getCheckStatistics() {
+        String sql = "SELECT projectName,familyType,count(id)," +
+                "sum(case when houseStatus = 1 and socialStatus = 1 and marriageStatus = 1 and ageStatus = 1 and educationStatus = 1 and otherStatus = 1 then 1 ELSE 0 end) as notCheck," +
+                "sum(case when houseStatus = 2 and socialStatus = 2 and marriageStatus = 2 and ageStatus = 2 and educationStatus = 2 and otherStatus = 2 then 1 ELSE 0 end) as noCheck," +
+                "sum(case when houseStatus = 3 or socialStatus = 3 or marriageStatus = 3 or ageStatus = 3 or educationStatus = 3 or otherStatus = 3 then 1 ELSE 0 end) as Checked " +
+                "FROM family GROUP BY projectName,familyType ORDER BY projectName,familyType";
+        List<Map> mapList =  this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String, Map<String,List<String>>> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                String projectName = String.valueOf(mapList.get(i).get("projectName"));
+                String familyTypeId = String.valueOf(mapList.get(i).get("familyType"));
+                String totalCount = String.valueOf(mapList.get(i).get("count(id)"));
+                String notCheck = String.valueOf(mapList.get(i).get("notCheck"));
+                String noCheck = String.valueOf(mapList.get(i).get("noCheck"));
+                String checked = String.valueOf(mapList.get(i).get("Checked"));
+                Map<String,List<String>> resultMap1 = resultMap.get(projectName) == null ? new LinkedHashMap<String,List<String>>() : resultMap.get(projectName);
+                List<String> resultList = new ArrayList<>();
+                resultList.add(totalCount);
+                resultList.add(notCheck);
+                resultList.add(noCheck);
+                resultList.add(checked);
+                resultMap1.put(familyTypeId,resultList);
+                resultMap.put(projectName,resultMap1);
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 核验情况总计
+     *
+     * @return
+     */
+    public Map<String, String> getCheckStatisticsTotal() {
+        String sql = "select count(id),sum(case when houseStatus = 1 and socialStatus = 1 and marriageStatus = 1 and ageStatus = 1 and educationStatus = 1 and otherStatus = 1 then 1 ELSE 0 end) as notCheck," +
+                "sum(case when houseStatus = 2 and socialStatus = 2 and marriageStatus = 2 and ageStatus = 2 and educationStatus = 2 and otherStatus = 2 then 1 ELSE 0 end) as noCheck," +
+                "sum(case when houseStatus = 3 or socialStatus = 3 or marriageStatus = 3 or ageStatus = 3 or educationStatus = 3 or otherStatus = 3 then 1 ELSE 0 end) as Checked " +
+                "FROM family";
+        List<Map> mapList =  this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String,String> resultMap = Maps.newLinkedHashMap();
+        for (int i = 0; i <mapList.size() ; i++) {
+            String totalCount = String.valueOf(mapList.get(i).get("count(id)"));
+            String notCheck = String.valueOf(mapList.get(i).get("notCheck"));
+            String noCheck = String.valueOf(mapList.get(i).get("noCheck"));
+            String checked = String.valueOf(mapList.get(i).get("Checked"));
+            resultMap.put("totalCount",totalCount);
+            resultMap.put("notCheck",notCheck);
+            resultMap.put("noCheck",noCheck);
+            resultMap.put("checked",checked);
+        }
+
+        return resultMap;
+    }
+    /**
+     * 房源总计
+     *
+     * @return
+     */
+    public List getZongTotal() {
+        String sql = "SELECT sum(case when houseType = 1 then 1 ELSE 0 end) as fTotalCount,sum(case when houseType = 1 then IFNULL(buildArea,0) else 0 end) as fTotalArea,sum(case when houseType = 1 and `status` = 1 then 1 ELSE 0 end) as fCanCount,SUM(case when houseType = 1 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as fCanArea,sum(case when houseType = 1 and `status` > 1 then 1 ELSE 0 end) as fCanedCount,sum(case when houseType = 1 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as fCanedArea,sum(case when houseType = 2 then 1 ELSE 0 end) as sTotalCount,sum(IFNULL(buildArea,0)) as sTotalArea,sum(case when houseType = 2 and `status` = 1 then 1 ELSE 0 end) as sCanCount,SUM(case when houseType = 2 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as sCanArea,sum(case when houseType = 2 and `status` > 1 then 1 ELSE 0 end) as sCanedCount,sum(case when houseType = 2 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as sCanedArea,sum(case when houseType = 3 then 1 ELSE 0 end) as tTotalCount,sum(IFNULL(buildArea,0)) as tTotalArea,sum(case when houseType = 3 and `status` = 1 then 1 ELSE 0 end) as tCanCount,SUM(case when houseType = 3 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as tCanArea,sum(case when houseType = 3 and `status` > 1 then 1 ELSE 0 end) as tCanedCount,sum(case when houseType = 3 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as tCanedArea FROM `house`";
+        List<Map> mapList =  this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        List resultList = new ArrayList<>();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                BigDecimal fTotalCount = (BigDecimal) mapList.get(i).get("fTotalCount");
+                BigDecimal fTotalArea = (BigDecimal) mapList.get(i).get("fTotalArea");
+                BigDecimal fCanCount = (BigDecimal) mapList.get(i).get("fCanCount");
+                BigDecimal fCanArea = (BigDecimal) mapList.get(i).get("fCanArea");
+                BigDecimal fCanedCount = (BigDecimal) mapList.get(i).get("fCanedCount");
+                BigDecimal fCanedArea = (BigDecimal) mapList.get(i).get("fCanedArea");
+                BigDecimal sTotalCount = (BigDecimal) mapList.get(i).get("sTotalCount");
+                BigDecimal sTotalArea = (BigDecimal) mapList.get(i).get("sTotalArea");
+                BigDecimal sCanCount = (BigDecimal) mapList.get(i).get("sCanCount");
+                BigDecimal sCanArea = (BigDecimal) mapList.get(i).get("sCanArea");
+                BigDecimal sCanedCount = (BigDecimal) mapList.get(i).get("sCanedCount");
+                BigDecimal sCanedArea = (BigDecimal) mapList.get(i).get("sCanedArea");
+                BigDecimal tTotalCount = (BigDecimal) mapList.get(i).get("tTotalCount");
+                BigDecimal tTotalArea = (BigDecimal) mapList.get(i).get("tTotalArea");
+                BigDecimal tCanCount = (BigDecimal) mapList.get(i).get("tCanCount");
+                BigDecimal tCanArea = (BigDecimal) mapList.get(i).get("tCanArea");
+                BigDecimal tCanedCount = (BigDecimal) mapList.get(i).get("tCanedCount");
+                BigDecimal tCanedArea = (BigDecimal) mapList.get(i).get("tCanedArea");
+
+                resultList.add(fTotalCount);
+                resultList.add(fTotalArea);
+                resultList.add(fCanCount);
+                resultList.add(fCanArea);
+                resultList.add(fCanedCount);
+                resultList.add(fCanedArea);
+                resultList.add(sTotalCount);
+                resultList.add(sTotalArea);
+                resultList.add(sCanCount);
+                resultList.add(sCanArea);
+                resultList.add(sCanedCount);
+                resultList.add(sCanedArea);
+                resultList.add(tTotalCount);
+                resultList.add(tTotalArea);
+                resultList.add(tCanCount);
+                resultList.add(tCanArea);
+                resultList.add(tCanedCount);
+                resultList.add(tCanedArea);
+            }
+        }
+
+        return resultList;
+    }
+    /**
+     * 房源合计
+     *
+     * @return
+     */
+    public Map<String, List> getHouseZongTotal() {
+        String sql = "SELECT projectId,sum(case when houseType = 1 then 1 ELSE 0 end) as fTotalCount,sum(case when houseType = 1 then IFNULL(buildArea,0) else 0 end) as fTotalArea,sum(case when houseType = 1 and `status` = 1 then 1 ELSE 0 end) as fCanCount,SUM(case when houseType = 1 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as fCanArea,sum(case when houseType = 1 and `status` > 1 then 1 ELSE 0 end) as fCanedCount,sum(case when houseType = 1 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as fCanedArea,sum(case when houseType = 2 then 1 ELSE 0 end) as sTotalCount,sum(IFNULL(buildArea,0)) as sTotalArea,sum(case when houseType = 2 and `status` = 1 then 1 ELSE 0 end) as sCanCount,SUM(case when houseType = 2 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as sCanArea,sum(case when houseType = 2 and `status` > 1 then 1 ELSE 0 end) as sCanedCount,sum(case when houseType = 2 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as sCanedArea,sum(case when houseType = 3 then 1 ELSE 0 end) as tTotalCount,sum(IFNULL(buildArea,0)) as tTotalArea,sum(case when houseType = 3 and `status` = 1 then 1 ELSE 0 end) as tCanCount,SUM(case when houseType = 3 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as tCanArea,sum(case when houseType = 3 and `status` > 1 then 1 ELSE 0 end) as tCanedCount,sum(case when houseType = 3 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as tCanedArea FROM `house` GROUP BY projectId ORDER BY projectId";
+        List<Map> mapList =  this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String, List> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                Integer projectId = (Integer) mapList.get(i).get("projectId");
+                Project project = this.projectService.get(projectId);
+                String projectName = project.getProjectName();
+                BigDecimal fTotalCount = (BigDecimal) mapList.get(i).get("fTotalCount");
+                BigDecimal fTotalArea = (BigDecimal) mapList.get(i).get("fTotalArea");
+                BigDecimal fCanCount = (BigDecimal) mapList.get(i).get("fCanCount");
+                BigDecimal fCanArea = (BigDecimal) mapList.get(i).get("fCanArea");
+                BigDecimal fCanedCount = (BigDecimal) mapList.get(i).get("fCanedCount");
+                BigDecimal fCanedArea = (BigDecimal) mapList.get(i).get("fCanedArea");
+                BigDecimal sTotalCount = (BigDecimal) mapList.get(i).get("sTotalCount");
+                BigDecimal sTotalArea = (BigDecimal) mapList.get(i).get("sTotalArea");
+                BigDecimal sCanCount = (BigDecimal) mapList.get(i).get("sCanCount");
+                BigDecimal sCanArea = (BigDecimal) mapList.get(i).get("sCanArea");
+                BigDecimal sCanedCount = (BigDecimal) mapList.get(i).get("sCanedCount");
+                BigDecimal sCanedArea = (BigDecimal) mapList.get(i).get("sCanedArea");
+                BigDecimal tTotalCount = (BigDecimal) mapList.get(i).get("tTotalCount");
+                BigDecimal tTotalArea = (BigDecimal) mapList.get(i).get("tTotalArea");
+                BigDecimal tCanCount = (BigDecimal) mapList.get(i).get("tCanCount");
+                BigDecimal tCanArea = (BigDecimal) mapList.get(i).get("tCanArea");
+                BigDecimal tCanedCount = (BigDecimal) mapList.get(i).get("tCanedCount");
+                BigDecimal tCanedArea = (BigDecimal) mapList.get(i).get("tCanedArea");
+
+                List resultList = new ArrayList<>();
+                resultList.add(fTotalCount);
+                resultList.add(fTotalArea);
+                resultList.add(fCanCount);
+                resultList.add(fCanArea);
+                resultList.add(fCanedCount);
+                resultList.add(fCanedArea);
+                resultList.add(sTotalCount);
+                resultList.add(sTotalArea);
+                resultList.add(sCanCount);
+                resultList.add(sCanArea);
+                resultList.add(sCanedCount);
+                resultList.add(sCanedArea);
+                resultList.add(tTotalCount);
+                resultList.add(tTotalArea);
+                resultList.add(tCanCount);
+                resultList.add(tCanArea);
+                resultList.add(tCanedCount);
+                resultList.add(tCanedArea);
+                resultMap.put(projectName,resultList);
+            }
+        }
+
+        return resultMap;
+    }
+    /**
+     * 房源情况
+     *
+     * @return
+     */
+    public Map<String, Map<String,List>> getHouseStatisticsTotal() {
+        String sql = "SELECT projectId,buildArea,buildNum,sum(case when houseType = 1 then 1 ELSE 0 end) as fTotalCount,sum(case when houseType = 1 then IFNULL(buildArea,0) else 0 end) as fTotalArea,sum(case when houseType = 1 and `status` = 1 then 1 ELSE 0 end) as fCanCount,SUM(case when houseType = 1 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as fCanArea,sum(case when houseType = 1 and `status` > 1 then 1 ELSE 0 end) as fCanedCount,sum(case when houseType = 1 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as fCanedArea,sum(case when houseType = 2 then 1 ELSE 0 end) as sTotalCount,sum(IFNULL(buildArea,0)) as sTotalArea,sum(case when houseType = 2 and `status` = 1 then 1 ELSE 0 end) as sCanCount,SUM(case when houseType = 2 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as sCanArea,sum(case when houseType = 2 and `status` > 1 then 1 ELSE 0 end) as sCanedCount,sum(case when houseType = 2 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as sCanedArea,sum(case when houseType = 3 then 1 ELSE 0 end) as tTotalCount,sum(IFNULL(buildArea,0)) as tTotalArea,sum(case when houseType = 3 and `status` = 1 then 1 ELSE 0 end) as tCanCount,SUM(case when houseType = 3 and `status` = 1 then IFNULL(buildArea,0) else 0 end) as tCanArea,sum(case when houseType = 3 and `status` > 1 then 1 ELSE 0 end) as tCanedCount,sum(case when houseType = 3 and `status` > 1 then IFNULL(buildArea,0) ELSE 0 end) as tCanedArea FROM `house` GROUP BY projectId,buildNum ORDER BY projectId,buildNum";
+        List<Map> mapList =  this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String, Map<String,List>> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (int i = 0; i <mapList.size() ; i++) {
+                Integer projectId = (Integer) mapList.get(i).get("projectId");
+                Project project = this.projectService.get(projectId);
+                String projectName = project.getProjectName();
+                String buildNum = String.valueOf(mapList.get(i).get("buildNum"));
+                BigDecimal fTotalCount = (BigDecimal) mapList.get(i).get("fTotalCount");
+                BigDecimal fTotalArea = (BigDecimal) mapList.get(i).get("fTotalArea");
+                BigDecimal fCanCount = (BigDecimal) mapList.get(i).get("fCanCount");
+                BigDecimal fCanArea = (BigDecimal) mapList.get(i).get("fCanArea");
+                BigDecimal fCanedCount = (BigDecimal) mapList.get(i).get("fCanedCount");
+                BigDecimal fCanedArea = (BigDecimal) mapList.get(i).get("fCanedArea");
+                BigDecimal sTotalCount = (BigDecimal) mapList.get(i).get("sTotalCount");
+                BigDecimal sTotalArea = (BigDecimal) mapList.get(i).get("sTotalArea");
+                BigDecimal sCanCount = (BigDecimal) mapList.get(i).get("sCanCount");
+                BigDecimal sCanArea = (BigDecimal) mapList.get(i).get("sCanArea");
+                BigDecimal sCanedCount = (BigDecimal) mapList.get(i).get("sCanedCount");
+                BigDecimal sCanedArea = (BigDecimal) mapList.get(i).get("sCanedArea");
+                BigDecimal tTotalCount = (BigDecimal) mapList.get(i).get("tTotalCount");
+                BigDecimal tTotalArea = (BigDecimal) mapList.get(i).get("tTotalArea");
+                BigDecimal tCanCount = (BigDecimal) mapList.get(i).get("tCanCount");
+                BigDecimal tCanArea = (BigDecimal) mapList.get(i).get("tCanArea");
+                BigDecimal tCanedCount = (BigDecimal) mapList.get(i).get("tCanedCount");
+                BigDecimal tCanedArea = (BigDecimal) mapList.get(i).get("tCanedArea");
+
+                Map<String,List> resultMap1 = resultMap.get(projectName) == null ? new LinkedHashMap<String,List>() : resultMap.get(projectName);
+                List resultList = new ArrayList<>();
+                resultList.add(fTotalCount);
+                resultList.add(fTotalArea);
+                resultList.add(fCanCount);
+                resultList.add(fCanArea);
+                resultList.add(fCanedCount);
+                resultList.add(fCanedArea);
+                resultList.add(sTotalCount);
+                resultList.add(sTotalArea);
+                resultList.add(sCanCount);
+                resultList.add(sCanArea);
+                resultList.add(sCanedCount);
+                resultList.add(sCanedArea);
+                resultList.add(tTotalCount);
+                resultList.add(tTotalArea);
+                resultList.add(tCanCount);
+                resultList.add(tCanArea);
+                resultList.add(tCanedCount);
+                resultList.add(tCanedArea);
+                resultMap1.put(buildNum,resultList);
+                resultMap.put(projectName,resultMap1);
+            }
+        }
+
+        return resultMap;
+    }
+
+    /**
+     * 综合统计查询方法
+     *
+     * @param pageInfo
+     */
+    public PageInfo<Family> getListForCompositeSearch(PageInfo<Family> pageInfo, HttpServletRequest request) {
+        StringBuffer hql = new StringBuffer("select f from Family f,House h,Contract c where 1=1 ");   //and len(f.idCode) = 10
+        Enumeration<String> paramsArray = request.getParameterNames();
+        while (paramsArray.hasMoreElements()) {
+            String name = paramsArray.nextElement();
+            if (name.endsWith("Array")) {
+                String value = ParamUtils.getString(request, name, "");
+                if (Strings.isNotEmpty(value)) {
+                    if (name.indexOf("_string") > 0) {
+                        value = this.getParamString(value);
+                    }
+                    String newName = name.substring(name.indexOf("_") + 1);
+                    String columnName = newName.substring(0, newName.indexOf("_"));
+
+                    hql.append(" and " + columnName + " in (" + value + ")");
+                }
+            }
+        }
+        hql.append("and f.id=c.family.id AND c.house.id=h.id order by f.projectName ");
+        return this.list(pageInfo, hql.toString());
+    }
+
+    private String getParamString(String param) {
+        String[] array = param.split(",");
+        StringBuffer paramSb = new StringBuffer();
+        for (String s : array) {
+            paramSb.append("'" + s + "'").append(",");
+        }
+        paramSb.deleteCharAt(paramSb.lastIndexOf(","));
+        return paramSb.toString();
+    }
+
+    /**
+     * 综合统计查询方法
+     *
+     * @param pageInfo
+     */
+    public PageInfo<Contract> getListForSearch(PageInfo<Contract> pageInfo, HttpServletRequest request) {
+        StringBuffer hql = new StringBuffer(" from Contract c inner join fetch c.family f where 1 = 1");   //and len(f.idCode) = 10
+        Enumeration<String> paramsArray = request.getParameterNames();
+        while (paramsArray.hasMoreElements()) {
+            String name = paramsArray.nextElement();
+            if (name.endsWith("Array")) {
+                String value = ParamUtils.getString(request, name, "");
+                if (Strings.isNotEmpty(value)) {
+                    if (name.indexOf("_string") > 0) {
+                        value = this.getParamString(value);
+                    }
+                    String newName = name.substring(name.indexOf("_") + 1);
+                    String columnName = newName.substring(0, newName.indexOf("_"));
+
+                    hql.append(" and " + columnName + " in (" + value + ")");
+                }
+            }
+        }
+        hql.append(" order by c.familyCode ");
+        return this.list(pageInfo, hql.toString());
+    }
+
+}

@@ -1,0 +1,373 @@
+package com.app.cq.web.cq;
+
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.service.FamilyPersonService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.utils.ReadExcel;
+import com.sqds.exception.SqdsException;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+@Controller
+@RequestMapping("/cq/compareInfo/*")
+public class CompareInfoController {
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private DataDictService dataDictService;
+
+
+    @RequestMapping("innerExcelIndex")
+    public void innerExcelIndex(HttpServletRequest request,ModelMap modelMap){
+        Integer familyType = ParamUtils.getInteger(request, "familyType", 0);
+        modelMap.addAttribute("familyType",familyType);
+    }
+    @RequestMapping("innerExcelIndex2")
+    public void innerExcelIndex2(HttpServletRequest request,ModelMap modelMap){
+    }
+    @RequestMapping("innerExcelIndex3")
+    public void innerExcelIndex3(HttpServletRequest request,ModelMap modelMap){
+    }
+
+
+    /**
+     * 家庭信息上传
+     * @param request
+     * @param map
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("comparison")
+    public String comparison(HttpServletRequest request , ModelMap map) throws Exception {
+        //上传文件
+        byte[] filePath = Servlets.uploadFile(request,"file");
+        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+        List list = ReadExcel.read(excelInputStream,0,true);
+        List<Family> familyList=familyService.listAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < list.size() ; i++) {
+            if (i > 0){
+                List row = (List) list.get(i);
+                if (!"".equals((String)row.get(0))) {
+                    Family family = new Family();
+                    String projectName = (String) row.get(1);
+                    String familyTypeName = (String)row.get(2);
+                    String familyCode = (String)row.get(3);
+                    String name = (String) row.get(4);
+                    String applyDate1 = (String) row.get(5);
+                    String cardType = (String) row.get(6);
+                    String idCard = (String) row.get(7);
+                    String contactName = (String) row.get(8);
+                    String phone = (String) row.get(9);
+                    String currentAddres = (String) row.get(10);
+                    String postCode = (String) row.get(11);
+                    String memo = (String) row.get(12);
+                    String marry = (String) row.get(13);
+                    Integer marryStatus = 0;
+                    if (marry.equals("未婚")){
+                        marryStatus = 1;
+                    }
+                    if (marry.equals("已婚")){
+                        marryStatus = 2;
+                    }
+                    if (marry.equals("离异")){
+                        marryStatus = 3;
+                    }
+                    String work = (String) row.get(14);
+                    Integer workUnit = 0;
+                    if (work.equals("丰台区")){
+                        workUnit = 1;
+                    }
+                    if (work.equals("东城区")){
+                        workUnit = 2;
+                    }
+                    String isThisArea = (String) row.get(15);
+                    Integer thisArea = 0;
+                    if (isThisArea.equals("是")){
+                        thisArea = 1;
+                    }
+                    if (isThisArea.equals("不是")){
+                        thisArea = 2;
+                    }
+                    String address = (String) row.get(16);
+                    String Permit1 = (String) row.get(17);
+                    Integer residencePermit = 0;
+                    if (Permit1.equals("北京市工作居住证")){
+                        residencePermit = 1;
+                    }
+
+                    String handleType1 = (String) row.get(18);
+                    Integer handleType = 0;
+                    if (handleType1.equals("身份证")){
+                        handleType = 1;
+                    }
+                    if (handleType1.equals("军（警）身份证")){
+                        handleType = 2;
+                    }
+                    String handleCard = (String) row.get(19);
+                    String residencePermitCode = (String) row.get(20);
+                    String startDate1 = (String) row.get(21);
+                    String endDate1 = (String) row.get(22);
+                    String armyType1 = (String) row.get(23);
+                    Integer armyType = 0;
+                    if (armyType1.equals("军官证")){
+                        armyType = 1;
+                    }
+                    if (armyType1.equals("警官证")){
+                        armyType = 2;
+                    }
+                    String armyIdCard = (String) row.get(24);
+                    String registerCode = (String) row.get(25);
+                    String firstOrNot1 = (String) row.get(26);
+                    Integer firstOrNot = 0;
+                    if (firstOrNot1.equals("是")){
+                        firstOrNot = 1;
+                    }
+                    if (firstOrNot1.equals("否")){
+                        firstOrNot = 2;
+                    }
+                    String continuity1 = (String) row.get(27);
+                    Integer continuity = 0;
+                    if (continuity1.equals("是")){
+                        continuity = 1;
+                    }
+                    if (continuity1.equals("否")){
+                        continuity = 2;
+                    }
+                    String education = (String) row.get(28);
+                    String learningMethod = (String) row.get(29);
+                    String thisParkIs = (String) row.get(30);
+                    String educationCode = (String) row.get(31);
+                    String job = (String) row.get(32);
+                    String unit = (String) row.get(33);
+                    String unitPerson = (String) row.get(34);
+                    String unitPhone = (String) row.get(35);
+                    String shakingBatch = (String) row.get(36);
+                    String shakingCode = (String) row.get(37);
+                    String shakingGroup = (String) row.get(38);
+                    String shakingResult = (String) row.get(39);
+
+
+                    family.setProjectName(projectName);
+                    Integer familyType = null;
+                    List<DataDict> familyTypeList = this.dataDictService.getDataDictList("家庭类型");
+                    for (DataDict dataDict : familyTypeList) {
+                        if (dataDict.getAttributeName().equals(familyTypeName)){
+                            familyType = Integer.valueOf(dataDict.getAttributeValue());
+                        }
+                    }
+
+                    for (Family family1:familyList) {
+                        if (family1.getFamilyCode().equals(familyCode)){
+                            throw new SqdsException("申请编号重复,请核验");
+                        }
+                    }
+
+                    family.setFamilyCode(familyCode);
+                    if (familyType == null){
+                        throw new SqdsException("家庭类型不能为空");
+                    }else {
+                        family.setFamilyType(familyType);
+                    }
+                    family.setName(name);
+                    if (!applyDate1.equals("") && applyDate1 != null) {
+                        if (applyDate1.contains("/")){
+                            applyDate1 = applyDate1.replace("/","-");
+                        }
+                        Date applyDate = sdf.parse(applyDate1);
+                        family.setApplyDate(applyDate);
+                    }
+                    if ("身份证".equals(cardType.trim())){
+                        family.setCardType(1);
+                    }
+                    if ("警官证".equals(cardType.trim())){
+                        family.setCardType(2);
+                    }
+                    family.setIdCard(idCard);
+                    family.setContactName(contactName);
+                    family.setPhone(phone);
+                    family.setCurrentAddres(currentAddres);
+                    family.setPostCode(postCode);
+                    family.setMemo(memo);
+                    family.setMarryStatus(marryStatus);
+                    family.setWorkUnit(workUnit);
+                    family.setThisArea(thisArea);
+                    family.setAddress(address);
+                    family.setResidencePermit(residencePermit);
+                    family.setHandleType(handleType);
+                    family.setHandleCard(handleCard);
+                    family.setResidencePermitCode(residencePermitCode);
+                    if (!startDate1.equals("") && startDate1 != null) {
+                        if (startDate1.contains("/")) {
+                            startDate1 = startDate1.replace("/", "-");
+                        }
+                        Date startDate = sdf.parse(startDate1);
+                        family.setStartDate(startDate);
+                    }
+                    if (!startDate1.equals("") && startDate1 != null) {
+                        if (endDate1.contains("/")){
+                            endDate1 = endDate1.replace("/","-");
+                        }
+                        Date endDate = sdf.parse(endDate1);
+                        family.setEndDate(endDate);
+                    }
+                    family.setArmyType(armyType);
+                    family.setArmyIdCard(armyIdCard);
+                    family.setRegisterCode(registerCode);
+                    family.setFirstOrNot(firstOrNot);
+                    family.setContinuity(continuity);
+                    List<DataDict> dataList = dataDictService.getDataDictList("学历层次");
+                    Integer educationLevel = 0;
+                    for (DataDict dataDict : dataList) {
+                        if (dataDict.getAttributeName().equals(education)){
+                            educationLevel = Integer.valueOf(dataDict.getAttributeValue());
+                        }
+                    }
+                    family.setEducation(educationLevel);
+                    family.setLearning(learningMethod);
+                    List<DataDict> thisParkList = dataDictService.getDataDictList("是否");
+                    Integer thisPark = 0;
+                    for (DataDict dataDict : thisParkList) {
+                        if (dataDict.getAttributeName().equals(thisParkIs)){
+                            thisPark = Integer.valueOf(dataDict.getAttributeValue());
+                        }
+                    }
+                    family.setThisPark(thisPark);
+                    family.setEducationCode(educationCode);
+                    family.setJob(job);
+                    family.setUnit(unit);
+                    family.setUnitPerson(unitPerson);
+                    family.setUnitPhone(unitPhone);
+                    family.setShakingBatch(shakingBatch);
+                    family.setShakingCode(shakingCode);
+                    family.setShakingGroup(shakingGroup);
+                    family.setShakingResult(shakingResult);
+                    familyService.save(family);
+                }
+            }
+        }
+        return "redirect:/cq/compareInfo/innerExcelIndex";
+    }
+
+
+    /**
+     * 摇号上传
+     * @param request
+     * @param map
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("comparison1")
+    public String comparison1(HttpServletRequest request , ModelMap map) throws Exception {
+        //上传文件
+        byte[] filePath = Servlets.uploadFile(request,"file");
+        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+        List list = ReadExcel.read(excelInputStream,0,true);
+        List<Family> familyList=familyService.listAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < list.size() ; i++) {
+            if (i > 0){
+                List row = (List) list.get(i);
+                if (!"".equals((String)row.get(0))) {
+                    String familyCode = (String)row.get(1);
+                    String name = (String) row.get(2);
+                    String shakingBatch = (String) row.get(3);
+                    String shakingCode = (String) row.get(4);
+                    String shakingGroup = (String) row.get(5);
+                    String shakingResult = (String) row.get(6);
+
+                    for (Family family1 : familyList){
+                        if (family1.getFamilyCode().equals(familyCode) && family1.getName().equals(name)){
+                            family1.setShakingBatch(shakingBatch);
+                            family1.setShakingCode(shakingCode);
+                            family1.setShakingGroup(shakingGroup);
+                            family1.setShakingResult(shakingResult);
+                            this.familyService.update(family1);
+                        }
+                    }
+                }
+            }
+        }
+        return "redirect:/cq/compareInfo/innerExcelIndex2";
+    }
+
+
+    /**
+     * 家庭成员上传
+     * @param request
+     * @param map
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("comparison2")
+    public String comparison2(HttpServletRequest request , ModelMap map) throws Exception {
+        //上传文件
+        byte[] filePath = Servlets.uploadFile(request,"file");
+        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+        List list = ReadExcel.read(excelInputStream,0,true);
+        List<Family> familyList=familyService.listAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < list.size() ; i++) {
+            if (i > 0){
+                List row = (List) list.get(i);
+                if (!"".equals((String)row.get(0))) {
+                    FamilyPerson familyPerson = new FamilyPerson();
+
+                    String familyCode = (String)row.get(1);
+                    String name = (String) row.get(2);
+                    String cardType1 = (String) row.get(3);
+                    Integer cardType = 0;
+                    if (cardType1.equals("身份证")){
+                        cardType = 1;
+                    }
+                    if (cardType1.equals("军（警）身份证")){
+                        cardType = 2;
+                    }
+                    String idCard = (String) row.get(4);
+                    String relationShip = (String) row.get(5);
+                    String address = (String) row.get(6);
+                    String memo = (String) row.get(7);
+                    Family family = null;
+                    for (Family family1 : familyList){
+                        if (family1.getFamilyCode().equals(familyCode)){
+                            family = family1;
+                        }
+                    }
+                    if (family == null){
+                        throw new SqdsException("无此申请人");
+                    }
+                    familyPerson.setName(name);
+                    familyPerson.setCardType(cardType);
+                    familyPerson.setIdCard(idCard);
+                    familyPerson.setRelationShip(relationShip);
+                    familyPerson.setAddress(address);
+                    familyPerson.setMemo(memo);
+                    familyPerson.setFamily(family);
+                    this.familyPersonService.save(familyPerson);
+                }
+            }
+        }
+        return "redirect:/cq/compareInfo/innerExcelIndex3";
+    }
+}

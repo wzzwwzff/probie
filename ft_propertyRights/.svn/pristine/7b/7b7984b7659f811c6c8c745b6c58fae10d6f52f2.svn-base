@@ -1,0 +1,321 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>房源情况统计</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        html, body {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="title">
+    <h4>房源情况统计</h4>
+</div>
+<div class="content">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center" style="vertical-align: middle" rowspan="3">项目名称</th>
+            <th class="text-center" style="vertical-align: middle" rowspan="3">楼号</th>
+            <th class="text-center" colspan="18">居室类型</th>
+        </tr>
+        <tr>
+            <th class="text-center" colspan="6">一居</th>
+            <th class="text-center" colspan="6">二居</th>
+            <th class="text-center" colspan="6">三居</th>
+        </tr>
+        <tr>
+            <th class="text-center">总套数/套</th>
+            <th class="text-center">总面积/㎡</th>
+            <th class="text-center">可选/套</th>
+            <th class="text-center">可选面积/㎡</th>
+            <th class="text-center">已选/套</th>
+            <th class="text-center">已选面积/㎡</th>
+            <th class="text-center">总套数/套</th>
+            <th class="text-center">总面积/㎡</th>
+            <th class="text-center">可选/套</th>
+            <th class="text-center">可选面积/㎡</th>
+            <th class="text-center">已选/套</th>
+            <th class="text-center">已选面积/㎡</th>
+            <th class="text-center">总套数/套</th>
+            <th class="text-center">总面积/㎡</th>
+            <th class="text-center">可选/套</th>
+            <th class="text-center">可选面积/㎡</th>
+            <th class="text-center">已选/套</th>
+            <th class="text-center">已选面积/㎡</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center" rowspan="4" style="vertical-align: middle;">槐新雅筑</td>
+            <td class="text-center">1号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr>
+            <td class="text-center">2号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr>
+            <td class="text-center">3号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr>
+            <td class="text-center">4号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr style="color: green;">
+            <td class="text-center" colspan="2">合计</td>
+            <td class="text-center">240</td>
+            <td class="text-center">12384.88</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2986.86</td>
+            <td class="text-center">156</td>
+            <td class="text-center">12362.02</td>
+            <td class="text-center">240</td>
+            <td class="text-center">14876.94</td>
+            <td class="text-center">96</td>
+            <td class="text-center">8897.68</td>
+            <td class="text-center">124</td>
+            <td class="text-center">12979.26</td>
+            <td class="text-center">400</td>
+            <td class="text-center">41673.46</td>
+            <td class="text-center">686</td>
+            <td class="text-center">49763.47</td>
+            <td class="text-center">64</td>
+            <td class="text-center">31909.99</td>
+        </tr>
+        <tr>
+            <td class="text-center" rowspan="5" style="vertical-align: middle;">城建家园</td>
+            <td class="text-center">1号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr>
+            <td class="text-center">2号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr>
+            <td class="text-center">3号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr>
+            <td class="text-center">4号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr>
+            <td class="text-center">5号楼</td>
+            <td class="text-center">60</td>
+            <td class="text-center">3348.88</td>
+            <td class="text-center">12</td>
+            <td class="text-center">986.86</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2362.02</td>
+            <td class="text-center">60</td>
+            <td class="text-center">4876.94</td>
+            <td class="text-center">24</td>
+            <td class="text-center">1897.68</td>
+            <td class="text-center">36</td>
+            <td class="text-center">2979.26</td>
+            <td class="text-center">100</td>
+            <td class="text-center">11673.46</td>
+            <td class="text-center">86</td>
+            <td class="text-center">9763.47</td>
+            <td class="text-center">14</td>
+            <td class="text-center">1909.99</td>
+        </tr>
+        <tr style="color: green;">
+            <td class="text-center" colspan="2">合计</td>
+            <td class="text-center">240</td>
+            <td class="text-center">12384.88</td>
+            <td class="text-center">48</td>
+            <td class="text-center">2986.86</td>
+            <td class="text-center">156</td>
+            <td class="text-center">12362.02</td>
+            <td class="text-center">240</td>
+            <td class="text-center">14876.94</td>
+            <td class="text-center">96</td>
+            <td class="text-center">8897.68</td>
+            <td class="text-center">124</td>
+            <td class="text-center">12979.26</td>
+            <td class="text-center">400</td>
+            <td class="text-center">41673.46</td>
+            <td class="text-center">686</td>
+            <td class="text-center">49763.47</td>
+            <td class="text-center">64</td>
+            <td class="text-center">31909.99</td>
+        </tr>
+        <tr style="color: green;">
+            <td class="text-center" colspan="2">总计</td>
+            <td class="text-center">480</td>
+            <td class="text-center">334648.88</td>
+            <td class="text-center">3576</td>
+            <td class="text-center">22986.86</td>
+            <td class="text-center">1902</td>
+            <td class="text-center">112362.02</td>
+            <td class="text-center">6873</td>
+            <td class="text-center">664876.94</td>
+            <td class="text-center">4424</td>
+            <td class="text-center">331897.68</td>
+            <td class="text-center">2236</td>
+            <td class="text-center">112979.26</td>
+            <td class="text-center">10100</td>
+            <td class="text-center">811673.46</td>
+            <td class="text-center">7686</td>
+            <td class="text-center">499763.47</td>
+            <td class="text-center">2714</td>
+            <td class="text-center">331909.99</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="footer">
+    <button class="btn btn-primary" id="excelBtn"><i class="fa fa-file-excel-o"></i>&nbsp;导出Excel
+    </button>
+</div>
+</body>
+</html>

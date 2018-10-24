@@ -1,0 +1,528 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.map.ContractExcelMap;
+import com.app.cq.model.Contract;
+import com.app.cq.model.Family;
+import com.app.cq.model.Project;
+import com.app.cq.service.ContractService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.ProjectService;
+import com.app.cq.service.StatisticsService;
+import com.app.cq.utils.RedirectAttributesExcel;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.Data;
+import java.math.BigInteger;
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+@Controller
+@RequestMapping("/cq/statistics/*")
+public class StatisticsController {
+
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private StatisticsService statisticsService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private ContractService contractService;
+
+    /**
+     * 家庭柱状图
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("familyMsg")
+    public void familyMsg(HttpServletRequest request, ModelMap modelMap) {
+        List<String> projectNameList = this.projectService.getProjectCount();
+        String groupArray = "";
+        if (Collections3.isNotEmpty(projectNameList)) {
+            for (String projectName : projectNameList) {
+                groupArray = groupArray + "'" + projectName + "',";
+            }
+        }
+        modelMap.addAttribute("groupArray", groupArray);
+    }
+
+
+    /**
+     * 获取各项目家庭数据
+     */
+    @RequestMapping("getFamilyMsg")
+    @ResponseBody
+    public List getFamilyMsg() {
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        String familyCountStr = "";
+        String projectNameStr = "";
+
+        List<String> projectNameList = this.projectService.getProjectCount();
+        Map<String, String> projectCount = this.statisticsService.getFamilyCount();
+        if (!Collections3.isEmpty(projectCount) && !Collections3.isEmpty(projectNameList)) {
+            for (String projectName1 : projectNameList) {
+                for (String projectName : projectCount.keySet()) {
+                    if (projectName.equals(projectName1)) {
+                        String familyCount = projectCount.get(projectName) == null ? String.valueOf(0) : projectCount.get(projectName);
+                        familyCountStr += familyCount + ",";
+                        projectNameStr += projectName + ",";
+                    }
+                }
+            }
+        }
+        String[] splitCount = familyCountStr.split(",");
+        String[] splitName = projectNameStr.split(",");
+        String splitCount1 = "";
+        for (int i = 0; i < splitCount.length; i++) {
+            if (i == splitCount.length - 1) {
+                splitCount1 += splitCount[i];
+            } else {
+                splitCount1 += splitCount[i] + ",";
+            }
+        }
+
+        map1.put("name", splitName[0]);
+        map1.put("data", "[" + splitCount1 + "]");
+        list.add(map1);
+        return list;
+    }
+
+    /**
+     * 合同柱状图
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("contractCount")
+    public void contractCount(HttpServletRequest request, ModelMap modelMap) {
+        this.familyMsg(request, modelMap);
+    }
+
+    /**
+     * 获取各项目合同数据
+     */
+    @RequestMapping("getContractMsg")
+    @ResponseBody
+    public List getContractMsg() {
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        String familyCountStr = "";
+        String projectNameStr = "";
+
+        List<String> projectNameList = this.projectService.getProjectCount();
+        Map<String, String> contractCount = this.statisticsService.getContractCount();
+        if (!Collections3.isEmpty(contractCount) && !Collections3.isEmpty(projectNameList)) {
+            for (String projectName1 : projectNameList) {
+                for (String projectName : contractCount.keySet()) {
+                    if (projectName.equals(projectName1)) {
+                        String familyCount = contractCount.get(projectName) == null ? String.valueOf(0) : contractCount.get(projectName);
+                        familyCountStr += familyCount + ",";
+                        projectNameStr += projectName + ",";
+                    }
+                }
+            }
+        }
+        String[] splitCount = familyCountStr.split(",");
+        String[] splitName = projectNameStr.split(",");
+        String splitCount1 = "";
+        for (int i = 0; i < splitCount.length; i++) {
+            if (i == splitCount.length - 1) {
+                splitCount1 += splitCount[i];
+            } else {
+                splitCount1 += splitCount[i] + ",";
+            }
+        }
+
+        map1.put("name", splitName[0]);
+        map1.put("data", "[" + splitCount1 + "]");
+        list.add(map1);
+        return list;
+    }
+
+
+    /**
+     * 房源信息柱状图
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("houseMsg")
+    public void houseMsg(HttpServletRequest request, ModelMap modelMap) {
+        List<DataDict> houseTypeList = this.dataDictService.getDataDictList("居室");
+        String groupArray = "";
+        if (Collections3.isNotEmpty(houseTypeList)) {
+            for (DataDict dataDict : houseTypeList) {
+                groupArray = groupArray + "'" + dataDict.getAttributeName() + "',";
+            }
+        }
+        modelMap.addAttribute("groupArray", groupArray);
+    }
+
+
+    /**
+     * 获取房源信息数据
+     */
+    @RequestMapping("getHouseMsg")
+    @ResponseBody
+    public List getHouseMsg() {
+        List list = new ArrayList();
+
+        String houseNumCount = "";
+        List<Project> projectList = this.projectService.listAll();
+        List<DataDict> houseTypeList = this.dataDictService.getDataDictList("居室");
+        Map<String, Map> houseCount = this.statisticsService.getHouseCount();
+        if (!Collections3.isEmpty(houseCount) && !Collections3.isEmpty(projectList) && !Collections3.isEmpty(houseTypeList)) {
+            for (Project project : projectList){
+                Map map = Maps.newHashMap();
+                for (DataDict dataDict : houseTypeList) {
+                    for (String houseTypeName : houseCount.keySet()) {
+                        if (dataDict.getAttributeName().equals(houseTypeName)) {
+                            for (Object projectId:houseCount.get(houseTypeName).keySet()) {
+                                if ((Integer)projectId == project.getId()){
+                                    BigInteger houseNum = (BigInteger) houseCount.get(houseTypeName).get(project.getId());
+                                    houseNumCount += houseNum.toString() + ",";
+                                }
+                            }
+                        }
+                    }
+                }
+                map.put("name","" + project.getProjectName());
+                if (houseNumCount.length() > 1){
+                    map.put("data","[" + houseNumCount.substring(0,houseNumCount.length() - 1) + "]");
+                }else {
+                    map.put("data","[" + houseNumCount.substring(0,houseNumCount.length()) + "]");
+                }
+                map.put("stack", "'male" + project.getId() + "'");
+                list.add(map);
+                houseNumCount = "";
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 影像文件信息
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("videoCount")
+    public void videoCount(HttpServletRequest request, ModelMap modelMap) {
+        this.familyMsg(request,modelMap);
+    }
+
+    /**
+     * 获取各项目影像文件数据
+     */
+    @RequestMapping("getVideoMsg")
+    @ResponseBody
+    public List getVideoMsg() {
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        String familyCountStr = "";
+        String projectNameStr = "";
+
+        List<String> projectNameList = this.projectService.getProjectCount();
+        Map<String, String> projectCount = this.statisticsService.getVideoCount();
+        if (!Collections3.isEmpty(projectCount) && !Collections3.isEmpty(projectNameList)) {
+            for (String projectName1 : projectNameList) {
+                for (String projectName : projectCount.keySet()) {
+                    if (projectName.equals(projectName1)) {
+                        String familyCount = projectCount.get(projectName) == null ? String.valueOf(0) : projectCount.get(projectName);
+                        familyCountStr += familyCount + ",";
+                        projectNameStr += projectName + ",";
+                    }
+                }
+            }
+        }
+        String[] splitCount = familyCountStr.split(",");
+        String[] splitName = projectNameStr.split(",");
+        String splitCount1 = "";
+        for (int i = 0; i < splitCount.length; i++) {
+            if (i == splitCount.length - 1) {
+                splitCount1 += splitCount[i];
+            } else {
+                splitCount1 += splitCount[i] + ",";
+            }
+        }
+
+        map1.put("name", splitName[0]);
+        map1.put("data", "[" + splitCount1 + "]");
+        list.add(map1);
+        return list;
+    }
+
+
+    /**
+     * 核验情况统计
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("checkStatistics")
+    public void checkStatistics(HttpServletRequest request, ModelMap modelMap) {
+        Map<String, Map<String, List<String>>> checkStatistics = this.statisticsService.getCheckStatistics();
+        Map<String, String> checkStatisticsTotal = this.statisticsService.getCheckStatisticsTotal();
+        modelMap.addAttribute("checkStatisticsTotal",checkStatisticsTotal);
+        modelMap.addAttribute("totalMap",checkStatistics);
+    }
+    /**
+     * 房源情况统计
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("houseStatistics")
+    public void houseStatistics(HttpServletRequest request, ModelMap modelMap) {
+        Map<String, Map<String, List>> houseStatisticsTotal = this.statisticsService.getHouseStatisticsTotal();
+        Map<String, List> total = this.statisticsService.getHouseZongTotal();
+        List zongTotal = this.statisticsService.getZongTotal();
+        modelMap.addAttribute("totalMap",houseStatisticsTotal);
+        modelMap.addAttribute("total",total);
+        modelMap.addAttribute("zongTotal",zongTotal);
+    }
+
+    /**
+     * 数据综合查询
+     * @param request
+     * @param model
+     */
+    @RequestMapping("dataQuery")
+    public void dailyDataExport(HttpServletRequest request, ModelMap model) {
+        Map<String,String> projectName = this.dataDictService.getMapByParentAttributeNameForName("项目名称");
+        model.addAttribute("projectName",projectName);
+
+        Map<String, String> allotStatus = this.dataDictService.getMapByParentAttributeNameForName("分配状态");
+        model.addAttribute("allotStatus", allotStatus);
+
+        Map<String, String> houseStatusMap = this.dataDictService.getMapByParentAttributeNameForName("审核状态");
+        model.addAttribute("houseStatusMap", houseStatusMap);
+
+        Map<String, String> socialStatusMap = this.dataDictService.getMapByParentAttributeNameForName("审核状态");
+        model.addAttribute("socialStatusMap", socialStatusMap);
+
+        Map<String, String> marriageStatusMap = this.dataDictService.getMapByParentAttributeNameForName("审核状态");
+        model.addAttribute("marriageStatusMap", marriageStatusMap);
+
+        Map<String, String> ageStatusMap = this.dataDictService.getMapByParentAttributeNameForName("审核状态");
+        model.addAttribute("ageStatusMap", ageStatusMap);
+
+        Map<String, String> educationStatusMap = this.dataDictService.getMapByParentAttributeNameForName("审核状态");
+        model.addAttribute("educationStatusMap", educationStatusMap);
+
+        Map<String, String> seniorityStatusMap = this.dataDictService.getMapByParentAttributeNameForName("审核状态");
+        model.addAttribute("seniorityStatusMap", seniorityStatusMap);
+
+        Map<String, String> reviewStatusMap = this.dataDictService.getMapByParentAttributeNameForName("复核状态");
+        model.addAttribute("reviewStatusMap", reviewStatusMap);
+
+        Map<String, String> isBeijingArea = this.dataDictService.getMapByParentAttributeNameForName("是否");
+        model.addAttribute("isBeijingArea", isBeijingArea);
+
+        Map<String, String> isFirstGroup = this.dataDictService.getMapByParentAttributeNameForName("是否");
+        model.addAttribute("isFirstGroup", isFirstGroup);
+
+        Map<String, String> dataStatusMap = this.dataDictService.getMapByParentAttributeNameForName("数据状态");
+        model.addAttribute("dataStatusMap", dataStatusMap);
+
+        Map<String, String> familyTypeMap = this.dataDictService.getMapByParentAttributeNameForName("家庭类型");
+        model.addAttribute("familyTypeMap", familyTypeMap);
+
+        Map<String, String> statusMap = this.dataDictService.getMapByParentAttributeNameForName("合同状态");
+        model.addAttribute("statusMap", statusMap);
+
+    }
+
+    /**
+     * 综合查询
+     */
+    @RequestMapping("result")
+    public void result(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo = this.statisticsService.getListForCompositeSearch(pageInfo, request);
+        modelMap.addAttribute("postValue", pageInfo.getPostValue());
+        modelMap.addAttribute("pageInfo", pageInfo);
+    }
+
+    /**
+     * 合同信息查看
+     */
+    @RequestMapping("mainView")
+    public void mainView(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Contract contract = this.contractService.getContractByfamilyid(familyId);
+
+        Family family = contract.getFamily();
+
+        modelMap.addAttribute("contract",contract);
+        modelMap.addAttribute("family",family);
+    }
+
+    @RequestMapping("resultExcel")
+    public String resultExcel(HttpServletRequest request, RedirectAttributes redirectAttributes) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Map<String, String> projectNameMap = this.dataDictService.getMapByParentAttributeNameForValue("项目名称");
+        Map<String, String> exCardTypeMap = this.dataDictService.getMapByParentAttributeNameForValue("证件类型"); //前配偶证件类型
+        Map<String, String> cardTypeMap = this.dataDictService.getMapByParentAttributeNameForValue("证件类型"); //证件类型
+        Map<String, String> statusMap = this.dataDictService.getMapByParentAttributeNameForValue("合同状态");
+        Map<String, String> thisAreaMap = this.dataDictService.getMapByParentAttributeNameForValue("是否"); //京籍是否是本区
+        Map<String, String> firstOrNotMap = this.dataDictService.getMapByParentAttributeNameForValue("是否"); //是否优先组
+        Map<String, String> houseStatusMap = this.dataDictService.getMapByParentAttributeNameForValue("审核状态"); //住房审核状态
+        Map<String, String> seniorityStatusMap = this.dataDictService.getMapByParentAttributeNameForValue("复核状态"); //资格复核状态
+
+        PageInfo<Contract> pageInfo = new PageInfo<Contract>();
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo.setPageSize(Integer.MAX_VALUE);
+        pageInfo = this.statisticsService.getListForSearch(pageInfo, request);
+        List dataList = Lists.newArrayList();
+        //存储列名
+        List<String> theadsList = new ArrayList<String>();
+        //存储字段名
+        List<String> nameList = new ArrayList<String>();
+
+        if (pageInfo.getTotalCount() > 0) {
+            Enumeration<String> param = request.getParameterNames();
+            while (param.hasMoreElements()) {
+                String name = param.nextElement();
+                //当不是查询条件时
+                if (name.indexOf("search_") == -1) {
+                    String thead = ContractExcelMap.excelMap().get(name).toString();
+                    theadsList.add(thead);
+                    nameList.add(name);
+                }
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            for (Contract contract : (List<Contract>) pageInfo.getResult()) {
+                //合同编号
+                List list = new ArrayList();
+
+                for (int i = 0; i < nameList.size(); i++) {
+                    String value = "";
+                    String property = nameList.get(i);
+                    if (property.indexOf("f_") == 0) {
+                        value = BeanUtils.getProperty(contract.getFamily(), property.split("_")[1]);
+                    } else {
+                        value = BeanUtils.getProperty(contract, property);
+                    }
+
+                    if (value != null && (value.equals("0.00") || value.equals("0"))) {
+                        value = "";
+                    }
+                    if (property.equals("f_projectName")) {
+                        value = projectNameMap.get(value) == null ? "" : projectNameMap.get(value);
+                    } else if (property.equals("f_exCardType")) {
+                        value = exCardTypeMap.get(value) == null ? "" : exCardTypeMap.get(value);
+                    } else if (property.equals("status")) {
+                        value = statusMap.get(value) == null ? "" : statusMap.get(value);
+                    } else if (property.equals("f_thisArea")) {
+                        value = thisAreaMap.get(value) == null ? "" : thisAreaMap.get(value);
+                    } else if (property.equals("f_firstOrNot")) {
+                        value = firstOrNotMap.get(value) == null ? "" : firstOrNotMap.get(value);
+                    } else if (property.equals("f_houseStatus")) {
+                        value = houseStatusMap.get(value) == null ? "" : houseStatusMap.get(value);
+                    } else if (property.equals("f_seniorityStatus")) {
+                        value = seniorityStatusMap.get(value) == null ? "" : seniorityStatusMap.get(value);
+                    }else if (property.equals("f_cardType")) {
+                        value = cardTypeMap.get(value) == null ? "" : cardTypeMap.get(value);
+                    } else if (property.equals("f_divorceDate")) {
+                        try {
+                            Date date = sdf.parse(value);
+                            value = sdf.format(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (property.equals("signDate")) {
+                        try {
+                            Date date = sdf.parse(value);
+                            value = sdf.format(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (property.equals("operateDate")) {
+                        try {
+                            Date date = sdf.parse(value);
+                            value = sdf.format(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (property.equals("f_applyDate")) {
+                        try {
+                            Date date = sdf.parse(value);
+                            value = sdf.format(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (value == null) {
+                        value = "";
+                    }
+                    list.add(value);
+                }
+                dataList.add(list);
+            }
+        }
+        RedirectAttributesExcel.addFlashAttribute(redirectAttributes, "综合信息台账", "综合信息台账", theadsList.toArray(new String[theadsList.size()]), dataList);
+        return "redirect:/cq/common/export/excel";
+    }
+
+
+    /**
+     * 合同信息列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("contractList")
+    public void list(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Contract> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = this.contractService.contractList(pageInfo);
+        modelMap.put("pageInfo",pageInfo);
+    }
+
+    /**
+     * 合同综合台账查看
+     * @param request
+     * @return
+     */
+    @RequestMapping("view")
+    public void view(HttpServletRequest request,ModelMap modelMap){
+        Integer contractId = ParamUtils.getInt(request, "contractId", 0);
+        Contract contract = this.contractService.get(contractId);
+
+        modelMap.addAttribute("contract",contract);
+    }
+
+    /**
+     * 导出合同信息台账
+     */
+    @RequestMapping("excelForm")
+    public void excelForm(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Contract> pageInfo = new PageInfo<Contract>();
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo = this.contractService.contractList(pageInfo);
+        pageInfo.setPageSize(Integer.MAX_VALUE);
+        modelMap.addAttribute("pageInfo", pageInfo);
+    }
+
+}

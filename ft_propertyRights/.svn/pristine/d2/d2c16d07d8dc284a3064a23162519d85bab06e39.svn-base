@@ -1,0 +1,326 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <title>安置房源销控</title>
+</head>
+<body>
+<div class="title" >
+    <h5>选房信息</h5>
+</div>
+<div class="content" >
+    <table style="width: 100%;">
+        <tr>
+            <td style="vertical-align: top;padding-left: 10px;">
+                <div id="content_cata">
+                    <div style="text-align: right;width: 100%;margin-top: 10px;" id="content">
+                        <table border="0" align="right" cellpadding="5" cellspacing="0">
+                            <tr>
+                                <td colspan="9" height="10"></td>
+                            </tr>
+                            <tr>
+                                <td>图示颜色说明：</td>
+
+                                <td bgcolor="#00a600">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>
+                                    &nbsp;可分配
+                                    &nbsp;&nbsp;
+                                </td>
+                                <td bgcolor="#FF4A4A">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>
+                                    &nbsp;已分配
+                                    &nbsp;&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" height="10"></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="1" align="center" cellpadding="1" cellspacing="1" bgcolor="#999999">
+                            <%--<tr>--%>
+                                <%--<td width="4%" height="35" bgcolor="#cccccc" align="center"><b>户型</b></td>--%>
+
+                                <%--<td width="10%" bgcolor="#cccccc" align="center"--%>
+                                    <%--style="border-left:#999999 3px solid;font-size: 20px;">三居室--%>
+                                <%--</td>--%>
+                                <%--<td bgcolor="#cccccc" align="center"--%>
+                                    <%--style="border-left:#999999 3px solid;font-size: 20px;">二居室--%>
+                                <%--</td>--%>
+                                <%--<td bgcolor="#cccccc" align="center"--%>
+                                    <%--style="border-left:#999999 3px solid;font-size: 20px;">一居室--%>
+                                <%--</td>--%>
+                                <%--<td bgcolor="#cccccc" align="center"--%>
+                                    <%--style="border-left:#999999 3px solid;font-size: 20px;">一居室--%>
+                                <%--</td>--%>
+                            <%--</tr>--%>
+                                <tr>
+                                    <td bgcolor="#cccccc" height="35" width="5%">
+                                        <div class="out">
+                                            <span class="bm">楼层</span>
+                                            <span class="em">单元</span>
+                                        </div>
+                                    </td>
+                                    <td height="25" colspan="4" bgcolor="#BDBABD" align="center"
+                                        style="border-left:#999999 1px solid; border-right:#999999 1px solid;">1单元
+                                    </td>
+                                </tr>
+                            <tr bgcolor="#FFFFFF">
+                                <td width="4%" height="18" bgcolor="#D6D3D6">
+                                    <div align="center"><b>7层</b>
+                                    </div>
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0701<br>一居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0702<br>二居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0703<br>三居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0704<br>三居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#FFFFFF">
+                                <td width="4%" height="18" bgcolor="#D6D3D6">
+                                    <div align="center"><b>6层</b>
+                                    </div>
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0601<br>一居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0602<br>一居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0603<br>二居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0604<br>三居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#FFFFFF">
+                                <td width="4%" height="18" bgcolor="#D6D3D6">
+                                    <div align="center"><b>5层</b>
+                                    </div>
+                                </td>
+                                <td height="40" width="24%" bgcolor="red" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0501<br>一居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="red" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0502<br>一居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0503<br>二居室<br>
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0504<br>三居室<br>
+                                </td>
+                            </tr>
+                            <tr bgcolor="#FFFFFF">
+                                <td width="4%" height="18" bgcolor="#D6D3D6">
+                                    <div align="center"><b>4层</b>
+                                    </div>
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0401<br>一居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0402<br>一居室<br>
+                                </td>
+                                <td height="40" width="24%" bgcolor="red" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0403<br>二居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0404<br>三居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                            </tr>
+                            <tr bgcolor="#FFFFFF">
+                                <td width="4%" height="18" bgcolor="#D6D3D6">
+                                    <div align="center"><b>3层</b>
+                                    </div>
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0301<br>一居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0302<br>一居室<br>                                    <input type="radio" value="" />
+
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0303<br>二居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0304<br>三居室<br>                                    <input type="radio" value="" />
+
+                                </td>
+                            </tr>
+                            <tr bgcolor="#FFFFFF">
+                                <td width="4%" height="18" bgcolor="#D6D3D6">
+                                    <div align="center"><b>2层</b>
+                                    </div>
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0201<br>一居室<br>                                    <input type="radio" value="" />
+
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0202<br>一居室<br>                                    <input type="radio" value="" />
+
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0203<br>二居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0204<br>三居室<br>                                    <input type="radio" value="" />
+
+                                </td>
+                            </tr>
+                            <tr bgcolor="#FFFFFF">
+                                <td width="4%" height="18" bgcolor="#D6D3D6">
+                                    <div align="center"><b>1层</b>
+                                    </div>
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">0101<br>一居室<br>
+                                    <input type="radio" value="" />
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0102<br>一居室<br>                                    <input type="radio" value="" />
+
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0103<br>二居室<br>                                    <input type="radio" value="" />
+
+
+                                </td>
+                                <td height="40" width="24%" bgcolor="#00a600" style="text-align:center;border-left:#999999 0px solid;
+                    border-left:#999999 3px solid;font-size: 20px;cursor: pointer" onclick="houseManger()">
+                                    0104<br>三居室<br>                                    <input type="radio" value="" />
+
+                                </td>
+                            </tr>
+                        </table>
+                        <br><br><br>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<SCRIPT type="text/javascript">
+    var setting = {
+        view: {
+            addHoverDom: false,
+            removeHoverDom: false,
+            selectedMulti: false
+        },
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        edit: {
+            enable: true
+        }
+    };
+
+    var buildNum;
+    var id;
+    function onClick() {//点击tree联动楼盘图
+        var nodes = zTree.getSelectedNodes();
+        if (nodes.length > 0) {
+            id = nodes[0].id;//id
+            if (id == null || id == "")
+                return;
+            buildNum = nodes[0].name.substring(0, nodes[0].name.length - 2);
+        }
+    }
+
+    var zNodes = [
+        {id: 1, pId: 0, name: "A项目", open: true},
+        {id: 101, pId: 1, name: "1号楼"},
+        {id: 102, pId: 1, name: "2号楼"},
+        {id: 103, pId: 1, name: "3号楼"},
+        {id: 104, pId: 1, name: "4号楼"},
+        {id: 108, pId: 1, name: "5号楼"},
+        {id: 2, pId: 0, name: "B项目", open: false},
+        {id: 101, pId: 2, name: "1号楼"},
+        {id: 102, pId: 2, name: "2号楼"},
+        {id: 103, pId: 2, name: "3号楼"},
+        {id: 104, pId: 2, name: "4号楼"},
+        {id: 108, pId: 2, name: "5号楼"},
+        {id: 3, pId: 0, name: "C项目", open: false},
+        {id: 101, pId: 3, name: "1号楼"},
+        {id: 102, pId: 3, name: "2号楼"},
+        {id: 103, pId: 3, name: "3号楼"},
+        {id: 104, pId: 3, name: "4号楼"},
+        {id: 108, pId: 3, name: "5号楼"},
+        {id: 4, pId: 0, name: "D项目", open: false},
+        {id: 101, pId: 4, name: "1号楼"},
+        {id: 102, pId: 4, name: "2号楼"},
+        {id: 103, pId: 4, name: "3号楼"},
+        {id: 104, pId: 4, name: "4号楼"},
+        {id: 108, pId: 4, name: "5号楼"},
+    ];
+    function beforeAsync() {
+        $("#loadFamily").show();
+    }
+    function onAsyncSuccess() {
+        $("#loadFamily").hide();
+    }
+    var zTree;
+    $(document).ready(function () {
+        initTree();
+    });
+    function initTree() {
+        $.fn.zTree.init($("#treeFamily"), setting, zNodes);
+    }
+    function toSubmit(type) {//提交修改后的房屋状态
+        location.reload();
+    }
+    function houseManger(id, num, opMemo) {//打开弹出层
+        $("#myModal").modal({backdrop: false});
+        $("#number").html(num);
+        $("#houseId").val(id);
+        $("#opMemoInfo").val(opMemo);
+    }
+</SCRIPT>
+</BODY>
+</HTML>

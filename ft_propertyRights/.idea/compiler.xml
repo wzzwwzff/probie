@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Annotation profile for tz_kywg" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="tz_kywg" />
+      </profile>
+      <profile name="Annotation profile for tz_kywg_mysql" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="tz_kywg_mysql" />
+      </profile>
+      <profile name="Annotation profile for frame_mysql" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="frame_mysql" />
+      </profile>
+      <profile name="Annotation profile for fjqz_bspq" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="fjqz_bspq" />
+      </profile>
+      <profile name="Annotation profile for frame_mysql_aop" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="frame_mysql_aop" />
+      </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ft_propertyRights" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="fjqz_bspq" target="1.7" />
+      <module name="frame_mysql" target="1.7" />
+      <module name="frame_mysql_aop" target="1.7" />
+      <module name="ft_propertyRights" target="1.7" />
+      <module name="tz_kywg" target="1.7" />
+      <module name="tz_kywg_mysql" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

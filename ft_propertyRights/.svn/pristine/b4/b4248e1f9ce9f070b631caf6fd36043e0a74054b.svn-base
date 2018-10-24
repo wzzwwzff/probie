@@ -1,0 +1,653 @@
+package com.app.cq.model;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 家庭表
+ */
+@Table(name = "family")
+@Entity
+public class Family {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;             //主键
+    private Integer age;            //年龄
+    private String familyCode;    //申请编号
+    private Date applyDate;    //申请日期
+    private String projectName;  //项目名称
+    private String name;          //申请人姓名
+    private Integer sex;          //性别   1:男 2：女
+    private Integer cardType;     //证件类型（1.身份证2.军（警）身份证）
+    private String idCard;        //身份证号
+    private Integer marryStatus;  //婚姻状况(1.未婚2.已婚3.离异)
+    private String address;         //户籍所在地
+    private Integer workUnit;          //工作地（社保缴纳地）1.丰台区2.东城区...
+    private String exSpouseName;          //前配偶姓名
+    private Integer exCardType;     //前配偶证件类型（1.身份证2.军（警）身份证）
+    private String exIdCard;        //前配偶证件号码
+    private Date divorceDate;          //离婚日期
+    private String contactName;       //联系人姓名
+    private String phone;               //联系电话
+    private String currentAddres;       //通讯地址
+    private String postCode;       //邮编
+    @Column(columnDefinition = "TEXT")
+    private String memo;            //备注
+
+    private Integer familyType;          //家庭类型 1.本市户籍2.持有效证3.驻京部队现役军人或武警4.缴社保5.缴个税
+    private Integer residencePermit;             //工作居住证类型  1.北京市工作居住证...
+    private Integer handleType;         //办理使用证件类型  1.身份证2.军（警）身份证
+    private String handleCard;          //办理使用证件号码
+    private String residencePermitCode;//工作居住证编号
+    private Date startDate;          //有效期限开始日期
+    private Date endDate;          //有效期限截止日期
+    private Integer armyType;         //军官（警官）证件(1.军官证2.警官证)
+    private String armyIdCard;      //军警证件号码
+    private String registerCode;      //暂住证/居住证、登记卡编号
+    private String houseSituation;      //住房情况
+    private String incomeSituation;      //收入情况
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer houseStatus;   //住房审核状态 1.未审核2.审核通过 3.审核不通过
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer socialStatus;       //社保审核状态   1.未审核2.审核通过 3.审核不通过
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer marriageStatus;     //婚姻审核状态 1.未审核2.审核通过 3.审核不通过
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer ageStatus;   //年龄审核状态 1.未审核2.审核通过 3.审核不通过
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer educationStatus; //学历审核状态 1.未审核2.审核通过 3.审核不通过
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer otherStatus; //其他审核状态 1.未审核2.审核通过 3.审核不通过
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer seniorityStatus; //已签约家庭定期资格复核状态 1.未审核2.审核通过 3.审核不通过
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer signStatus; //签约状态 1.未签约2.已签约
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer dataStatus;  //数据状态    1.未上报  2.已上报
+
+    @Column(columnDefinition = "INT default 1", nullable = false)
+    private Integer thisArea; //是否是本区 1.是 2.否
+    @Column(columnDefinition = "INT default 1", nullable = false)
+    private Integer firstOrNot; //是否优先组 1.是 2.否
+    @Column(columnDefinition = "INT default 1", nullable = false)
+    private Integer thisPark; //是否园区 1.是 2.否
+
+    private String educationTrouble;  //学历复核不通过原因
+
+    private String shakingBatch;           //摇号批次
+    private String shakingCode;           //摇号编号
+    private String shakingGroup;           //摇号组别
+    private String shakingResult;           //摇号结果
+    @Column(columnDefinition = "INT default 1", nullable = false)
+    private Integer education;           //学历层次    数据字典(1、本科     2、硕士研究生    3、博士研究生)
+    private String educationCode;       //学历证书在线验证码
+    private String learning;                //学习形式 数据字典（1.全日制 2.非全日制）
+    private String job;                 //职务
+    @Column(columnDefinition = "INT default 1", nullable = false)
+    private Integer continuity;         //社保是否符合连续缴纳12个月要求（是/否） 1.是 2.否
+    private String unit;           //工作单位
+    private String unitPerson;           //单位联系人
+    private String unitPhone;           //单位联系电话
+    private String count;           //家庭人口数
+
+    //2018.10.15 add
+    private Integer isThirtySingleFamily; //非30岁以下单身家庭 1.是 2.否
+    private Integer isThisAreaPeople; //项目所在区县户籍 1.是 2.否
+    private Integer isThisAreaWork; //项目所在区县工作 1.是 2.否
+    private Integer houseNum; //家庭名下住房套数
+    private Integer isHoldHouse; //离婚未满3年且前配偶持有住房 1.是 2.否
+    private Integer isRentHouse; //有住房转出记录 1.是 2.否
+    private Integer isUpCollege; //全日制本科以上学历 1.是 2.否
+
+
+    @OneToMany(mappedBy = "family")
+    private List<FamilyPerson> familyPersonList;
+
+    @OneToMany(mappedBy = "family")
+    private List<FileInfo> fileInfoList;
+
+    public Integer getEducation() {
+        return education;
+    }
+
+    public void setEducation(Integer education) {
+        this.education = education;
+    }
+
+    public String getEducationTrouble() {
+        return educationTrouble;
+    }
+
+    public Integer getSeniorityStatus() {
+        return seniorityStatus;
+    }
+
+    public void setSeniorityStatus(Integer seniorityStatus) {
+        this.seniorityStatus = seniorityStatus;
+    }
+
+    public void setEducationTrouble(String educationTrouble) {
+        this.educationTrouble = educationTrouble;
+    }
+
+    public Integer getDataStatus() {
+        return dataStatus;
+    }
+
+    public void setDataStatus(Integer dataStatus) {
+        this.dataStatus = dataStatus;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFamilyCode() {
+        return familyCode;
+    }
+
+    public void setFamilyCode(String familyCode) {
+        this.familyCode = familyCode;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Integer getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(Integer cardType) {
+        this.cardType = cardType;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public Integer getMarryStatus() {
+        return marryStatus;
+    }
+
+    public void setMarryStatus(Integer marryStatus) {
+        this.marryStatus = marryStatus;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getWorkUnit() {
+        return workUnit;
+    }
+
+    public void setWorkUnit(Integer workUnit) {
+        this.workUnit = workUnit;
+    }
+
+    public String getExSpouseName() {
+        return exSpouseName;
+    }
+
+    public void setExSpouseName(String exSpouseName) {
+        this.exSpouseName = exSpouseName;
+    }
+
+    public Integer getExCardType() {
+        return exCardType;
+    }
+
+    public void setExCardType(Integer exCardType) {
+        this.exCardType = exCardType;
+    }
+
+    public String getExIdCard() {
+        return exIdCard;
+    }
+
+    public void setExIdCard(String exIdCard) {
+        this.exIdCard = exIdCard;
+    }
+
+    public Date getDivorceDate() {
+        return divorceDate;
+    }
+
+    public void setDivorceDate(Date divorceDate) {
+        this.divorceDate = divorceDate;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getCurrentAddres() {
+        return currentAddres;
+    }
+
+    public void setCurrentAddres(String currentAddres) {
+        this.currentAddres = currentAddres;
+    }
+
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public Integer getFamilyType() {
+        return familyType;
+    }
+
+    public void setFamilyType(Integer familyType) {
+        this.familyType = familyType;
+    }
+
+    public Integer getResidencePermit() {
+        return residencePermit;
+    }
+
+    public void setResidencePermit(Integer residencePermit) {
+        this.residencePermit = residencePermit;
+    }
+
+    public Integer getHandleType() {
+        return handleType;
+    }
+
+    public void setHandleType(Integer handleType) {
+        this.handleType = handleType;
+    }
+
+    public String getHandleCard() {
+        return handleCard;
+    }
+
+    public void setHandleCard(String handleCard) {
+        this.handleCard = handleCard;
+    }
+
+    public String getResidencePermitCode() {
+        return residencePermitCode;
+    }
+
+    public void setResidencePermitCode(String residencePermitCode) {
+        this.residencePermitCode = residencePermitCode;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Integer getArmyType() {
+        return armyType;
+    }
+
+    public void setArmyType(Integer armyType) {
+        this.armyType = armyType;
+    }
+
+    public String getArmyIdCard() {
+        return armyIdCard;
+    }
+
+    public void setArmyIdCard(String armyIdCard) {
+        this.armyIdCard = armyIdCard;
+    }
+
+    public String getRegisterCode() {
+        return registerCode;
+    }
+
+    public void setRegisterCode(String registerCode) {
+        this.registerCode = registerCode;
+    }
+
+    public String getHouseSituation() {
+        return houseSituation;
+    }
+
+    public void setHouseSituation(String houseSituation) {
+        this.houseSituation = houseSituation;
+    }
+
+    public String getIncomeSituation() {
+        return incomeSituation;
+    }
+
+    public void setIncomeSituation(String incomeSituation) {
+        this.incomeSituation = incomeSituation;
+    }
+
+    public Integer getHouseStatus() {
+        return houseStatus;
+    }
+
+    public void setHouseStatus(Integer houseStatus) {
+        this.houseStatus = houseStatus;
+    }
+
+    public Integer getSocialStatus() {
+        return socialStatus;
+    }
+
+    public void setSocialStatus(Integer socialStatus) {
+        this.socialStatus = socialStatus;
+    }
+
+    public Integer getMarriageStatus() {
+        return marriageStatus;
+    }
+
+    public void setMarriageStatus(Integer marriageStatus) {
+        this.marriageStatus = marriageStatus;
+    }
+
+    public Integer getAgeStatus() {
+        return ageStatus;
+    }
+
+    public void setAgeStatus(Integer ageStatus) {
+        this.ageStatus = ageStatus;
+    }
+
+    public Integer getEducationStatus() {
+        return educationStatus;
+    }
+
+    public void setEducationStatus(Integer educationStatus) {
+        this.educationStatus = educationStatus;
+    }
+
+    public Integer getOtherStatus() {
+        return otherStatus;
+    }
+
+    public void setOtherStatus(Integer otherStatus) {
+        this.otherStatus = otherStatus;
+    }
+
+    public Integer getThisArea() {
+        return thisArea;
+    }
+
+    public void setThisArea(Integer thisArea) {
+        this.thisArea = thisArea;
+    }
+
+    public Integer getFirstOrNot() {
+        return firstOrNot;
+    }
+
+    public void setFirstOrNot(Integer firstOrNot) {
+        this.firstOrNot = firstOrNot;
+    }
+
+    public String getShakingBatch() {
+        return shakingBatch;
+    }
+
+    public void setShakingBatch(String shakingBatch) {
+        this.shakingBatch = shakingBatch;
+    }
+
+    public String getShakingCode() {
+        return shakingCode;
+    }
+
+    public void setShakingCode(String shakingCode) {
+        this.shakingCode = shakingCode;
+    }
+
+    public String getShakingGroup() {
+        return shakingGroup;
+    }
+
+    public void setShakingGroup(String shakingGroup) {
+        this.shakingGroup = shakingGroup;
+    }
+
+    public String getShakingResult() {
+        return shakingResult;
+    }
+
+    public void setShakingResult(String shakingResult) {
+        this.shakingResult = shakingResult;
+    }
+
+    public String getEducationCode() {
+        return educationCode;
+    }
+
+    public void setEducationCode(String educationCode) {
+        this.educationCode = educationCode;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public Integer getContinuity() {
+        return continuity;
+    }
+
+    public void setContinuity(Integer continuity) {
+        this.continuity = continuity;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getUnitPerson() {
+        return unitPerson;
+    }
+
+    public void setUnitPerson(String unitPerson) {
+        this.unitPerson = unitPerson;
+    }
+
+    public String getUnitPhone() {
+        return unitPhone;
+    }
+
+    public void setUnitPhone(String unitPhone) {
+        this.unitPhone = unitPhone;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public Date getApplyDate() {
+        return applyDate;
+    }
+
+    public void setApplyDate(Date applyDate) {
+        this.applyDate = applyDate;
+    }
+
+    public Integer getSignStatus() {
+        return signStatus;
+    }
+
+    public void setSignStatus(Integer signStatus) {
+        this.signStatus = signStatus;
+    }
+
+    public Integer getThisPark() {
+        return thisPark;
+    }
+
+    public void setThisPark(Integer thisPark) {
+        this.thisPark = thisPark;
+    }
+
+    public String getLearning() {
+        return learning;
+    }
+
+    public void setLearning(String learning) {
+        this.learning = learning;
+    }
+
+    public Integer getIsThirtySingleFamily() {
+        return isThirtySingleFamily;
+    }
+
+    public void setIsThirtySingleFamily(Integer isThirtySingleFamily) {
+        this.isThirtySingleFamily = isThirtySingleFamily;
+    }
+
+    public Integer getIsThisAreaPeople() {
+        return isThisAreaPeople;
+    }
+
+    public void setIsThisAreaPeople(Integer isThisAreaPeople) {
+        this.isThisAreaPeople = isThisAreaPeople;
+    }
+
+    public Integer getIsThisAreaWork() {
+        return isThisAreaWork;
+    }
+
+    public void setIsThisAreaWork(Integer isThisAreaWork) {
+        this.isThisAreaWork = isThisAreaWork;
+    }
+
+    public Integer getHouseNum() {
+        return houseNum;
+    }
+
+    public void setHouseNum(Integer houseNum) {
+        this.houseNum = houseNum;
+    }
+
+    public Integer getIsHoldHouse() {
+        return isHoldHouse;
+    }
+
+    public void setIsHoldHouse(Integer isHoldHouse) {
+        this.isHoldHouse = isHoldHouse;
+    }
+
+    public Integer getIsRentHouse() {
+        return isRentHouse;
+    }
+
+    public void setIsRentHouse(Integer isRentHouse) {
+        this.isRentHouse = isRentHouse;
+    }
+
+    public Integer getIsUpCollege() {
+        return isUpCollege;
+    }
+
+    public void setIsUpCollege(Integer isUpCollege) {
+        this.isUpCollege = isUpCollege;
+    }
+
+    public List<FamilyPerson> getFamilyPersonList() {
+        return familyPersonList;
+    }
+
+    public void setFamilyPersonList(List<FamilyPerson> familyPersonList) {
+        this.familyPersonList = familyPersonList;
+    }
+
+    public List<FileInfo> getFileInfoList() {
+        return fileInfoList;
+    }
+
+    public void setFileInfoList(List<FileInfo> fileInfoList) {
+        this.fileInfoList = fileInfoList;
+    }
+}
