@@ -1,0 +1,633 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Family;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.StatisticsService;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.utils.DateUtils;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ *信息公示
+ * @author zyk
+ * @date 2017/11/14
+ */
+@Controller
+@RequestMapping("/cq/show/*")
+public class ShowController {
+    @Autowired
+    private StatisticsService statisticsService;
+    @Autowired
+    private DataDictService dataDictService;
+
+    /**
+     * 入户情况公示
+     * zyk
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("rhChartShow")
+    public void rhChartShow(HttpServletRequest request,ModelMap modelMap){
+        List<DataDict> dataDictList = this.dataDictService.getDataDictList("组别");
+        String groupArray = "";
+        if (Collections3.isNotEmpty(dataDictList)){
+            for (DataDict dataDict : dataDictList) {
+                groupArray = groupArray + "'" + dataDict.getAttributeName() + "',";
+            }
+        }
+        modelMap.addAttribute("groupArray",groupArray);
+    }
+
+    /**
+     * 获取各片区各组入户数据
+     * zyk
+     */
+    @RequestMapping("getRhJson1")
+    @ResponseBody
+    public List getRhJson1(){
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        Map map2 = Maps.newHashMap();
+
+        String rhTotalStr = "";
+        String noRhTotalStr = "";
+        String rhStr;
+        String noRhStr;
+
+
+//        Map<String,Map> map = new HashMap<>();
+//        if (list!=null && list.size()>0){
+//            for (Map m:list){
+//                String groupCode = String.valueOf(m.get("groupCode"));
+//                map.put(groupCode,m);
+//            }
+//        }
+
+        List<DataDict> dataDictList = this.dataDictService.getDataDictList("组别");
+        List<Map> data = this.statisticsService.getData("", "");
+
+//        if (dataDictList != null && dataDictList.size()>0) {
+//            for (int i = 0; i < dataDictList.size(); i++) {
+//                try {
+//                    String attributeValue = dataDictList.get(i).getAttributeValue();
+//                    Object signCount = map.get(attributeValue).get("signCount");
+//                    String s = String.valueOf(signCount);
+//                    dataDictList.get(i).setAttributeColor(s);
+//                } catch (NullPointerException nul) {
+//                    System.out.println("有空指针");
+//                }
+//            }
+//        }
+
+        Map<String,Integer> resultMap = this.statisticsService.getGroupCount();
+
+        if (Collections3.isNotEmpty(data)){
+            for (Map map :data){
+                String rhTotal = map.get("signCount") == null ? "0" : String.valueOf(map.get("signCount"));
+                Integer rhCount = resultMap.get(map.get("groupCode")) == null ? 0 : resultMap.get(map.get("groupCode"));
+                rhStr = rhCount.toString();
+                noRhStr = (Integer.valueOf(rhTotal) - rhCount) <= 0 ? "0" : String.valueOf((Integer.valueOf(rhTotal) - rhCount));
+                rhTotalStr += rhStr + ",";
+                noRhTotalStr += noRhStr + ",";
+            }
+        }
+        map1.put("name", "未入户");
+        map1.put("data", "[" + noRhTotalStr.substring(0, noRhTotalStr.length() - 1) + "]");
+        map2.put("name", "已入户");
+        map2.put("data", "[" + rhTotalStr.substring(0, rhTotalStr.length() - 1) + "]");
+        list.add(map1);
+        list.add(map2);
+        return list;
+    }
+
+
+    /**
+     * 获取每天各片区各组入户数据
+     * zsj
+     */
+    @RequestMapping("getRhJsonToday")
+    @ResponseBody
+    public List getRhJsonToday(){
+        List list = new ArrayList();
+
+        List<DataDict> dataDictList = this.dataDictService.getDataDictList("组别");
+        Map<String,Integer> resultMap = this.statisticsService.getGroupTodayCount();
+
+        List dateList=this.statisticsService.getDistinctDate();
+        for(int i=0;i<dateList.size();i++){
+            Object o = (Object) dateList.get(i);
+            Object[] os = (Object[]) o;
+            String dateStr=String.valueOf(os[0]);
+
+            Map map = Maps.newHashMap();
+
+            String rhTotalStr = "";
+            String rhStr;
+            if (Collections3.isNotEmpty(dataDictList)){
+                for (DataDict dataDict :dataDictList){
+                    Integer rhCount = resultMap.get(dataDict.getAttributeColor()+dateStr) == null ? 0 : resultMap.get(dataDict.getAttributeColor()+dateStr);
+                    rhStr = rhCount.toString();
+                    rhTotalStr += rhStr + ",";
+                }
+            }
+
+            map.put("name", dateStr);
+            map.put("data", "[" + rhTotalStr.substring(0, rhTotalStr.length() - 1) + "]");
+
+            list.add(map);
+        }
+
+        return list;
+    }
+    /**
+     * 获取所有组别累计入户数量
+     * zyk
+     *
+     */
+    @RequestMapping("getRhJson2")
+    @ResponseBody
+    public Map getRhJson2() {
+        Map<String,Integer> resultMap = this.statisticsService.getCountByGroup();
+//        List<DataDict> dataDictList = this.dataDictService.getDataDictList("组别");
+        List<Map> data = this.statisticsService.getData("", "");
+        Integer total = 0;
+        if (Collections3.isNotEmpty(data)){
+            for (Map map : data){
+                Integer count = null;
+                count = map.get("signCount") == null ? 0 : Integer.valueOf(String.valueOf(map.get("signCount")));
+                total += Integer.valueOf(count);
+            }
+        }
+        Integer familyCount = resultMap.get("familyCount");
+        Map<String, String> map = Maps.newHashMap();
+        map.put("type", "pie");
+        map.put("name", "百分比");
+        map.put("data", "[[\"已入户\"," + familyCount + "],[\"未入户\"," + String.valueOf(total - familyCount) + "]]");
+        return map;
+    }
+
+    /**
+     * 签约情况公示
+     * zyk
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("signChartShow")
+    public void signChartShow(HttpServletRequest request,ModelMap modelMap){
+        this.rhChartShow(request,modelMap);
+    }
+
+    /**
+     * 获取各组别签约数据
+     * zyk
+     */
+    @RequestMapping("getSignJson1")
+    @ResponseBody
+    public List getSignJson1(){
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        Map map2 = Maps.newHashMap();
+
+        String signTotalStr = "";
+        String noSignTotalStr = "";
+        String signStr;
+        String noSignStr;
+
+        Map<String, Map> resMap = this.statisticsService.getStatisticsByGroup();
+        if (!Collections3.isEmpty(resMap)){
+            for (String groupCode : resMap.keySet()){
+                Integer signCount = resMap.get(groupCode).get("signCount") == null ? 0 : Integer.valueOf(resMap.get(groupCode).get("signCount").toString());
+                Integer noSignCount = resMap.get(groupCode).get("noSignCount") == null ? 0 : Integer.valueOf(resMap.get(groupCode).get("noSignCount").toString());
+                signStr = signCount.toString();
+                noSignStr = noSignCount.toString();
+                signTotalStr += signStr + ",";
+                noSignTotalStr += noSignStr + ",";
+            }
+        }
+        map1.put("name", "未签约");
+        map1.put("data", "[" + noSignTotalStr.substring(0, noSignTotalStr.length() - 1) + "]");
+        map2.put("name", "已签约");
+        map2.put("data", "[" + signTotalStr.substring(0, signTotalStr.length() - 1) + "]");
+        list.add(map1);
+        list.add(map2);
+        return list;
+    }
+
+    /**
+     * 获取所有片区累计签约数量
+     * zyk
+     *
+     */
+    @RequestMapping("getSignJson2")
+    @ResponseBody
+    public Map getSignJson2() {
+        Map<String,Integer> resultMap = this.statisticsService.getCountByGroup();
+        Integer familyCount = resultMap.get("familyCount");
+        Integer signCount = resultMap.get("signCount");
+        Map<String, String> map = Maps.newHashMap();
+        map.put("type", "pie");
+        map.put("name", "百分比");
+        map.put("data", "[[\"已签约\"," + signCount + "],[\"未签约\"," + String.valueOf(familyCount - signCount) + "]]");
+        return map;
+    }
+
+    /**
+     * 交房情况公示
+     * zyk
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("jfChartShow")
+    public void jfChartShow(HttpServletRequest request,ModelMap modelMap){
+        this.rhChartShow(request,modelMap);
+    }
+
+    /**
+     * 获取各组别交房数据
+     * zyk
+     */
+    @RequestMapping("getJfJson1")
+    @ResponseBody
+    public List getJfJson1(){
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        Map map2 = Maps.newHashMap();
+
+        String jfTotalStr = "";
+        String noJfTotalStr = "";
+        String jfStr;
+        String noJfStr;
+
+        Map<String, Map> resMap = this.statisticsService.getStatisticsByGroup();
+        if (!Collections3.isEmpty(resMap)){
+            for (String groupCode : resMap.keySet()){
+                Integer jfCount = resMap.get(groupCode).get("jfCount") == null ? 0 : Integer.valueOf(resMap.get(groupCode).get("jfCount").toString());
+                Integer noJfCount = resMap.get(groupCode).get("noJfCount") == null ? 0 : Integer.valueOf(resMap.get(groupCode).get("noJfCount").toString());
+                jfStr = jfCount.toString();
+                noJfStr = noJfCount.toString();
+                jfTotalStr += jfStr + ",";
+                noJfTotalStr += noJfStr + ",";
+            }
+        }
+        map1.put("name", "未交房");
+        map1.put("data", "[" + noJfTotalStr.substring(0, noJfTotalStr.length() - 1) + "]");
+        map2.put("name", "已交房");
+        map2.put("data", "[" + jfTotalStr.substring(0, jfTotalStr.length() - 1) + "]");
+        list.add(map1);
+        list.add(map2);
+        return list;
+    }
+
+    /**
+     * 获取所有组别累计交房数量
+     * zyk
+     *
+     */
+    @RequestMapping("getJfJson2")
+    @ResponseBody
+    public Map getJfJson2() {
+        Map<String,Integer> resultMap = this.statisticsService.getCountByGroup();
+        Integer familyCount = resultMap.get("familyCount");
+        Integer jfCount = resultMap.get("jfCount");
+        Map<String, String> map = Maps.newHashMap();
+        map.put("type", "pie");
+        map.put("name", "百分比");
+        map.put("data", "[[\"已交房\"," + jfCount + "],[\"未交房\"," + String.valueOf(familyCount - jfCount) + "]]");
+        return map;
+    }
+
+    /**
+     * 拆除情况公示
+     * zyk
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("ccChartShow")
+    public void ccChartShow(HttpServletRequest request,ModelMap modelMap){
+        this.rhChartShow(request,modelMap);
+    }
+
+
+    /**
+     * 获取各组别交房数据
+     */
+    @RequestMapping("getCcJson1")
+    @ResponseBody
+    public List getCcJson1(){
+        List list = new ArrayList();
+        Map map1 = Maps.newHashMap();
+        Map map2 = Maps.newHashMap();
+
+        String ccTotalStr = "";
+        String noCcTotalStr = "";
+        String ccStr;
+        String noCcStr;
+
+        Map<String, Map> resMap = this.statisticsService.getStatisticsByGroup();
+        if (!Collections3.isEmpty(resMap)){
+            for (String groupCode : resMap.keySet()){
+                Integer ccCount = resMap.get(groupCode).get("ccCount") == null ? 0 : Integer.valueOf(resMap.get(groupCode).get("ccCount").toString());
+                Integer noCcCount = resMap.get(groupCode).get("noCcCount") == null ? 0 : Integer.valueOf(resMap.get(groupCode).get("noCcCount").toString());
+                ccStr = ccCount.toString();
+                noCcStr = noCcCount.toString();
+                ccTotalStr += ccStr + ",";
+                noCcTotalStr += noCcStr + ",";
+            }
+        }
+        map1.put("name", "未拆除");
+        map1.put("data", "[" + noCcTotalStr.substring(0, noCcTotalStr.length() - 1) + "]");
+        map2.put("name", "已拆除");
+        map2.put("data", "[" + ccTotalStr.substring(0, ccTotalStr.length() - 1) + "]");
+        list.add(map1);
+        list.add(map2);
+        return list;
+    }
+
+    /**
+     * 获取所有组别累计交房数量
+     *
+     */
+    @RequestMapping("getCcJson2")
+    @ResponseBody
+    public Map getCcJson2() {
+        Map<String,Integer> resultMap = this.statisticsService.getCountByGroup();
+        Integer familyCount = resultMap.get("familyCount");
+        Integer ccCount = resultMap.get("ccCount");
+        Map<String, String> map = Maps.newHashMap();
+        map.put("type", "pie");
+        map.put("name", "百分比");
+        map.put("data", "[[\"已拆除\"," + ccCount + "],[\"未拆除\"," + String.valueOf(familyCount - ccCount) + "]]");
+        return map;
+    }
+
+    //交房顺序号展示
+    @RequestMapping("jfNumberShow")
+    public void jfNumberShow(){
+
+    }
+
+    /**
+     * 获取已交房户数
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("getJfCount")
+    @ResponseBody
+    public Map<String, Integer> sequence(HttpServletRequest request) {
+        Integer jfCount = statisticsService.getJfCount();
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        map.put("total", jfCount);
+        return map;
+    }
+
+    /**
+     * 整体签约顺序公示刷新
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("jfNumberShowItem")
+    public void jfNumberShowItem(HttpServletRequest request,ModelMap modelMap) {
+        int myPageNo = ParamUtils.getInt(request, "myPageNo", 1);
+        int myPageSize = ParamUtils.getInt(request, "myPageSize", 10);
+
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        pageInfo.setPageSize(myPageSize);
+        pageInfo.setPageNo(myPageNo);
+
+        pageInfo = this.statisticsService.jfNumberShow(pageInfo);
+        modelMap.addAttribute("pageInfo", pageInfo);
+
+        List list = this.statisticsService.getJfMessage();
+
+        Object o = (Object) list.get(0);
+        Object[] os = (Object[]) o;
+        String all = String.valueOf(os[0] == null ? 0 : os[0]);
+        String todaySign = String.valueOf(os[1] == null ? 0 : os[1]);
+        String sign = String.valueOf(os[2] == null ? 0 : os[2]);
+
+        modelMap.addAttribute("all", all);
+        modelMap.addAttribute("todaySign", todaySign);
+        modelMap.addAttribute("sign", sign);
+    }
+
+
+
+    //签约倒计时
+    @RequestMapping("daoJiShi")
+    public void daoJiShi(){
+
+    }
+
+    /**
+     * 得到差额时间
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("getTime")
+    @ResponseBody
+    public Map getTime(HttpServletRequest request, ModelMap modelMap) throws ParseException {
+        Map map = new HashMap();
+        Map<String, String> signDateMap = this.dataDictService.getMapByParentAttributeNameForName("奖励期时间");
+        String startTime = signDateMap.get("签约开始时间");
+        String endTime = signDateMap.get("签约结束时间");
+        String oneEndTime = signDateMap.get("第一奖励期结束时间");
+        String twoEndTime = signDateMap.get("第二奖励期结束时间");
+        SimpleDateFormat simpleDateFormatDay = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar startCal = Calendar.getInstance();
+        Calendar nowCal = Calendar.getInstance();
+        Calendar endCal = Calendar.getInstance();
+        startCal.setTime(simpleDateFormatDay.parse(startTime));
+        nowCal.setTime(new Date());
+        endCal.setTime(simpleDateFormatDay.parse(endTime));
+        String flag = "";
+        Integer leftDay = 0;
+        Long jlSecond = new Long(0);
+        String jlFlag = "";
+        if (startCal.getTimeInMillis() < nowCal.getTimeInMillis() && nowCal.getTimeInMillis() < endCal.getTimeInMillis()) {  //开始时间比现在时间小，说明签约期已经开始
+            flag = "1";
+            leftDay = nowCal.get(Calendar.DAY_OF_YEAR) - startCal.get(Calendar.DAY_OF_YEAR);  //得到已经签约的时间
+            leftDay ++ ;
+            //已经开始签约
+            Calendar oneCal = Calendar.getInstance();
+            oneCal.setTime(simpleDateFormatDay.parse(oneEndTime));
+            Calendar twoCal = Calendar.getInstance();
+            twoCal.setTime(simpleDateFormatDay.parse(twoEndTime));
+            if (nowCal.getTimeInMillis() < oneCal.getTimeInMillis()) {  //在第一奖励期
+                jlSecond = oneCal.getTimeInMillis() - nowCal.getTimeInMillis();
+                jlFlag = "1";
+            } else if (nowCal.getTimeInMillis() < twoCal.getTimeInMillis()) { //在第二奖励期
+                jlSecond = twoCal.getTimeInMillis() - nowCal.getTimeInMillis();
+                jlFlag = "2";
+            }
+        } else {
+            flag = "2";
+        }
+        map.put("flag", flag);
+        map.put("leftDay", leftDay);
+        map.put("jlFlag", jlFlag);
+        map.put("jlSecond", jlSecond);
+        map.put("time", DateUtils.date2string("yyyy年MM月dd日 HH时mm分ss秒", new Date()));
+
+        List  list = statisticsService.getQyMessage();
+
+
+        Object o = (Object) list.get(0);
+        Object[] os = (Object[]) o;
+        BigDecimal all = new BigDecimal(String.valueOf(os[0] == null ? 0 : os[0]));
+        BigDecimal sign = new BigDecimal(String.valueOf(os[2] == null ? 0 : os[2]));
+
+        BigDecimal bili = sign.multiply(new BigDecimal("100")).divide(all,2,BigDecimal.ROUND_HALF_UP);
+        map.put("bili",bili);
+
+
+        return map;
+    }
+
+
+    //得到数据（入户，签约，甲方，拆除）
+    @RequestMapping("dataTable")
+    public void dataTable(HttpServletRequest request,ModelMap modelMap){
+        String type = ParamUtils.getString(request,"type","");
+        String paramName = "";
+        String paramDate = "";
+        if (type.equals("qy")){
+            paramName = "qyState";
+            paramDate = "qyDate";
+        }else if (type.equals("jf")){
+            paramName = "jfState";
+            paramDate = "jfNumberDate";
+        }else if (type.equals("cc")){
+            paramName = "ccState";
+            paramDate = "ccDate";
+        }
+        List<Map> list = statisticsService.getData(paramName,paramDate);
+        Map<String,Map> map = new HashMap<>();
+        if (list!=null && list.size()>0){
+            for (Map m:list){
+                String groupCode = String.valueOf(m.get("groupCode"));
+                map.put(groupCode,m);
+            }
+        }
+        List<DataDict> dataDictList = dataDictService.getDataDictList("组别");
+
+            if (dataDictList != null && dataDictList.size()>0) {
+                for (int i = 0; i < dataDictList.size(); i++) {
+                    try {
+                        String attributeValue = dataDictList.get(i).getAttributeValue();
+                        Object signCount = map.get(attributeValue).get("signCount");
+                        String s = String.valueOf(signCount);
+                        dataDictList.get(i).setAttributeColor(s);
+                    } catch (NullPointerException nul) {
+                        System.out.println("有空指针");
+                    }
+                }
+            }
+
+        modelMap.addAttribute("dataDictList",dataDictList);
+        modelMap.addAttribute("map",map);
+        modelMap.addAttribute("type",type);
+    }
+
+    //手机端得到数据（入户，签约，甲方，拆除）
+    @RequestMapping("dataTablePhone")
+    public void dataTablePhone(HttpServletRequest request,ModelMap modelMap){
+        String type = ParamUtils.getString(request,"type","");
+        String paramName = "";
+        String paramDate = "";
+        if (type.equals("qy")){
+            paramName = "qyState";
+            paramDate = "qyDate";
+        }else if (type.equals("jf")){
+            paramName = "jfState";
+            paramDate = "jfNumberDate";
+        }else if (type.equals("cc")){
+            paramName = "ccState";
+            paramDate = "ccDate";
+        }
+        List<Map> list = statisticsService.getData(paramName,paramDate);
+        Map<String,Map> map = new HashMap<>();
+        if (list!=null && list.size()>0){
+            for (Map m:list){
+                String groupCode = String.valueOf(m.get("groupCode"));
+                map.put(groupCode,m);
+            }
+        }
+        List<DataDict> dataDictList = dataDictService.getDataDictList("组别");
+
+        if (dataDictList != null && dataDictList.size()>0) {
+            for (int i = 0; i < dataDictList.size(); i++) {
+                try {
+                    String attributeValue = dataDictList.get(i).getAttributeValue();
+                    Object signCount = map.get(attributeValue).get("signCount");
+                    String s = String.valueOf(signCount);
+                    dataDictList.get(i).setAttributeColor(s);
+                } catch (NullPointerException nul) {
+                    System.out.println("有空指针");
+                }
+            }
+        }
+
+        modelMap.addAttribute("dataDictList",dataDictList);
+        modelMap.addAttribute("map",map);
+        modelMap.addAttribute("type",type);
+    }
+
+    /**
+     * 手机端入户情况公示
+     * wmy
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("phoneRhChartShow")
+    public void phoneRhChartShow(HttpServletRequest request,ModelMap modelMap){
+        List<DataDict> dataDictList = this.dataDictService.getDataDictList("组别");
+        String groupArray = "";
+        if (Collections3.isNotEmpty(dataDictList)){
+            for (DataDict dataDict : dataDictList) {
+                groupArray = groupArray + "'" + dataDict.getAttributeName() + "',";
+            }
+        }
+        modelMap.addAttribute("groupArray",groupArray);
+    }
+
+    /**
+     * 签约情况公示
+     * wmy
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("phoneSignChartShow")
+    public void phoneSignChartShow(HttpServletRequest request,ModelMap modelMap){
+        this.phoneRhChartShow(request,modelMap);
+    }
+
+    /**
+     * 交房情况公示
+     * wmy
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("phoneJfChartShow")
+    public void phoneJfChartShow(HttpServletRequest request,ModelMap modelMap){
+        this.phoneRhChartShow(request,modelMap);
+    }
+}

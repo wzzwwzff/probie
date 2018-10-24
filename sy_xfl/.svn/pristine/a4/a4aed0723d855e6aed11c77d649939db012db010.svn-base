@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 1500px;
+            font-size: 17px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 22px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        #header1{
+            line-height: 150%;
+        }
+
+        @page {
+            margin: 15mm 10mm 18.6mm 18.6mm
+        }
+
+        body {
+            font-family: SimSun;
+            font-size: 1.6mm;
+            line-height: 180%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 0px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            size:420mm 297mm;
+            /*size:210mm 297mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+</head>
+<body style="background-image: url(${url1})">
+<div>
+    <div class="printContent">
+        <div>
+            <div style="float: left;width: 650px;margin-right: 45px;">
+                <div style="float: left;width: 650px">
+                    <div id="header1">
+                    <b>拆 迁 人：</b><span class="fix_span">北京首开中晟置业有限责任公司</span>（以下简称甲方）<br/>
+                    <b>被拆迁人：</b><span class="fix_span">${family.name?default("")}</span>（以下简称乙方）　<br/>
+                    <b>身份证号：</b><span class="fix_span">${family.idCard?default("")}</span>　<br/>
+                    <b>房屋坐落：</b><span class="fix_span">${family.houseAddress?default("")}</span>　<br/>
+                    <b>属地政府：</b><span class="fix_span">北京市顺义区马坡镇人民政府</span>（以下简称丙方）　<br/>
+                    </div>
+                <p style="margin-top: 10px;">
+                    为保护甲、乙双方权益，根据《北京市集体土地房屋拆迁管理办法》、《顺义区西丰乐村棚户区改造土地开发项目集体土地住宅拆迁实施方案》及相关法律法规和文件规定，经协议双方协商，就乙方宅基地及地上房屋和附属物拆迁相关事宜，达成协议如下：</p>
+                <p><b>一、拆迁依据</b></p>
+                <p>根据《房屋拆迁许可证》，甲方因顺义区马坡镇西丰乐村棚户区改造土地开发项目，需对乙方宅基地及地上房屋和附属物实施拆迁。
+                </p>
+                <p><b>二、被拆迁宅基地及其地上房屋情况</b></p>
+                <p>乙方《集体土地建设用地使用权证》（以下简称宅基地使用权证）证载面积为<span class="span">${family.confirmArea?default("0")}</span>m²，其中：宅基地面积控制标准内为<span class="span">${family.controlArea?default("/")}</span>m²，超控制标准面积为<span class="span">${family.outControlArea?default("0")}</span>m²。宅基地使用权证证载面积范围内正式房屋建筑面积为<span class="span">${family.buildArea?default("0")}</span>m²。
+                </p>
+                <p><b>三、拆迁补偿、补助及奖励款</b></p>
+                <p>甲方应支付乙方拆迁补偿、补助及奖励款共计<span class="span">${total?default("0")}</span>元（人民币，以下同），大写：<span class="span">${moneyUtils(total)}</span>，其中包括：
+                </p>
+                <p>（一）补偿款：</p>
+                <p>经评估机构评估，甲方应支付乙方的各项补偿款共计<span class="span"> ${bcSum?default("0")}</span>元，其中包括：</p>
+                <p>1.宅基地区位补偿款：</p>
+                <p>被拆迁地区的宅基地区位补偿价为<span class="span">1755</span>元/m²，该宗宅基地区位补偿款为<span class="span">${family.qwMoney?default("0")}</span>元。其中：宅基地面积控制标准内区位补偿款为<span
+                        class="span">${family.inqwFee?default("0")}</span>元，宅基地面积控制标准外区位补偿款为<span class="span">${family.outqwFee?default("0")}</span>元。</p>
+                <p>2.房屋及附属物重置成新价补偿款：</p>
+                <p>房屋及附属物重置成新价补偿款为<span class="span">${family.fswFee?default("0")}</span>元。</p>
+                <p>3.分户补偿款：</p>
+                <p>分户补偿款为<span class="span">${family.fhbcfFee?default("0")}</span>元。</p>
+                <p>（二）补助款：</p>
+                <p>甲方应支付乙方的各项补助款共计<span class="span">${bzSum?default("0")}</span>元，其中包括：</p>
+                <p>1.搬家补助<span class="span">${family.bjbzFee?default("0")}</span>元；2.装修补助<span class="span">${family.realZxbzFee?default("0")}</span>元；
+                </p>
+                <p>3.安置房补助<span class="span">${family.azfbzFee?default("0")}</span>元；4.人员安置补助<span class="span">${family.rybzFee?default("0")}</span>元；
+                </p>
+                <p>5.生活补助<span class="span">${family.shbzFee?default("0")}</span>元；
+                </p>
+                <p>6.移机补助<span class="span">${family.yjfSumFee?default("0")}</span>元（空调<span class="span">${family.airConditionerNum?default("0")}</span>台；电话<span class="span">${family.telephoneNum?default("0")}</span>部；宽带<span
+                            class="span">${family.broadbandNum?default("0")}</span>宗；有线电视<span class="span">${family.tvNum?default("0")}</span>宗；热水器<span class="span">${family.waterHeaterNum?default("0")}</span>台）；</p>
+                <p>7.其他补助<span class="span">${family.otherfFee?default("/")}</span>元。</p>
+                </div>
+            </div>
+            <div style="float: right;margin-right: 100px;width: 650px;margin-top: -7px;">
+
+                <p>（三）奖励款：</p>
+                <p>甲方应支付乙方的各项奖励款共计<span class="span">${rewardSum?default("0")}</span>元，其中包括：</p>
+                <p>1.宅基地内空地奖<span class="span">${family.ktjFee?default("0")}</span>元；2.提前搬家奖<span class="span">${family.tqbjfFee?default("0")}</span>元；</p>
+                <p>3.宅基地合法利用奖<span class="span">${family.confirmFee?default("0")}</span>元；4.其他奖励<span class="span">${family.otherRewardFee?default("/")}</span>元。</p>
+                <p><b>四、被拆迁人家庭中符合安置资格的人员情况</b></p>
+                <p>乙方家庭中符合安置资格的人员共<span class="span">${personUtils(family.personNum)?default("0")}</span>人（数字大写），分别是（姓名及身份证号）：<span class="span">${familyPersonStrID?default("/")}</span>。</p>
+                <p><b>五、房屋安置面积及放弃或剩余安置面积的货币安置标准</b></p>
+                <p>（一）安置房选房面积标准</p>
+                <p>乙方按照以下第<span class="span">${family.type}</span>种方式计算房屋安置面积，乙方的总安置面积为<span class="span">${family.houseControlArea?default("0")}</span>m²（建筑面积），安置房价格及其他相关事宜按照《顺义区西丰乐村棚户区改造土地开发项目集体土地住宅拆迁实施方案》执行。</p>
+                <p>1.符合安置资格的人员每人50㎡，其中达到法定结婚年龄的未婚者可再增加25㎡；</p>
+                <p>2.宅基地使用权证证载面积的70%。</p>
+                <p>（二）乙方实际选房总面积不得超出上述安置面积标准，放弃或剩余面积以货币形式安置，货币安置标准为<span class="span">32900</span>元/㎡（安置房建设地点周边类似安置房的市场价格<span class="span">35000</span>元/㎡-安置房销售均价 2100元/平方米）。</p>
+                <p>（三）各方应在签订本协议后<span class="span">15</span>天内另行签订顺义区马坡镇西丰乐村棚户区改造土地开发项目安置房认购协议书》（以下简称《安置房认购协议》），确定选取安置房套数及面积，乙方拒绝签订的，视为放弃安置房，全部安置面积以货币形式进行安置。</p>
+                <p><b>六、租房补助款</b></p>
+                <p>（一）如乙方选择房屋安置，甲方先行支付乙方享有安置资格的人员每人30个月的租房补助款，标准为每人每月<span class="span">1650</span>元（如遇政策调整，按调整后政策执行）。</p>
+                <p>（二）如乙方全部放弃安置房，或在第五条第（三）款规定期限内未签订《安置房认购协议》的，则全部安置面积以货币形式进行安置，甲方一次性支付乙方享有安置资格的人员每人4个月的租房补助款，标准为每人每月<span class="span">1650</span>元。</p>
+                <p>（三）租房补助款总金额及支付时间以《安置房认购协议》的约定为准。</p>
+                <p><b>七、其他补助及奖励</b></p>
+                <p>如乙方符合领取工程配合奖的条件，待相关部门审核通过后，另行签订《北京市顺义区集体土地住宅房屋拆迁补偿安置协议书补充协议（一）》（以下简称《补充协议（一）》）予以明确并遵照执行。若乙方符合领取独生子女补助、大病补助、残疾补助、低保补助、住房困难补助、停产停业补助等补助的条件，并在项目搬迁奖励期结束之日前向甲方提供真实合法的证明材料，相关部门审核通过后，另行签订《北京市顺义区集体土地住宅房屋拆迁补偿安置协议书补充协议（二）》（以下简称《补充协议（二）》）予以明确并遵照执行。</p>
+            </div>
+            <div style="float: left;width: 650px;margin-top: 20px;">
+                <p><b>八、付款方式</b></p>
+                <p>（一）在乙方按照甲方要求提交完整的相关资料，完成搬迁并将乙方宅基地上的房屋和附属物交付甲方且签订《安置房认购协议》（或按照第五条第（三）款视为放弃房屋安置）的前提下，经相关部门审核通过后<span class="span">15</span>个工作日内，甲方将本协议第三条所确定的拆迁补偿、补助及奖励款共计<span class="span">${total?default("0")}</span>元（大写：<span class="span">${moneyUtils(total)}</span>）一次性支付给乙方。甲方未按约定支付上述费用的，应按延期天数向乙方支付违约金，标准为1000元/天。</p>
+                <p>（二）工程配合奖、独生子女补助、大病补助、残疾补助、低保补助、住房困难补助、停产停业补助，以及租房补助费、放弃安置面积货币安置款的金额及支付时间等，由甲、乙、丙三方在《补充协议（一）》、《补充协议（二）》和《安置房认购协议》中具体明确，《补充协议（一）》、《补充协议（二）》和《安置房认购协议》与本协议具有同等法律效力。</p>
+                <p><b>九、搬家期限</b></p>
+                <p>乙方应在<span class="span" style="min-width: 50px;">签订本协议3日内</span>完成搬家，并将原宅基地及地上房屋和附属物（含树木）全部交付甲方，由甲方自行处理及拆除，乙方不得向甲方主张任何权益。</p>
+                <p>乙方未按上述规定期限完成搬家并交付原宅基地及地上房屋和附属物的，甲方不再支付乙方人员安置补助费、安置房补助费、生活补助、合法利用奖、提前搬家奖，乙方应按延期天数向甲方支付违约金，标准为1000元/天，甲方有权直接从应支付款项中相应扣除。</p>
+                <p><b>十、注销登记</b></p>
+                <p>在本协议签订之时，乙方应将原宅基地及地上房屋和附属物相关的《集体土地建设用地使用证》、《房屋所有权证》原件移交甲方，统一办理注销登记手续，乙方应予以配合。办理注销登记手续的有关费用由甲方承担。</p>
+                <p><b>十一、争议的解决</b></p>
+                <p>本协议在订立、履行过程中发生的争议，由双方当事人协商解决；协商不成的，可依法向北京市顺义区人民法院提起诉讼。</p>
+                <p><b>十二、协议生效及其他</b></p>
+                <p>（一）乙方保证向甲方提供的相关资料真实有效并完整准确，否则乙方自行承担法律责任及由此造成的一切不利后果，并赔偿因此给甲方造成的全部经济损失。</p>
+                <p>（二）本协议自甲方签字盖章，乙方签字之日起生效。本协议一式肆份，甲方持贰份，乙、丙方各持壹份，具有同等法律效力。</p>
+                <p>（三）丙方负责协助、监督本协议的签订及履行。</p>
+                <p>注：（以上所有空格部分需打印，手工填写无效）。</p>
+
+                <div style="line-height: 250%;margin-top: 25px;margin-left: 20px;">
+                    甲方(盖章）：　　　　 乙方（签字并按手印）： 　<br/>
+                    法定代表人：　　　　　委托代理人(签字并按手印)：<br/>
+                </div>
+                <div style="margin-left: 355px;margin-top: 10px">
+                    <p>签约时间：<span class="fix_span" style="min-width: 50px;"></span>年<span class="fix_span" style="min-width: 30px;"></span>月<span class="fix_span" style="min-width: 30px;"></span>日</p>
+                </div>
+            </div>
+            <div style="float: right;width: 650px;margin-right: 100px;text-align: center">
+                <div style="font-size: 17px;margin-top: 60px;margin-left: 350px;"><b>协议编号：<span class="span">${family.familyCode}</span></b></div>
+                <div style="font-size: 35px;margin-top: 140px;"><b>北京市顺义区集体土地住宅房屋拆迁</b></div>
+                <div style="font-size: 35px;margin-top: 30px;"><b>补偿安置协议书</b></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

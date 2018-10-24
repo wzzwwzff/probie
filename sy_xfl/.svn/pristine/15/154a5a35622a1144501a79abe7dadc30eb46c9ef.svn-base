@@ -1,0 +1,1086 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.en.CheckState;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.service.ActionInfoService;
+import com.app.cq.service.FamilyPersonService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.utils.*;
+import com.app.cq.vo.Response;
+import com.app.permission.model.User;
+import com.app.permission.utils.UserSession;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sqds.exception.SqdsException;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.utils.pdf.PdfDocumentGenerator;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * 签约管理
+ * Created by zhaisj on 2018/1/2.
+ */
+@Controller
+@RequestMapping("/cq/sign/*")
+public class SignController {
+    @Resource
+    private FamilyService familyService;
+    @Resource
+    private FamilyPersonService familyPersonService;
+    @Resource
+    private DataDictService dataDictService;
+    @Resource
+    private ActionInfoService actionInfoService;
+    @Resource
+    private FamilyController familyController;
+
+    /*****************************************
+     * 签约列表
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+
+        pageInfo.addParameter("search_like_string_f.groupCode", user.getDepartment().getDepartmentCode());
+//        pageInfo.addParameter("search_eq_integer_f.checkState", CheckState.SECONDCHECK.getIndex());
+
+        pageInfo = this.familyService.familyList(pageInfo);
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("departmentCode", GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode());
+
+    }
+
+    /**
+     * 预览框架
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("previewFrame")
+    public void previewFrame(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        modelMap.put("familyId", familyId);
+    }
+
+    /**
+     * 打印框架
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("printFrame")
+    public void printFrame(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        modelMap.put("familyId", familyId);
+    }
+
+
+    /**
+     * 打印协议
+     *
+     * @param request
+     */
+    @RequestMapping("print")
+    public void print(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HashMap<String, Integer> renDing = new HashMap<>();
+        renDing.put("211",95);
+        renDing.put("404",74);
+        renDing.put("408",75);
+        renDing.put("210",123);
+        renDing.put("309",91);
+        renDing.put("320",70);
+        renDing.put("617",140);
+        renDing.put("610",116);
+
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.get(familyId);
+
+        String template = null;
+        if (family == null) {
+            throw new SqdsException("家庭信息不存在！");
+        } else {
+            CalcUtils.calc(family);
+            List<FamilyPerson> persons = familyPersonService.listByFamilyId(family.getId());//所有家庭成员
+            List<FamilyPerson> azPersons = familyPersonService.getAzFamilyPerson(family.getId());//所有安置人
+
+            String familyPersonStrID = familyPersonService.getPersonStrNum(azPersons);
+            String familyPersonStr = familyPersonService.getPersonStr(persons);
+
+            String familyPersonStrRealOne = familyPersonService.getPersonOneStr(persons);
+
+            String familyPersonStrRealNo = familyPersonService.getPersonNoStr(persons);
+
+            BigDecimal bzSum = BigDecimalUtils.getNotNull(family.getBzSum());
+            BigDecimal bcSum = BigDecimalUtils.getNotNull(family.getBcSum());
+            BigDecimal rewardSum = BigDecimalUtils.getNotNull(family.getRewardSum());
+            BigDecimal total = BigDecimalUtils.getSum(bzSum, bcSum, rewardSum);
+            Map map = Maps.newHashMap();
+
+            FreeMarkerMoneyUtils freeMarkerMoneyUtils = new FreeMarkerMoneyUtils();
+            FreeMarkerBigDecimalUtils freeMarkerBigDecimalUtils = new FreeMarkerBigDecimalUtils();
+            FreeMarkerPersonUtils freeMarkerPersonUtils = new FreeMarkerPersonUtils();
+
+
+            DataDict dataDict = dataDictService.getDataDict("访问地址");
+            String url1 = dataDict.getAttributeValue() + "/static/image/fw.jpg";
+            if (family.getCheckState() != CheckState.SECONDCHECK.getIndex()) {
+                url1 = dataDict.getAttributeValue() + "/static/image/bg.jpg";//添加水印
+            }
+
+            map.put("renDing",renDing);
+            map.put("familyPersonStrID",familyPersonStrID);
+            map.put("personUtils",freeMarkerPersonUtils);
+            map.put("url1", url1);
+            map.put("familyPersonStr", familyPersonStr);
+            map.put("familyPersonStrRealOne", familyPersonStrRealOne);
+            map.put("familyPersonStrRealNo", familyPersonStrRealNo);
+            map.put("moneyUtils", freeMarkerMoneyUtils);
+            map.put("bigDecimalUtils", freeMarkerBigDecimalUtils);
+            map.put("bzSum", bzSum);
+            map.put("bcSum", bcSum);
+            map.put("rewardSum", rewardSum);
+            map.put("total", total);
+            map.put("family", family);
+
+            template = "familyAgreement.html";
+            PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+            OutputStream outputStream = null;
+            try {
+                outputStream = response.getOutputStream();
+                pdfDocumentGenerator.generate(template, map, outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    outputStream.flush();
+                    outputStream.close();
+//                    response.reset();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    //打印交房通知单框架
+    @RequestMapping("printJfFrame")
+    public void printJfFrame(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        modelMap.put("familyId", familyId);
+    }
+
+    //打印交房通知单
+    @RequestMapping("printJf")
+    public void printJf(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+
+        Family family = familyService.get(familyId);
+
+        String template = null;
+        if (family == null) {
+            throw new SqdsException("家庭信息不存在！");
+        } else {
+
+            Map map = Maps.newHashMap();
+            map.put("family", family);
+            template = "printJf.html";
+            BigDecimal buildArea = BigDecimalUtils.getSum(family.getBuildArea(), family.getOutBuildArea());
+            map.put("buildArea", buildArea);
+            PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+            OutputStream outputStream = null;
+            try {
+                outputStream = response.getOutputStream();
+                pdfDocumentGenerator.generate(template, map, outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+
+                    outputStream.flush();
+                    outputStream.close();
+//                    response.reset();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /*****************************************
+     * 签约列表
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("signList")
+    public void signList(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+        pageInfo.addParameter("search_like_string_f.groupCode", user.getDepartment().getDepartmentCode());
+        pageInfo.addParameter("search_eq_integer_f.checkState", CheckState.SECONDCHECK.getIndex());
+
+        pageInfo = this.familyService.familyList(pageInfo);
+
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("departmentCode", GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode());
+        Map<String, String> map = dataDictService.getMapByParentAttributeNameForName("奖励期时间");
+        String beginTimeStr = map.get("签约开始时间");
+        Date nowTime = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date beginTime = null;
+        try {
+            beginTime = sdf.parse(beginTimeStr);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        Calendar beginCalendar = Calendar.getInstance();
+        Calendar nowCalendar = Calendar.getInstance();
+        nowCalendar.setTime(nowTime);
+        beginCalendar.setTime(beginTime);
+
+        Boolean flag = true;
+        if (nowCalendar.compareTo(beginCalendar) > 0) {
+            flag = false;
+        }
+        modelMap.addAttribute("flag", flag);
+
+    }
+
+    /**
+     * 设置签约状态
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("setSignStatus")
+    @ResponseBody
+    public Map setSignStatus(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.get(familyId);
+        Map map = Maps.newHashMap();
+        try {
+            this.familyService.getSignNum(family.getId());
+            map.put("success", "true");
+            map.put("message", "设置成功！");
+            String status = "qyStatus";
+            this.familyController.toWebFamilyData(family,status);
+            String operateType = "标记补偿协议已签约";
+            actionInfoService.saveActionInfo(family, operateType);
+        } catch (Exception e) {
+            map.put("success", "false");
+            map.put("message", "操作失败！");
+        }
+        return map;
+    }
+
+    /**
+     * 撤销签约状态
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("cancelSignStatus")
+    @ResponseBody
+    public Map cancelSignStatus(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.get(familyId);
+        Map map = Maps.newHashMap();
+        try {
+            if (family.getQyState() == 2) {
+                family.setQyState(1);
+                family.setQyDate(null);
+                family.setQyDateMillisecond(null);
+            }
+            familyService.save(family);
+            map.put("success", "true");
+            map.put("message", "设置成功！");
+            String status = "cxqyStatus";
+            this.familyController.toWebFamilyData(family,status);
+
+            String operateType = "撤销补偿协议已签约状态";
+            actionInfoService.saveActionInfo(family, operateType);
+        } catch (Exception e) {
+            map.put("success", "false");
+            map.put("message", "操作失败！");
+        }
+        return map;
+    }
+//    @RequestMapping("setSignStatus")
+//    @ResponseBody
+//    public Response qyState(HttpServletRequest request, ModelMap modelMap){
+//
+//        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+//        Family family = familyService.get(familyId);
+//
+//        if (family.getQyState() == 1){
+//            family.setQyState(2);
+//            family.setQyDate(new Date());
+//
+//        }
+//        familyService.save(family);
+//
+//        return new Response();
+//
+//    }
+//
+//    /**
+//     * 得到签约的基本信息
+//     *
+//     * @param request
+//     */
+//    @RequestMapping("getBaseInfo")
+//    @ResponseBody
+//    public Map getBaseInfo(HttpServletRequest request, ModelMap model) {
+//        Integer familyId  = ParamUtils.getInteger(request, "familyId",0);
+//        Family family = familyService.get(familyId);
+//        Precondition.checkAjaxArguement(family!=null, "0001", "该用户不存在！");
+//
+//        Map<String, String> resultMap = Maps.newHashMap();
+//        resultMap.put("familyId",String.valueOf(family.getId()));
+//        resultMap.put("name", family.getName());
+//        resultMap.put("idCard", family.getIdCard());
+//        resultMap.put("familyNum", family.getFamilyCode());
+//        resultMap.put("affirmArea",StringUtils.getNotNullDecimalStr(family.getConfirmArea()));
+//        resultMap.put("address", family.getHouseAddress());
+//        return resultMap;
+//    }
+//
+//    /**
+//     * 签约方法
+//     */
+//    @RequestMapping("getSignNum")
+//    @ResponseBody
+//    public synchronized Response getSignNum(HttpServletRequest request, ModelMap modelMap) {
+//        Integer familyId = ParamUtils.getInteger(request, "familyId", 0);
+//        this.familyService.getSignNum(familyId);
+//        return new Response();
+//    }
+
+
+    /**
+     * 保存打印协议记录
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("setActionInfo")
+    @ResponseBody
+    public Response setActionInfo(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        String type = ParamUtils.getString(request, "type", "");
+        Family family = familyService.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "0001", "数据不存在！");
+        String operateType = "";
+        if (type.equals("agreement")) {
+            operateType = "打印补偿协议";
+        } else if (type.equals("jf")) {
+            operateType = "打印交房验收单";
+        } else if (type.equals("jfjg")) {
+            operateType = "打印交房结果单";
+        } else if (type.equals("finance")) {
+            operateType = "打印财务会签单";
+        } else if (type.equals("cj")) {
+            operateType = "补充协议二";
+        } else if (type.equals("db")) {
+            operateType = "打印低保补助补充协议";
+        } else if (type.equals("dab")) {
+            operateType = "打印大病补助补充协议";
+        } else if (type.equals("team")) {
+            operateType = "打印工程配合奖补充协议";
+        } else if (type.equals("rg")) {
+            operateType = "打印认购协议";
+        }
+
+        actionInfoService.saveActionInfo(family, operateType);
+        return new Response();
+    }
+
+
+    /*****************************************
+     * 低保残疾大病修改
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("difficultyList")
+    public void difficultyList(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+        pageInfo.addParameter("search_like_string_f.groupCode", user.getDepartment().getDepartmentCode());
+        pageInfo.addParameter("search_eq_integer_f.qyState", 2);
+
+        pageInfo = this.familyService.familyList(pageInfo);
+
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("departmentCode", GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode());
+    }
+
+    /*****************************************
+     * 低保残疾大病修改
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("difficultyForm")
+    public void difficultyForm(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = familyService.get(familyId);
+        Precondition.checkSqdsArguement(family!=null,"家庭信息不存在");
+        modelMap.addAttribute("family",family);
+    }
+
+    /**
+     * 低保残疾大病保存
+     * @param request
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("difficultySave")
+    public String difficultySave(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = familyService.get(familyId);
+
+        Servlets.bind(request,family);
+
+        User user = UserSession.getUserFromSession(request);
+        String ip = GetCurrentUser.getIpAddr(request);
+
+        familyService.saveDifficultyFamily(family,user.getUsername(),ip);
+        CalcUtils.calc(family);
+        return "redirect:difficultyList?"+request.getAttribute("searchParams");
+    }
+
+
+    /*****************************************
+     * 补充列表
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("bcList")
+    public void bcList(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+        pageInfo.addParameter("search_like_string_f.groupCode", user.getDepartment().getDepartmentCode());
+        pageInfo.addParameter("search_eq_integer_f.qyState", 2);
+
+        pageInfo = this.familyService.familyList(pageInfo);
+
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("departmentCode", GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode());
+    }
+
+    /*****************************************
+     * 补充列表
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("bcSignList")
+    public void bcSignList(HttpServletRequest request, ModelMap modelMap) {
+        this.bcList(request, modelMap);
+    }
+
+    @RequestMapping("printBcxyFrame")
+    public void printBcxyFrame(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null, "家庭信息不存在");
+        modelMap.addAttribute("family", family);
+    }
+
+    //补充协议
+    @RequestMapping("printBcxy")
+    public void printBcxy(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        String pdfType = ParamUtils.getString(request, "pdfType", "");
+        String printPDFType = ParamUtils.getString(request,"printPDFType","");
+
+        Family family = familyService.get(familyId);
+        Integer personNum = family.getPersonNum();
+//        BigDecimal bcSumTatal = family.getBcSumTatal();
+//        double rjcqbcMoney = BigDecimalUtils.div(bcSumTatal, personNum, 2);
+        Integer isZfkn = family.getIsZfkn();
+        Integer isTcty = family.getIsTcty();
+        String rjcqbc = "不低于";
+        String zfknbz = "不符合";
+        if (isZfkn == 2){
+            rjcqbc = "低于";
+            zfknbz = "符合";
+        }
+
+        String tcty = "不符合";
+        if(isTcty == 2){
+            tcty = "符合";
+        }
+
+        if (family.getZfknFee() == null){
+            family.setZfknFee(new BigDecimal(0));
+        }
+
+        if (family.getTeamMoney() == null){
+            family.setTeamMoney(new BigDecimal(0));
+        }
+
+        if (family.getDabNum() == null){
+            family.setDabNum(0);
+        }
+        if (family.getCjNum() == null){
+            family.setCjNum(0);
+        }
+        if (family.getDbNum() == null){
+            family.setDbNum(0);
+        }
+
+        List<FamilyPerson> persons = familyPersonService.listByFamilyId(family.getId());//所有安置人
+        String familyPersonStrID = familyPersonService.getPersonStrNum(persons);
+        BigDecimal bcMoney = BigDecimalUtils.getNotNull(family.getBcxyTotal());
+
+        FreeMarkerPersonUtils freeMarkerPersonUtils = new FreeMarkerPersonUtils();
+        DataDict dataDict = dataDictService.getDataDict("访问地址");
+        String url1 = dataDict.getAttributeValue() + "/static/image/fw.jpg";
+        if (family.getCheckState() != CheckState.SECONDCHECK.getIndex()) {
+            url1 = dataDict.getAttributeValue() + "/static/image/bg.jpg";//添加水印
+        }
+
+        String template = null;
+        if (family == null) {
+            throw new SqdsException("家庭信息不存在！");
+        } else {
+            CalcUtils.calc(family);
+            Map map = Maps.newHashMap();
+            map.put("url1",url1);
+            map.put("tcty",tcty);
+            map.put("family",family);
+            map.put("zfknbz",zfknbz);
+            map.put("rjcqbc",rjcqbc);
+            map.put("familyPersonStrID",familyPersonStrID);
+            map.put("personUtils",freeMarkerPersonUtils);
+            map.put("bcMoney",bcMoney);
+            FreeMarkerMoneyUtils freeMarkerMoneyUtils = new FreeMarkerMoneyUtils();
+            map.put("moneyUtils", freeMarkerMoneyUtils);
+
+            if (pdfType.equals("cj")) {
+                template = "cjAgreement.html";
+            } else if (pdfType.equals("team")) {
+                template = "teamAgreement.html";
+            }
+
+            PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+            OutputStream outputStream = null;
+            try {
+                outputStream = response.getOutputStream();
+                pdfDocumentGenerator.generate(template, map, outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+
+                    outputStream.flush();
+                    outputStream.close();
+//                    response.reset();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 设置签约状态
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("setBcxyStatus")
+    @ResponseBody
+    public Response setBcxyStatus(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "0001", "家庭信息不存在");
+        Precondition.checkAjaxArguement(family.getQyState() != null && family.getQyState() == 2, "0002", "该户未签补偿协议");
+        Precondition.checkAjaxArguement(family.getBcxyState() == null || family.getBcxyState() != 2, "0003", "该户已签补充协议");
+        family.setBcxyState(2);
+        family.setBcxyDate(new Date());
+        family.setBcxyPerson(GetCurrentUser.getLoginUser(request).getRealName());
+        familyService.save(family);
+        String operateType = "标记补充协议已签约";
+        actionInfoService.saveActionInfo(family, operateType);
+        return new Response();
+    }
+
+    /**
+     * 撤销签约状态
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("cancelBcxyStatus")
+    @ResponseBody
+    public Response cancelBcxyStatus(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "0001", "家庭信息不存在");
+        Precondition.checkAjaxArguement(family.getBcxyState() != null && family.getBcxyState() == 2, "0002", "补充下协议未签约");
+
+        family.setBcxyState(1);
+        family.setBcxyDate(null);
+        family.setBcxyPerson(null);
+
+        familyService.save(family);
+
+        String operateType = "撤销补充协议已签约状态";
+        actionInfoService.saveActionInfo(family, operateType);
+        return new Response();
+    }
+
+
+    /**
+     * 列表显示
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("bcUpdate")
+    public void bcUpdate(HttpServletRequest request,ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+
+        User user = GetCurrentUser.getLoginUser(request);
+        pageInfo.addParameter("search_like_string_f.groupCode",user.getDepartment().getDepartmentCode());
+        pageInfo = familyService.familyList(pageInfo);
+
+        modelMap.put("pageInfo",pageInfo);
+    }
+
+
+    /**
+     * 补充修改表单页面
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("updateBCForm")
+    public void updateBCForm(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = familyService.get(familyId);
+
+        Precondition.checkSqdsArguement(family != null, "数据错误，请重试！");
+
+        CalcUtils.calc(family);
+        BigDecimal pgTotal=BigDecimalUtils.getSum(family.getInqwFee(),family.getOutqwFee(),family.getFswFee(),family.getRealZxbzFee(),family.getFhbcfFee(),family.getKtjFee());
+
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(familyId);
+        String personStr = familyPersonService.getPersonStr(familyPersonList);
+        String personOne = familyPersonService.getPersonOneStr(familyPersonList);
+        String personPregnancy = familyPersonService.getPersonPregnancyStr(familyPersonList);
+
+        modelMap.put("family",family);
+        modelMap.put("pgMoney",pgTotal);
+        modelMap.put("personStr",personStr);
+        modelMap.put("personOne",personOne);
+        modelMap.put("personPregnancy",personPregnancy);
+        modelMap.put("familyPersonList",familyPersonList);
+    }
+
+    /**
+     * 补充修改数据保存
+     * @param request
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("updateBCSave")
+    public String updateBCSave(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = familyService.get(familyId);
+
+        Servlets.bind(request,family);
+
+        User user = UserSession.getUserFromSession(request);
+        String ip = GetCurrentUser.getIpAddr(request);
+
+        familyService.saveSchemeFamily(family,user.getUsername(),ip);
+        return "redirect:bcUpdate?" +"&"+request.getAttribute("searchParams");
+    }
+
+
+
+    /*****************************************
+     * 认购协议
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("rgList")
+    public void rgList(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+        pageInfo.addParameter("search_like_string_f.groupCode", user.getDepartment().getDepartmentCode());
+        pageInfo.addParameter("search_eq_integer_f.qyState", 2);
+
+        pageInfo = this.familyService.familyList(pageInfo);
+
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("departmentCode", GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode());
+    }
+
+
+    @RequestMapping("printRgxyFrame")
+    public void printRgxyFrame(HttpServletRequest request, ModelMap modelMap) {
+            Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+            modelMap.put("familyId", familyId);
+    }
+
+
+    /**
+     * 打印补偿协议
+     *
+     * @param request
+     */
+    @RequestMapping("printRg")
+    public void printRg(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.get(familyId);
+
+        String template = null;
+        if (family == null) {
+            throw new SqdsException("家庭信息不存在！");
+        } else {
+            CalcUtils.calc(family);
+
+            Map map = Maps.newHashMap();
+
+            List<DataDict> dataDictList = dataDictService.getDataDictList("认购协议");
+            Integer zbAzPrice = 0;
+            for (DataDict dataDict : dataDictList){
+                if (dataDict.getAttributeName().equals("周边类似安置房的市场价格")){
+                    zbAzPrice = Integer.valueOf(dataDict.getAttributeValue());
+                }
+            }
+            Integer fqAzControlPrice = zbAzPrice - 2100;//放弃安置面积每平米补偿标准
+
+            BigDecimal fqAzArea = BigDecimalUtils.jian(family.getHouseControlArea(),family.getAzHouseAreaTotal());//放弃安置面积
+            BigDecimal azMoney = BigDecimalUtils.getBigDecimalAndIntegerMultiply(fqAzArea, fqAzControlPrice);//安置款
+
+            String isFqAz = "全部放弃安置房";
+            if (family.getOneAZHouse() > 0 || family.getTwoAZHouse() > 0 || family.getThreeAZHouse() > 0 || family.getFourAZHouse() > 0 || family.getFiveAZHouse() > 0){
+                isFqAz = "房屋安置";
+            }
+
+            //每种安置房选房面积之和
+            BigDecimal OneHouseAreaTotal = new BigDecimal(50 * family.getOneAZHouse());
+            BigDecimal TwoHouseAreaTotal = new BigDecimal(80 * family.getTwoAZHouse());
+            BigDecimal ThreeHouseAreaTotal = new BigDecimal(90 * family.getThreeAZHouse());
+            BigDecimal FourHouseAreaTotal = new BigDecimal(100 * family.getFourAZHouse());
+            BigDecimal FiveHouseAreaTotal = new BigDecimal(125 * family.getFiveAZHouse());
+
+            FreeMarkerMoneyUtils freeMarkerMoneyUtils = new FreeMarkerMoneyUtils();
+            FreeMarkerBigDecimalUtils freeMarkerBigDecimalUtils = new FreeMarkerBigDecimalUtils();
+            FreeMarkerPersonUtils freeMarkerPersonUtils = new FreeMarkerPersonUtils();
+
+            DataDict dataDict = dataDictService.getDataDict("访问地址");
+            String url1 = dataDict.getAttributeValue() + "/static/image/fw.jpg";
+            if (family.getCheckState() != CheckState.SECONDCHECK.getIndex()) {
+                url1 = dataDict.getAttributeValue() + "/static/image/bg.jpg";//添加水印
+            }
+
+            map.put("OneHouseAreaTotal",OneHouseAreaTotal);
+            map.put("TwoHouseAreaTotal",TwoHouseAreaTotal);
+            map.put("ThreeHouseAreaTotal",ThreeHouseAreaTotal);
+            map.put("FourHouseAreaTotal",FourHouseAreaTotal);
+            map.put("FiveHouseAreaTotal",FiveHouseAreaTotal);
+            map.put("url1", url1);
+            map.put("fqAzControlPrice",fqAzControlPrice);
+            map.put("zbAzPrice",zbAzPrice);
+            map.put("azMoney",azMoney);
+            map.put("fqAzArea",fqAzArea);
+            map.put("isFqAz",isFqAz);
+            map.put("personUtils",freeMarkerPersonUtils);
+            map.put("moneyUtils", freeMarkerMoneyUtils);
+            map.put("bigDecimalUtils", freeMarkerBigDecimalUtils);
+            map.put("family", family);
+
+            template = "rgAgreement.html";
+            PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+            OutputStream outputStream = null;
+            try {
+                outputStream = response.getOutputStream();
+                pdfDocumentGenerator.generate(template, map, outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    outputStream.flush();
+                    outputStream.close();
+//                    response.reset();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    /**
+     * 认购协议修改表单页面
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("rgForm")
+    public void rgForm(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Integer flag = ParamUtils.getInt(request,"flag",0);
+
+        Family family = familyService.get(familyId);
+        User user = UserSession.getUserFromSession(request);
+
+
+        if (family == null) {
+            family = new Family();
+            family.setAddDate(new Date());
+        }
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(familyId);
+        String personStr = familyPersonService.getPersonStr(familyPersonList);
+        String personOne = familyPersonService.getPersonOneStr(familyPersonList);
+
+        modelMap.put("flag",flag);
+        modelMap.put("personStr",personStr);
+        modelMap.put("personOne",personOne);
+        modelMap.put("family",family);
+        modelMap.put("departmentCode", user.getDepartment().getDepartmentCode());
+    }
+
+    /**
+     * 认购协议修改保存
+     * @param request
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("rgSave")
+    public String rgSave(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = familyService.get(familyId);
+        Integer oneAZHouse = ParamUtils.getInt(request,"oneAZHouse",0);
+        Integer twoAZHouse = ParamUtils.getInt(request,"twoAZHouse",0);
+        Integer threeAZHouse =ParamUtils.getInt(request,"threeAZHouse",0);
+        Integer fourAZHouse = ParamUtils.getInt(request,"fourAZHouse",0);
+        Integer fiveAZHouse = ParamUtils.getInt(request,"fiveAZHouse",0);
+        Integer azHouseTotal = oneAZHouse+twoAZHouse+threeAZHouse+fourAZHouse+fiveAZHouse;
+        BigDecimal azHouseAreaTotal = new BigDecimal((oneAZHouse * 50) + (twoAZHouse * 80) + (threeAZHouse * 90) + (fourAZHouse * 100) + (fiveAZHouse * 125));
+
+        if (family == null) {
+            family = new Family();
+        }
+        if (azHouseAreaTotal.compareTo(family.getHouseControlArea()) > 0){
+            throw new SqdsException("您的选房面积不能大于安置面积，请重新选择！");
+        }
+
+        Servlets.bind(request,family);
+
+        family.setOneAZHouse(oneAZHouse);
+        family.setTwoAZHouse(twoAZHouse);
+        family.setThreeAZHouse(threeAZHouse);
+        family.setFourAZHouse(fourAZHouse);
+        family.setFiveAZHouse(fiveAZHouse);
+        family.setAzHouseTotal(azHouseTotal);
+        family.setAzHouseAreaTotal(azHouseAreaTotal);
+
+        User user = UserSession.getUserFromSession(request);
+        String ip = GetCurrentUser.getIpAddr(request);
+
+        familyService.saveFamily(request, family,user.getUsername(),ip);
+        Family family1 = familyService.get(family.getId());
+        CalcUtils.calc(family1);
+
+        return "redirect:/cq/sign/rgList?" +"&" + request.getAttribute("searchParams");
+    }
+
+
+    /**
+     * 选房列表显示
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("xfList")
+    public void xfList(HttpServletRequest request,ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+        pageInfo.addParameter("search_like_string_f.groupCode",user.getDepartment().getDepartmentCode());
+        pageInfo = familyService.getjfNumberListF(pageInfo);
+
+        modelMap.put("pageInfo",pageInfo);
+    }
+
+    /**
+     * 认购协议修改表单页面
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("xfForm")
+    public void xfForm(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Integer flag = ParamUtils.getInt(request,"flag",0);
+
+        Family family = familyService.get(familyId);
+        User user = UserSession.getUserFromSession(request);
+
+
+        if (family == null) {
+            family = new Family();
+            family.setAddDate(new Date());
+        }
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(familyId);
+        String personStr = familyPersonService.getPersonStr(familyPersonList);
+        String personOne = familyPersonService.getPersonOneStr(familyPersonList);
+
+        modelMap.put("flag",flag);
+        modelMap.put("personStr",personStr);
+        modelMap.put("personOne",personOne);
+        modelMap.put("family",family);
+        modelMap.put("departmentCode", user.getDepartment().getDepartmentCode());
+    }
+
+    /**
+     * 认购协议修改保存
+     * @param request
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("xfSave")
+    public String xfSave(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = familyService.get(familyId);
+        String firstXFNum = ParamUtils.getString(request, "firstXFNum", "");
+        String secondXFNum = ParamUtils.getString(request, "secondXFNum", "");
+        String thirdXFNum = ParamUtils.getString(request, "thirdXFNum", "");
+
+        if (family == null) {
+            family = new Family();
+        }
+        if (firstXFNum.equals("") || secondXFNum.equals("") || thirdXFNum.equals("")){
+            throw new SqdsException("选房顺序号不可为空");
+        }
+
+        Servlets.bind(request,family);
+        family.setFirstXFNum(Integer.valueOf(firstXFNum));
+        family.setSecondXFNum(Integer.valueOf(secondXFNum));
+        family.setThirdXFNum(Integer.valueOf(thirdXFNum));
+
+        User user = UserSession.getUserFromSession(request);
+        String ip = GetCurrentUser.getIpAddr(request);
+
+        familyService.saveFamily(request, family,user.getUsername(),ip);
+        Family family1 = familyService.get(family.getId());
+        CalcUtils.calc(family1);
+
+        return "redirect:/cq/sign/xfList?" +"&" + request.getAttribute("searchParams");
+    }
+
+
+    /**
+     * 验证选房第一轮顺序号
+     */
+    @RequestMapping("validateFileNum1")
+    @ResponseBody
+    public String validateFileNum1(HttpServletRequest request, String firstNum) {
+        String familyId = ParamUtils.getString(request, "familyId", "");
+        if (familyId.contains(",")){
+            String[] split = familyId.split(",");
+            familyId = split[1];
+        }
+        if (firstNum.equals("") || firstNum == null){
+            return "false";
+        }
+        Integer firstNum1 = Integer.valueOf(firstNum);
+        List<Family> resultList = this.familyService.list("from Family where firstXFNum = '" + firstNum1 + "'");
+        if (Collections3.isEmpty(resultList)) {
+            return "true";
+        } else {
+            Family family = resultList.get(0);
+            if (String.valueOf(family.getId()).equals(familyId)){
+                return "true";
+            }
+            return "false";
+        }
+    }
+    /**
+     * 验证选房第一轮顺序号
+     */
+    @RequestMapping("validateFileNum2")
+    @ResponseBody
+    public String validateFileNum2(HttpServletRequest request, String secondNum) {
+        String familyId = ParamUtils.getString(request, "familyId", "");
+        if (familyId.contains(",")){
+            String[] split = familyId.split(",");
+            familyId = split[1];
+        }
+        if (secondNum.equals("") || secondNum == null){
+            return "false";
+        }
+        Integer secondNum1 = Integer.valueOf(secondNum);
+        List<Family> resultList = this.familyService.list("from Family where secondXFNum = '" + secondNum1 + "'");
+        if (Collections3.isEmpty(resultList)) {
+            return "true";
+        } else {
+            Family family = resultList.get(0);
+            if (String.valueOf(family.getId()).equals(familyId)){
+                return "true";
+            }
+            return "false";
+        }
+    }
+    /**
+     * 验证选房第一轮顺序号
+     */
+    @RequestMapping("validateFileNum3")
+    @ResponseBody
+    public String validateFileNum3(HttpServletRequest request, String thirdNum) {
+        String familyId = ParamUtils.getString(request, "familyId", "");
+        if (familyId.contains(",")){
+            String[] split = familyId.split(",");
+            familyId = split[1];
+        }
+        if (thirdNum.equals("") || thirdNum == null){
+            return "false";
+        }
+        Integer thirdNum1 = Integer.valueOf(thirdNum);
+        List<Family> resultList = this.familyService.list("from Family where firstXFNum = '" + thirdNum1 + "'");
+        if (Collections3.isEmpty(resultList)) {
+            return "true";
+        } else {
+            Family family = resultList.get(0);
+            if (String.valueOf(family.getId()).equals(familyId)){
+                return "true";
+            }
+            return "false";
+        }
+    }
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 1500px;
+            font-size: 17px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 22px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        #header1{
+            line-height: 150%;
+        }
+
+        @page {
+            margin: 15mm 10mm 18.6mm 18.6mm
+        }
+
+        body {
+            font-family: SimSun;
+            font-size: 1.6mm;
+            line-height: 180%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 0px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            size:420mm 297mm;
+            /*size:210mm 297mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+</head>
+<body style="background-image: url(${url1})">
+<!--<body>-->
+<div>
+    <div class="printContent">
+            <div style="float: left;width: 1400px;margin-right: 45px;">
+                <div style="float: left;width: 650px">
+                    <div id="header1">
+                        <b>拆 迁 人：</b><span class="fix_span">北京首开中晟置业有限责任公司</span>（以下简称甲方）<br/>
+                        <b>被拆迁人：</b><span class="fix_span">${family.name?default("")}</span>（以下简称乙方）　<br/>
+                        <b>身份证号：</b><span class="fix_span"><#if family.idCard==''>/</#if><#if family.idCard!=''>${family.idCard?default(" ")}</#if> </span>　<br/>
+                        <b>房屋坐落：</b><span class="fix_span">${family.houseAddress?default("/")}</span>　<br/>
+                    </div>
+                    <p style="margin-top: 10px;">
+                        为维护甲、乙双方权益，根据《北京市集体土地房屋拆迁管理办法》、《顺义区西丰乐村棚户区改造土地开发项目集体土地住宅拆迁实施方案》、《北京市顺义区集体土地住宅房屋拆迁补偿安置协议书》（协议编号：<span class="span">${family.familyCode}</span>，以下简称《拆迁补偿安置协议》）及相关法律法规和文件规定，经协议双方协商，就乙方安置房认购相关事宜，达成协议如下：</p>
+                    <p><b>一、安置房认购情况</b></p>
+                    <p>（一）乙方自愿认购安置房共<span class="span">${family.azHouseTotal?default("0")}</span>套（以下合称乙方实际选房或该房屋），实际选房面积共计<span class="span">${family.azHouseAreaTotal?default("0")}</span>㎡（指建筑面积，以下同）。
+                    </p>
+                    <p>其中：</p>
+                    <p><span class="span">50</span>㎡<span class="span">${family.oneAZHouse?default("0")}</span>套，合计面积<span class="span">${OneHouseAreaTotal?default("0")}</span>㎡；</p>
+                    <p><span class="span">80</span>㎡<span class="span">${family.twoAZHouse?default("0")}</span>套，合计面积<span class="span">${TwoHouseAreaTotal?default("0")}</span>㎡；</p>
+                    <p><span class="span">90</span>㎡<span class="span">${family.threeAZHouse?default("0")}</span>套，合计面积<span class="span">${ThreeHouseAreaTotal?default("0")}</span>㎡；</p>
+                    <p><span class="span">100</span>㎡<span class="span">${family.fourAZHouse?default("0")}</span>套，合计面积<span class="span">${FourHouseAreaTotal?default("0")}</span>㎡；</p>
+                    <p><span class="span">125</span>㎡<span class="span">${family.fiveAZHouse?default("0")}</span>套，合计面积<span class="span">${FiveHouseAreaTotal?default("0")}</span>㎡。</p>
+                    <p>（二）安置房建设地点位于<span class="span">顺义区马坡镇中晟新城北侧</span>，该安置房建设区域具体四至范围以相关审批部门批准文件为准。
+                    </p>
+                    <p>（三）本协议中的房屋建筑面积为暂定面积，最终以相关审批部门备案的实测建筑面积为准。</p>
+                    <p><b>二、安置房认购款</b></p>
+                    <p>（一）应享受安置面积范围内的安置房认购价格为均价2100元（人民币，以下同）/㎡，乙方实际选房面积为<span class="span">${family.azHouseAreaTotal?default("0")}</span>㎡，乙方应向甲方支付的安置房认购款为<span class="span">${family.houseTotal?default("0")}</span>元，具体支付金额和时间以甲乙双方就该房屋签订的《房屋销售合同》的约定为准。</p>
+                    <p>（二）安置房认购款不包括购买该房屋所应缴纳的物业费、供暖费、公共维修基金、燃气接口费、楼房差价、契税及其他按照相关法律、法规及政策规定需由乙方承担的税金及其它费用。</p>
+                    <p><b>三、放弃安置面积折算货币安置款</b></p>
+                    <p>乙方放弃安置面积<span class="span">${family.fqAzArea?default("0")}</span>m²，该部分面积按照<span class="span">${fqAzControlPrice?default("0")}</span>元/m²（安置房建设地点周边类似安置房的市场价格<span class="span">${zbAzPrice?default("0")}</span>元/m²-安置房销售均价2100元/m²）的标准折算的货币安置款共计<span class="span">${family.azMoney?default("0")}</span>元，由甲方向乙方一次性支付。</p>
+                    <p><b>四、租房补助费</b></p>
+                    <p>乙方选择<span class="span">${isFqAz}</span>,根据《拆迁补偿安置协议》第六条的规定，甲方应向乙方支付租房补助费<span class="span">${lsazfFee}</span>元。</p>
+                    <p><b>五、房屋交付</b></p>
+                </div>
+                <div style="float: right;width: 650px">
+                    <p>（一）甲方应于顺义区马坡镇西丰乐村棚户区改造土地开发项目完成拆迁结案后<span>40</span>个月内向乙方交付该房屋。</p>
+                    <p>（二）甲方逾期交房且在24个月（含）以内的，应按照顺义区住建委届时发布的租房补助标准的1.1倍向乙方发放租房补助费。</p>
+                    <p>（三）甲方逾期交房24个月以上的，应按照顺义区住建委届时发布的租房补助标准的1.2倍向乙方发放租房补助费。</p>
+                    <p><b>六、结算方式</b></p>
+                    <p>甲、乙双方签订本协议并经相关部门审核通过后15个工作日内，甲方将本协议第三条和第四条应付款项一次性支付给乙方。甲方未按约定支付上述费用的，应按延期天数向乙方支付违约金，标准为1000元/天。</p>
+                    <p><b>七、购房款结算及相关费用缴纳</b></p>
+                    <p>（一）该房屋的面积与实测建筑面积不一致的，甲、乙双方同意按照多退少补的原则根据实测建筑面积结算购房款：</p>
+                    <p>1.实测建筑面积大于乙方实际选房面积时，建筑面积误差比在3%以内（含3%）部分，应由乙方按照单价11500元/㎡的标准计算并补足购房款；建筑面积误差比超过3%的部分，乙方无需另行支付购房款。</p>
+                    <p>2.实测建筑面积小于乙方实际选房面积时，由甲方按照安置房建设地点周边类似安置房的市场价格<span class="span">${zbAzPrice?default("0")}</span>元/ m²的标准计算并向乙方支付差价款。</p>
+                    <p>（二）本协议有关该房屋价款结算的相关调整的约定不影响《拆迁补偿安置协议》中有关拆迁补偿、补助及奖励款的条款和内容的效力和履行。</p>
+                    <p><b>八、争议解决方式</b></p>
+                    <p>本协议在订立、履行过程中发生的争议，由双方当事人协商解决；协商不成的，可依法向北京市顺义区人民法院起诉。</p>
+                    <p><b>九、协议生效及其他</b></p>
+                    <p>（一）乙方保证向甲方提供的相关资料真实有效并完整准确，否则乙方自行承担法律责任及由此造成的一切不利后果，并赔偿因此给甲方造成的全部经济损失。</p>
+                    <p>（二）本协议自甲方签字盖章，乙方签字之日起生效。本协议一式肆份，甲方持叁份，乙方持壹份，具有同等法律效力。</p>
+                    <p>注：（以上所有空格部分需打印，手工填写无效）。</p>
+                <div style="line-height: 250%;margin-top: 25px;margin-left: 20px;">
+                    甲方(盖章）：　　　　 乙方（签字并按手印）： 　<br/>
+
+                    法定代表人：　　　　　委托代理人(签字并按手印)：<br/>
+                </div>
+                <div style="margin-left: 355px;margin-top: 20px">
+                    <p>签约时间：<span class="fix_span" style="min-width: 50px;"></span>年<span class="fix_span" style="min-width: 30px;"></span>月<span class="fix_span" style="min-width: 30px;"></span>日</p>
+                </div>
+                </div>
+            <div style="float: right;width: 650px;text-align: center">
+                <div style="font-size: 17px;margin-top: 100px;margin-left: 400px;"><b>协议编号：<span class="span">${family.familyCode}</span></b></div>
+                <div style="font-size: 35px;margin-top: 100px;"><b>北京市顺义区马坡镇西丰乐村棚户区改造</b></div>
+                <div style="font-size: 35px;margin-top: 30px;"><b>土地开发项目安置房认购协议书</b></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

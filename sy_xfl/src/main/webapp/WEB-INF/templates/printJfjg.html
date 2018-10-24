@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns:text-align="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 680px;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        /*@page {*/
+        /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            /*margin: 6.6mm 12.6mm 6.6mm 12.6mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        .printTable tr td {
+
+            border: 1px solid #000000;
+            text-align: center;
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+</head>
+<body>
+<#list 1..2 as t>
+    <div class="printContent">
+        <p style="text-align:center;line-height: 26px;margin: 20px ;"><span style="font-weight: bold">交房顺序号结果单</span></p>
+        <p style="text-indent: 0em;">北京市顺义区马坡镇西丰乐村，编号：${family.familyCode?default("")}</p>
+        <table class="printTable" cellpadding="0" cellspacing="0" style="width: 98%">
+            <tr style="text-align: center;height: 50px">
+                <td width="120px">被拆迁人</td>
+                <td width="220px">${family.name?default("/")}</td>
+                <td width="120px">房屋坐落</td>
+                <td>${family.houseAddress?default("/")}</td>
+            </tr>
+            <tr style="height: 50px">
+                <td>身份证号</td>
+                <td><#if family.idCard?default(" ")==''  >/</#if><#if family.idCard?default(" ")!=''  >${family.idCard?default("/")}</#if></td>
+                <td>联系电话</td>
+                <td><#if family.phone?default(" ")==''  >/</#if><#if  family.phone?default(" ")!=''  >${family.phone?default("/")}</#if></td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <p style="line-height: 200%">
+                        <!--您于<span class="span">${ss}</span>完成了交房，并在<span class="span">${sss?default("/")}</span>获取了交房顺序号。-->
+                        <!--您是本村第<span class="span">${family.jfNumber?default("/")}</span>个交房家庭，-->
+                        您于<span class="span">${ss}${sss?default("/")}</span>完成了交房，并获取了交房顺序号。
+                        您的交房顺序号为<span class="span">${jfNum?default("/")}</span>。
+                    </p></td>
+            </tr>
+            <tr style="height: 80px">
+                <td rowspan="2">被拆迁人</td>
+                <td colspan="3" style="border-bottom:none;text-align: left">（签字摁手印）：</td>
+
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: none;text-align: right">日期：${ss}　</td>
+            </tr>
+            <tr>
+                <td colspan="4" >
+                    <#if t=1>第一联（被拆迁人留存）</#if>
+                    <#if t=2>第二联（归档留存）</#if>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <#if t=1>
+        <!--<div class="text" style=" text-align:center;">第一联（被拆迁人留存）</div>-->
+        <hr style="border:1px dotted #000;margin-top: 50px;margin-bottom: 60px"/>
+    </#if>
+    <!--<#if t=2>-->
+        <!--<div class="text" style=" text-align:center;">第二联（归档留存）</div>-->
+    <!--</#if>-->
+</#list>
+
+</body>
+</html>

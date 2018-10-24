@@ -1,0 +1,1189 @@
+package com.app.cq.model;
+
+import com.app.cq.utils.BigDecimalUtils;
+import com.sqds.utils.DateUtils;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+
+/**
+ * 家庭及协议
+ * @author
+ * @date 2017/11/10
+ */
+@Table(name = "family")
+@Entity
+public class Family {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;             //主键
+    //被   拆   迁   人   情    况
+    private String familyCode;      //编号
+    private String dptCode;         // 标段编号(未用)
+    private String district;       //片区（未用）
+    private String groupCode;       //组别编号
+    private String name;            //姓名
+    private Integer sex;          //性别  1: 男：女
+    private String idCard;          //身份证号码
+    private Date  birthdayDate;    //出生日期
+    private String unit;            //工作单位
+    private String phone;           //联系电话
+    private String address;         //户籍所在地
+    private String zipCode;        //邮编
+    private String contextAddress;  //通讯地址
+    private Date moveDate;    //户口迁入时间
+
+    //被   拆   迁   人 房屋情况:
+    private String houseAddress;    //房屋坐落
+    private String ownershipCode;   //权属证书编号
+    private BigDecimal confirmArea; // 合法宅基地面积
+    private BigDecimal controlArea; // 控制标准面积
+    private BigDecimal outControlArea;// 超控制标准面积
+
+    private BigDecimal buildArea;      // 证载（面积)（未用）
+    private BigDecimal outBuildArea;    //院外建筑面积（未用）
+    private BigDecimal confirmBuildArea; // 认定建筑面积（未用）
+    private Integer isBussess;     // 是否经营  1：否 2.是
+    private BigDecimal bussessArea;      // 经营认定面积
+    private Integer isDutyFree;    //是否免税  1：否 2。是
+    @Column(columnDefinition = "INT default 2", nullable = false, insertable = false)
+    private Integer isLive;    // 是否在此居住 1：否 2.是（未用）
+
+
+    //被拆迁人移机项目:
+    private Integer airConditionerNum;  // 空调
+    private Integer telephoneNum;       // 电话
+    private Integer broadbandNum;       // 宽带
+    private Integer tvNum;              // 有线
+    private Integer waterHeaterNum;     // 热水器
+
+    private Integer dbNum;              // 低保
+    private Integer cjNum;              // 残疾证
+    private Integer dabNum;             // 大病
+
+
+    private Integer personNum;     // 安置人数
+    private Integer personOne;     // 独生子女人数
+    private Integer personNo;     // 达到法定结婚年龄且从未结婚人数
+    private Integer personPregnancy;     // 怀孕的家庭成员
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer type; // 安置类型 1,按人均50安置补偿2,按宅面70%安置补偿
+
+    private String pgCompany;           // 评估公司
+    private String pgbgCode;            // 评估报告号（未用）
+    // 各项费用
+    private BigDecimal qwMoney;        // 宅基地区位补偿价
+    private BigDecimal inqwFee;     // 宅基地面积控制标准内区位补偿价
+    private BigDecimal outqwFee;    // 宅基地面积控制标准外区位补偿价
+    private BigDecimal fswFee;         //房屋及附属物重置成新价
+    @Column(columnDefinition = "INT default 2", nullable = false, insertable = false)
+    private Integer isGiveup;//  评估重置成新价是否包含未经审批房屋重置成新价  1：否 2.是
+//    private BigDecimal zxbzf;         // 装修补助费
+//    private BigDecimal dezxbzf;         // 定额装修补助费
+    private BigDecimal realZxbzFee;    //装修补助费
+    private BigDecimal fhbcfFee;      //分户补偿款
+    private BigDecimal confirmFee;        // 宅基地合法利用奖
+    private BigDecimal ktjFee;        // 空地奖
+
+    private BigDecimal pgAllCount;   //评估小计
+    private BigDecimal bjbzFee;         // 搬家补助费
+
+    private BigDecimal tdbzFee;           // 土地出让金补助费（未用）
+    private BigDecimal azfbzFee;          // 安置房补助费
+    private BigDecimal rybzFee;          // 人员安置补助费
+    private BigDecimal shbzFee;          // 生活补助费
+    private BigDecimal yjfSumFee;       //移机费
+
+    private BigDecimal lsazfFee;        // 房屋周转租房补助费（安置房认购协议）
+    private BigDecimal wsqfFee;        // 未经审批房屋补偿（未用）
+    private BigDecimal otherfFee;       //其他费用(其他补助)
+    private BigDecimal otherRewardFee;       //其他奖励费用
+    private BigDecimal tqbjfFee;        // 提前搬家奖励费
+    private BigDecimal houseControlArea; // 安置房控制标准
+
+    //拆迁补偿总计
+    private BigDecimal bcSumTatal;        //拆迁补偿总计
+    private BigDecimal houseTotal;        //选房费用
+    private BigDecimal finalTotal;        //最终结算款
+
+    private BigDecimal teamMoney;        // 工程配合（团结互助奖）（补充协议一）
+    private BigDecimal shknMoney;        // 大病、残疾和低保补助费（补充协议二）
+    private BigDecimal onlyFee;        // 独生子女补助费（补充协议二）
+    private BigDecimal tctyfFee;        // 停产停业补偿费（补充协议二）
+    private BigDecimal zfknFee;        // 住房困难补助费（补充协议二）
+
+    //2018年4月17日11:05:12新加
+    private BigDecimal cjMoney;        // 残疾补助费（补充协议二）
+    private BigDecimal dbMoney;        // 低保补助费（补充协议二）
+    private BigDecimal dabMoney;        // 大病补助费（补充协议二）
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer bcxyState;            //补充协议是否已签约 1未签约 2 已签约
+    private Date bcxyDate;                //补充协议签约时间
+    private String bcxyPerson;                //补充协议签约操作人
+
+
+    private Date printDate;             // 打印时间(协议打印时间)
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer qyState;            // 是否已签约 1未签约 2 已签约
+    private Date qyDate;                //签约时间
+    private Long qyDateMillisecond;     //签约时间毫秒值
+    private Integer qyNumber;           //签约顺序号
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer jfState;            // 是否已交房 1未交房 2 已交房
+    private Date jfDate;                // 交房日期  (临时周转补助协议使用)
+    private String jfPerson;//交房经办人
+    private String jfMemo;//交房备注
+    private Integer jfNumber;           //交房顺序号
+    private Date jfNumberDate;                //交房顺序号获取时间
+    private Long jfNumberDateMillisecond;     //交房顺序号获取时间毫秒值
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer ccState;            // 是否已拆除 1未拆除 2 已拆除
+    private Date ccDate;                //拆除日期
+    private String ccPerson;//拆除经办人
+    private String ccMemo;//拆除备注
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer jsState;            // 是否已结算 1未结算  2 已结算
+    private Date jsDate;                // 结算日期
+    private String jsPerson;            //结算经办人
+    private Date xfDate;                // 选房日期（未用）
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer pgState;            // 评估审核状态    退回(0),未上报(1),已上报(2),已审核(3)
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer cqState;            // 拆迁审核状态     退回(0),未上报(1),已上报(2),已审核(3)
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer chState;            // 测绘审核状态      退回(0),未上报(1),已上报(2),已审核(3)
+
+    @Column(columnDefinition = "INT default 2", nullable = false, insertable = false)
+    private Integer checkState;            // 初审审核状态（0：初审退回，1：预审退回，2：未审核（默认），3：初审通过，4：预审通过）
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer finalState;  //预审审核状态（0：预审退回，1：未审核（默认），2：已审核）（未用）
+    //解锁签约
+    private String operatePerson;     //操作人
+    private Date operateDate;        //操作时间
+    private String operateText;     //操作说明
+    private Integer lockState;           //锁定状态1已锁定2已解锁
+
+    //被拆迁人家庭情况:
+    private Integer fwczNum;            // 房屋出租证(未用)
+    private String yyzz;                // 营业执照名称
+    private String zcgCode;             // 营业执照注册号
+    private String other;               // 其他情况说明
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer isLandFee;            // 是否有缴费种养殖地  1 否  ；2 是
+
+    @Type(type = "text")
+
+    private String summary;             // 备注(入户数据登记)
+    private Date addDate;             // 入户时间(入户数据登记时间)
+
+    //补偿款
+    @Transient
+    public BigDecimal getBcSum(){
+        BigDecimal bcSum = BigDecimalUtils.getNotNull(this.bjbzFee)
+                .add(BigDecimalUtils.getNotNull(this.realZxbzFee))
+                .add(BigDecimalUtils.getNotNull(this.fhbcfFee));
+        return bcSum;
+    }
+
+    //补助款
+    @Transient
+    public BigDecimal getBzSum(){
+        BigDecimal bzSum = BigDecimalUtils.getNotNull(this.qwMoney)
+                .add(BigDecimalUtils.getNotNull(this.fswFee))
+                .add(BigDecimalUtils.getNotNull(this.azfbzFee))
+                .add(BigDecimalUtils.getNotNull(this.rybzFee))
+                .add(BigDecimalUtils.getNotNull(this.shbzFee))
+                .add(BigDecimalUtils.getNotNull(this.yjfSumFee))
+                .add(BigDecimalUtils.getNotNull(this.otherfFee));
+        return bzSum;
+    }
+
+    //奖励款
+    @Transient
+    public BigDecimal getRewardSum(){
+        BigDecimal rewardSum = BigDecimalUtils.getNotNull(this.ktjFee)
+                .add(BigDecimalUtils.getNotNull(this.tqbjfFee))
+                .add(BigDecimalUtils.getNotNull(this.confirmFee))
+                .add(BigDecimalUtils.getNotNull(this.otherRewardFee));
+        return rewardSum;
+    }
+
+    //主协议补偿款总计
+    @Transient
+    public BigDecimal getBcTotal(){
+        BigDecimal bcTotal = BigDecimalUtils.getNotNull(this.getBcSum())
+                .add(BigDecimalUtils.getNotNull(this.getBzSum()))
+                .add(BigDecimalUtils.getNotNull(this.getRewardSum()));
+        return bcTotal;
+    }
+
+    //补充协议二补偿款总计
+    @Transient
+    public BigDecimal getBcxyTotal(){
+        BigDecimal bcxyTotal = BigDecimalUtils.getNotNull(this.shknMoney)
+                .add(BigDecimalUtils.getNotNull(this.onlyFee))
+                .add(BigDecimalUtils.getNotNull(this.zfknFee))
+                .add(BigDecimalUtils.getNotNull(this.tctyfFee));
+        return bcxyTotal;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFamilyCode() {
+        return familyCode;
+    }
+
+    public void setFamilyCode(String familyCode) {
+        this.familyCode = familyCode;
+    }
+
+    public String getDptCode() {
+        return dptCode;
+    }
+
+    public void setDptCode(String dptCode) {
+        this.dptCode = dptCode;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getContextAddress() {
+        return contextAddress;
+    }
+
+    public void setContextAddress(String contextAddress) {
+        this.contextAddress = contextAddress;
+    }
+
+    public String getHouseAddress() {
+        return houseAddress;
+    }
+
+    public void setHouseAddress(String houseAddress) {
+        this.houseAddress = houseAddress;
+    }
+
+    public String getOwnershipCode() {
+        return ownershipCode;
+    }
+
+    public void setOwnershipCode(String ownershipCode) {
+        this.ownershipCode = ownershipCode;
+    }
+
+    public BigDecimal getConfirmBuildArea() {
+        return confirmBuildArea;
+    }
+
+    public void setConfirmBuildArea(BigDecimal confirmBuildArea) {
+        this.confirmBuildArea = confirmBuildArea;
+    }
+
+    public BigDecimal getConfirmArea() {
+        return confirmArea;
+    }
+
+    public void setConfirmArea(BigDecimal confirmArea) {
+        this.confirmArea = confirmArea;
+    }
+
+    public Integer getAirConditionerNum() {
+        return airConditionerNum;
+    }
+
+    public void setAirConditionerNum(Integer airConditionerNum) {
+        this.airConditionerNum = airConditionerNum;
+    }
+
+    public Integer getTelephoneNum() {
+        return telephoneNum;
+    }
+
+    public void setTelephoneNum(Integer telephoneNum) {
+        this.telephoneNum = telephoneNum;
+    }
+
+    public Integer getBroadbandNum() {
+        return broadbandNum;
+    }
+
+    public void setBroadbandNum(Integer broadbandNum) {
+        this.broadbandNum = broadbandNum;
+    }
+
+    public Integer getTvNum() {
+        return tvNum;
+    }
+
+    public void setTvNum(Integer tvNum) {
+        this.tvNum = tvNum;
+    }
+
+    public Integer getWaterHeaterNum() {
+        return waterHeaterNum;
+    }
+
+    public void setWaterHeaterNum(Integer waterHeaterNum) {
+        this.waterHeaterNum = waterHeaterNum;
+    }
+
+    public Integer getDbNum() {
+        return dbNum;
+    }
+
+    public void setDbNum(Integer dbNum) {
+        this.dbNum = dbNum;
+    }
+
+    public Integer getCjNum() {
+        return cjNum;
+    }
+
+    public void setCjNum(Integer cjNum) {
+        this.cjNum = cjNum;
+    }
+
+    public Integer getDabNum() {
+        return dabNum;
+    }
+
+    public void setDabNum(Integer dabNum) {
+        this.dabNum = dabNum;
+    }
+
+    public Integer getFwczNum() {
+        return fwczNum;
+    }
+
+    public void setFwczNum(Integer fwczNum) {
+        this.fwczNum = fwczNum;
+    }
+
+    public String getYyzz() {
+        return yyzz;
+    }
+
+    public void setYyzz(String yyzz) {
+        this.yyzz = yyzz;
+    }
+
+    public String getZcgCode() {
+        return zcgCode;
+    }
+
+    public void setZcgCode(String zcgCode) {
+        this.zcgCode = zcgCode;
+    }
+
+    public BigDecimal getAzfbzFee() {
+        return azfbzFee;
+    }
+
+    public void setAzfbzFee(BigDecimal azfbzFee) {
+        this.azfbzFee = azfbzFee;
+    }
+
+    public Date getBirthdayDate() {
+        return birthdayDate;
+    }
+
+    public void setBirthdayDate(Date birthdayDate) {
+        this.birthdayDate = birthdayDate;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public Date getMoveDate() {
+        return moveDate;
+    }
+
+    public void setMoveDate(Date moveDate) {
+        this.moveDate = moveDate;
+    }
+
+    public BigDecimal getBjbzFee() {
+        return bjbzFee;
+    }
+
+    public void setBjbzFee(BigDecimal bjbzFee) {
+        this.bjbzFee = bjbzFee;
+    }
+
+    public BigDecimal getBuildArea() {
+        return buildArea;
+    }
+
+    public void setBuildArea(BigDecimal buildArea) {
+        this.buildArea = buildArea;
+    }
+
+    public BigDecimal getBussessArea() {
+        return bussessArea;
+    }
+
+    public void setBussessArea(BigDecimal bussessArea) {
+        this.bussessArea = bussessArea;
+    }
+
+    public Integer getIsDutyFree() {
+        return isDutyFree;
+    }
+
+    public void setIsDutyFree(Integer isDutyFree) {
+        this.isDutyFree = isDutyFree;
+    }
+
+    public BigDecimal getConfirmFee() {
+        return confirmFee;
+    }
+
+    public void setConfirmFee(BigDecimal confirmFee) {
+        this.confirmFee = confirmFee;
+    }
+
+    public BigDecimal getControlArea() {
+        return controlArea;
+    }
+
+    public void setControlArea(BigDecimal controlArea) {
+        this.controlArea = controlArea;
+    }
+
+    public BigDecimal getFswFee() {
+        return fswFee;
+    }
+
+    public void setFswFee(BigDecimal fswFee) {
+        this.fswFee = fswFee;
+    }
+
+    public BigDecimal getHouseControlArea() {
+        return houseControlArea;
+    }
+
+    public void setHouseControlArea(BigDecimal houseControlArea) {
+        this.houseControlArea = houseControlArea;
+    }
+
+    public BigDecimal getKtjFee() {
+        return ktjFee;
+    }
+
+    public void setKtjFee(BigDecimal ktjFee) {
+        this.ktjFee = ktjFee;
+    }
+
+    public BigDecimal getOnlyFee() {
+        return onlyFee;
+    }
+
+    public void setOnlyFee(BigDecimal onlyFee) {
+        this.onlyFee = onlyFee;
+    }
+
+    public BigDecimal getOutBuildArea() {
+        return outBuildArea;
+    }
+
+    public void setOutBuildArea(BigDecimal outBuildArea) {
+        this.outBuildArea = outBuildArea;
+    }
+
+    public BigDecimal getOutControlArea() {
+        return outControlArea;
+    }
+
+    public void setOutControlArea(BigDecimal outControlArea) {
+        this.outControlArea = outControlArea;
+    }
+
+    public BigDecimal getQwMoney() {
+        return qwMoney;
+    }
+
+    public void setQwMoney(BigDecimal qwMoney) {
+        this.qwMoney = qwMoney;
+    }
+
+    public BigDecimal getInqwFee() {
+        return inqwFee;
+    }
+
+    public void setInqwFee(BigDecimal inqwFee) {
+        this.inqwFee = inqwFee;
+    }
+
+    public BigDecimal getOutqwFee() {
+        return outqwFee;
+    }
+
+    public void setOutqwFee(BigDecimal outqwFee) {
+        this.outqwFee = outqwFee;
+    }
+
+    public BigDecimal getRybzFee() {
+        return rybzFee;
+    }
+
+    public void setRybzFee(BigDecimal rybzFee) {
+        this.rybzFee = rybzFee;
+    }
+
+    public BigDecimal getShbzFee() {
+        return shbzFee;
+    }
+
+    public void setShbzFee(BigDecimal shbzFee) {
+        this.shbzFee = shbzFee;
+    }
+
+    public BigDecimal getTdbzFee() {
+        return tdbzFee;
+    }
+
+    public void setTdbzFee(BigDecimal tdbzFee) {
+        this.tdbzFee = tdbzFee;
+    }
+
+    public BigDecimal getShknMoney() {
+        return shknMoney;
+    }
+
+    public void setShknMoney(BigDecimal shknMoney) {
+        this.shknMoney = shknMoney;
+    }
+
+    public BigDecimal getTeamMoney() {
+        return teamMoney;
+    }
+
+    public void setTeamMoney(BigDecimal teamMoney) {
+        this.teamMoney = teamMoney;
+    }
+
+    public Integer getIsBussess() {
+        return isBussess;
+    }
+
+    public void setIsBussess(Integer isBussess) {
+        this.isBussess = isBussess;
+    }
+
+    public BigDecimal getWsqfFee() {
+        return wsqfFee;
+    }
+
+    public void setWsqfFee(BigDecimal wsqfFee) {
+        this.wsqfFee = wsqfFee;
+    }
+
+    public BigDecimal getZfknFee() {
+        return zfknFee;
+    }
+
+    public void setZfknFee(BigDecimal zfknFee) {
+        this.zfknFee = zfknFee;
+    }
+
+//    public BigDecimal getZxbzf() {
+//        return zxbzf;
+//    }
+//
+//    public void setZxbzf(BigDecimal zxbzf) {
+//        this.zxbzf = zxbzf;
+//    }
+//
+//    public BigDecimal getDezxbzf() {
+//        return dezxbzf;
+//    }
+//
+//    public void setDezxbzf(BigDecimal dezxbzf) {
+//        this.dezxbzf = dezxbzf;
+//    }
+
+    public BigDecimal getRealZxbzFee() {
+        return realZxbzFee;
+    }
+
+    public void setRealZxbzFee(BigDecimal realZxbzFee) {
+        this.realZxbzFee = realZxbzFee;
+    }
+
+    public Integer getIsGiveup() {
+        return isGiveup;
+    }
+
+    public void setIsGiveup(Integer isGiveup) {
+        this.isGiveup = isGiveup;
+    }
+
+    public Integer getIsLive() {
+        return isLive;
+    }
+
+    public void setIsLive(Integer isLive) {
+        this.isLive = isLive;
+    }
+
+    public Integer getJsState() {
+        return jsState;
+    }
+
+    public void setJsState(Integer jsState) {
+        this.jsState = jsState;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+    public String getOther() {
+        return other;
+    }
+
+    public void setOther(String other) {
+        this.other = other;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getPgCompany() {
+        return pgCompany;
+    }
+
+    public void setPgCompany(String pgCompany) {
+        this.pgCompany = pgCompany;
+    }
+
+    public String getPgbgCode() {
+        return pgbgCode;
+    }
+
+    public void setPgbgCode(String pgbgCode) {
+        this.pgbgCode = pgbgCode;
+    }
+
+    public BigDecimal getTqbjfFee() {
+        return tqbjfFee;
+    }
+
+    public void setTqbjfFee(BigDecimal tqbjfFee) {
+        this.tqbjfFee = tqbjfFee;
+    }
+
+    public BigDecimal getTctyfFee() {
+        return tctyfFee;
+    }
+
+    public void setTctyfFee(BigDecimal tctyfFee) {
+        this.tctyfFee = tctyfFee;
+    }
+
+    public BigDecimal getLsazfFee() {
+        return lsazfFee;
+    }
+
+    public void setLsazfFee(BigDecimal lsazfFee) {
+        this.lsazfFee = lsazfFee;
+    }
+
+    public BigDecimal getYjfSumFee() {
+        return yjfSumFee;
+    }
+
+    public void setYjfSumFee(BigDecimal yjfSumFee) {
+        this.yjfSumFee = yjfSumFee;
+    }
+
+    public BigDecimal getOtherfFee() {
+        return otherfFee;
+    }
+
+    public void setOtherfFee(BigDecimal otherfFee) {
+        this.otherfFee = otherfFee;
+    }
+
+    public BigDecimal getOtherRewardFee() {
+        return otherRewardFee;
+    }
+
+    public void setOtherRewardFee(BigDecimal otherRewardFee) {
+        this.otherRewardFee = otherRewardFee;
+    }
+
+    public BigDecimal getBcSumTatal() {
+        return bcSumTatal;
+    }
+
+    public void setBcSumTatal(BigDecimal bcSumTatal) {
+        this.bcSumTatal = bcSumTatal;
+    }
+
+    public BigDecimal getHouseTotal() {
+        return houseTotal;
+    }
+
+    public void setHouseTotal(BigDecimal houseTotal) {
+        this.houseTotal = houseTotal;
+    }
+
+    public BigDecimal getFinalTotal() {
+        return finalTotal;
+    }
+
+    public void setFinalTotal(BigDecimal finalTotal) {
+        this.finalTotal = finalTotal;
+    }
+
+    public Date getXfDate() {
+        return xfDate;
+    }
+
+    public void setXfDate(Date xfDate) {
+        this.xfDate = xfDate;
+    }
+
+    public BigDecimal getFhbcfFee() {
+        return fhbcfFee;
+    }
+
+    public void setFhbcfFee(BigDecimal fhbcfFee) {
+        this.fhbcfFee = fhbcfFee;
+    }
+
+    public BigDecimal getPgAllCount() {
+        return pgAllCount;
+    }
+
+    public void setPgAllCount(BigDecimal pgAllCount) {
+        this.pgAllCount = pgAllCount;
+    }
+
+    public Date getJfDate() {
+        return jfDate;
+    }
+
+    public void setJfDate(Date jfDate) {
+        this.jfDate = jfDate;
+    }
+
+    public Date getPrintDate() {
+        return printDate;
+    }
+
+    public void setPrintDate(Date printDate) {
+        this.printDate = printDate;
+    }
+
+    public Integer getQyState() {
+        return qyState;
+    }
+
+    public void setQyState(Integer qyState) {
+        this.qyState = qyState;
+    }
+
+    public Integer getJfState() {
+        return jfState;
+    }
+
+    public void setJfState(Integer jfState) {
+        this.jfState = jfState;
+    }
+
+    public Date getQyDate() {
+        return qyDate;
+    }
+
+    public void setQyDate(Date qyDate) {
+        this.qyDate = qyDate;
+    }
+
+    public Long getQyDateMillisecond() {
+        return qyDateMillisecond;
+    }
+
+    public void setQyDateMillisecond(Long qyDateMillisecond) {
+        this.qyDateMillisecond = qyDateMillisecond;
+    }
+
+    public Integer getQyNumber() {
+        return qyNumber;
+    }
+
+    public void setQyNumber(Integer qyNumber) {
+        this.qyNumber = qyNumber;
+    }
+
+    @Transient
+    public String getFormatQyNumber() {
+        DecimalFormat decimalFormat = new DecimalFormat("000");
+        if (qyNumber != null) {
+            return decimalFormat.format(qyNumber);
+        }
+        return null;
+    }
+
+    @Transient
+    public String getFormatJfNumber() {
+        DecimalFormat decimalFormat = new DecimalFormat("000");
+        if (jfNumber != null) {
+            return decimalFormat.format(jfNumber);
+        }
+        return null;
+    }
+    @Transient
+    public String getFormatDateMillisecond() {
+        if (qyDateMillisecond != null) {
+            String time = DateUtils.date2string("yyyy年MM月dd日 HH时mm分ss.SSS秒",new Date(qyDateMillisecond));
+            return time;
+        }
+        return "";
+    }
+
+    public String getOperatePerson() {
+        return operatePerson;
+    }
+
+    public void setOperatePerson(String operatePerson) {
+        this.operatePerson = operatePerson;
+    }
+
+    public Date getOperateDate() {
+        return operateDate;
+    }
+
+    public void setOperateDate(Date operateDate) {
+        this.operateDate = operateDate;
+    }
+
+    public String getOperateText() {
+        return operateText;
+    }
+
+    public void setOperateText(String operateText) {
+        this.operateText = operateText;
+    }
+
+    public Integer getLockState() {
+        return lockState;
+    }
+
+    public void setLockState(Integer lockState) {
+        this.lockState = lockState;
+    }
+
+    public Integer getCheckState() {
+        return checkState;
+    }
+
+    public void setCheckState(Integer checkState) {
+        this.checkState = checkState;
+    }
+
+    public Integer getCqState() {
+        return cqState;
+    }
+
+    public void setCqState(Integer cqState) {
+        this.cqState = cqState;
+    }
+
+    public Integer getPgState() {
+        return pgState;
+    }
+    public void setPgState(Integer pgState) {
+        this.pgState = pgState;
+    }
+
+    public Integer getFinalState() {
+        return finalState;
+    }
+
+    public void setFinalState(Integer finalState) {
+        this.finalState = finalState;
+    }
+
+    public Integer getPersonNum() {
+        return personNum;
+    }
+
+    public void setPersonNum(Integer personNum) {
+        this.personNum = personNum;
+    }
+
+    public Integer getPersonNo() {
+        return personNo;
+    }
+
+    public void setPersonNo(Integer personNo) {
+        this.personNo = personNo;
+    }
+
+    public Integer getPersonOne() {
+        return personOne;
+    }
+
+    public void setPersonOne(Integer personOne) {
+        this.personOne = personOne;
+    }
+
+    public String getJfMemo() {
+        return jfMemo;
+    }
+
+    public void setJfMemo(String jfMemo) {
+        this.jfMemo = jfMemo;
+    }
+
+    public String getJfPerson() {
+        return jfPerson;
+    }
+
+    public void setJfPerson(String jfPerson) {
+        this.jfPerson = jfPerson;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public Integer getChState() {
+        return chState;
+    }
+
+    public void setChState(Integer chState) {
+        this.chState = chState;
+    }
+
+    public Integer getCcState() {
+        return ccState;
+    }
+
+    public void setCcState(Integer ccState) {
+        this.ccState = ccState;
+    }
+
+    public Integer getJfNumber() {
+        return jfNumber;
+    }
+
+    public void setJfNumber(Integer jfNumber) {
+        this.jfNumber = jfNumber;
+    }
+
+    public Date getJfNumberDate() {
+        return jfNumberDate;
+    }
+
+    public void setJfNumberDate(Date jfNumberDate) {
+        this.jfNumberDate = jfNumberDate;
+    }
+
+    public Long getJfNumberDateMillisecond() {
+        return jfNumberDateMillisecond;
+    }
+
+    public void setJfNumberDateMillisecond(Long jfNumberDateMillisecond) {
+        this.jfNumberDateMillisecond = jfNumberDateMillisecond;
+    }
+
+    public Date getCcDate() {
+        return ccDate;
+    }
+
+    public void setCcDate(Date ccDate) {
+        this.ccDate = ccDate;
+    }
+
+    public String getCcPerson() {
+        return ccPerson;
+    }
+
+    public void setCcPerson(String ccPerson) {
+        this.ccPerson = ccPerson;
+    }
+
+    public String getCcMemo() {
+        return ccMemo;
+    }
+
+    public void setCcMemo(String ccMemo) {
+        this.ccMemo = ccMemo;
+    }
+
+    public Date getJsDate() {
+        return jsDate;
+    }
+
+    public void setJsDate(Date jsDate) {
+        this.jsDate = jsDate;
+    }
+
+    public String getJsPerson() {
+        return jsPerson;
+    }
+
+    public void setJsPerson(String jsPerson) {
+        this.jsPerson = jsPerson;
+    }
+
+    public Integer getPersonPregnancy() {
+        return personPregnancy;
+    }
+
+    public void setPersonPregnancy(Integer personPregnancy) {
+        this.personPregnancy = personPregnancy;
+    }
+
+    public Date getAddDate() {
+        return addDate;
+    }
+
+    public void setAddDate(Date addDate) {
+        this.addDate = addDate;
+    }
+
+    public BigDecimal getCjMoney() {
+        return cjMoney;
+    }
+
+    public void setCjMoney(BigDecimal cjMoney) {
+        this.cjMoney = cjMoney;
+    }
+
+    public BigDecimal getDbMoney() {
+        return dbMoney;
+    }
+
+    public void setDbMoney(BigDecimal dbMoney) {
+        this.dbMoney = dbMoney;
+    }
+
+    public BigDecimal getDabMoney() {
+        return dabMoney;
+    }
+
+    public void setDabMoney(BigDecimal dabMoney) {
+        this.dabMoney = dabMoney;
+    }
+
+    public Integer getBcxyState() {
+        return bcxyState;
+    }
+
+    public void setBcxyState(Integer bcxyState) {
+        this.bcxyState = bcxyState;
+    }
+
+    public Date getBcxyDate() {
+        return bcxyDate;
+    }
+
+    public void setBcxyDate(Date bcxyDate) {
+        this.bcxyDate = bcxyDate;
+    }
+
+    public String getBcxyPerson() {
+        return bcxyPerson;
+    }
+
+    public void setBcxyPerson(String bcxyPerson) {
+        this.bcxyPerson = bcxyPerson;
+    }
+
+    public Integer getIsLandFee() {
+        return isLandFee;
+    }
+
+    public void setIsLandFee(Integer isLandFee) {
+        this.isLandFee = isLandFee;
+    }
+}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 680px;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        @page {
+            margin: 18.6mm 18.6mm 18.6mm 18.6mm
+        }
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+        .dataTable {
+            width: 100%;
+        }
+        .dataTable tr td{
+            border-left: 1px solid #000;
+            border-top: 1px solid #000;
+            text-align: center;
+            vertical-align: middle;
+
+        }
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            margin: 6.6mm 12.6mm 6.6mm 12.6mm;
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+</head>
+<body>
+<div style="padding-top: 20px;font-size: 25px;text-align: center;line-height: 160%">
+    <b>拆迁协议审查会签表</b>
+</div>
+<div style="padding-top: 20px;font-size: 16px;text-align: right;line-height: 160%;padding-right: 150px;">
+    编号：
+</div>
+<table class="dataTable" cellpadding="0" cellspacing="0">
+    <tr style="height: 50px;">
+        <td style="width: 25%">项目名称</td>
+        <td style="border-right: 1px solid #000">顺义区马坡镇西丰乐村棚户区改造土地开发项目</td>
+    </tr>
+    <tr style="height: 40px;">
+        <td>被拆迁人</td>
+        <td style="border-right: 1px solid #000">${family.name?default("/")}</td>
+    </tr>
+    <tr style="height: 40px;">
+        <td>房屋座落</td>
+        <td style="border-right: 1px solid #000">顺义区马坡镇西丰乐村${family.houseAddress?default("/")}</td>
+    </tr>
+</table>
+<table class="dataTable" cellpadding="0" cellspacing="0">
+    <tr style="height: 40px;">
+        <td style="border-right: 1px solid #000">相关单位会签页</td>
+    </tr>
+</table>
+<table class="dataTable" cellpadding="0" cellspacing="0">
+    <tr style="height: 170px;">
+        <td style="width: 20%">补偿安置协议签订阶段</td>
+        <td  style="border-right: 1px solid #000">
+            <table style="height: 150px;width: 100%">
+            <tr>
+                <td style="height: 85px;width: 70%;border: none;text-align: left;padding-left: 5px;">拆迁总补偿价款：<span class="span">${family.bcSumTatal?default("/")}</span>元；</td>
+                <td style="border: none"></td>
+            </tr>
+            <tr>
+                <td style="height: 85px;border: none;text-align: left;padding-bottom: 20px;padding-left: 5px;">拆迁公司项目经理（签字）：</td>
+                <td style="text-align: right;padding-right: 20px;border: none;padding-bottom: 20px;padding-left: 5px;">年<span style="width: 40px;display: inline-block"></span>月<span style="width: 40px;display: inline-block"></span>日</td>
+            </tr>
+            </table>
+        </td>
+    </tr>
+    <tr style="height: 110px;">
+        <td>管理公司意见</td>
+        <td style="border-right: 1px solid #000;text-align: left;vertical-align: bottom;padding-left: 5px;">
+            组长（签字）：<span style="width: 150px;display: inline-block"></span>年<span style="width: 40px;display: inline-block"></span>月<span style="width: 40px;display: inline-block"></span>日
+        </td>
+    </tr>
+    <tr style="height: 110px;">
+        <td>审计公司意见</td>
+        <td style="border-right: 1px solid #000;text-align: left;vertical-align: bottom;padding-left: 5px;">
+            组长（签字）：<span style="width: 150px;display: inline-block"></span>年<span style="width: 40px;display: inline-block"></span>月<span style="width: 40px;display: inline-block"></span>日
+        </td>
+    </tr>
+    <tr style="height: 130px;">
+        <td>项目实施单位意见</td>
+        <td style="border-right: 1px solid #000">
+            <table style="height:130px;width: 100%;" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td style="border:none ;text-align: left;vertical-align: top;padding-left: 5px;">城建房地产：</td>
+                </tr>
+                <tr>
+                    <td style="border: none;text-align: left;vertical-align: bottom;padding-top: 0px;">（签字）：<span style="width: 187px;display: inline-block"></span>年<span style="width: 40px;display: inline-block"></span>月<span style="width: 40px;display: inline-block"></span>日</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr style="height: 170px;">
+        <td style="border-bottom: 1px solid #000">财务组意见</td>
+        <td style="border-right: 1px solid #000;border-bottom: 1px solid #000">
+            <table style="height:170px;width: 100%;" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td style="border:none ;text-align: left;vertical-align: top;padding-left: 5px;padding-top: 30px;">同意放款，放款金额为<span style="border-bottom: 1px solid #000;display: inline-block;width: 150px;"></span>元</td>
+                </tr>
+                <tr>
+                    <td style="border: none;text-align: left;vertical-align: bottom;padding-top: 0px;">（签字）：<span style="width: 310px;display: inline-block"></span>年<span style="width: 40px;display: inline-block"></span>月<span style="width: 40px;display: inline-block"></span>日</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

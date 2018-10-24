@@ -1,0 +1,276 @@
+package com.app.cq.web.cq;
+
+import com.app.cq.model.Family;
+import com.app.cq.service.ActionInfoService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.utils.GetCurrentUser;
+import com.app.cq.utils.Integers;
+import com.app.cq.utils.Precondition;
+import com.app.permission.model.User;
+import com.app.permission.utils.UserSession;
+import com.google.common.collect.Maps;
+import com.sqds.exception.SqdsException;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.DateUtils;
+import com.sqds.utils.pdf.PdfDocumentGenerator;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 交房
+ * Created by zhaisj on 2018/1/3.
+ */
+@Controller
+@RequestMapping("/cq/handHouse/*")
+public class HandHouseController {
+    @Resource
+    private FamilyService familyService;
+    @Resource
+    private ActionInfoService actionInfoService;
+    @Resource
+    private FamilyController familyController;
+
+    /****************************************8888
+     * 交房列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public  void list(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+
+        pageInfo.addParameter("search_like_string_f.groupCode", user.getDepartment().getDepartmentCode());
+        pageInfo.addParameter("search_eq_integer_f.qyState", 2);
+
+        pageInfo = this.familyService.familyList(pageInfo); //得到已签约列表
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("departmentCode", GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode());
+    }
+
+    @RequestMapping("form")
+    public void form(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId= ParamUtils.getInteger(request,"familyId",0);
+        Family family=this.familyService.get(familyId);
+
+        Precondition.checkSqdsArguement(family!=null,"数据错误，请重试！");
+        modelMap.put("family",family);
+        User user = GetCurrentUser.getLoginUser(request);
+        modelMap.addAttribute("user",user);
+    }
+
+    /**
+     * 交房数据保存
+     * @param request
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("save")
+    public String save(HttpServletRequest request,ModelMap modelMap) throws ParseException {
+        Integer familyId = ParamUtils.getInteger(request, "familyId", 0);
+        Servlets.searchParams(request);
+        familyService.getjfNum(request);
+        Family family = familyService.get(familyId);
+        String status = "jfStatus";
+        familyController.toWebFamilyData(family,status);
+        return "redirect:printJfjgFrame?familyId="+familyId+"&"+request.getAttribute("searchParams");
+    }
+
+    /*************************************8
+     * 交房数据查看
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("view")
+    public  void view(HttpServletRequest request,ModelMap modelMap){
+        this.form(request,modelMap);
+    }
+
+    /****************************************8888
+     * 拆除列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("ccList")
+    public  void ccList(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+
+        pageInfo.addParameter("search_like_string_f.groupCode", user.getDepartment().getDepartmentCode());
+        pageInfo.addParameter("search_eq_integer_f.jfState", 2);
+
+        pageInfo = this.familyService.familyList(pageInfo);
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("departmentCode", user.getDepartment().getDepartmentCode());
+    }
+
+    @RequestMapping("ccForm")
+    public void ccForm(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId= ParamUtils.getInteger(request,"familyId",0);
+        Family family=this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family!=null,"数据错误，请重试！");
+        modelMap.put("family",family);
+        User user = GetCurrentUser.getLoginUser(request);
+        modelMap.addAttribute("user",user);
+    }
+
+    /**
+     * 拆除数据保存
+     * @param request
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("ccSave")
+    public String ccSave(HttpServletRequest request,ModelMap modelMap) throws ParseException {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Integer ccState = ParamUtils.getInt(request,"ccState",1);
+        Family family = familyService.get(familyId);
+        Precondition.checkAjaxArguement(family!= null,"1002","数据有误！");
+        if (ccState == 2){
+            if (family.getCcState() == 1) {
+                String operateType = "标记为已拆除";
+                actionInfoService.saveActionInfo(family, operateType);
+            }
+            Servlets.bind(request,family);
+            familyService.save(family);
+        } else {
+            if (family.getCcState() == 2){
+                String operateType = "撤销已拆除状态";
+                actionInfoService.saveActionInfo(family,operateType);
+            }
+            family.setCcState(1);
+            family.setCcDate(null);
+            family.setCcMemo(null);
+            family.setCcPerson(null);
+            familyService.save(family);
+            Servlets.searchParams(request);
+        }
+        return "redirect:ccList?"+request.getAttribute("searchParams");
+    }
+
+    /*************************************8
+     * 拆除数据查看
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("ccView")
+    public  void ccView(HttpServletRequest request,ModelMap modelMap){
+        this.ccForm(request,modelMap);
+    }
+
+
+
+    //已交房列表
+    @RequestMapping("jfNumber")
+    public void jfNumberList(HttpServletRequest request,ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = familyService.getjfNumberList(pageInfo);
+        Integer maxNumber = familyService.getMaxJfNumber();
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("maxNumber",maxNumber);
+    }
+
+
+
+    //撤销交房顺序号，改变甲方状态
+    @RequestMapping("cancelNumber")
+    @ResponseBody
+    public Map cancelNumber(HttpServletRequest request){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = familyService.get(familyId);
+        Map map = new HashMap();
+        String code = "0000";
+        String message = "";
+        if (family == null){
+            code = "0001";
+            message = "数据错误，请重试";
+        }
+        Integer maxNumber = familyService.getMaxJfNumber();
+        if (maxNumber != Integers.getNotNull(family.getJfNumber())){
+            code = "0002";
+            message = "该户不是最后一个交房";
+        }
+        if (code.equals("0000")){
+            family.setJfState(1);
+            family.setJfDate(null);
+            family.setJfNumberDate(null);;
+            family.setJfNumberDateMillisecond(null);
+            family.setJfNumber(null);
+            familyService.save(family);
+            String operation = "撤销已交房状态";
+            actionInfoService.saveActionInfo(family,operation);
+        }
+        map.put("code",code);
+        map.put("message",message);
+        return map;
+    }
+
+
+    //打印交房结果单框架
+    @RequestMapping("printJfjgFrame")
+    public void printJfjgFrame(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        modelMap.put("familyId",familyId);
+    }
+//打印交房结果单
+    @RequestMapping("printJfjg")
+    public void printJfjg(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.get(familyId);
+        Date jfDate=new Date(family.getJfNumberDateMillisecond());
+        String ss=DateUtils.date2string("yyyy年MM月dd日",jfDate);
+        String sss=DateUtils.date2string("HH时mm分ss.SSS秒",jfDate);
+        String jfNum=family.getFormatJfNumber();
+        String template = null;
+        if (family == null) {
+            throw new SqdsException("家庭信息不存在！");
+        } else {
+
+            Date date=new Date();
+            Map map = Maps.newHashMap();
+            map.put("family",family);
+            map.put("ss",ss);
+            map.put("sss",sss);
+            map.put("jfNum",jfNum);
+            template = "printJfjg.html";
+            PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+            OutputStream outputStream = null;
+            try {
+                outputStream = response.getOutputStream();
+                pdfDocumentGenerator.generate(template, map, outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+
+                    outputStream.flush();
+                    outputStream.close();
+//                    response.reset();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}

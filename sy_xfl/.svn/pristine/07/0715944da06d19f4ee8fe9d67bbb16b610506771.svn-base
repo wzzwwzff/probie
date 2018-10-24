@@ -1,0 +1,233 @@
+package com.app.cq.service;
+
+import com.app.cq.model.FamilyPerson;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.utils.Collections3;
+import org.hibernate.Query;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 家庭人员信息
+ * @author zsj
+ * @date 2017/11/10
+ */
+@Service
+@Transactional
+public class FamilyPersonService  extends HibernateDao<FamilyPerson>{
+
+    /**
+     * 取得这个家庭成员信息
+     * @param familyId
+     * @return
+     */
+    public List<FamilyPerson> listByFamilyId(Integer familyId){
+        String hql = "from FamilyPerson where family.id=? order by id";
+        return list(hql, familyId);
+    }
+
+    /**
+     * 删除family对应的person
+     * @param familyId
+     */
+    public void deleteByFamilyId(int familyId) {
+        String hql="delete FamilyPerson where family.id=?";
+        getSession().createQuery(hql).setInteger(0,familyId).executeUpdate();
+    }
+
+    /**
+     * 取得所有家庭成员信息
+     * @return
+     */
+    public List<FamilyPerson> allList(){
+        String hql = "from FamilyPerson p inner join fetch p.family order by p.family.id,p.id";
+        return list(hql);
+    }
+
+    /**
+     * 得到所有入户/认定家庭成员<主表uuid,List<家庭成员>>
+     *
+     * @return
+     */
+    public Map<Integer, List<FamilyPerson>> getFamilyPersonMap() {
+        String hql = "from FamilyPerson fp inner join fetch fp.family f order by f.id,fp.id";
+        Query query = this.getSession().createQuery(hql);
+        List<FamilyPerson> familyPersonList = query.list();
+        Map<Integer, List<FamilyPerson>> familyPersonMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(familyPersonList)) {
+            for (FamilyPerson familyPerson : familyPersonList) {
+                List<FamilyPerson> itemList = familyPersonMap.get(familyPerson.getFamily().getId()) == null ? new ArrayList<FamilyPerson>() : familyPersonMap.get(familyPerson.getFamily().getId());
+                itemList.add(familyPerson);
+                familyPersonMap.put(familyPerson.getFamily().getId(), itemList);
+            }
+        }
+        return familyPersonMap;
+    }
+
+    /**
+     * 是否是独生子女
+     *
+     * @param familyId
+     * @return
+     */
+    public List<FamilyPerson> listOne(Integer familyId) {
+        return this.list("from FamilyPerson where familyId = " + familyId + " and oneType = 2 ");
+    }
+
+    /**
+     * 达到法定结婚年龄且从未结婚
+     *
+     * @param familyId
+     * @return
+     */
+    public List<FamilyPerson> listNoPerson(Integer familyId) {
+        return this.list("from FamilyPerson where familyId = " + familyId + " and oneType = 2  and marrType=1");
+    }
+    //得到家庭成员数量
+    public Integer getPersonNum(List<FamilyPerson> familyPersonList){
+        Integer personNum = 0;//家庭成员总人数
+
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for(FamilyPerson familyPerson:familyPersonList){
+                personNum++;
+            }
+        }
+        return personNum;
+    }
+
+    //得到大龄未婚人数
+    public Integer getPersonNoNum(List<FamilyPerson> familyPersonList){
+        Integer personNo = 0;  //大龄未婚
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for (FamilyPerson familyPerson : familyPersonList) {
+                if (familyPerson.getMarrType() == 4) {
+                    personNo++;
+                }
+            }
+        }
+        return personNo;
+    }
+    //得到独生子人数
+    public Integer getPersonOneNum(List<FamilyPerson> familyPersonList){
+        Integer personOne = 0; //独生子女
+
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for (FamilyPerson familyPerson : familyPersonList) {
+
+                if (familyPerson.getOneType() == 2) {
+                    personOne++;
+                }
+            }
+        }
+        return personOne;
+    }
+    //得到怀孕人数
+    public Integer getPersonPregnancyNum(List<FamilyPerson> familyPersonList){
+        Integer personPregnancy = 0;//怀孕人数
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for(FamilyPerson familyPerson:familyPersonList){
+                if (familyPerson.getPregnancyType() != null && familyPerson.getPregnancyType() == 2){
+                    personPregnancy++;
+                }
+            }}
+        return personPregnancy;
+    }
+
+    //得到家庭成员数量
+    public String getPersonStr(List<FamilyPerson> familyPersonList){
+        String personStr = "";
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for(FamilyPerson familyPerson:familyPersonList){
+                personStr = personStr+familyPerson.getPersonName()+",";
+            }
+        }
+        if (personStr.length()>0){
+            personStr = personStr.substring(0,personStr.length()-1);
+        }else{
+            personStr = "/";
+        }
+        return personStr;
+    }
+
+    //得到家庭成员数量及身份证号
+    public String getPersonStrNum(List<FamilyPerson> familyPersonList){
+        String personStr = "";
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for(FamilyPerson familyPerson:familyPersonList){
+                personStr = personStr+familyPerson.getPersonName()+"(" + familyPerson.getIdCard() + "),";
+            }
+        }
+        if (personStr.length()>0){
+            personStr = personStr.substring(0,personStr.length()-1);
+        }else{
+            personStr = "/";
+        }
+        return personStr;
+    }
+
+    //得到大龄未婚人数
+    public String getPersonNoStr(List<FamilyPerson> familyPersonList){
+        String personNo = "";  //大龄未婚
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for (FamilyPerson familyPerson : familyPersonList) {
+                if (familyPerson.getMarrType() == 4) {
+                    personNo = personNo+ familyPerson.getPersonName() +",";
+                }
+            }
+        }
+        if (personNo.length()>0){
+            personNo = personNo.substring(0,personNo.length()-1);
+        }else{
+            personNo = "/";
+        }
+        return personNo;
+    }
+    //得到独生子人数
+    public String getPersonOneStr(List<FamilyPerson> familyPersonList){
+        String personOneStr = ""; //独生子女
+
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for (FamilyPerson familyPerson : familyPersonList) {
+
+                if (familyPerson.getOneType() == 2) {
+                    personOneStr = personOneStr+ familyPerson.getPersonName() +",";
+                }
+            }
+
+        }
+        if (personOneStr.length()>0){
+            personOneStr = personOneStr.substring(0,personOneStr.length()-1);
+        }else{
+            personOneStr = "/";
+        }
+        return personOneStr;
+    }
+    //得到怀孕名称
+    public String getPersonPregnancyStr(List<FamilyPerson> familyPersonList) {
+        String personPregnancyStr = "";//怀孕人数
+        if (familyPersonList != null && familyPersonList.size() > 0) {
+            for (FamilyPerson familyPerson : familyPersonList) {
+                if (familyPerson.getPregnancyType() != null && familyPerson.getPregnancyType() == 2) {
+                    personPregnancyStr = personPregnancyStr+ familyPerson.getPersonName() +"/";
+                }
+            }
+        }
+        if (personPregnancyStr.length()>0){
+            personPregnancyStr = personPregnancyStr.substring(0,personPregnancyStr.length()-1);
+        }else{
+            personPregnancyStr = "/";
+        }
+        return personPregnancyStr;
+    }
+
+
+    public List<FamilyPerson> listFamilyPerson(String familyIds) {
+        String hql  = "from FamilyPerson fp inner join fetch fp.family f where f.id in ("+familyIds+")";
+        return list(hql);
+    }
+}

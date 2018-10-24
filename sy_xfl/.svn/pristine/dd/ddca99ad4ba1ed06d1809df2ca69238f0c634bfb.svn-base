@@ -1,0 +1,314 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fieldset>
+    <legend>一、被拆迁人情况</legend>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="fieldName">组别：</td>
+            <td class="fieldValue"><tags:dataDict dataDict="组别" value="${family.groupCode}"/></td>
+            <td class="fieldName">编号：</td>
+            <td class="fieldValue">${family.familyCode} </td>
+        </tr>
+        <tr>
+            <td class="fieldName">姓名：</td>
+            <td class="fieldValue">${family.name}</td>
+            <td class="fieldName">身份证号：</td>
+            <td class="fieldValue">${family.idCard}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">性别：</td>
+            <td class="fieldValue"><tags:dataDict dataDict="性别"  value="${family.sex}"/></td>
+            <td class="fieldName">出生日期：</td>
+            <td class="fieldValue"><fmt:formatDate value="${family.birthdayDate}" pattern="yyyy年MM月dd日" /></td>
+        </tr>
+        <tr>
+            <td class="fieldName">工作单位：</td>
+            <td class="fieldValue">${family.unit}</td>
+            <td class="fieldName">联系电话：</td>
+            <td class="fieldValue">${family.phone}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">户籍所在地：</td>
+            <td class="fieldValue">${family.address}</td>
+            <td class="fieldName">邮编：</td>
+            <td class="fieldValue">${family.zipCode}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">通讯地址：</td>
+            <td class="fieldValue">${family.contextAddress}</td>
+            <td class="fieldName ">户口迁入时间：</td>
+            <td class="fieldValue"><fmt:formatDate value="${family.moveDate}" pattern="yyyy年MM月dd日"/></td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>二、被拆迁房屋土地情况</legend>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="fieldName">房屋坐落：</td>
+            <td class="fieldValue" colspan="3">${family.houseAddress}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">权属证书编号：</td>
+            <td class="fieldValue">${family.ownershipCode}</td>
+            <td class="fieldName">合法宅基地面积【㎡】：</td>
+            <td class="fieldValue">${family.confirmArea}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">控制标准面积【㎡】：</td>
+            <td class="fieldValue">${family.controlArea}</td>
+            <td class="fieldName">超控制标准面积【㎡】：</td>
+            <td class="fieldValue">${family.outControlArea}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">房屋是否经营：</td>
+            <td class="fieldValue"><tags:dataDict  dataDict="是否" value="${family.isBussess}"/></td>
+            <td class="fieldName"><span class="confir">经营认定面积【㎡】：</span></td>
+            <td class="fieldValue"><span class="confir">${family.bussessArea}</span></td>
+        </tr>
+        <tr class="confir">
+            <td class="fieldName">是否免税：</td>
+            <td class="fieldValue"><tags:dataDict dataDict="是否" value="${family.isDutyFree}"/></td>
+            <td class="fieldName"><span class="confirFree">停产停业补助费【元】：</span></td>
+            <td class="fieldValue"><span class="confirFree">${family.tctyfFee}</span></td>
+        </tr>
+        <tr class="confir">
+            <td class="fieldName">营业执照名称：</td>
+            <td class="fieldValue">${family.yyzz}</td>
+            <td class="fieldName">营业执照注册号：</td>
+            <td class="fieldValue">${family.zcgCode}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">是否有缴费种养殖地：</td>
+            <td class="fieldValue" colspan="3"><tags:dataDict  dataDict="是否" value="${family.isLandFee}"/></td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>三、家庭人口情况</legend>
+    <table class="table table-bordered" id="personTable">
+        <tr>
+            <th class="active" style="text-align: center;">姓名</th>
+            <th class="active" style="text-align: center;">性别</th>
+            <th class="active" style="text-align: center;width: 12%">身份证号</th>
+            <th class="active" style="text-align: center;width: 5%">年龄</th>
+            <th class="active" style="text-align: center;">与户主关系</th>
+            <th class="active" style="text-align: center;">婚姻状况</th>
+            <th class="active" style="text-align: center;">工作单位</th>
+            <th class="active" style="text-align: center;">是否是独生子女</th>
+            <th class="active" style="text-align: center;">是否怀孕</th>
+            <th class="active" style="text-align: center;">户口迁入时间</th>
+            <th class="active" style="text-align: center;">是否为安置人口</th>
+            <th class="active" style="text-align: center;">联系方式</th>
+            <th class="active" style="text-align: center;">现住址</th>
+            <th class="active" style="text-align: center;">备注</th>
+        </tr>
+        <c:forEach items="${familyPersonList}" var="familyPerson"  varStatus="status">
+            <tr >
+                <td style="text-align: center;">${familyPerson.personName}</td>
+                <td style="text-align: center;"><tags:dataDict dataDict="性别"
+                                                                                   value="${familyPerson.sex}"/></td>
+                <td style="text-align: center;">${familyPerson.idCard}</td>
+                <td style="text-align: center;">${familyPerson.age}</td>
+                <td style="text-align: center;">${familyPerson.relation}</td>
+                <td style="text-align: center;"><tags:dataDict dataDict="婚姻状况"
+                                                                                   value="${familyPerson.marrType}"/></td>
+                <td style="text-align: center;">${familyPerson.unit}</td>
+                <td style="text-align: center;"><tags:dataDict dataDict="是否" value="${familyPerson.oneType}"/></td>
+                <td style="text-align: center;"><tags:dataDict dataDict="是否" value="${familyPerson.pregnancyType}"/></td>
+
+                <jsp:useBean id="qrdate" class="java.util.Date" />
+                <jsp:setProperty name="qrdate" property="time" value="${familyPerson.qrDate}" />
+                <td style="text-align: center;"><fmt:formatDate value="${qrdate}" type="date" dateStyle="long" pattern="yyyy年MM月dd日"/></td>
+                <td style="text-align: center;"><tags:dataDict dataDict="是否" value="${familyPerson.status}"/></td>
+                <td style="text-align: center;">${familyPerson.tel}</td>
+                <td style="text-align: center;">${familyPerson.address}</td>
+                <td style="text-align: center;">${familyPerson.memo}</td>
+            </tr>
+        </c:forEach>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>四、移机项目</legend>
+    <table class="table table-bordered">
+        <tr>
+            <td width="20%" class="fieldName" style="text-align: center">空调【台】</td>
+            <td width="20%" class="fieldName" style="text-align: center">电话【部】</td>
+            <td width="20%" class="fieldName" style="text-align: center">网络宽带【宗】</td>
+            <td width="20%" class="fieldName" style="text-align: center">有线电视【宗】</td>
+            <td width="20%" class="fieldName" style="text-align: center">热水器【台】</td>
+        </tr>
+        <tr>
+            <td style="text-align: center">${family.airConditionerNum}</td>
+            <td style="text-align: center">${family.telephoneNum}</td>
+            <td style="text-align: center">${family.broadbandNum}</td>
+            <td style="text-align: center">${family.tvNum}</td>
+            <td style="text-align: center">${family.waterHeaterNum}</td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset  style="margin-bottom: 20px;">
+    <legend>五、其他信息</legend>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="fieldName">低保【证】：</td>
+            <td class="fieldValue">${family.dbNum}</td>
+            <td class="fieldName">残疾【证】：</td>
+            <td class="fieldValue">${family.cjNum}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">大病【人】：</td>
+            <td class="fieldValue" colspan="3">${family.dabNum}</td>
+        </tr>
+
+        <tr>
+            <td class="fieldName">登记日期：</td>
+            <td class="fieldValue" colspan="3"><fmt:formatDate value="${family.addDate}" pattern="yyyy年MM月dd日"/></td>
+        </tr>
+        <tr>
+            <td class="fieldName">其他情况说明：</td>
+            <td class="fieldValue" colspan="3">${family.summary}</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>六、测绘信息</legend>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+
+            <td class="fieldName">合法宅基地范围内正式房屋建筑面积【㎡】：</td>
+            <td class="fieldValue">${family.buildArea}</td>
+            <td class="fieldName">合法宅基地外的房屋建筑面积【㎡】：</td>
+            <td class="fieldValue">${family.outBuildArea}</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>七、评估信息</legend>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="fieldName">评估公司：</td>
+            <td class="fieldValue" colspan="3"><tags:dataDict dataDict="评估公司" value="${family.pgCompany}"/>
+        </tr>
+        <tr>
+            <td class="fieldName">宅基地面积控制标准内区位补偿款【元】：</td>
+            <td class="fieldValue">${family.inqwFee}</td>
+            <td class="fieldName">宅基地面积控制标准外区位补偿款【元】：</td>
+            <td class="fieldValue">${family.outqwFee}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">宅基地区位补偿款【元】：</td>
+            <td class="fieldValue" colspan="3">${family.qwMoney}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">房屋及附属物重置成新价补偿款【元】：</td>
+            <td class="fieldValue">${family.fswFee}&nbsp;&nbsp;
+                是否包含未经审批房屋重置成新价：<tags:dataDict dataDict="是否" value="${family.isGiveup}"/></td>
+            <td class="fieldName">装修补助费【元】：</td>
+            <td class="fieldValue">${family.realZxbzFee}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">分户补偿款【元】：</td>
+            <td class="fieldValue">${family.fhbcfFee}</td>
+            <td class="fieldName">合法宅基地内空地奖【元】：</td>
+            <td class="fieldValue">${family.ktjFee}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">评估价款合计【元】：</td>
+            <td class="fieldValue" colspan="3">${family.pgAllCount}</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>八、拆迁补助费及奖励费</legend>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="fieldName">搬家补助费【元】：</td>
+            <td class="fieldValue">${family.bjbzFee}</td>
+            <td class="fieldName">安置房补助费【元】：</td>
+            <td class="fieldValue">${family.azfbzFee}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">人员安置补助费【元】：</td>
+            <td class="fieldValue">${family.rybzFee}</td>
+            <td class="fieldName">生活补助费【元】：</td>
+            <td class="fieldValue">${family.shbzFee}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">停产停业补助费【元】：</td>
+            <td class="fieldValue">${family.tctyfFee}</td>
+            <td class="fieldName">独生子女补助费【元】：</td>
+            <td class="fieldValue">${family.onlyFee}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">住房困难补助费【元】：</td>
+            <td class="fieldValue">${family.zfknFee}</td>
+            <td class="fieldName">周转补助费【元】：</td>
+            <td class="fieldValue">${family.lsazfFee}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">移机费【元】：</td>
+            <td class="fieldValue">${family.yjfSumFee}</td>
+            <td class="fieldName">提前搬家奖【元】：</td>
+            <td class="fieldValue">${family.tqbjfFee}</td>
+        </tr>
+        <tr>
+            <td class="fieldName">合法利用奖【元】：</td>
+            <td class="fieldValue">${family.confirmFee}</td>
+            <td class="fieldName">其他【元】：</td>
+            <td class="fieldValue">${family.otherfFee}</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+<fieldset   style="margin-bottom: 40px;">
+    <legend>九、拆迁补偿款总计<font style="color:red">（评估价款+拆迁补助费及奖励费）</font></legend>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td class="active text-right" style="width: 15%;">拆迁补偿款总计【元】：</td>
+            <td colspan="3" style="text-align: left;vertical-align: middle;">${family.bcSumTatal}</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+
+<script>
+$(function(){
+    validateBusiness();
+    validateDutyFree();
+})
+    //验证是否免税
+    function validateDutyFree() {
+        var value = '${family.isDutyFree}';
+        if (value === "1") {
+            $(".confirFree").show();
+        }
+        if (value === "2") {
+            $(".confirFree").hide();
+        }
+    }
+    //验证是否营业
+    function validateBusiness() {
+        var value = '${family.isBussess}';
+        if (value === "2") {
+            $(".confir").show();
+        }
+        if (value === "1") {
+            $(".confir").hide();
+        }
+    }
+</script>

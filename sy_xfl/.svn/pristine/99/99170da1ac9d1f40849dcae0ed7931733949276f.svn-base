@@ -1,0 +1,54 @@
+package com.app.cq.utils;
+
+import java.math.BigDecimal;
+
+/**
+ * Created by wsb on 2017/10/25.
+ */
+public class BigDecimalUtils {
+
+    /**
+     * 处理空值(BigDecimal)
+     * @param value
+     * @return
+     */
+    public static BigDecimal getNotNull(BigDecimal value) {
+        return value == null ? new BigDecimal("0") : value;
+    }
+
+    /**
+     * 计算求和
+     *
+     * @param values
+     * @return
+     */
+    public static BigDecimal getSum(BigDecimal... values) {
+        BigDecimal result = new BigDecimal("0");
+        if (values != null && values.length > 0) {
+            for (BigDecimal v : values) {
+                result = result.add(getNotNull(v));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 计算bigDecimal*integer数值
+     * @param b
+     * @param i
+     * @return
+     */
+    public static BigDecimal getBigDecimalAndIntegerMultiply(BigDecimal b,Integer i){
+        return getNotNull(b).multiply(new BigDecimal(Integers.getNotNull(i)));
+    }
+
+    /**
+     * 计算bigDecimal*bigDecimal数值
+     * @param b1
+     * @param b2
+     * @return
+     */
+    public static BigDecimal getBigDecimalAndBigDecimalMultiply(BigDecimal b1,BigDecimal b2){
+        return getNotNull(b1).multiply(getNotNull(b2));
+    }
+}

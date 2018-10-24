@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 1500px;
+            font-size: 17px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 34px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        @page {
+            margin: 18.6mm 18.6mm 18.6mm 18.6mm
+        }
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            size: 420mm 297mm;
+            /*size:210mm 297mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="printContent">
+        <div>
+         <div style="float: left;width: 1390px;margin-right: 45px;">
+        <!--<div style="padding-top: 20px;margin-bottom: 20px;font-size: 25px;text-align: center;line-height: 160%">-->
+            <!--<b>北京市集体土地住宅房屋拆迁货币补偿协议书</b><br/>-->
+            <!--<b>残疾补助补充协议</b>-->
+        <!--</div>-->
+        <div style="float: left;width: 650px;margin-top: 15px">
+        拆 迁 人：<span class="fix_span"></span>（以下简称甲方）<br/>
+        被拆迁人：<span class="fix_span">${family.name?default("")}</span>（以下简称乙方）　<br/>
+        身份证号：<span class="fix_span">${family.idCard?default("")}</span>　<br/>
+        房屋坐落：<span class="fix_span">${family.houseAddress?default("")}</span>　<br/>
+        属地政府：<span class="fix_span"></span>（以下简称丙方）<br/>
+        <p>为保护甲、乙双方权益，根据《北京市集体土地房屋拆迁管理办法》、《<span class="fix_span" style="min-width: 100px;"></span>拆迁实施方案》、《北京市顺义区集体土地住宅房屋拆迁补偿安置协议书》（协议编号：<span class="fix_span" style="min-width: 100px;"></span>，以下简称《拆迁补偿安置协议》）及相关法律法规和文件规定，经协议双方协商，就乙方的独生子女补助、大病补助、残疾补助、低保补助、住房困难补助、停产停业补助等事宜，达成补充协议如下：</p>
+        <p><b>一、各项补助</b></p>
+        <p>（一）独生子女补助</p>
+        <p>乙方提交的认定材料经相关部门审核<span class="span">${isPersonOne}</span>证或证明（数字大写）符合独生子女补助条件，给予乙方独生子女补助<span class="span">${family.onlyFee?default("0")}</span>元（人民币，以下同），大写：<span class="span">${moneyUtils(family.onlyFee)}</span>。</p>
+        <p>（二）大病补助</p>
+        <p>乙方提交的认定材料经相关部门审核<span class="span">${personUtils(family.dabNum)}</span>人（数字大写）符合大病补助条件，给予乙方大病补助<span class="span">${family.dabMoney?default("/")}</span>元（大写：<span class="span">${moneyUtils(family.dabMoney)}</span>）。</p>
+        <p>（三）残疾补助</p>
+        <p>乙方提交的认定材料经相关部门审核<span class="span">${personUtils(family.cjNum)}</span>人（数字大写）符合残疾补助条件，给予乙方残疾补助<span class="span">${family.cjMoney?default("/")}</span>元（大写：<span class="span">${moneyUtils(family.cjMoney)}</span>）。</p>
+        <p>（四）低保补助</p>
+        <p>乙方提交的认定材料经相关部门审核<span class="span">${moneyUtils(family.dbNum)}</span>证（数字大写）符合低保补助条件，给予乙方低保补助<span class="span">${family.dbMoney?default("0")}</span>元（大写：<span class="span">${moneyUtils(family.dbMoney)}</span>）。</p>
+        <p>（五）住房困难补助费</p>
+        <p>以乙方符合安置资格人员为基数，人均拆迁补偿款<span class="span">${rjcqbc}</span>20万元（不含租房补助费），</p>
+        </div>
+        <div style="float: right;width: 650px;margin-top: 15px;margin-right: -5px">
+        <p>经相关部门审核，乙方<span class="span">${zfknbz}</span>住房困难补助条件。现给予乙方住房困难补助<span class="span">${family.zfknFee?default("0")}</span>元（大写：<span class="span">${moneyUtils(family.zfknFee)}</span>）。</p>
+        <p>（六）停产停业补助</p>
+        <P>乙方提交的认定材料经相关部门审核<span class="span">${tcty}</span>停产停业补助条件，给予乙方停产停业补助<span class="span">${family.tctyfFee?default("0")}</span>元（大写：<span class="span">${moneyUtils(family.tctyfFee?default("0"))}</span>）。</P>
+        <p><b>二、补助费支付</b></p>
+        <p>甲方同意在乙方履行《拆迁补偿安置协议》约定的搬家交房义务，且在本协议生效后<span class="fix_span" style="min-width: 50px;"></span>个工作日内，向乙方一次性支付上述各项补助费共计<span class="span">${bcMoney}</span>元（大写：<span class="span">${moneyUtils(bcMoney)}</span>）。乙方未按规定期限完成搬家并交付宅基地及地上房屋和附属物的，甲方不再支付乙方上述各项补助费。甲方未按约定支付上述费用，应按延期天数向乙方支付违约金1000元/天。</p>
+        <p><b>三、争议的解决</b></p>
+        <p>本协议在订立、履行过程中发生的争议，由双方当事人协商解决：协商不成的，可依法向北京市顺义区人民法院起诉。</p>
+        <p><b>四、协议生效及其他</b></p>
+        <p>（一）乙方保证向甲方提供的相关资料真实有效并完整准确，否则乙方自行承担法律责任及由此造成的一切不利后果，并赔偿因此给甲方造成的全部经济损失。</p>
+        <p>（二）本协议是《拆迁安置补偿协议》不可分割的组成部分，与《拆迁安置补偿协议》具有同等法律效力。《拆迁安置补偿协议》与本协议不一致的，以本协议为准，本协议未约定的，以《拆迁安置补偿协议》为准。</p>
+        <p>（三）本协议自甲方签字盖章，乙方签字之日起生效。本协议一式肆份，甲方持贰份，乙、丙方各持壹份，具有同等法律效力。</p>
+        <p>（四）丙方负责协助、监督本协议的签订及履行。</p>
+        <p>注：（以上所有空格部分需打印，手工填写无效）。</p>
+     </div>
+     </div>
+            <div style="float: left;width: 1390px;margin-right: 45px;">
+                <div style="float: left;width: 650px;margin-top: 80px;">
+                    <div style="line-height: 300%;">
+                        <div>
+                        甲方（盖章）：　　　　　　　　　　　 乙方（签字并按手印）：<br/>
+                        法定代表人： 　　　　　　　　　　　　委托代理人（签字并按手印）:<br/>
+                        </div>
+                        <div style="margin-top: 140px;margin-left: 350px">
+                            <p>签约时间：<span class="fix_span" style="min-width: 50px;"></span>年<span class="fix_span" style="min-width: 30px;"></span>月<span class="fix_span" style="min-width: 30px;"></span>日</p>
+                        </div>
+                    </div>
+                </div>
+                        <div style="float: right;width: 650px;text-align: center">
+                            <div style="font-size: 20px;margin-top: 60px;margin-left: 350px;"><b>协议编号：<span class="fix_span" style="min-width: 150px;"></span></b></div>
+                            <div style="font-size: 35px;margin-top: 140px;"><b>北京市顺义区集体土地住宅房屋</b></div>
+                            <div style="font-size: 35px;margin-top: 30px;"><b>拆迁补偿安置协议书补充协议（二）</b></div>
+                        </div>
+            </div>
+ </div>
+ </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="sy_xfl:war exploded">
+    <output-path>$PROJECT_DIR$/target/sy_xfl-1.0</output-path>
+    <root id="root" />
+  </artifact>
+</component>

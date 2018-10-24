@@ -1,0 +1,100 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>补充协议</title>
+    <%@include file="/static/common/common.jsp"%>
+    <script>
+        var printType = "cj";
+        function printPDF() {
+            $.get("setActionInfo",{familyId:'${family.id}',type:printType,mtTime:new Date().getTime()},function(data){
+                if (data.code == "0000") {
+                    window.frames["printf"].focus();
+                    window.frames["printf"].print();
+                } else {
+                    alert(data.message);
+                }
+            })
+
+        }
+    </script>
+</head>
+<body style="overflow: hidden;">
+<div class="title resizeLayout">
+    <h5>补充协议</h5>
+    <div class="right">
+        <a href="javascript:printPDF();" class="btn btn-primary"><i class="fa fa-print" aria-hidden="true"></i> 打印</a>
+        <a href="javascript:history.back();" class="btn btn-primary"><i class="fa fa-backward" aria-hidden="true"></i> 返回</a>
+    </div>
+</div>
+<div class="form-inline" id="hideCls" style="padding-bottom: 20px;">
+    <ul class="nav nav-tabs">
+        <%--<c:set var="cj" value="${family.cjMoney}"/>--%>
+        <%--<c:if test="${cj gt 0}">--%>
+            <li role="presentation" class="active"><a href="javascript:void(0);" aid="team">补充协议一</a></li>
+
+            <li role="presentation"><a href="javascript:void(0);" aid="cj">补充协议二</a></li>
+        <%--</c:if>--%>
+        <%--<c:set var="db" value="${family.dbMoney}"/>--%>
+        <%--<c:if test="${db gt 0}">--%>
+            <%--<li role="presentation" class="active"><a href="javascript:void(0);" aid="db">低保补助补充协议</a></li>--%>
+        <%--</c:if>--%>
+        <%--<c:set var="dab" value="${family.dabMoney}"/>--%>
+        <%--<c:if test="${dab gt 0}">--%>
+            <%--<li role="presentation" class="active"><a href="javascript:void(0);" aid="dab">大病补助补充协议</a></li>--%>
+        <%--</c:if>--%>
+        <%--<c:set var="team" value="${family.teamMoney}"/>--%>
+        <%--<c:if test="${team gt 0}">--%>
+        <%--</c:if>--%>
+    </ul>
+</div>
+<div class="content">
+    <div id="pdf" class="data_table_height_auto">
+        <iframe id="printf" name="printf" src="" style="width: 100%;border: 0px;height: 100%"></iframe>
+    </div>
+</div>
+<script>
+    function wrapData(v) {
+        var reg = /^[-\+]?\d+(\.\d+)?$/;
+        v = !reg.test(v) ? 0 : v;
+        return v;
+    }
+<<<<<<< .mine
+    var cjMoney = parseFloat(wrapData("${family.cjMoney}"));
+    var dbMoney = parseFloat(wrapData("${family.dbMoney}"));
+    var dabMoney = parseFloat(wrapData("${family.dabMoney}"));
+    var teamMoney = parseFloat(wrapData("${family.teamMoney}"));
+    if (cjMoney > 0){
+        init("cj");
+    }else if(dbMoney>0){
+        init("db");
+    }else if(dabMoney>0){
+        init("dab");
+    }else if(/*teamMoney>0*/1==1){
+=======
+    <%--var teamMoney = parseFloat(wrapData("${family.teamMoney}"));--%>
+//    if (cjMoney > 0){
+//        init("cj");
+//    }else if(dbMoney>0){
+//        init("db");
+//    }else if(dabMoney>0){
+//        init("dab");
+//    }else if(teamMoney>0){
+>>>>>>> .r15134
+        init("team");
+//    }
+    function init(type) {
+        printType = type;
+        //注意方法的()
+        var a = $("a[aid='" + type + "']");
+        $("li").removeClass("active");
+        a.parent().addClass("active");
+        $("#printf").attr("src", "printBcxy?familyId=${family.id}&pdfType="+type+"#toolbar=0");
+    }
+    $(".nav li a").click(function () {
+        var type = $(this).attr("aid");
+        init(type);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+package com.app.cq.utils;
+
+import java.math.BigDecimal;
+
+public class Test {
+
+    public static void main(String[] args){
+        HouseFeeUtil houseFeeUtil = new HouseFeeUtil(new BigDecimal("100"));
+
+        houseFeeUtil.result(new BigDecimal("60"));
+        System.out.println("-----------");
+
+        houseFeeUtil.result(new BigDecimal("80"));
+        System.out.println("-----------");
+
+        houseFeeUtil.result(new BigDecimal("60"));
+        System.out.println("-----------");
+    }
+}

@@ -1,0 +1,86 @@
+package com.app.cq.model;
+
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * 历史记录  by zsj  2017.12.04
+ */
+@Entity
+@Table
+public class ActionInfo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    private String operateType; //操作类型
+
+    private String computerId;//操作电脑Id
+    private String person;//操作用户名
+    private Date doDate;//操作时间
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "familyId")
+    private Family family;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getComputerId() {
+        return computerId;
+    }
+
+    public void setComputerId(String computerId) {
+        this.computerId = computerId;
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
+    }
+
+    public Date getDoDate() {
+        return doDate;
+    }
+
+    public void setDoDate(Date doDate) {
+        this.doDate = doDate;
+    }
+
+    public String getOperateType() {
+        return operateType;
+    }
+
+    public void setOperateType(String operateType) {
+        this.operateType = operateType;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    public void setFamily(Family family) {
+        this.family = family;
+    }
+
+    @Transient
+    public String getFormatDoDate() {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒");
+        if (doDate != null) {
+            String time = sf.format(doDate);
+            return time;
+        }
+        return "";
+    }
+}

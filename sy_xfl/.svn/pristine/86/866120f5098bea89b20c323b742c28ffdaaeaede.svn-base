@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 17px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 20px;
+        }
+
+        .heirhter {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 1000px;
+        }
+
+        .printContent .right {
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .printContent .bold {
+            font-weight: bold;
+        }
+
+        .printContent .printTitle {
+            clear: both;
+            text-indent: 0em;
+            font-size: 28px;
+            text-align: center;
+            line-height: 24px;
+        }
+
+        .printContent .printTitle_default {
+            clear: both;
+            text-indent: 0em;
+            text-align: center;
+        }
+
+        .printContent .printTitle_left {
+            clear: both;
+            text-indent: 2em;
+            line-height: 70px;
+            font-size: 20px;
+        }
+
+        .printTable {
+            width: 100%;
+            font-size: 13px;
+            text-align: center;
+            border: 1px solid #000000;
+        }
+
+        .printTable tr {
+            height: 32px;
+        }
+
+        .printTable tr td {
+            line-height: 14px;
+            border: 1px solid #000000;
+            /*border-bottom: 1px solid #000000;*/
+            text-align: center;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+        @page {
+            margin: 6.6mm 12.6mm 6.6mm 12.6mm
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .space {
+            padding-left: 200px;
+        }
+
+    </style>
+</head>
+<body style="background-image: url(${url1})">
+<div class="printContent" style="padding-top: 30px;">
+    <center>
+        <h2>顺义区马坡镇西丰乐村拆迁补偿单</h2>
+        <table style="width: 100%;margin-top: 10px;margin-bottom: 5px;font-size: 15px;">
+            <tr>
+                <td style="text-align: left;">顺义区马坡镇西丰乐村${family.houseAddress?default("")}</td>
+                <td style="text-align: center;">编号：${family.familyCode?default("/")}</td>
+            </tr>
+        </table>
+        <table class="printTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="28%" >被拆迁人</td>
+                <td  style="width: 30%;">${family.name?default("/")}</td>
+                <td style="width: 20%;">身份证号码</td>
+                <td style="width: 21%;">${family.idCard?default("/")}</td>
+            </tr>
+            <tr>
+                <td colspan="1">安置总人口:${family.personNum?default("/")}人 </td>
+                <td colspan="3" style="text-align: left;">合法宅基地面积为 <span class="span">${family.confirmArea?default("0")}</span>m²，其中：宅基地控制标准面积为<span class="span">${family.controlArea?default("0")}</span>m²，超控制标准面积为<span class="span">${family.outControlArea?default("0")}</span>m²。
+                    合法宅基地范围内正式房屋建筑面积为<span class="span">${family.buildArea?default("0")}</span>m²。经营用房面积<span class="span">${family.bussessArea?default("/")}</span>m²。</td>
+            </tr>
+            <tr>
+                <td>项目</td>
+                <td >标准<br/>
+                    （简述，应以拆迁方案为准）</td>
+                <td >按人均50安置补偿</td>
+                <td >按宅面70%安置补偿</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">1、宅基地区位补偿价</td>
+                <td style="text-align: left; font-size: 11px;">1755元/㎡</td>
+                <td  colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.qwMoney)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;"> 2、分户补偿款</td>
+                <td style="text-align: left; font-size: 11px;">877.5元/㎡</td>
+                <td  colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.fhbcfFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">3、房屋重置成新价</td>
+                <td style="text-align: left; font-size: 11px;">据实评估确定。首层房屋结构重置成新价低于1000元/㎡的，按照1000元 /㎡标准给予补偿。</td>
+                <td colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.fswFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">4、搬家补助费</td>
+                <td style="text-align: left; font-size: 11px;">5000元/宗</td>
+                <td colspan="2"  style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.bjbzFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">5、装修补助费</td>
+                <td style="text-align: left; font-size: 11px;">据实评估确定。不足200元/㎡，补足200元/㎡；高于200元/㎡，按评估价。</td>
+                <td colspan="2"  style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.realZxbzFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">6、移机补助费</td>
+                <td style="text-align: left; font-size: 11px;">电话235元/部、空调400元/台、宽带400元/宗、有线电视300元/宗、燃气热水器和电热水器400元/台。</td>
+                <td  colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.yjfSumFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">7、安置房补助费</td>
+                <td style="text-align: left; font-size: 11px;">不按宅基地面积70%选房的，1600元/㎡</td>
+                <td  style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family1.azfbzFee)}</td>
+                <td  style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family2.azfbzFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">8、人员安置补助费</td>
+                <td style="text-align: left; font-size: 11px;">20000元/人</td>
+                <td colspan="2"  style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.rybzFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">9、生活补助费</td>
+                <td style="text-align: left; font-size: 11px;">按安置面积400元/㎡</td>
+                <td style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family1.shbzFee)}</td>
+                <td style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family2.shbzFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">10、空地奖</td>
+                <td style="text-align: left; font-size: 11px;">1200元/㎡</td>
+                <td colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.ktjFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">11、合法利用奖</td>
+                <td style="text-align: left; font-size: 11px;">100000元/宗</td>
+                <td colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.confirmFee)}</td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left;">12、提前搬家奖</td>
+                <td style="text-align: left; font-size: 11px;">1400元/㎡</td>
+                <td style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family1.tqbjfFee)}</td>
+                <td style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family2.tqbjfFee)}</td>
+            </tr>
+            <tr>
+                <td colspan="2">1-12项合计(该部分补偿、补助及奖励费由《拆迁安置补偿协议》约定)</td>
+                <td>${bigDecimalUtils(family.bjbzFee + family.yjfSumFee + family1.azfbzFee + family.rybzFee + family1.shbzFee + family.confirmFee + family1.tqbjfFee)}</td>
+                <td>${bigDecimalUtils(family.bjbzFee + family.yjfSumFee + family2.azfbzFee + family.rybzFee + family2.shbzFee + family.confirmFee + family2.tqbjfFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">13、停产停业补助费</td>
+                <td style="text-align: left; font-size: 11px;">按近3年内纳税总额的6倍进行补偿，……</td>
+                <td colspan="2"  style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.tctyfFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">14、独生子女补助费</td>
+                <td style="text-align: left; font-size: 11px;">30000元/证</td>
+                <td colspan="2"  style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.onlyFee)}</td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left;">15、大病、残疾或低保补助费</td>
+                <td style="text-align: left; font-size: 11px;">大病补助100000元/人；残疾补助50000元/证；低保补助50000元/证。</td>
+                <td colspan="2"  style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.shknMoney)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">16、住房困难补助费</td>
+                <td style="text-align: left; font-size: 11px;">人均拆迁补偿款低于20万的（不含房屋周转补助费），补足到20万。</td>
+                <td colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.zfknFee)}</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">17、工程配合奖</td>
+                <td style="text-align: left; font-size: 11px;" colspan="3">第一奖励期小组全签，奖励50000元/宗；第一奖励期大组全签，奖励50000元/宗</td>
+                <!--<td colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.ktjFee)}</td>-->
+            </tr>
+            <tr>
+                <td colspan="2">13-17项合计(该部分补助及奖励费由相关《补充协议》另行约定)</td>
+                <td>${bigDecimalUtils(family.onlyFee + family.shknMoney)}</td>
+                <td>${bigDecimalUtils(family.onlyFee + family.shknMoney)}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left;">18、安置面积标准</td>
+                <td style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family1.houseControlArea)}</td>
+                <td style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family2.houseControlArea)}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left;">19、放弃房屋安置面积的货币安置标准</td>
+                <td colspan="2" style="text-align: center;padding-right: 5px;">放弃房屋安置面积×（周边类似安置房的市场价格-2100元/㎡）</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">20、租房补助费</td>
+                <td style="text-align: left; font-size: 11px;" colspan="3">按安置人口1650元/人•月计算。选择安置房的，租房补助费发放期为自搬家交房之日起至《安置房入住办理通知书》送达之日后的第4个月（暂按30个月算）；全部放弃房屋安置面积的，按4个月发放。</td>
+                <!--<td colspan="2" style="text-align: center;padding-right: 5px;">${bigDecimalUtils(family.lsazfFee)}</td>-->
+            </tr>
+        </table>
+    </center>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 650px;
+            font-size: 17px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 34px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        /*@page {*/
+            /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size: 420mm 297mm;*/
+            /*size:210mm 297mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="printContent">
+        <div style="padding-top: 20px;margin-bottom: 20px;font-size: 25px;text-align: center;line-height: 160%">
+            <b>北京市集体土地住宅房屋拆迁货币补偿协议书</b><br/>
+            <b>工程配合奖补充协议</b>
+        </div>
+        拆 迁 人：<span class="fix_span">北京首开中晟房地产开发有限公司</span>（以下简称甲方）<br/>
+        被拆迁人：<span class="fix_span">${family.name?default("")}</span>（以下简称乙方）　<br/>
+        <p><b>一、工程配合奖金额</b></p>
+        <p>根据《顺义区马坡镇西丰乐村棚户区改造土地开发项目拆迁实施方案》：</p>
+        <p>1.乙方所在的小组在搬迁奖励期限内全部签订拆迁补偿安置协议并按期搬迁，给予乙方小组奖励费为:人民币<span
+                class="span">${family.teamMoney?default("0")}</span>元（大写：人民币<span class="span">${moneyUtils(family.teamMoney)}</span>）。
+        </p>
+        <p><b>二、支付期限</b></p>
+        <p>本协议生效且乙方履行协议约定的搬家交房义务后，甲方在<span class="span">10</span>个工作日内，向乙方一次性支付工程配合奖。</p>
+        <p><b>三、协议生效</b></p>
+        <p>本协议自甲、乙双方签字盖章，乙方加按指印之日起生效。本协议一式四份，甲方两份，乙方一份，报区主管部门备案一份，具有同等效力。</p>
+
+        <div style="line-height: 450%">
+            甲方（盖章）：　　　　　　　　　　　　　　　　　乙方（签字）：<br/>
+            委托代理人（拆迁公司）：　　　　　　　　　　　　委托代理人（签字）:<br/>
+            <span class="fix_span" style="min-width: 50px;"></span>年<span class="fix_span"
+                                                                          style="min-width: 30px;"></span>月<span
+                class="fix_span" style="min-width: 30px;"></span>日　　　　　　　　　　　　
+            <span class="fix_span" style="min-width: 50px;"></span>年<span class="fix_span"
+                                                                          style="min-width: 30px;"></span>月<span
+                class="fix_span" style="min-width: 30px;"></span>日
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

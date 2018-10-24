@@ -1,0 +1,239 @@
+package com.app.cq.map;
+
+import com.google.common.collect.Maps;
+
+import java.util.Map;
+
+/**
+ * 导出excel时使用的map
+ * Created by lsh on 2017/7/27.
+ */
+public class FamilyExcelMap {
+
+    /**
+     * 入户基础信息Map
+     * @return
+     */
+    public static Map familyMap(){
+        Map map = Maps.newLinkedHashMap();
+        map.put("groupCode","组别");
+        map.put("familyCode","编号");
+        map.put("name","被拆迁人");
+        map.put("sex","性别");
+        map.put("idCard","身份证号码");
+        map.put("birthdayDate","出生日期");
+        map.put("unit","工作单位");
+        map.put("phone","联系电话");
+        map.put("address","户籍所在地");
+        map.put("zipCode","邮编");
+        map.put("contextAddress","通讯地址");
+        map.put("moveDate","户口迁入时间");
+        map.put("familyPerson","家庭成员");
+        map.put("addDate","入户时间");
+        return map;
+    }
+
+    /**
+     * 入户基础信息Map
+     */
+    public static Map<String, Map> familyShowMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("入户信息", familyMap());
+        return map;
+    }
+
+    /**
+     * 房屋信息
+     * @return
+     */
+    public static Map houseMap(){
+        Map map = Maps.newLinkedHashMap();
+        map.put("houseAddress","房屋坐落");
+        map.put("ownershipCode","权属证书编号");
+        map.put("confirmArea","合法宅基地面积");
+        map.put("controlArea","控制标准面积");
+        map.put("outControlArea","超控制标准面积");
+        map.put("isBussess","是否经营");
+        map.put("bussessArea","经营认定面积");
+        map.put("isDutyFree","是否免税");
+        map.put("yyzz","营业执照名称");
+        map.put("zcgCode","营业执照注册号");
+        map.put("isLandFee","是否有缴费种养殖地");
+        return map;
+    }
+
+    /**
+     * 房屋信息
+     */
+    public static Map<String, Map> houseShowMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("房屋信息", houseMap());
+        return map;
+    }
+
+    /**
+     * 其他信息
+     * @return
+     */
+    public static Map otherMap(){
+        Map map = Maps.newLinkedHashMap();
+        map.put("airConditionerNum","空调数量");
+        map.put("telephoneNum","电话数量");
+        map.put("tvNum","有线电视数量");
+        map.put("waterHeaterNum","热水器数量");
+        map.put("broadbandNum","宽带数量");
+        map.put("dbNum","低保数量");
+        map.put("cjNum","残疾证数量");
+        map.put("dabNum","大病数量");
+        map.put("personNum","安置人数");
+        map.put("personOne","独生子女人数");
+        map.put("personNo","达到法定结婚年龄且从未结婚人数");
+        map.put("personPregnancy","怀孕的家庭成员");
+        map.put("houseControlArea","安置房控制标准");
+        return map;
+    }
+
+    /**
+     * 其他信息
+     */
+    public static Map<String, Map> otherShowMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("其他信息", otherMap());
+        return map;
+    }
+
+    /**
+     * 方案信息
+     */
+    public static Map faMap(){
+        Map map = Maps.newLinkedHashMap();
+        map.put("type","安置类型");
+
+
+        map.put("bjbzFee","搬家补助费");
+        map.put("azfbzFee","安置房补助费");
+        map.put("rybzFee","人员安置补助费");
+        map.put("shbzFee","生活补助费");
+        map.put("tctyfFee","停产停业补助费");
+        map.put("onlyFee","独生子女补助费");
+        map.put("zfknFee","住房困难补助费");
+
+        map.put("lsazfFee","周转补助费");
+        map.put("yjfSumFee","移机费");
+        map.put("tqbjfFee","提前搬家奖");
+        map.put("confirmFee","宅基地合法利用奖");
+        map.put("wsqfFee","未经审批房屋补偿");
+        map.put("otherfFee","其他");
+        map.put("bcSumTatal","拆迁补偿款总计");
+        map.put("cjMoney","残疾补助费");
+        map.put("dbMoney","低保补助费");
+        map.put("dabMoney","大病补助费");
+        map.put("teamMoney","工程配合（团结互助奖）");
+        return map;
+    }
+
+    /**
+     * 方案信息
+     */
+    public static Map<String, Map> faShowMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("方案信息", faMap());
+        return map;
+    }
+
+    /**
+     * 评估信息
+     */
+    public static Map pgMap(){
+        Map map = Maps.newLinkedHashMap();
+        map.put("pgCompany","评估公司");
+        map.put("inqwFee","宅基地面积控制标准内区位补偿款");
+        map.put("outqwFee","宅基地面积控制标准外区位补偿款");
+        map.put("qwMoney","宅基地区位补偿款");
+        map.put("fswFee","房屋及附属物重置成新价补偿款");
+        map.put("isGiveup","是否包含未经审批房屋重置成新价");
+        map.put("dezxbzf","定额装修补助费");
+        map.put("zxbzf","据实装修补助费");
+        map.put("realZxbzFee","装修补助费");
+        map.put("fhbcfFee","分户补偿款");
+        map.put("ktjFee","合法宅基地内空地奖");
+        map.put("pgAllCount","评估价款合计");
+        map.put("buildArea","合法宅基地范围内正式房屋建筑面积");
+        map.put("outBuildArea","合法宅基地外的房屋建筑面积");
+        return map;
+    }
+
+    /**
+     * 评估、测绘信息
+     */
+    public static Map<String, Map> pgShowMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("评估、测绘信息", pgMap());
+        return map;
+    }
+
+    /**
+     * 状态信息
+     */
+    public static Map stateMap(){
+        Map map = Maps.newLinkedHashMap();
+        map.put("pgState","评估审核状态");
+        map.put("cqState","拆迁审核状态");
+        map.put("chState","测绘审核状态");
+        map.put("checkState","审核状态");
+        map.put("qyState","签约状态");
+        map.put("qyDate","签约时间");
+        map.put("jfState","交房状态");
+        map.put("jfDate","交房时间");
+        map.put("ccState","拆除状态");
+        map.put("ccDate","拆除时间");
+        map.put("jsState","结算状态");
+        map.put("jsDate","结算时间");
+        map.put("jfNumber","交房顺序号");
+        map.put("jfNumberDate","交房顺序号获取时间");
+        map.put("bcxyState","补充协议签约状态");
+        map.put("bcxyDate","补充协议签约时间");
+        map.put("bcxyPerson","补充协议签约操作人");
+        return map;
+    }
+
+    /**
+     * 状态信息
+     */
+    public static Map<String, Map> stateShowMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("状态信息", stateMap());
+        return map;
+    }
+
+    /**
+     * 标题Map
+     * @return
+     */
+    public static Map<String,Map> jspShowMap(){
+        Map map = Maps.newLinkedHashMap();
+        map.put("入户信息",familyMap());
+        map.put("房屋信息",houseMap());
+        map.put("评估、测绘信息",pgMap());
+        map.put("方案信息",faMap());
+        map.put("状态信息",stateMap());
+        map.put("其他信息",otherMap());
+        return  map;
+    }
+
+
+    /**
+     * 总Map
+     * @return
+     */
+    public static Map excelMap(){
+        Map map = Maps.newLinkedHashMap();
+        map.putAll(familyMap());
+        map.putAll(houseMap());
+        map.putAll(otherMap());
+        map.putAll(faMap());
+        map.putAll(pgMap());
+        map.putAll(stateMap());
+        return map;
+    }
+}
