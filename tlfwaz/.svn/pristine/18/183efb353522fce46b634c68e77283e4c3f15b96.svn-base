@@ -1,0 +1,83 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: jmdf
+  Date: 2018/9/10
+  Time: 16:36
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电话通知</title>
+    <%@include file="/static/common/common.jsp" %>
+    <%--<style>--%>
+        <%--#info ul li {--%>
+            <%--list-style-type: none;--%>
+            <%--background-color: #00AA88;--%>
+            <%--width: 150px;--%>
+            <%--font-size: 17px;--%>
+            <%--margin-left: 10px;--%>
+            <%--margin-bottom: 10px;--%>
+            <%--float: left;--%>
+            <%--cursor: pointer;--%>
+        <%--}--%>
+    <%--</style>--%>
+</head>
+<body>
+<div class="content">
+    <div class="form-inline" id="hideCls" style="padding-bottom: 20px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="phoneHandList">批次电话通知管理</a></li>
+            <li><a href="handed">已有批次家庭</a></li>
+        </ul>
+    </div>
+
+    <table class="table table-bordered">
+        <tr>
+            <td class="active text-right" style="width: 20%;">批次人数：</td>
+            <td>
+                <input type="text" id="handPersonNum" name="handPersonNum" value="" class="form-control" style="width: 130px"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="active text-right" style="width: 20%;">批次时间：</td>
+            <td>
+                <input type="text" id="handDate" name="handDate" value="" class="form-control datetimePicker dateISO" style="width: 130px;height: 33px;background-image:url(../../../../static/plugin/datepicker/img/icon.png); background-repeat:no-repeat; background-position:right center;"/>
+            </td>
+        </tr>
+    </table>
+    <div class="footer">
+        <button type="button" onclick="submitHandData()" class="btn btn-danger"><i class="fa fa-magic"></i>&nbsp;生成批次</button>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    function submitHandData() {
+        var handDate = $("#handDate").val();
+        var handPersonNum = $("#handPersonNum").val();
+        $.get("handPcNum",{handPersonNum:handPersonNum,handUpDate:handDate, _time: new Date().getTime()},function(){
+        });
+        window.location="/cq/family/handed";
+    }
+
+    //日期控件
+    $(".datetimePicker").datetimepicker({
+        format: 'yyyy-mm-dd',//显示格式
+        language: 'zh-CN',
+        todayHighlight: 1,//今天高亮
+        minView: 2,  //日期最小选择的范围
+        startView: 2, //设置开始视图为月
+        forceParse: 0,
+        showMeridian: 1,
+        autoclose: 1,//选择后自动关闭
+        showSecond: false, //显示秒
+        todayBtn: true
+    })
+</script>

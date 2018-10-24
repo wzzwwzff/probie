@@ -1,0 +1,78 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>管理员维护列表</title>
+    <%@include file="/static/common/common.jsp"%>
+</head>
+<body>
+<div class="title">
+    <h5>管理员维护列表</h5>
+</div>
+<div class="content">
+    <div class="search_content resizeLayout">
+        <form class="form-inline" role="form" id="search">
+            <div class="form-group">
+                <%@include file="/WEB-INF/pages/cq/common/search/searchFamily.jsp" %>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">是否有效</div>
+                    <tags:searchDataDict name="f.deleteStatus" fieldType="integer" dataDict="是否有效" className="form-control"/>
+                </div>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">数据状态</div>
+                    <tags:searchDataDict name="f.hideStatus" fieldType="integer" dataDict="数据状态" className="form-control"/>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</button>
+            </div>
+        </form>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center" width="5%">序号</th>
+            <th class="text-center">标段</th>
+            <th class="text-center">家庭编号</th>
+            <th class="text-center">被腾退人</th>
+            <th class="text-center">地址门牌</th>
+            <th class="text-center">房屋产别</th>
+            <th class="text-center">建筑面积(㎡)</th>
+            <th class="text-center">拆迁复核状态</th>
+            <th class="text-center">评估复核状态</th>
+            <th class="text-center">是否有未登记房屋</th>
+            <th class="text-center">是否有效</th>
+            <th class="text-center">数据状态</th>
+            <th width="20%" class="text-center">操作</th>
+        </tr>
+        </thead>
+        <c:forEach items="${pageInfo.result}" var="family" varStatus="status">
+            <tr>
+                <td class="text-center">${status.count}</td>
+                <td class="text-center"><tags:dataDict dataDict="标段" value="${family.section}"/></td>
+                <td class="text-center">${family.familyCode}</td>
+                <td class="text-center">${family.name}</td>
+                <td class="text-center">${family.address}</td>
+                <td class="text-center"><tags:dataDict dataDict="房屋产别" value="${family.cb}"/></td>
+                <td class="text-center">${family.buildArea}</td>
+                <td class="text-center"><tags:dataDict dataDict="复核状态" value="${family.cqStatus}"/></td>
+                <td class="text-center"><tags:dataDict dataDict="复核状态" value="${family.pgStatus}"/></td>
+                <td class="text-center"><tags:dataDict dataDict="是否" value="${family.houseStatus}"/></td>
+                <td class="text-center"><tags:dataDict dataDict="是否有效" value="${family.deleteStatus}"/></td>
+                <td class="text-center"><tags:dataDict dataDict="数据状态" value="${family.hideStatus}"/></td>
+                <td class="text-center">
+                    <c:if test="${family.houseStatus eq 1}">
+                        <a href="familyHouseForm?familyId=${family.id}&${pageInfo.searchParams}"><i class="fa fa-big fa-edit"></i>&nbsp;未登记房屋登记</a>&nbsp;&nbsp;
+                    </c:if>
+                    <a href="/cq/common/view/main?familyId=${family.id}"><i class="fa fa-big fa-eye"></i>&nbsp;查看</a>&nbsp;&nbsp;
+                    <a href="rhForm?familyId=${family.id}"><i class="fa fa-big fa-edit"></i>&nbsp;修改</a>&nbsp;&nbsp;
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+</div>
+<div class="footer resizeLayout"><tags:pageInfo/></div>
+</body>
+</html>

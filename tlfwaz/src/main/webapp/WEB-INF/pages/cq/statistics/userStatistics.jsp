@@ -1,0 +1,68 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户操作统计</title>
+    <%@include file="/static/common/common.jsp"%>
+    <style>
+        table tr td{
+            text-align: center;
+        }
+    </style>
+    <script>
+        $(function () {
+            $("#excelBtn").click(function () {
+                $(".table").table2excel({
+                    exclude: ".noExl",
+                    name: "用户操作统计",
+                    filename: "用户操作统计",
+                    exclude_img: true,
+                    exclude_links: true,
+                    exclude_inputs: true
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="title">
+    <h5>用户操作统计</h5>
+</div>
+<div class="content">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th rowspan="2">日期</th>
+            <c:forEach items="${userMap}" var="userMap">
+                <th colspan="2">${userMap.key}</th>
+            </c:forEach>
+        </tr>
+        <tr>
+            <c:forEach items="${userMap}">
+                <th>签约数</th>
+                <th>打印数</th>
+            </c:forEach>
+        </tr>
+        </thead>
+        <c:forEach items="${map}" var="dataMap">
+            <c:set var="valueMap" value="${dataMap.value}"/>
+            <c:set var="date" value="${dataMap.key}" />
+            <tr>
+                <td>${date}</td>
+                <c:forEach items="${userMap}" var="userMap">
+                    <c:set var="user" value="${userMap.value}" />
+                    <td>${valueMap[user]["signed"] == null ? 0 : valueMap[user]["signed"]}</td>
+                    <td>${valueMap[user]["notSigned"] == null ? 0 : valueMap[user]["notSigned"]}</td>
+                </c:forEach>
+            </tr>
+        </c:forEach>
+    </table>
+</div>
+<div class="footer resizeLayout">
+    <button class="btn btn-primary" id="excelBtn" style="width: 120px;letter-spacing: 2px;"><i class="fa fa-file-excel-o"></i>&nbsp;导出Excel</button>
+</div>
+</body>
+</html>

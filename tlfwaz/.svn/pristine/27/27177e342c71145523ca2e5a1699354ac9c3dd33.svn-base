@@ -1,0 +1,12 @@
+package com.app.cq.service;
+
+import com.app.cq.model.Family;
+import com.sqds.hibernate.HibernateDao;
+import org.springframework.stereotype.Service;
+
+/**
+ * Created by jmdf on 2018/9/5.
+ */
+@Service
+public class FamilyService extends HibernateDao<Family> {
+}

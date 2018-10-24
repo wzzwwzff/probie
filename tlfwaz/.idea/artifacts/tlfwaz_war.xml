@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="tlfwaz:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="tlfwaz-1.0.war">
+      <element id="artifact" artifact-name="tlfwaz:war exploded" />
+    </root>
+  </artifact>
+</component>

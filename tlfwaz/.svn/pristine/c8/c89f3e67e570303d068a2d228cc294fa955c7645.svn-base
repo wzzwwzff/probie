@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 680px;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        /*@page {*/
+        /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            /*margin: 6.6mm 12.6mm 6.6mm 12.6mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        .printTable tr td {
+
+            border: 1px solid #000000;
+            text-align: center;
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+
+</head>
+<body>
+<div class="printContent">
+    <p style="text-align:center;line-height: 26px;margin: 20px ;"><span style="font-weight: bold;font-size: 28px">长辛店东河沿村回迁房项目换签通知书</span></p>
+    <p style="margin-top: 30px;text-indent: 0em;">尊敬的被腾退人：<span class="border">${strings.getNotNull(family.name)}</span></p>
+    <p>请您按下列时间、地点携带相关资料办理换签手续。</p>
+    <p>一、换签时间：<span class="border"> ${strings.getNotNull(year)} </span>年<span class="border"> ${strings.getNotNull(month)} </span>月<span class="border"> ${strings.getNotNull(day)} </span>日 <span class="border">${batchDate}</span></p>
+    <p>二、携带资料：</p>
+    <p>1、被腾退人身份证明原件及复印件1份</p>
+    <p>2、本通知书原件</p>
+    <p>3、原安置房认购协议原件</p>
+    <p>4、《北京市宅基地房屋腾退补偿安置协议》原件</p>
+    <p>三、换签地点：盛德东兴家园41号楼</p>
+    <p>四、换签须知：</p>
+    <p>1、请仔细阅读换签现场公示的《换签规则》。</p>
+    <p>2、本人不能亲自到场的，需提供委托手续。</p>
+    <p>3、本通知书一式两份，北京鹏睿房地产开发有限公司一份，被腾退人一份。</p>
+    <p>4、咨询电话：  </p>
+
+    <p style="margin-top: 100px"> 北京鹏睿房地产开发有限公司 <span style="margin-left: 120px;"> 被腾退人（签字）：</span></p>
+    <p style="margin-top: 40px;text-indent: 2em;"><span class="border">　　　　</span>年<span class="border">　　</span>月<span class="border">　　</span>日<span style="margin-left: 160px;"><span class="border">　　　　</span>年<span class="border">　　</span>月<span class="border">　　</span>日</span></p>
+</div>
+</body>
+</html>

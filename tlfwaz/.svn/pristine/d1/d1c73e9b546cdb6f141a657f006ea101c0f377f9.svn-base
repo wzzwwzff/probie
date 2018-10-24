@@ -1,0 +1,13 @@
+package com.app.cq.web.cq;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 公示管理
+ * Created by jmdf on 2018/9/6.
+ */
+@Controller
+@RequestMapping("/cq/publicShow/*")
+public class PublicShowController {
+}

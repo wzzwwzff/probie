@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>产权人确认申请</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 20px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 45px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitle {
+            clear: both;
+            text-indent: 0em;
+            font-size: 16px;
+            text-align: center;
+            line-height: 20px;
+            /*font-weight: bold;*/
+            margin-top: 15px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 28px;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 24px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 40px;
+        }
+
+        .dataTable tr {
+            height: 30px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        #footer {
+            margin-bottom: 7px;
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .space {
+            padding-left: 200px;
+        }
+
+        .checkCls{
+            width: 40px;
+            height: 20px;;
+            border: 1px solid #000000;
+        }
+
+        .bold{
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="printContent">
+    <p class="printTitler">产权调换房屋产权人确认申请</p>
+
+    <p style="margin-top: 20px;text-indent: 0em;">天龙房地产：</p>
+    <p>本人系坐落于<span class="border">　${family.fwzl?default("/")}　</span>房屋的被征收人，自愿做出如下决定：</p>
+    <#if (houseList ? size > 0)>
+        <#list houseList as house>
+            <p>将<span class="border">　${house.azProject.projectName?default("/")}${house.buildNum?default("/")}楼${house.unitNum?default("/")}单元${house.houseNum?default("/")}　</span>产权调换房屋的产权人，确定为<span class="border">　　　　　　　　</span>。</p>
+        </#list>
+    </#if>
+    <p style="margin-top: 20px;"> 本人保证上述表示真实有效，承诺上述确认的产权人符合相关条例关于产权调换房屋产权人需要符合的条件，如有虚假，本人自愿承担一切由此引发的法律责任和后果。</p>
+    <p> 特此申请。</p>
+
+    <p style="margin-top: 20px;margin-right:150px;text-align: right;"> 被征收人：</p>
+    <p style="margin-top: 30px;margin-right:150px;text-align: right;"> 其他产权人：</p>
+    <p style="margin-top: 30px;text-align: right;">　　　　年　　月　　日</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+package com.app.cq.service;
+
+import com.app.cq.model.Area;
+import com.app.cq.model.Project;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.StringUtils;
+import com.sqds.web.ParamUtils;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+/**
+ * Created by jmdf on 2018/9/5.
+ */
+@Service
+public class AreaService extends HibernateDao<Area>{
+
+    public List<Area> getListByProjectId(Integer id) {
+        String hql = "from Area a where a.project.id = ? order by a.id";
+        return list(hql,id);
+    }
+
+    public PageInfo<Area> getListArea(PageInfo<Area> pageInfo) {
+        String hql = "from Area a order by a.id";
+        return list(pageInfo,hql);
+    }
+
+    /**
+     * 循环保存征收地块
+     *
+     * @param request
+     * @param project
+     */
+    public void saveArea(HttpServletRequest request, Project project) {
+        String[] id = ParamUtils.getStringParameters(request, "a_id");
+        String[] a_areaName = ParamUtils.getStringParameters(request, "a_areaName");
+        String[] a_memo = ParamUtils.getStringParameters(request, "a_memo");
+        for (int i = 0; i < a_areaName.length; i++) {
+            if (StringUtils.isEmpty(a_areaName[i]) && StringUtils.isNotEmpty(id[i])) {
+                this.delete(Integer.valueOf(id[i]));
+            } else if (StringUtils.isNotEmpty(a_areaName[i])) {
+                Area area = new Area();
+                if (StringUtils.isNotEmpty(id[i])) {
+                    area = this.get(Integer.valueOf(id[i]));
+                }
+                area.setAreaName(a_areaName[i]);
+                area.setMemo(a_memo[i]);
+                area.setProject(project);
+                this.save(area);
+            }
+        }
+    }
+
+    /**
+     * 根据名称
+     * @param areaName
+     * @return
+     */
+    public Area getAreaByAreaName(String areaName){
+        String hql = "from Area where areaName = ?";
+        return this.findUnique(hql,areaName);
+    }
+}

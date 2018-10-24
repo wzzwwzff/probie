@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>入住通知单</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 17px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 25px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitle {
+            clear: both;
+            text-indent: 0em;
+            font-size: 16px;
+            text-align: center;
+            line-height: 20px;
+            /*font-weight: bold;*/
+            margin-top: 15px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 30px;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 24px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 40px;
+        }
+
+        .dataTable tr {
+            height: 30px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        #footer {
+            margin-bottom: 7px;
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .space {
+            padding-left: 200px;
+        }
+
+        .checkCls{
+            width: 40px;
+            height: 20px;;
+            border: 1px solid #000000;
+        }
+
+        .bold{
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="footer">
+    第<span id="pagenumber"></span>页，共<span id="pagecount"></span>页
+</div>
+-->
+<div class="printContent">
+    <p style="text-align:center;line-height: 26px;margin: 20px ;"><span style="font-weight: bold;font-size: 28px">东河沿棚户区改造回迁项目入住通知书</span></p>
+    <p style="margin-top: 30px;text-indent: 0em;">尊敬的：<span class="border">${family.name}</span>先生/女士：</p>
+    <p>东河沿村回迁房已具备入住条件，请您于2018年<span class="border">　　　　</span>月<span class="border">　　　　</span>日时间<span class="border">　　　　</span>
+        到<span class="border">　　　　</span>办理（施工管理号）<span class="border">${house.buildNum}</span>号楼<span class="border">${house.unitNum}</span>单元<span class="border">${house.houseNum}</span>号房屋的入住手续。</p>
+    <p style="text-indent: 0em;">一、须携带的资料: </p>
+    <p style="text-indent: 0em;">1、本通知书；</p>
+    <p style="text-indent: 0em;">2、购房人1寸照片一张；</p>
+    <p style="text-indent: 0em;">3、购房协议复印件1份；</p>
+    <p style="text-indent: 0em;">4、身份证明复印件2份；</p>
+    <p style="text-indent: 0em;">5、流转单1份。（每个环节签字用）</p>
+    <p style="text-indent: 0em;">6、买受人为下列情况的：</p>
+    <p>①无/限制民事行为能力人另需提供监护人身份证明、监护证明原件及复印件各2份。</p>
+    <p>②委托他人办理另需提供代理人的身份证明、经公证处公正的授权委托书原件及复印件各2份。</p>
+    <p>③存在争议的，需提供民事调解书原件及附件各2份</p>
+    <p>注：上述文件为复印件的，统一使用A4纸复印。</p>
+    <p style="text-indent: 0em;">二、入住须携带的款项：</p>
+    <p style="text-indent: 0em;">以下数据仅供业主参考，最终以办理入住手续时实际收取金额为准。</p>
+    <p style="text-indent: 0em;">一居室单套共计收费约：<span class="border">${price1}</span>元</p>
+    <p style="text-indent: 0em;">二居室单套共计收费约：<span class="border">${price2}</span>元</p>
+    <p style="text-indent: 0em;">三居室单套共计收费约：<span class="border">${price3}</span>元</p>
+    <p style="text-indent: 0em;">注：物业费（按年收取）：住宅建筑面积*2.56元*12月；（只接受银联借记卡支付）</p>
+    <p style="text-indent: 0em;">三、未按照本通知书规定的时间和地点办理房屋交付手续的，视为北京鹏睿房地产开发有限公司已完成房屋交付。自视为交付之日起，购房人开始承担与该房屋有关的全部风险责任以及包括但不限于物业服务费、供暖费等全部相关费用。</p>
+    <p style="text-indent: 0em;">物业公司办公地址：<span class="border">　　　　</span></p>
+    <p style="text-indent: 0em;">物业公司联系电话：<span class="border">　　　　</span></p>
+    <p style="text-indent: 0em;">工作时间： </p>
+    <p style="margin-top: 30px;text-indent: 0em"> 北京鹏睿房地产开发有限公司 <span style="margin-left: 120px;"> 购房人签字：</span></p>
+    <p style="margin-left: 355px">代理人签字：</p>
+    <p style="text-indent: 2em;"><span style="margin-left: 10px">　　　　</span>年<span style="margin-left: 11px;">　　</span>月<span style="margin-left: 12px;">　　</span>日<span style="margin-left: 130px;"><span style="margin-left: 15px;">　　　　</span>年<span style="margin-left: 16px;">　　</span>月<span style="margin-left: 17px;">　　</span>日</span></p>
+</div>
+</body>
+</html>

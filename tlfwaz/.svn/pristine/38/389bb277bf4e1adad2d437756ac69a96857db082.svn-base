@@ -1,0 +1,247 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <title>综合数据查询</title>
+    <%@include file="/static/common/common.jsp" %>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        table {
+            borde: 1px;
+        }
+    </style>
+</head>
+<body style="overflow: auto;">
+<div class="title">
+    <h4 id="installing"> <b>综合数据查询</b></h4>
+</div>
+<div class="content">
+        <form class="form-inline" id="myForm" action="result">
+            <table class="table table-bordered">
+                <%--<tr>
+                    <td class="fieldName" style="width: 15%">项目名称：</td>
+                    <td class="fieldValue" style="width: 85%">
+                        <input type="hidden" name="search_f.projectName_stringArray" value=""/>
+                        <a href="javascript:void(0);" name="search_f.projectName_string" value="" class="btn btn-primary btn-sm">全部</a>
+                        <c:forEach items="${projectName}" var="projectName">
+                            <a href="javascript:void(0);" name="search_f.projectName_string" isMore="false"
+                               value="${projectName.id}" class="btn btn-sm">${projectName.projectName}</a>
+                        </c:forEach>
+                    </td>
+                </tr>--%>
+                <tr>
+                    <td class="fieldName" style="width: 10%">档案编号：</td>
+                    <td class="fieldValue"><tags:searchInput name="f.familyCode" fieldType="string" size="40" operator="like"/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">姓名：</td>
+                    <td class="fieldValue"><tags:searchInput name="f.name" fieldType="string" size="40" operator="like"/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">身份证号：</td>
+                    <td class="fieldValue"><tags:searchInput name="f.idCard" fieldType="string" size="40" operator="like"/></td>
+
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">联系地址：</td>
+                    <td class="fieldValue"><tags:searchInput name="f.address" fieldType="string" size="40" operator="like"/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 15%">地块：</td>
+                    <td class="fieldValue" style="width: 85%">
+                        <input type="hidden" name="search_a.id_stringArray" value=""/>
+                        <a href="javascript:void(0);" name="search_a.id_string" value="" class="btn btn-primary btn-sm">全部</a>
+                        <c:forEach items="${areaName}" var="areaName">
+                            <a href="javascript:void(0);" name="search_a.id_string" isMore="false"
+                               value="${areaName.id}" class="btn btn-sm">${areaName.areaName}</a>
+                        </c:forEach>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">签约日期：</td>
+                    <td class="fieldValue">
+                        <%--<input type="hidden" name="search_f.signNumDate_stringArrays" value=""/>--%>
+                        <input type="text" name="search_f.signNumDate_stringTime" value="<fmt:formatDate value="${family.signNumDate}" pattern="yyyy-MM-dd" />" class="form-control form-date-time dateISO" style="width: 130px;height: 33px;"/>
+                    </td>
+                </tr>
+                <%--<tr>
+                    <td class="fieldName" style="width: 10%">签约日期时间段：</td>
+                    <td class="fieldValue">
+                        <input type="text" name="search_f.signNumDate_stringTimeDu" value="<fmt:formatDate value="${family.signNumDate}" pattern="yyyy-MM-dd" />" class="form-control form-date-time dateISO" style="width: 130px;height: 33px;"/>
+                        至
+                        <input type="text" name="search_f.signNumDate_stringTimeDu" value="<fmt:formatDate value="${family.signNumDate}" pattern="yyyy-MM-dd" />" class="form-control form-date-time dateISO" style="width: 130px;height: 33px;"/>
+                    </td>
+                </tr>--%>
+                <tr>
+                    <td class="fieldName">签约日期时间段：</td>
+                    <td class="fieldValue"><tags:searchInput name="f.signNumDate" size="15" fieldType="date" operator="ge" className="form-control_short"/>&nbsp;至&nbsp;
+                        <tags:searchInput name="f.signNumDate" size="15" fieldType="date" operator="le" className="form-control_short"/>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">是否平移家庭：</td>
+                    <td class="fieldValue">
+                        <input type="hidden" name="search_f.isSpecial_integerArray" value=""/>
+                        <a href="javascript:void(0);" name="search_f.isSpecial_integer" value="" class="btn btn-primary btn-sm">全部</a>
+                        <c:forEach items="${isSpecial}" var="isSpecial">
+                            <a href="javascript:void(0);" name="search_f.isSpecial_integer" isMore="false"
+                               value="${isSpecial.value}" class="btn btn-sm">${isSpecial.key}</a>
+                        </c:forEach>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">选房状态：</td>
+                    <td class="fieldValue">
+                        <input type="hidden" name="search_f.xfStatus_integerArray" value=""/>
+                        <a href="javascript:void(0);" name="search_f.xfStatus_integer" value="" class="btn btn-primary btn-sm">全部</a>
+                        <c:forEach items="${xfStatus}" var="xfStatus">
+                            <a href="javascript:void(0);" name="search_f.xfStatus_integer" isMore="false"
+                               value="${xfStatus.value}" class="btn btn-sm">${xfStatus.key}</a>
+                        </c:forEach>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">签约状态：</td>
+                    <td class="fieldValue">
+                        <input type="hidden" name="search_f.signStatus_integerArray" value=""/>
+                        <a href="javascript:void(0);" name="search_f.signStatus_integer" value="" class="btn btn-primary btn-sm">全部</a>
+                        <c:forEach items="${signStatus}" var="signStatus">
+                            <a href="javascript:void(0);" name="search_f.signStatus_integer" isMore="false"
+                               value="${signStatus.value}" class="btn btn-sm">${signStatus.key}</a>
+                        </c:forEach>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName" style="width: 10%">结算状态：</td>
+                    <td class="fieldValue">
+                        <input type="hidden" name="search_f.jsStatus_integerArray" value=""/>
+                        <a href="javascript:void(0);" name="search_f.jsStatus_integer" value="" class="btn btn-primary btn-sm">全部</a>
+                        <c:forEach items="${jsStatus}" var="jsStatus">
+                            <a href="javascript:void(0);" name="search_f.jsStatus_integer" isMore="false"
+                               value="${jsStatus.value}" class="btn btn-sm">${jsStatus.key}</a>
+                        </c:forEach>
+                    </td>
+                </tr>
+            </table>
+            <hr>
+            <%@include file="modal.jsp" %>
+            <div class="footer">
+                <button class="btn btn-primary" type="button" onclick="searchForm();"><i class="fa fa-search"></i>&nbsp;查询
+                </button>
+                <button class="btn btn-primary" type="button" onclick="chooseData();"><i class="fa fa-search"></i>&nbsp;筛选导出
+                </button>
+            </div>
+        </form>
+</div>
+</body>
+<script>
+
+    function searchForm() {
+        $("#myForm").submit();
+    }
+    function setPropertyValues(name) {
+        var inputValues = "";
+        $("a[name='" + name + "']").each(function () {
+            var has = $(this).hasClass("btn-primary");
+            if (has) {
+                var isMore = $(this).attr("isMore");
+                if (isMore == "true") {
+                    if (inputValues != "") {
+                        inputValues = inputValues + ",";
+                    }
+                    inputValues = inputValues + $(this).attr("value");
+                } else {
+                    inputValues = $(this).attr("value");
+                }
+
+
+            }
+        });
+        $("input:hidden[name='" + name + "Array']").val(inputValues);
+    }
+    $(function () {
+        $("table tr td a").click(function () {
+            var name = $(this).attr("name");
+            var v = $(this).attr("value");
+            var has = $(this).hasClass("btn-primary");
+            if (v == "") {//全部
+                if (!has) {
+                    $(this).addClass("btn-primary");
+                }
+                $("a[name='" + name + "'][value!='']").removeClass("btn-primary");
+            } else {
+                $("a[name='" + name + "'][value='']").removeClass("btn-primary");
+                if (has) {
+                    $(this).removeClass("btn-primary");
+                } else {
+                    $(this).addClass("btn-primary");
+                }
+                var isMore = $(this).attr("isMore");
+                if (isMore == "false") {
+                    $("a[name='" + name + "'][value!='" + v + "']").removeClass("btn-primary");
+                }
+            }
+            setPropertyValues(name);
+        });
+    });
+
+    function setPropertyValues(name) {
+        var inputValues = "";
+        $("a[name='" + name + "']").each(function () {
+            var has = $(this).hasClass("btn-primary");
+            if (has) {
+//                var isMore = $(this).attr("isMore");
+//                if (isMore == "true") {
+//                    if (inputValues != "") {
+//                        inputValues = inputValues + ",";
+//                    }
+//                    inputValues = inputValues + $(this).attr("value");
+//                } else {
+                inputValues = $(this).attr("value");
+//                }
+            }
+        });
+        $("input:hidden[name='" + name + "Array']").val(inputValues);
+    }
+
+    //处理复选框
+    $(".tit .all").click(function () {
+        var status = $(this).is(":checked");
+        var type = $(this).parent().parent().parent().attr("id");
+        if (status == false) {
+            $("." + type).each(function () {
+                $(this).remove("checked");
+                $(this).attr("checked", false);
+            });
+        } else {
+            $("." + type).each(function () {
+//                $(this).remove("checked");
+                $(this).prop('checked', true);
+            });
+        }
+    });
+
+    function getForm() {
+        //设置数据回显
+        var nameList = "${sessionScope.checkBox_nameList}";
+        var array = new Array();
+        <c:forEach items="${sessionScope.checkBox_nameList}" var="name">
+        array.push('${name}');
+        </c:forEach>
+        for (var i = 0; i < array.length; i++) {
+            var name = array[i];
+            $("input[name='" + name + "']").prop("checked", true);
+        }
+        if (nameList == null) {
+            $("input[type='checkbox']").each(function () {
+                $(this).attr("checked", "true");
+            });
+        }
+
+        $("#myModal").modal();
+    }
+</script>
+</html>

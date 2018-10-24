@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>变更购房人结果通知单</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 20px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 40px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitle {
+            clear: both;
+            text-indent: 0em;
+            font-size: 22px;
+            text-align: center;
+            line-height: 20px;
+            /*font-weight: bold;*/
+            margin-top: 15px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 30px;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 24px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 40px;
+        }
+
+        .dataTable tr {
+            height: 30px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        #footer {
+            margin-bottom: 7px;
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="footer">
+    第<span id="pagenumber"></span>页，共<span id="pagecount"></span>页
+</div>
+-->
+<div class="printContent">
+    <p class="printTitler">长辛店东河沿村回迁房项目<br/>变更购房人结果通知单</p>
+    <p style="margin-top: 30px;text-indent: 0em;">被腾退人<span class="border">${family.name?default("/")}</span>：</p>
+    <p>您提交的<span class="border">${house.buildNum?default("/")}</span>号楼<span class="border">${house.unitNum?default("/")}</span>单元<span class="border">${house.houseNum?default("/")}</span>号房屋《变更购房人申请书》已收悉，经审查您的变更资料符合《变更购房人方案》要求，房屋的购房人变更为<span class="border">${house.hPerson?default("/")}</span>。</p>
+    <p style="margin-top: 80px;margin-left: 300px"> 北京鹏睿房地产开发有限公司</p>
+    <p style="margin-top: 30px;margin-left: 300px"> 经办人：</p>
+    <p style="margin-top: 30px;margin-left: 300px"><span style="margin-left: 10px">　　　　</span>年<span style="margin-left: 11px;">　　</span>月<span style="margin-left: 12px;">　　</span>日</p>
+
+    <p style="margin-top: 60px;margin-left: 300px">被腾退人领取签字：</p>
+    <p style="margin-top: 30px;margin-left: 300px"><span style="margin-left: 10px">　　　　</span>年<span style="margin-left: 11px;">　　</span>月<span style="margin-left: 12px;">　　</span>日</p>
+</div>
+</body>
+</html>

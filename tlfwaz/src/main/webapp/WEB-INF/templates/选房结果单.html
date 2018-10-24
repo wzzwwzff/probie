@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>选房确认单</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 20px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 32px;
+        }
+
+        .printContent .right {
+            text-align: right;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 25px;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+        }
+
+        .dataTable {
+            width: 99%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 22px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+        }
+
+        .dataTable tr {
+            height: 30px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            width: 82px;
+            height: 32px;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .border2 {
+            padding-left: 60px;
+            padding-right: 60px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .mode{
+            text-indent: 0em;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+<#list 1..2 as t>
+    <div class="printContent">
+        <table class="dataTable">
+            <tr>
+                <td colspan="7" class="printTitler">东河沿选房确认单</td>
+                <td rowspan="${index}" style="width: 25px;">
+                    <#if t=1>
+                        <span class="mode">征<br/>收<br/>方<br/>留<br/>存</span>
+                    </#if>
+                    <#if t=2>
+                        <span class="mode">被<br/>征<br/>收<br/>人<br/>留<br/>存</span>
+                    </#if>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 120px;">被征收人：</td>
+                <td colspan="6"  class="border" style="text-align: left;">${family.name?default("/")}</td>
+            </tr>
+            <tr>
+                <td>身份证号：</td>
+                <td colspan="6" class="border" style="text-align: left;">${family.idCard?default("/")}</td>
+            </tr>
+            <tr>
+                <td>坐落：</td>
+                <td colspan="6" class="border" style="text-align: left;">${family.address?default("/")}</td>
+            </tr>
+            <tr>
+                <td>面积：</td>
+                <td colspan="6" class="border" style="text-align: left;">${family.buildArea?default("/")}      ㎡</td>
+            </tr>
+            <tr>
+                <td colspan="7">安置房明细</td>
+            </tr>
+            <tr>
+                <td style="width: 20%">序号</td>
+                <td style="width: 15%">项目名称</td>
+                <td style="width: 10%">楼号</td>
+                <td style="width: 10%">单元</td>
+                <td style="width: 10%">房号</td>
+                <td style="width: 10%">居室</td>
+                <td style="width: 20%">面积（㎡）</td>
+            </tr>
+            <#if (houseList ? size > 0)>
+                <#list houseList as house>
+                    <tr>
+                        <td>${house_index + 1}</td>
+                        <td>${house.azProject.projectName}</td>
+                        <td>${house.buildNum}</td>
+                        <td>${house.unitNum}</td>
+                        <td>${house.houseNum}</td>
+                        <td>${houseTypeMap[house.houseType+""]}</td>
+                        <td>${house.buildArea}</td>
+                    </tr>
+                </#list>
+            </#if>
+            <tr>
+                <td>选房日期：</td>
+                <td colspan="6" style="text-align: left;">${chooseHouseDate?default("")}　</td>
+            </tr>
+            <tr style="height: 80px;">
+                <td>业务组签字<br/>或签章：</td>
+                <td colspan="2" class="right">　</td>
+                <td colspan="2">被征收人签字：</td>
+                <td colspan="2" class="right">　</td>
+            </tr>
+        </table>
+        <#if t=1>
+            <div class="pageBreak"></div>
+            <p style="margin-top:20px;margin-bottom:20px;text-indent: 0em;">-------------------------------------------------------------------</p>
+        </#if>
+    </div>
+</#list>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>平移补助发放通知</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 20px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 15px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 40px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitle {
+            clear: both;
+            font-size: 21px;
+            text-indent: 2em;
+            text-align: center;
+            line-height: 25px;
+            /*font-weight: bold;*/
+            margin: 10px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 30px;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 24px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 40px;
+        }
+
+        .dataTable tr {
+            height: 30px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        #footer {
+            margin-bottom: 7px;
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div id="footer">
+    第<span id="pagenumber"></span>页，共<span id="pagecount"></span>页
+</div>
+<div class="printContent">
+    <p class="printTitler" >关于长辛店东河沿村回迁房项目<br/>平移补助发放的通知</p>
+    <p style="padding-top: 50px;text-indent: 0em;">被腾退人：<span class="border">${strings.getNotNull(family.name)}</span></p>
+
+    <p>根据《长辛店东河沿村回迁房项目换签补助方案》，您本次平移的房屋及平移补助如下：</p>
+    <div>
+        <table class="dataTable">
+            <tr>
+                <td style="width: 10%">序号</td>
+                <td style="width: 30%">房号</td>
+                <td style="width: 20%">选房建筑面积（㎡）</td>
+                <td style="width: 15%">标准（元/㎡）</td>
+                <td style="width: 20%">金额</td>
+            </tr>
+            <#if (moveHouseList ? size > 0)>
+                <#list moveHouseList as house>
+                    <tr>
+                        <td>${house_index + 1}</td>
+                        <td>${house.buildNum}号楼${house.unitNum}单元${house.houseNum}</td>
+                        <td>${house.buildArea}</td>
+                        <td>${movePrice[house.houseNumAll]}</td>
+                        <td style="text-align: right;padding-right: 10px">${moneyMap[house.houseNumAll]}</td>
+                    </tr>
+                </#list>
+            </#if>
+            <tr>
+                <td >合计</td>
+                <td>${total}套</td>
+                <td>${area}</td>
+                <td>\</td>
+                <td style="text-align: right;padding-right: 10px"><div>${houseFee}</div></td>
+            </tr>
+        </table>
+    </div>
+    <p>上述平移补助，自《长辛店东河沿村回迁房项目购房协议》签订之日起15个工作日内，由村委会统一发放。</p>
+
+</div>
+</body>
+</html>

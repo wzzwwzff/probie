@@ -1,0 +1,355 @@
+package com.app.cq.web.cq;
+
+import com.app.cq.exception.Precondition;
+import com.app.cq.model.*;
+import com.app.cq.service.*;
+import com.app.cq.utils.GetCurrentUser;
+import com.app.cq.utils.MD5Utils;
+import com.app.permission.model.User;
+import com.app.permission.utils.UserSession;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.StringUtils;
+import com.sqds.utils.pdf.PdfDocumentGenerator;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+
+/**
+ * 管理员维护
+ * Created by jmdf on 2018/9/17.
+ */
+@Controller
+@RequestMapping("/cq/dataAdmin/*")
+public class DataAdminController {
+
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private HouseService houseService;
+    @Autowired
+    private AzProjectService azProjectService;
+    @Autowired
+    private AreaService areaService;
+    @Autowired
+    private ProjectService projectService;
+
+    /**
+     *  家庭基础信息列表
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+        User user = GetCurrentUser.getLoginUser(request);
+        String departmentCode = user.getDepartment().getDepartmentCode();
+        if (!departmentCode.equals("110")) {
+            pageInfo.addParameter("search_eq_string_section", departmentCode);
+        }
+        pageInfo = familyService.list(pageInfo);
+        modelMap.put("pageInfo", pageInfo);
+        modelMap.put("departmentCode", departmentCode);
+    }
+
+    /**
+     * 家庭编号查重
+     * @param request
+     * @return
+     */
+    @RequestMapping("checkRepeat")
+    @ResponseBody
+    public boolean checkRepeat(ServletRequest request) {
+        String familyCode = ParamUtils.getString(request, "familyCode", "");
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.checkRepeat(familyCode, familyId);
+        if (family != null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 表单
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.familyForm(familyId);
+        family = family == null ? new Family() : family;
+
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(familyId);
+        List<Project> projectList = projectService.listAll();
+
+        modelMap.addAttribute("family", family);
+        modelMap.addAttribute("familyPersonList", familyPersonList);
+        modelMap.addAttribute("projectList", projectList);
+    }
+
+
+    /**
+     * 保存表单
+     */
+    @RequestMapping("save")
+    @ResponseBody
+    public Map save(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Integer projectId = ParamUtils.getInt(request, "p_projectId", 0);
+        Integer areaId = ParamUtils.getInt(request, "areaId", 0);
+        Map map = Maps.newHashMap();
+        try {
+            Family family = familyService.get(familyId);
+            if (family == null) {
+                family = new Family();
+            }
+            Servlets.bind(request,family);
+            Project project = this.projectService.get(projectId);
+            family.setProject(project);
+            Area area = this.areaService.get(areaId);
+            family.setArea(area);
+            this.familyService.saveFamily(request,family);
+            map.put("success", "true");
+            map.put("message", "保存成功！");
+        } catch (Exception e) {
+            map.put("success", "false");
+            map.put("message", "保存失败！");
+        }
+        return map;
+    }
+
+    /**
+     * 结算数据表单页面
+     */
+    @RequestMapping("jsForm")
+    public void jsForm(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null, "数据错误，请重试！");
+        modelMap.put("pageName", "pgForm");
+        modelMap.put("family", family);
+        modelMap.addAttribute("jsPerson", UserSession.getUserFromSession(request).getRealName());
+    }
+
+    /**
+     * 评估信息保存
+     */
+    @RequestMapping("jsSave")
+    @ResponseBody
+    public Map pgSave(HttpServletRequest request) {
+        Map map = Maps.newHashMap();
+        try {
+            this.familyService.financeSave(request);
+            map.put("success", "true");
+            map.put("message", "保存成功！");
+        } catch (Exception e) {
+            map.put("success", "false");
+            map.put("message", "保存失败！");
+        }
+        return map;
+    }
+
+    /**
+     * 已选房源列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("dataAdminXf")
+    public void dataAdminXf(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        String departmentCode = GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode();
+        if (!departmentCode.equals("110")){
+            pageInfo.addParameter("search_eq_string_bd",departmentCode);
+        }
+        pageInfo = familyService.getChooseHouseList(pageInfo);
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+        }
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("houseListMap",houseListMap);
+        modelMap.addAttribute("departmentCode",departmentCode);
+    }
+
+
+    /**
+     * 计算方法
+     */
+    @RequestMapping("calcMethod")
+    public String calcMethod(HttpServletRequest request) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        String departmentCode = GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode();
+        if (!departmentCode.equals("110")){
+            pageInfo.addParameter("search_eq_string_bd",departmentCode);
+        }
+        pageInfo = familyService.getChooseHouseList(pageInfo);
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            this.houseService.jmCalcHouseMoney(familyUuid);
+        }
+
+        return "redirect:choosedHouseList";
+    }
+
+    /**
+     * 进入选房详情页面
+     * @param request
+     * @param modelMap
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     */
+    @RequestMapping("dataAdminChooseHouse")
+    public void dataAdminChooseHouse(HttpServletRequest request,ModelMap modelMap) throws IllegalAccessException,NoSuchMethodException,InvocationTargetException {
+        Integer familyId = ParamUtils.getInt(request, "familyId",0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"数据错误！");
+
+        //所有项目
+        List<AzProject> azProjectList = this.azProjectService.getAzProjectList();
+        modelMap.addAttribute("azProjectList", azProjectList);
+
+        //Map<projectId,List<BuildNum>>
+        Map<Integer, List<String>> projectBuildNumMap =  this.houseService.getBuildNum();
+
+        //选房限制信息待定...
+        //String message = "";
+
+        modelMap.addAttribute("family",family);
+        modelMap.addAttribute("projectBuildNumMap", projectBuildNumMap);
+        modelMap.addAttribute("searchParams",request.getAttribute("searchParams"));
+    }
+
+
+    /**
+     * 详情页面已选房源信息
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("selectHouseInfo")
+    public void selectHouseInfo(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.get(familyId);
+        List<House> houseList = this.houseService.getHouseListByFamilyId(family.getId());
+        modelMap.addAttribute("houseList", houseList);
+        modelMap.addAttribute("family", family);
+    }
+
+    /**
+     * 变更继承人密码管理
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("inheritPassword")
+    public void inheritPassword(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo = this.familyService.getChooseHouseList(pageInfo);
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+
+        //是继承人的家庭成员信息
+        Map<Integer, List<FamilyPerson>> familyPersonListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+            List familyPersonList = this.familyPersonService.listByFamilyIdAndInheritType(familyUuid);
+            familyPersonListMap.put(familyUuid, familyPersonList);
+        }
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("houseListMap",houseListMap);
+        modelMap.addAttribute("familyPersonListMap",familyPersonListMap);
+    }
+
+    /**
+     * 变更继承人密码生成界面
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("inheritPasswordForm")
+    public void inheritPasswordForm(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Integer houseId = ParamUtils.getInt(request,"houseId",0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"数据错误！");
+        modelMap.addAttribute("family", family);
+
+        //实际安置选房信息
+        House house = this.houseService.get(houseId);
+        String hPerson = house.gethPerson() == null ? "" : house.gethPerson();
+        List<String> personNameList = new ArrayList<>();
+        if (hPerson.contains(",")){
+            String[] hPersonListSplit = hPerson.split(",");
+            for (int i = 0; i <hPersonListSplit.length ; i++) {
+                personNameList.add(hPersonListSplit[i]);
+            }
+        }else {
+            personNameList.add(hPerson);
+        }
+        //申请人
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(family.getId());
+        List<FamilyPerson> personList = new ArrayList<>();
+        if (!hPerson.equals("")){
+            for (String personName:personNameList) {
+                for (int i = 0; i <familyPersonList.size() ; i++) {
+                    if (familyPersonList.get(i).getpName().equals(personName)){
+                        personList.add(familyPersonList.get(i));
+                    }
+                }
+            }
+        }
+        modelMap.addAttribute("house", house);
+        modelMap.addAttribute("personList", personList);
+        modelMap.addAttribute("searchParams", request.getAttribute("searchParams"));
+    }
+
+
+    /**
+     * 密码生成
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("makePassword")
+    @ResponseBody
+    public Map<String,String> makePassword(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Integer houseId = ParamUtils.getInt(request,"houseId",0);
+        String passwordTest = ParamUtils.getString(request,"passwordTest","");
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"数据错误！");
+        House house = this.houseService.get(houseId);
+        Precondition.checkSqdsArguement(house != null,"数据错误！");
+        Map<String,String> map = new HashMap<>();
+
+        String md5 = MD5Utils.getMD5(passwordTest);
+        house.setInheritPassword(md5);
+        houseService.save(house);
+        map.put("success","true");
+        map.put("message","密码生成成功："+md5);
+        return map;
+    }
+
+}

@@ -1,0 +1,42 @@
+package com.app.cq.service;
+
+import com.app.cq.model.AzProject;
+import com.sqds.hibernate.HibernateDao;
+import org.hibernate.SQLQuery;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by jmdf on 2018/9/5.
+ */
+@Service
+public class AzProjectService extends HibernateDao<AzProject> {
+    /**
+     * 判断项目下是否存在房源
+     */
+    public Integer isExistHouse(Integer projectId) {
+        String sql="select count(1) from house h where h.azProjectId="+projectId;
+        SQLQuery query = getSession().createSQLQuery(sql);
+        int count=((Number)query.uniqueResult()).intValue();
+        return count;
+    }
+
+    /**
+     * 得到所有的项目
+     * @return
+     */
+    public List<AzProject> getAzProjectList(){
+        StringBuffer hql = new StringBuffer(" from AzProject az order by az.projectName ");
+        return this.list(hql.toString());
+    }
+
+    /**
+     * 根据项目名查项目
+     * @return
+     */
+    public AzProject getAzProjectByName(String projectName){
+        String hql = "from AzProject where projectName = ?";
+        return findUnique(hql,projectName);
+    }
+}

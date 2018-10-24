@@ -1,0 +1,229 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.exception.Response;
+import com.app.cq.model.AzProject;
+import com.app.cq.model.Family;
+import com.app.cq.model.House;
+import com.app.cq.service.AzProjectService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.HouseService;
+import com.app.cq.utils.GetCurrentUser;
+import com.app.cq.utils.ReadExcel;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.StringUtils;
+import com.sqds.utils.pdf.PdfDocumentGenerator;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 选房管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/rzBusinessManager/*")
+public class rzManagerController {
+
+    @Resource
+    private FamilyService familyService;
+    @Resource
+    private HouseService houseService;
+    @Resource
+    private DataDictService dataDictService;
+    @Resource
+    private AzProjectService azProjectService;
+
+    /**
+     * 入住业务列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        String departmentCode = GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode();
+        if (!departmentCode.equals("110")){
+            pageInfo.addParameter("search_eq_string_bd",departmentCode);
+        }
+        pageInfo = familyService.rzFamilyList(pageInfo);
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+        }
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("houseListMap",houseListMap);
+        modelMap.addAttribute("departmentCode",departmentCode);
+    }
+
+    /**
+     * 打印入住通知书
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("printrzReport")
+    public void printrzReport(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);//家庭id
+        Family family = this.familyService.get(familyId);
+        modelMap.addAttribute("family",family);
+
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);//家庭id
+        House house = this.houseService.get(houseId);
+        modelMap.addAttribute("house",house);
+    }
+
+    /**
+     * 打印入住通知书
+     * @param request
+     * @param response
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    @RequestMapping("printrzReportPDF")
+    public void printrzReportPDF(HttpServletRequest request, HttpServletResponse response) throws InvocationTargetException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);//家庭id
+        Family family = this.familyService.get(familyId);
+
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);//家庭id
+        House house = this.houseService.get(houseId);
+
+        List<House> houseList = this.houseService.getHouseListByFamilyId(family.getId());
+
+        Map map = Maps.newHashMap();
+        map.put("family",family);
+        map.put("houseList", houseList);
+        map.put("house", house);
+
+        Integer houseType = house.getHouseType();
+        if(houseType == 1){
+            map.put("price1","2000");
+            map.put("price2","/");
+            map.put("price3","/");
+        }else if(houseType == 3){
+            BigDecimal buildArea = house.getBuildArea();    //判断面积大小于75
+            if(buildArea.intValue() <= 75){
+                map.put("price1","/");
+                map.put("price2","2500");
+                map.put("price3","/");
+            }else if(buildArea.intValue() > 75){
+                map.put("price1","/");
+                map.put("price2","3000");
+                map.put("price3","/");
+            }
+        }else if(houseType == 4){
+            map.put("price1","/");
+            map.put("price2","/");
+            map.put("price3","3500");
+        }
+
+        List<DataDict> contextList = this.dataDictService.getDataDictList("文本单据");
+
+        String template = "";   //入住通知书模板
+        for (DataDict dataDict : contextList) {
+            if (dataDict.getAttributeName().equals("东河沿入住通知单")){
+                template = dataDict.getAttributeValue();
+            }
+        }
+
+        PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            pdfDocumentGenerator.generate(template, map, outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 入住信息导出
+     */
+    @RequestMapping("excelForm")
+    public void excelForm(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        pageInfo.setPageSize(Integer.MAX_VALUE);
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo = this.familyService.rzFamilyList(pageInfo);
+
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+        }
+
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("houseListMap", houseListMap);
+    }
+
+    /**
+     * 入住状态更新
+     */
+    @RequestMapping("statusUpdate")
+    public void statusUpdate(){
+
+    }
+
+    /**
+     * 入住更新保存
+     * @throws IOException
+     */
+    @Transactional
+    @RequestMapping("statusUpdateSave")
+    public synchronized String statusUpdateSave(HttpServletRequest request , ModelMap map) throws Exception {
+        //上传文件
+        byte[] filePath = Servlets.uploadFile(request,"file");
+        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+        List list = ReadExcel.read(excelInputStream,0,true);
+        for (int i = 0; i < list.size() ; i++) {
+            if (i > 0) {
+                List row = (List) list.get(i);
+                if (!"".equals((String)row.get(0))) {
+                    String projectName = (String) row.get(1);
+                    String buildNum = (String) row.get(2);
+                    String unitNum = (String) row.get(3);
+                    String houseNum = (String) row.get(4);
+                    String rzStatus = (String) row.get(5);
+                    AzProject azProject = this.azProjectService.getAzProjectByName(projectName);
+                    House house = this.houseService.getHouseByAll(azProject.getId(), buildNum, unitNum, houseNum);
+                    house.setRzStatus(Integer.valueOf(rzStatus));
+                    this.houseService.save(house);
+                }
+            }
+        }
+
+        return "redirect:list";
+    }
+
+}

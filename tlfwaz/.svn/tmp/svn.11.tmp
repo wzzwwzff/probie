@@ -1,0 +1,206 @@
+package com.app.cq.service;
+
+import com.app.cq.en.HouseStatus;
+import com.app.cq.en.SignStatus;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.model.House;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.web.ParamUtils;
+import org.apache.logging.log4j.util.Strings;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+
+/**
+ * 综合统计查询
+ * Created by jmdf on 2018/9/6.
+ */
+@Service
+public class StatisticsService extends HibernateDao<Family> {
+
+    //安置房整体情况统计
+    public Map<String,Map<String,Map>> houseMap() {
+        String sql = "select h.buildNum,h.houseType," +
+                "COUNT(h.id) as allCount," +//全部房源数量
+                "SUM(IFNULL(h.buildArea,0)) as allArea," +//全部预测面积
+                "SUM(IFNULL(h.sjBuildArea,0)) as allSjArea," +//全部实际面积
+                "SUM(case when h.houseStatus > 1 then 1 else 0 end) as signCount," +//已选房源数量
+                "SUM(case when h.houseStatus > 1 then IFNULL(buildArea,0) else 0 end) as signArea," +//已选房源预测面积
+                "SUM(case when h.sjBuildArea > 1 then IFNULL(sjBuildArea,0) else 0 end) as signSjArea," +//已选房源实际面积
+                "SUM(case when h.houseStatus = 1 then 1 else 0 end) as noSignCount," +//剩余房源数量
+                "SUM(case when h.houseStatus = 1 then IFNULL(buildArea,0) else 0 end) as noSignArea," +//剩余房源预测面积
+                "SUM(case when h.sjBuildArea = 1 then IFNULL(sjBuildArea,0) else 0 end) as noSignSjArea " +//剩余房源实际面积
+                " from house h group by h.buildNum" +
+                " order by h.id,h.buildNum,h.houseType";
+        List<Map> mapList = this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String,Map<String,Map>> buildNumMap = new LinkedHashMap<String, Map<String, Map>>();
+        for (Map m:mapList){
+            String buildNum = String.valueOf(m.get("buildNum"));
+            String houseType = String.valueOf(m.get("houseType"));
+            Map<String,Map> houseTypeMap = buildNumMap.get(buildNum) == null?new LinkedHashMap<String, Map>():buildNumMap.get(buildNum);
+            houseTypeMap.put(houseType,m);
+            buildNumMap.put(buildNum,houseTypeMap);
+        }
+        return buildNumMap;
+    }
+
+    //安置房整体情况统计
+    public List houseStatistics() {
+        String sql = "select h.houseType," +
+                "COUNT(h.id) as allCount," +//全部房源数量
+                "SUM(IFNULL(h.buildArea,0)) as allArea," +//全部预测面积
+                "SUM(IFNULL(h.sjBuildArea,0)) as allSjArea," +//全部实际面积
+                "SUM(case when h.houseStatus > 1 then 1 else 0 end) as signCount," +//已选房源数量
+                "SUM(case when h.houseStatus > 1 then IFNULL(buildArea,0) else 0 end) as signArea," +//已选房源预测面积
+                "SUM(case when h.houseStatus > 1 then IFNULL(sjBuildArea,0) else 0 end) as signSjArea," +//已选房源实际面积
+                "SUM(case when h.houseStatus = 1 then 1 else 0 end) as noSignCount," +//剩余房源数量
+                "SUM(case when h.houseStatus = 1 then IFNULL(buildArea,0) else 0 end) as noSignArea," +//剩余房源预测面积
+                "SUM(case when h.houseStatus = 1 then IFNULL(sjBuildArea,0) else 0 end) as noSignSjArea" +//剩余房源实际面积
+                " from house h  group by h.houseType" +
+                " order by h.houseType";
+        return this.getSession().createSQLQuery(sql).list();
+
+    }
+
+    /**
+     * 整体情况统计
+     */
+    public Map<String,Map> processMap() {
+        String sql = "select a.areaName," +
+                "count(f.id) as allCount," +  //总户数
+                "sum(case when f.xfBatch is not null then 1 else 0 end) as xfBatch," +  //选房批次设置数量
+                "sum(case when f.xfStatus = "+ SignStatus.SIGN.getIndex()+" then 1 else 0 end) as houseCount," +  //选房户数
+                "sum(case when f.signStatus = "+ SignStatus.SIGN.getIndex()+" then 1 else 0 end) as signCount," +  //签约户数
+                "sum(case when f.jsStatus = "+ SignStatus.SIGN.getIndex()+" then 1 else 0 end) as jsCount" +  //结算户数
+                " from family f inner join area a on a.id = f.areaId" +
+                " group by a.areaName order by a.id";
+        List<Map> list = this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String,Map> map = new LinkedHashMap<>();
+        for (Map m:list){
+            String areaName = String.valueOf(m.get("areaName"));
+            map.put(areaName,m);
+        }
+        return map;
+    }
+
+    /**
+     * 已选房的房源套数(500户选房公示)
+     */
+    public Object getHouseCount() {
+        String hql = "select count(*) from House h where h.houseDecrip = 2 and houseStatus = "+HouseStatus.SIGNED.getIndex()+"";
+        return findUnique(hql);
+    }
+
+    /**
+     * 已选房的房源套数(2000户选房公示)
+     */
+    public Object getHouseCount2() {
+        String hql = "select count(*) from House h ,Family f where    h.familyId=f.id and  h.houseDecrip = 1 and houseStatus = "+HouseStatus.SIGNED.getIndex()+" and f.signStatus = "+ SignStatus.SIGN.getIndex()+" ";
+        return getSession().createSQLQuery(hql).list().size();
+    }
+
+    /**
+     * 综合统计查询方法
+     *
+     * @param pageInfo
+     */
+    public PageInfo<Family> getListForCompositeSearch(PageInfo<Family> pageInfo, HttpServletRequest request) {
+        StringBuffer hql = new StringBuffer("select f from Family f left join fetch f.project p left join fetch f.area a where 1=1 ");   //and len(f.idCode) = 10
+        Enumeration<String> paramsArray = request.getParameterNames();
+        while (paramsArray.hasMoreElements()) {
+            String name = paramsArray.nextElement();
+            if (name.endsWith("Array")) {
+                String value = ParamUtils.getString(request, name, "");
+                if (Strings.isNotEmpty(value)) {
+                    if (name.indexOf("_string") > 0) {
+                        value = this.getParamString(value);
+                    }
+                    String newName = name.substring(name.indexOf("_") + 1);
+                    String columnName = newName.substring(0, newName.indexOf("_"));
+
+                    hql.append(" and " + columnName + " in (" + value + ")");
+                }
+            }
+        }
+        hql.append(" order by a.id, f.familyCode ");
+        return this.list(pageInfo, hql.toString());
+    }
+    private String getParamString(String param) {
+        String[] array = param.split(",");
+        StringBuffer paramSb = new StringBuffer();
+        for (String s : array) {
+            paramSb.append("'" + s + "'").append(",");
+        }
+        paramSb.deleteCharAt(paramSb.lastIndexOf(","));
+        return paramSb.toString();
+    }
+
+    /**
+     * 综合统计查询方法
+     *
+     * @param pageInfo
+     */
+    public PageInfo<Family> getListForSearch(PageInfo<Family> pageInfo, HttpServletRequest request) {
+        StringBuffer hql = new StringBuffer("select f from Family f left join fetch f.project p left join fetch f.area a where 1=1");   //and len(f.idCode) = 10
+        Enumeration<String> paramsArray = request.getParameterNames();
+        while (paramsArray.hasMoreElements()) {
+            String name = paramsArray.nextElement();
+            if (name.endsWith("Array")) {
+                String value = ParamUtils.getString(request, name, "");
+                if (Strings.isNotEmpty(value)) {
+                    if (name.indexOf("_string") > 0) {
+                        value = this.getParamString(value);
+                    }
+                    String newName = name.substring(name.indexOf("_") + 1);
+                    String columnName = newName.substring(0, newName.indexOf("_"));
+
+                    hql.append(" and " + columnName + " in (" + value + ")");
+                }
+            }
+        }
+        hql.append(" order by a.id, f.familyCode ");
+        return this.list(pageInfo, hql.toString());
+    }
+
+    /**
+     * 得到所有家庭成员<主表uuid,List<家庭成员>>
+     *
+     * @return
+     */
+    public Map<Integer, List<FamilyPerson>> getFamilyPersonMap() {
+        String hql = "from FamilyPerson fp inner join fetch fp.family f order by f.id,fp.id";
+        Query query = this.getSession().createQuery(hql);
+        List<FamilyPerson> familyPersonList = query.list();
+        Map<Integer, List<FamilyPerson>> familyPersonMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(familyPersonList)) {
+            for (FamilyPerson familyPerson : familyPersonList) {
+                List<FamilyPerson> itemList = familyPersonMap.get(familyPerson.getFamily().getId()) == null ? new ArrayList<FamilyPerson>() : familyPersonMap.get(familyPerson.getFamily().getId());
+                itemList.add(familyPerson);
+                familyPersonMap.put(familyPerson.getFamily().getId(), itemList);
+            }
+        }
+        return familyPersonMap;
+    }
+
+    public Map<Integer, List<House>> getHouseMap() {
+        String hql = "from House fp inner join fetch fp.family f order by f.id,fp.id";
+        Query query = this.getSession().createQuery(hql);
+        List<House> houseList = query.list();
+        Map<Integer, List<House>> houseMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(houseList)) {
+            for (House house : houseList) {
+                List<House> itemList = houseMap.get(house.getFamily().getId()) == null ? new ArrayList<House>() : houseMap.get(house.getFamily().getId());
+                itemList.add(house);
+                houseMap.put(house.getFamily().getId(), itemList);
+            }
+        }
+        return houseMap;
+    }
+}

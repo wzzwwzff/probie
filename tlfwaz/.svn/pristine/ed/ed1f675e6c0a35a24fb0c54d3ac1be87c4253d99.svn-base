@@ -1,0 +1,74 @@
+package com.app.cq.service;
+
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.utils.StringUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by jmdf on 2018/9/5.
+ */
+@Service
+public class FamilyPersonService extends HibernateDao<FamilyPerson> {
+
+    /**
+     * 取得这个家庭成员信息
+     * @param familyId
+     * @return
+     */
+    public List<FamilyPerson> listByFamilyId(Integer familyId){
+        String hql = "from FamilyPerson where family.id=? order by id";
+        return list(hql, familyId);
+    }
+
+    /**
+     * 删除
+     */
+    public void deleteByFamilyId(int familyId){
+        String hql="delete FamilyPerson where familyId=?";
+        getSession().createQuery(hql).setInteger(0,familyId).executeUpdate();
+    }
+
+    /**
+     * 保存person
+     * @param list
+     */
+    public synchronized void saveFamilyPerson(List<String[]> list, Family family) {
+        String[] f_id = list.get(0);
+        if (f_id != null && f_id.length > 0) {
+            String[] f_personName = list.get(1);
+            String[] f_relation = list.get(2);
+            String[] f_sex = list.get(3);
+            String[] f_idCard = list.get(4);
+            String[] f_phone = list.get(5);
+            String[] f_isRegistered = list.get(6);
+            String[] f_addressType = list.get(7);
+            String[] f_pAddress = list.get(8);
+            String[] f_summary = list.get(9);
+            for (int i = 0; i < f_id.length; i++) {
+                if (StringUtils.isEmpty(f_personName[i]) && StringUtils.isNotEmpty(f_id[i])) {
+                    this.delete(Integer.valueOf(f_id[i]));
+                } else if (StringUtils.isNotEmpty(f_personName[i])) {
+                    FamilyPerson familyPerson = new FamilyPerson();
+                    if (StringUtils.isNotEmpty(f_id[i])) {
+                        familyPerson = this.get(Integer.valueOf(f_id[i]));
+                    }
+                    familyPerson.setpName(f_personName[i]);
+                    familyPerson.setpRelation(f_relation[i]);
+                    familyPerson.setpSex(f_sex[i] == null ? 1 : Integer.valueOf(f_sex[i]));
+                    familyPerson.setpIdCard(f_idCard[i]);
+                    familyPerson.setpPhone(f_phone[i]);
+                    familyPerson.setIsRegistered(f_isRegistered[i] == null ? 1 : Integer.valueOf(f_isRegistered[i]));
+                    familyPerson.setAddressType(f_addressType[i] == null ? 1 : Integer.valueOf(f_addressType[i]));
+                    familyPerson.setpAddress(f_pAddress[i]);
+                    familyPerson.setpMemo(f_summary[i]);
+                    familyPerson.setFamily(family);
+                    this.save(familyPerson);
+                }
+            }
+        }
+    }
+}

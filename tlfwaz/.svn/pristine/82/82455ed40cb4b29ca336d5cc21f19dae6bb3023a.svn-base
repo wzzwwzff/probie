@@ -1,0 +1,17 @@
+package com.app.cq.web.cq;
+
+import com.app.cq.service.FamilyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 财务管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/financial/*")
+public class FinanceController {
+    @Autowired
+    private FamilyService familyService;
+}

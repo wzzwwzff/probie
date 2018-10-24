@@ -1,0 +1,164 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.AzProject;
+import com.app.cq.model.House;
+import com.app.cq.service.AzProjectService;
+import com.app.cq.service.HouseService;
+import com.google.common.collect.Maps;
+import com.sqds.utils.Collections3;
+import com.sqds.web.ParamUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+
+/**
+ * 房源管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/house/*")
+public class HouseController {
+
+    @Autowired
+    private AzProjectService azProjectService;
+    @Autowired
+    private HouseService houseService;
+    @Autowired
+    private DataDictService dataDictService;
+
+    //房源配组查看
+    @RequestMapping("housePic")
+    public void housePic(){
+
+    }
+    /**
+     * 房源配组ztree项目楼号获取
+     *
+     * @param request
+     */
+        @RequestMapping("dataJson")
+    @ResponseBody
+    public List dataJson(HttpServletRequest request) {
+
+        List<AzProject> projectList = azProjectService.listAll();//项目
+        //按照组别封装数据为json格式
+        List<Map> jsonList = new ArrayList<Map>();
+
+        for (int i = 0; i < projectList.size(); i++) {
+            Map<String, Object> m = new LinkedHashMap<String, Object>();
+            m.put("name", projectList.get(i).getProjectName());
+            List childrenList = houseService.getHouseNumInfo(projectList.get(i).getId());
+            List<Map> list = new ArrayList<Map>();
+            for (int j = 0; j < childrenList.size(); j++) {
+                Map map = new HashMap();
+                map.put("id", projectList.get(i).getId());
+                map.put("name", childrenList.get(j) + "号楼");
+                //Object[] objects=(Object[])childrenList.get(j);
+                //map.put("name", objects[1] + "号楼");
+                //map.put("houseId", objects[0]);
+                map.put("icon", "/static/plugin/zTree_v3-master/css/zTreeStyle/img/diy/1_close.png");
+                list.add(map);
+            }
+            m.put("children", list);
+            m.put("open", true);
+            jsonList.add(m);
+        }
+        return jsonList;
+    }
+
+    /**
+     * 加载楼盘图
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("housePicChooses")
+    public void housePicChooses(HttpServletRequest request, ModelMap modelMap, int id, String buildNum){
+        Integer projectUuid = id;
+        AzProject project = this.azProjectService.get(projectUuid);
+
+        Map<String, String> houseTypeDataDictMap = this.dataDictService.getMapByParentAttributeNameForValue("户型");
+        List<String> unitList = this.houseService.distinctUnit(project.getId(), buildNum);// 获取所有单元
+        // 各个单元的最大房号<单元号，最大房号>
+        Map<String, String> maxRoomByUnitMap = this.houseService.getMaxRoomByUnit(project.getId(), buildNum);
+        // 最大楼层
+        int maxFloor = this.houseService.getMaxFloor(project.getId(), buildNum);
+        // 所有房源
+        List<House> houseList = this.houseService.listHouse(project.getId(), buildNum);
+        Map<String, House> houseMap = new HashMap<String, House>();// <单元-房号:house>
+        if (Collections3.isNotEmpty(houseList) && houseList.size() > 0) {
+            for (House house : houseList) {
+                String code = house.getUnitNum() + "-" + house.getHouseNum();
+                houseMap.put(code, house);
+            }
+        }
+        //单元  房号  居室
+        Map<String, Map<String, String>> houseTypeMap = this.houseService.getHouseTypeByProjectIdAndBuildNum(project.getId(), buildNum);
+        List<DataDict> flagList = dataDictService.getDataDictList("房屋状态");
+        List<DataDict> typeList = dataDictService.getDataDictList("户型");
+        Map<String, DataDict> flagMap = Maps.newLinkedHashMap();
+        Map<String, String> typeMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(flagList)) {
+            for (DataDict dataDict : flagList) {
+                flagMap.put(dataDict.getAttributeValue(), dataDict);
+            }
+        }
+        if (Collections3.isNotEmpty(typeList)) {
+            for (DataDict dataDict : typeList) {
+                typeMap.put(dataDict.getAttributeValue(), dataDict.getAttributeColor());
+            }
+        }
+        modelMap.addAttribute("project", project);
+        modelMap.addAttribute("buildNum", buildNum);
+        modelMap.addAttribute("unitList", unitList);
+        modelMap.addAttribute("maxRoomByUnitMap", maxRoomByUnitMap);
+        modelMap.addAttribute("maxFloor", maxFloor);
+        modelMap.addAttribute("houseMap", houseMap);
+        modelMap.addAttribute("houseTypeMap", houseTypeMap);
+        modelMap.addAttribute("houseTypeDataDictMap", houseTypeDataDictMap);
+        modelMap.addAttribute("flagMap", flagMap);
+        modelMap.addAttribute("typeMap", typeMap);
+    }
+
+    //房源配组信息回显
+    @RequestMapping("houseMsg")
+    public void houseMsg(HttpServletRequest request, ModelMap modelMap){
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        House house = this.houseService.get(houseId);
+        modelMap.addAttribute("house", house);
+
+        Integer projectId = ParamUtils.getInt(request, "projectId", 0);
+        AzProject project = this.azProjectService.get(projectId);
+        modelMap.addAttribute("project", project);
+    }
+
+    /**
+     * 房源信息查看（可以查看实测面积）
+     */
+    @RequestMapping("housePic2")
+    public void housePic2(){
+
+    }
+
+    /**
+     * 加载楼盘图
+     */
+    @RequestMapping("housePicChooses2")
+    public void housePicChooses2(HttpServletRequest request, ModelMap modelMap, int id, String buildNum){
+        this.housePicChooses(request, modelMap, id, buildNum);
+    }
+
+    //房源配组信息回显
+    @RequestMapping("houseMsg2")
+    public void houseMsg2(HttpServletRequest request, ModelMap modelMap){
+       this.houseMsg(request, modelMap);
+    }
+
+}

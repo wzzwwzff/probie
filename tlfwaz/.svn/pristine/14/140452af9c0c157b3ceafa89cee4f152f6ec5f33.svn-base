@@ -1,0 +1,254 @@
+package com.app.cq.web.cq;
+
+import com.app.common.service.DataDictService;
+import com.app.cq.map.ContractExcelMap;
+import com.app.cq.model.*;
+import com.app.cq.service.AreaService;
+import com.app.cq.service.ProjectService;
+import com.app.cq.service.StatisticsService;
+import com.app.cq.utils.RedirectAttributesExcel;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.web.Servlets;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * 数据统计查询
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/statistics/*")
+public class StatisticsController {
+    @Autowired
+    private StatisticsService statisticsService;
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private AreaService areaService;
+
+    /**
+     * 安置房整体情况统计
+     */
+    @RequestMapping("houseStatistics")
+    public void houseStatistics(ModelMap modelMap){
+        Map<String, Map<String, Map>> buildNumMap = this.statisticsService.houseMap();
+        modelMap.addAttribute("buildNumMap",buildNumMap);
+        List list = this.statisticsService.houseStatistics();
+        modelMap.addAttribute("list",list);
+    }
+
+
+    /**
+     * 整体情况统计
+     */
+    @RequestMapping("processStatistics")
+    public void processStatistics(ModelMap modelMap){
+        Map<String,Map> map = statisticsService.processMap();
+        modelMap.addAttribute("map",map);
+    }
+
+    /**
+     * 平移情况统计
+     */
+    @RequestMapping("pytjStatistics")
+    public void pytjStatistics(ModelMap modelMap){
+        Map<String,Map> signMap = statisticsService.pyprocessMap();
+        Map<String,Map> xfMap = statisticsService.pyprocessMap1();
+        modelMap.addAttribute("signMap",signMap);
+        modelMap.addAttribute("xfMap",xfMap);
+    }
+
+    /**
+     * 用户操作统计
+     */
+    @RequestMapping("userStatistics")
+    public void userStatistics(ModelMap modelMap){
+        Map<String, String> userMap = this.dataDictService.getMapByParentAttributeNameForName("用户操作统计");
+//        Map<String,Map<String,Map>> map = Maps.newHashMap();
+//        for(Map.Entry<String,String> entry:userMap.entrySet()){
+//            String userName = entry.getKey();
+//        }
+        Map<String,Map<String,Map>> map=statisticsService.userHandleMap();
+        modelMap.addAttribute("userMap",userMap);
+        modelMap.addAttribute("map",map);
+    }
+
+    /**
+     * 数据综合查询
+     * @param request
+     * @param model
+     */
+    @RequestMapping("main")
+    public void main(HttpServletRequest request, ModelMap model) {
+        List<Project> projectName = projectService.listAll();
+        model.addAttribute("projectName", projectName);
+
+        List<Area> areaName = areaService.listAll();
+        model.addAttribute("areaName",areaName);
+
+        Map<String, String> xfStatus = this.dataDictService.getMapByParentAttributeNameForName("选房状态");
+        model.addAttribute("xfStatus", xfStatus);
+
+        Map<String, String> signStatus = this.dataDictService.getMapByParentAttributeNameForName("签约状态");
+        model.addAttribute("signStatus", signStatus);
+
+        Map<String, String> jsStatus = this.dataDictService.getMapByParentAttributeNameForName("结算状态");
+        model.addAttribute("jsStatus", jsStatus);
+
+        Map<String, String> isSpecial = this.dataDictService.getMapByParentAttributeNameForName("是否平移家庭");
+        model.addAttribute("isSpecial", isSpecial);
+
+    }
+
+    /**
+     * 综合查询
+     */
+    @RequestMapping("result")
+    public void result(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo = this.statisticsService.getListForCompositeSearch(pageInfo, request);
+        modelMap.addAttribute("postValue", pageInfo.getPostValue());
+        modelMap.addAttribute("pageInfo", pageInfo);
+    }
+
+    /**
+     * 综合导出
+     * @param request
+     * @param redirectAttributes
+     * @return
+     * @throws IllegalAccessException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     */
+    @RequestMapping("resultExcel")
+    public String resultExcel(HttpServletRequest request, RedirectAttributes redirectAttributes) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Map<String, String> xfStatus = this.dataDictService.getMapByParentAttributeNameForValue("选房状态");
+        Map<String, String> signStatus = this.dataDictService.getMapByParentAttributeNameForValue("签约状态");
+        Map<String, String> jsStatus = this.dataDictService.getMapByParentAttributeNameForValue("结算状态");
+        Map<String, String> sex = this.dataDictService.getMapByParentAttributeNameForValue("性别");
+        Map<String, String> isPingy = this.dataDictService.getMapByParentAttributeNameForValue("是否");
+
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo.setPageSize(Integer.MAX_VALUE);
+        pageInfo = this.statisticsService.getListForSearch(pageInfo, request);
+        List dataList = Lists.newArrayList();
+        //存储列名
+        List<String> theadsList = new ArrayList<String>();
+        //存储字段名
+        List<String> nameList = new ArrayList<String>();
+        String familyPerson = "";
+        String houseInfo = "";
+
+        if (pageInfo.getTotalCount() > 0) {
+            Enumeration<String> param = request.getParameterNames();
+            while (param.hasMoreElements()) {
+                String name = param.nextElement();
+                //当不是查询条件时
+                if (name.indexOf("search_") == -1) {
+                    String thead = ContractExcelMap.excelMap().get(name).toString();
+                    theadsList.add(thead);
+                    nameList.add(name);
+                }
+                if (name.equals("f_familyPerson")){
+                    familyPerson = "familyPerson";
+                }
+                if (name.equals("f_houseInfo")){
+                    houseInfo = "houseInfo";
+                }
+            }
+
+            Map<Integer, List<FamilyPerson>> familyPersonMap = statisticsService.getFamilyPersonMap();
+            Map<Integer, List<House>> houseMap = statisticsService.getHouseMap();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            for (Family family : (List<Family>) pageInfo.getResult()) {
+                //合同编号
+                List list = new ArrayList();
+
+                for (int i = 0; i < nameList.size(); i++) {
+                    String value = "";
+                    String property = nameList.get(i);
+                    List<FamilyPerson> familyPersonList = null;
+                    List<House> houseList = null;
+                    if (property.indexOf("f_") == 0) {
+                        if(property.equals("f_familyPerson")){
+                            familyPersonList = familyPersonMap.get(family.getId());
+                            if(familyPersonList==null){
+                                familyPersonList = new ArrayList<FamilyPerson>();
+                            }
+                            if(familyPersonList.size()==0){
+                                familyPersonList.add(new FamilyPerson());
+                            }
+                            list.add(familyPersonList);
+                        }else if(property.equals("f_houseInfo")){
+                            houseList = houseMap.get(family.getId());
+                            if(houseList==null){
+                                houseList = new ArrayList<House>();
+                            }
+                            if(houseList.size()==0){
+                                houseList.add(new House());
+                            }
+                            list.add(houseList);
+                        }else{
+                            value = BeanUtils.getProperty(family, property.split("_")[1]);
+                        }
+                    }else {
+                        value = BeanUtils.getProperty(family, property);
+                    }
+
+                    if (value != null && (value.equals("0.00") || value.equals("0"))) {
+                        value = "";
+                    }
+                    if (property.equals("f_xfStatus")) {
+                        value = xfStatus.get(value) == null ? "" : xfStatus.get(value);
+                    } else if (property.equals("f_signStatus")) {
+                        value = signStatus.get(value) == null ? "" : signStatus.get(value);
+                    } else if (property.equals("f_jsStatus")) {
+                        value = jsStatus.get(value) == null ? "" : jsStatus.get(value);
+                    }else if(property.equals("f_isSpecial")){
+                        value = isPingy.get(value) == null ? "" : isPingy.get(value);
+                    }
+                    else if (property.equals("f_sex")) {
+                        value = sex.get(value) == null ? "" : sex.get(value);
+                    }else if (property.equals("f_signDate") || property.equals("f_moveBackDate") || property.equals("f_xfDate") || property.equals("f_xyPrintDate") || property.equals("f_jsDate")) {
+                        if (value == null) {
+                            value = "";
+                        }else{
+                            try {
+                                Date date = sdf.parse(value);
+                                value = sdf.format(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    if (value == null) {
+                        value = "";
+                    }
+                    if (!property.equals("f_familyPerson") && !property.equals("f_houseInfo")){
+                        list.add(value);
+                    }
+                }
+                dataList.add(list);
+            }
+        }
+        RedirectAttributesExcel.addFlashAttribute(redirectAttributes, "综合信息台账", "综合信息台账", theadsList.toArray(new String[theadsList.size()]), dataList,familyPerson,houseInfo);
+        return "redirect:/cq/common/export/excel";
+    }
+}

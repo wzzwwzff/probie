@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>结算证明打印</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 17px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 25px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitle {
+            clear: both;
+            text-indent: 0em;
+            font-size: 16px;
+            text-align: center;
+            line-height: 20px;
+            /*font-weight: bold;*/
+            margin-top: 15px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 30px;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 24px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 40px;
+        }
+
+        .dataTable tr {
+            height: 30px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        #footer {
+            margin-bottom: 7px;
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .border {
+            padding-left: 1px;
+            padding-right: 1px;
+            border-bottom: 0.5px solid #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .space {
+            padding-left: 200px;
+        }
+
+        .checkCls{
+            width: 40px;
+            height: 20px;;
+            border: 1px solid #000000;
+        }
+
+        .bold{
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!--
+<div id="footer">
+    第<span id="pagenumber"></span>页，共<span id="pagecount"></span>页
+</div>
+-->
+<div class="printContent">
+    <p style="text-align:center;line-height: 26px;margin: 20px ;"><span style="font-weight: bold;font-size: 28px">长辛店东河沿村回迁房项目结算通知书</span></p>
+    <p style="margin-top: 30px;text-indent: 0em;">尊敬的：<span class="border">${family.name}</span>先生/女士（身份证 <span style="margin-left: 2px;">${family.idCard}</span>）：</p>
+    <p>请您于<span class="border">　　　　</span>年<span class="border">　　　　</span>月<span class="border">　　　　</span>日到<span class="border">　　　　</span>办理下列房屋的结算手续：</p>
+    <p>第1套：房号：<span class="border">　　　　</span>  建筑面积：<span class="border">　　　　</span></p>
+    <p>第2套：房号：<span class="border">　　　　</span>  建筑面积：<span class="border">　　　　</span></p>
+    <p style="text-indent: 0em;">一、办理结算手续须携带的相关资料：</p>
+    <p>1、本通知书；</p>
+    <p>2、被腾退人身份证原件；</p>
+    <p>3、购房款收据</p>
+    <p>4、有银联标志的储蓄卡</p>
+    <p>5、委托他人办理的，须提供公证委托书、双方身份证原件；</p>
+    <p style="text-indent: 0em;">二、关于结算费用的说明：</p>
+    <p>1、根据《长辛店东河沿村回迁项目购房协议》您所购回迁房<span class="border">　　　</span>套，建筑面积<span class="border">　　　</span>平方米，已结购房款<span class="border">　　　</span>元。</p>
+    <p>2、建筑面积变化，您所购房屋建筑面积现为<span class="border">　　　　</span>平方米，按回迁房售价计算，购房款为<span class="border">　　　　</span>元，</p>
+    <p >其中：</p>
+    <p><span style="margin-left: 48px"></span>1）应收回迁房购房款<span class="border">　　　　</span>元；（根据实测面积据实结算）</p>
+    <p>加　　2）应收专项维修资金<span class="border">　　　　</span>元；（收费标准：200元/㎡）</p>
+    <p>减　　3）已收回迁房购房款<span class="border">　　　　</span>元；</p>
+    <p>款项折抵后，本次您应支付人民币（大写）<span class="border">　　　　</span>（¥<span class="border">　　　　</span>）。</p>　　　
+    <p style="text-indent: 0em;">三、其他通知事项：</p>
+    <p>1. 为保证交易安全，被腾退人缴纳结算款，须刷卡支付，仅限使用一张带有银联标识的储蓄卡。</p>
+    <p>2. 请您按照我们通知的时间、地点办理结算、入住手续，逾期办理上述手续，则视为北京鹏睿房地产开发有限公司交付了回迁房屋，从逾期之日回迁房屋相关的一切责任、风险、费用由您承担。</p>
+    <p>3. 结算处咨询电话：</p>
+    <p>4. 结算处工作时间：</p>
+    <p style="margin-top: 30px;text-indent: 0em"> 北京鹏睿房地产开发有限公司 <span style="margin-left: 120px;"> 被腾退人：</span></p>
+    <p style="margin-top: 10px;text-indent: 0em">经办人：</p>
+    <p style="text-indent: 2em;"><span style="margin-left: 10px">　　　　</span>年<span style="margin-left: 11px;">　　</span>月<span style="margin-left: 12px;">　　</span>日<span style="margin-left: 110px;"><span style="margin-left: 15px;">　　　　</span>年<span style="margin-left: 16px;">　　</span>月<span style="margin-left: 17px;">　　</span>日</span></p>
+</div>
+</body>
+</html>

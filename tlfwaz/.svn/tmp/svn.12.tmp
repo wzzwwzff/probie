@@ -1,0 +1,514 @@
+package com.app.cq.service;
+
+import com.app.cq.en.DataPhase;
+import com.app.cq.en.HouseStatus;
+import com.app.cq.en.SignStatus;
+import com.app.cq.exception.Precondition;
+import com.app.cq.exception.Response;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.model.House;
+import com.app.cq.utils.BigDecimals;
+import com.google.common.collect.Maps;
+import com.app.cq.utils.GetCurrentUser;
+import com.google.common.collect.Lists;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+import com.sqds.web.ParamUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by jmdf on 2018/9/5.
+ */
+@Service
+public class HouseService extends HibernateDao<House> {
+
+    @Resource
+    private FamilyService familyService;
+    @Resource
+    private FamilyPersonService familyPersonService;
+    @Resource
+    private HistoryInfoService historyInfoService;
+
+    public PageInfo<House> houseList(PageInfo pageInfo,Integer projectId){
+        String hql = "from House where azProjectId=? order by id";
+        return list(pageInfo,hql, projectId);
+    }
+
+    /**
+     * 得到家庭选择房源
+     * @param familyId
+     * @return
+     */
+    public List<House> getHouseListByFamilyId(Integer familyId) {
+        String hql = "from House h inner join fetch h.azProject where h.family.id = ? order by h.id";
+        return this.list(hql, familyId);
+    }
+
+    /****************************
+     * 得到家庭选择平移房源
+     * @param familyId
+     * @return
+     */
+    public List<House> getHouseListByMoveFamilyId(Integer familyId) {
+        String hql = "from House h inner join fetch h.azProject where  h.isSpecial=1 and h.family.id = ? order by h.id";
+        return this.list(hql, familyId);
+    }
+
+    /**
+     * 按照项目，楼号信息
+     */
+    public List getHouseNumInfo(int projectId) {
+        String sql = "select distinct buildNum from House where azProjectId='" + projectId +"' order by id,buildNum";
+        List<List> list = super.getSession().createSQLQuery(sql).list();
+        return list;
+    }
+
+    /**
+     * 取得所有单元
+     *
+     * @param projectUuid
+     * @param buildNum
+     */
+    public List<String> distinctUnit(Integer projectUuid, String buildNum) {
+        String hql = "select distinct h.unitNum from House h where azProjectId=:projectUuid and h.buildNum=:buildNum order by h.unitNum desc";
+        Query query = this.getSession().createSQLQuery(hql).setParameter("projectUuid", projectUuid).setString("buildNum", buildNum);
+        return query.list();
+    }
+
+
+    /**
+     * 获取最大房间号(楼层)
+     *
+     * @param projectUuid
+     * @param buildingNum
+     * @return
+     */
+    public int getMaxFloor(Integer projectUuid, String buildingNum) {
+        String hql = "select max(substring(h.houseNum,1,2)) from House h where h.azProject.id = ? and h.buildNum = ?";
+        List list = this.getSession().createQuery(hql).setParameter(0, projectUuid).setString(1, buildingNum).list();
+        int maxFh = 0;
+        if (Collections3.isNotEmpty(list) && list.size() > 0) {
+            Object o = list.get(0);
+            if (o != null) {
+                maxFh = Integer.valueOf(String.valueOf(o));
+            }
+        }
+        return maxFh;
+    }
+
+    /**
+     * 获取各项目楼号
+     * @return
+     */
+    public Map<Integer, List<String>> getBuildNum(){
+        Map<Integer, List<String>> map = Maps.newLinkedHashMap();
+        String sql = "select azProjectId,buildNum from House group by azProjectId,buildNum order by azProjectId,buildNum";
+        List<Map> list = this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        if (Collections3.isNotEmpty(list)) {
+            List<String> strList = null;
+            for (Map m : list) {
+                Integer projectId = Integer.valueOf(m.get("azProjectId").toString());
+                String buildNum = m.get("buildNum").toString();
+                strList = map.get(projectId);
+                strList = Collections3.isNotEmpty(strList) ? strList : Lists.<String>newArrayList();
+                strList.add(buildNum);
+                map.put(projectId, strList);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 单元、房号、居室
+     * @param projectUuid
+     * @param buildNum
+     * @return
+     */
+    public Map<String, Map<String, String>> getHouseTypeByProjectIdAndBuildNum(Integer projectUuid, String buildNum) {
+
+        String sql = "select distinct unitNum,SUBSTRING(houseNum,3,2) as num,houseType from House where azProjectId =:projectUuid and buildNum = :buildNum group by buildNum,unitNum,houseNum,houseType ";
+        Query query = this.getSession().createSQLQuery(sql).setInteger("projectUuid", projectUuid).setString("buildNum", buildNum);
+        List<Map> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+        Map<String, Map<String, String>> map = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(list)) {
+            Map<String, String> childItemMap = null;
+            for (Map m : list) {
+                String unitNum = m.get("unitNum").toString();
+                String num = m.get("num").toString();
+                String houseType = m.get("houseType").toString();
+                childItemMap = map.get(unitNum);
+                childItemMap = Collections3.isEmpty(childItemMap) ? Maps.<String, String>newLinkedHashMap() : childItemMap;
+
+                childItemMap.put(num, houseType);
+                map.put(unitNum, childItemMap);
+            }
+        }
+        return map;
+    }
+
+
+    /**
+     * 取得单元最大的房号
+     *
+     * @param projectUuid
+     * @param buildNum
+     * @return
+     */
+    public Map<String, String> getMaxRoomByUnit(Integer projectUuid, String buildNum) {
+        String hql = "select h.unitNum as unitNum, max(substring(h.houseNum,3,2)) as maxRoom from House h where h.azProject.id = ? and h.buildNum = ? group by h.unitNum";
+        Query query = this.getSession().createQuery(hql).setParameter(0, projectUuid).setString(1, buildNum).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map> list = query.list();
+        Map<String, String> resultMap = Maps.newHashMap();
+        if (Collections3.isNotEmpty(list)) {
+            for (Map map : list) {
+                String unitNum = map.get("unitNum").toString();
+                String maxRoom = map.get("maxRoom").toString();
+                resultMap.put(unitNum, maxRoom);
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据项目、楼号查询该楼下的所有房源数据
+     *
+     * @param projectUuid
+     * @param buildingNum
+     * @return
+     */
+    public List<House> listHouse(Integer projectUuid, String buildingNum) {
+        return list("from House h inner join fetch h.azProject p where p.id = ? and h.buildNum= ? order by h.buildNum,h.unitNum,h.houseNum", projectUuid, buildingNum);
+    }
+
+    /**
+     * 获取已选房list
+     * @param familyId
+     * @return
+     */
+    public List<House> getChooseHouseById(Integer familyId) {
+        String hql = "from House h inner join fetch h.azProject p where h.houseStatus = ? and h.family.id = ? order by p.id,h.buildNum,h.unitNum,h.houseNum";
+        return this.list(hql, 2, familyId);
+    }
+
+    /**
+     * 保存所选房源
+     */
+    public synchronized Response saveBuildInfo(HttpServletRequest request){
+        Response response = new Response();
+        Integer familyId = ParamUtils.getInt(request, "familyUuid",0);
+        Integer houseUuid = ParamUtils.getInt(request, "houseUuid", 0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "1111", "数据错误！");
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(family.getId());
+        //Precondition.checkAjaxArguement(family.getXfStatus() != 2 ,"2211","该户选房信息已锁定，填写选房退回申请退回后后可重新选房");
+        //保存房源验证
+        House house = this.get(houseUuid);
+        Precondition.checkAjaxArguement(house != null, "3333", "找不到所选安置房源!");
+        Precondition.checkAjaxArguement(house.getHouseStatus() != 2, "4444", "该房源已经被选择，请选择其他房源!");
+        /*if(house.getHouseStatus() == 2){
+            response.setCode("4444");
+            response.setMessage("该房源已经被选择，请选择其他房源!");
+        }*/
+
+        //保存房源
+        String userName = GetCurrentUser.getLoginUser(request).getRealName();
+        Date currentDate = new Date();
+        house.setChooseDate(currentDate);
+        house.setOpName(userName);   //保存操作人员姓名
+        house.sethPerson(family.getName());
+        house.sethIdCard(family.getIdCard());
+        house.setHouseStatus(2);//状态设置为已选择
+        house.setFamily(family);
+        //东河沿选房公示标记
+        if(family.getArea().getAreaName().equals("东河沿")){
+            house.setHouseDecrip(2);
+        }
+        this.save(house);
+
+        List<House> houseList = this.getChooseHouseById(family.getId());
+        historyInfoService.histroySave(request,family,familyPersonList,houseList,DataPhase.CHOOSEHOUSE.getIndex());
+        //保存选房日期
+        if (family.getXfDate() == null) {//保存选房日期，第一次保存
+            family.setXfDate(currentDate);
+        }
+        this.familyService.save(family);
+        //更新选房面积、购房款等家庭数据
+        this.calculateHouseMoney(family.getId());
+        return response;
+    }
+
+    /**
+     * 保存变更购房人信息
+     *
+     * @param request
+     * @param familyId
+     */
+    public Map saveChangePerson(HttpServletRequest request, Integer familyId, Integer houseId, String params,String type) {
+        Family family = familyService.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "0012", "家庭数据错误");
+        String[] idArray=params.split(",");
+        FamilyPerson familyPerson=null;
+        String name="";
+        String idCard="";
+        for (String s : idArray) {
+            Integer id=Integer.valueOf(s);
+            familyPerson=this.familyPersonService.get(id);
+            if(!name.equals("")&&!idCard.equals("")){
+                name=name+","+familyPerson.getpName();
+                idCard=idCard+","+familyPerson.getpIdCard();
+            }else{
+                name=name+familyPerson.getpName();
+                idCard=idCard+familyPerson.getpIdCard();
+            }
+        }
+        Map<String ,String > map = new HashMap<>();
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(family.getId());
+        House house = this.get(houseId);
+        Precondition.checkAjaxArguement(house != null, "0012", "房源信息错误");
+        house.sethPerson(name);
+        house.sethIdCard(idCard);
+        if (type.equals("变更继承人")){
+            house.setInheritType(1);
+            map.put("success","true");
+            map.put("message","变更继承人成功");
+        }else {
+            map.put("success","true");
+            map.put("message","变更购房人成功");
+        }
+        this.save(house);
+
+        List<House> houseList = this.getChooseHouseById(family.getId());
+
+        historyInfoService.histroySave(request,family,familyPersonList,houseList, DataPhase.GFPERSON.getIndex());
+        return map;
+    }
+
+    /**
+     * 删除房源
+     */
+    public synchronized Response delHouseInfo(HttpServletRequest request){
+        Response response = new Response();
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        Family family = this.familyService.get(familyId);
+        House house = this.get(houseId);
+        Precondition.checkAjaxArguement(house != null, "0012", "房源信息错误");
+        Precondition.checkAjaxArguement(house.getHouseStatus() != 1, "4444", "该房源还未被选，暂不需要撤销！");
+        house.setChooseDate(null);
+        house.setOpName(null);   //保存操作人员姓名
+        house.sethPerson(null);
+        house.sethIdCard(null);
+        house.setHouseStatus(HouseStatus.ALLOW.getIndex());//状态设置为可选状态
+        house.setFamily(null);
+        //东河沿选房公示标记
+        if(family.getArea().getAreaName().equals("东河沿")){
+            house.setHouseDecrip(null);
+        }
+        this.save(house);
+        List<House> houseList = this.listByProperty("family.id", family.getId());
+        if (Collections3.isEmpty(houseList)) {
+            //不是需要更换房源的840户 清空主要家庭的选房信息
+            family.setXfDate(null);
+            this.familyService.save(family);
+        }
+        //更新选房面积、购房款等家庭数据
+        this.calculateHouseMoney(family.getId());
+        return response;
+    }
+
+    /**
+     * 按安置项目、楼号、单元、房号 查找房源
+     */
+    public House getHouseByAll(Integer azProjectId,String buildNum,String unitNum,String houseNum) {
+        String hql = "from House where azProject.id = ? and buildNum = ? and unitNum = ? and houseNum = ?";
+        return findUnique(hql, azProjectId,buildNum,unitNum,houseNum);
+    }
+
+    /**
+     * 更新面积，购房款等...
+     *
+     * @param familyId
+     */
+    public synchronized void calculateHouseMoney(Integer familyId) {
+        Family family = this.familyService.get(familyId);
+        if (family == null) {
+            return;
+        }
+
+        BigDecimal purchaseHouseArea = new BigDecimal("0");   //实际选房面积
+        BigDecimal sjHouseArea = new BigDecimal("0");   //实际选房面积（实测面积累加）
+        List<House> houseList = this.getChooseHouseById(family.getId());   //查询已选房源
+        if (Collections3.isNotEmpty(houseList) && houseList.size() > 0) {
+            for (House house : houseList) {
+                purchaseHouseArea = BigDecimals.getSum(purchaseHouseArea, house.getBuildArea());  //将所有选的房的面积累加起来，即为实际安置面积
+                sjHouseArea = BigDecimals.getSum(sjHouseArea, house.getSjBuildArea());  //将所有选的房的面积累加起来，即为实际安置面积
+            }
+            family.setHouseNum(houseList.size());//已选房套数
+        }
+
+        //计算实测面积下的购房款
+        BigDecimal gfArea = BigDecimals.getNotNull(family.getGfArea()).add(new BigDecimal("15"));//购房指标 + 15
+        BigDecimal price = new BigDecimal("4000");
+        BigDecimal outPrice = new BigDecimal("6000");
+        BigDecimal inSjArea = new BigDecimal("0");
+        BigDecimal outSjArea = new BigDecimal("0");
+        BigDecimal inHouseSjMoney = new BigDecimal("0");
+        BigDecimal outHouseSjMoney = new BigDecimal("0");
+        BigDecimal totalHouseSjMoney = new BigDecimal("0");
+        if(sjHouseArea.compareTo(gfArea) == 1){//实测面积累加大于（购房指标+15）
+            outSjArea =sjHouseArea.subtract(gfArea);
+            inSjArea = gfArea;
+        }else if(sjHouseArea.compareTo(gfArea) == 0){//实测面积累加等于（购房指标+15）
+            inSjArea = gfArea;
+        }else if(sjHouseArea.compareTo(gfArea) == -1){//实测面积累加小于（购房指标+15）
+            inSjArea = sjHouseArea;
+
+        }
+        inHouseSjMoney = BigDecimals.getBigAndBigMul(inSjArea,price);
+        outHouseSjMoney = BigDecimals.getBigAndBigMul(outSjArea,outPrice);
+        totalHouseSjMoney = inHouseSjMoney.add(outHouseSjMoney);
+
+        family.setAzArea(purchaseHouseArea);//已选房面积
+        family.setAzSjArea(sjHouseArea);//已选房面积(实测面积累加)
+        family.setInSjArea(inSjArea); //超15㎡内面积(实际)
+        family.setOutSjArea(outSjArea);//	超15㎡外面积(实际)
+        family.setInHouseSjMoney(inHouseSjMoney);//超标内房款(4000／㎡）(实际)
+        family.setOutHouseSjMoney(outHouseSjMoney);//超标外房款6000／㎡）(实际)
+        family.setTotalHouseSjMoney(totalHouseSjMoney);//总购房款(实际)
+
+        this.familyService.save(family);
+    }
+
+    /**
+     * 建筑面积计算金额
+     *
+     * @param familyId
+     */
+    public synchronized void jmCalcHouseMoney(Integer familyId) {
+        Family family = this.familyService.get(familyId);
+        if (family == null) {
+            return;
+        }
+
+        BigDecimal purchaseHouseArea = new BigDecimal("0");   //实际选房面积（实际面积累加）
+        BigDecimal sjHouseArea = new BigDecimal("0");   //实际选房面积（预测建筑面积累加）
+        List<House> houseList = this.getChooseHouseById(family.getId());   //查询已选房源
+        if (Collections3.isNotEmpty(houseList) && houseList.size() > 0) {
+            for (House house : houseList) {
+                purchaseHouseArea = BigDecimals.getSum(purchaseHouseArea, house.getBuildArea());  //将所有选的房的面积累加起来，即为实际安置面积
+            }
+            family.setHouseNum(houseList.size());//已选房套数
+        }
+
+        //计算建筑面积下的购房款
+        BigDecimal gfArea = BigDecimals.getNotNull(family.getGfArea()).add(new BigDecimal("15"));//购房指标 + 15
+        BigDecimal price = new BigDecimal("4000");
+        BigDecimal outPrice = new BigDecimal("6000");
+        BigDecimal inSjArea = new BigDecimal("0");
+        BigDecimal outSjArea = new BigDecimal("0");
+        BigDecimal inHouseSjMoney = new BigDecimal("0");
+        BigDecimal outHouseSjMoney = new BigDecimal("0");
+        BigDecimal totalHouseSjMoney = new BigDecimal("0");
+        if(purchaseHouseArea.compareTo(gfArea) == 1){//实测面积累加大于（购房指标+15）
+            outSjArea =purchaseHouseArea.subtract(gfArea);
+            inSjArea = gfArea;
+        }else if(purchaseHouseArea.compareTo(gfArea) == 0){//实测面积累加等于（购房指标+15）
+            inSjArea = gfArea;
+        }else if(purchaseHouseArea.compareTo(gfArea) == -1){//实测面积累加小于（购房指标+15）
+            inSjArea = purchaseHouseArea;
+        }
+        inHouseSjMoney = BigDecimals.getBigAndBigMul(inSjArea,price);
+        outHouseSjMoney = BigDecimals.getBigAndBigMul(outSjArea,outPrice);
+        totalHouseSjMoney = inHouseSjMoney.add(outHouseSjMoney);
+
+        //保存用预测建筑面积累加算的购房款信息
+        family.setYxfArea(purchaseHouseArea);//已选房面积(预测面积累加)
+        family.setInFifArea(inSjArea); //超15㎡内面积(预测面积计算)
+        family.setOutFifArea(outSjArea);//	超15㎡外面积(预测面积计算)
+        family.setBnHouseMoney(inHouseSjMoney);//超标内房款(4000／㎡）(预测面积计算)
+        family.setBwHouseMoney(outHouseSjMoney);//超标外房款6000／㎡）(预测面积计算)
+        family.setzHouseMoney(totalHouseSjMoney);//总购房款(预测面积计算)
+
+        this.familyService.save(family);
+    }
+
+    /**
+     * 平移房源
+     */
+    /*public synchronized Response changeHouseInfo(HttpServletRequest request){
+        Response response = new Response();
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "1111", "数据错误！");
+
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(family.getId());
+        House house = this.get(houseId);
+        Precondition.checkAjaxArguement(house != null, "2222", "找不到所选安置房源!");
+
+
+        Precondition.checkAjaxArguement(house.getHouseStatus() == HouseStatus.SIGNED.getIndex(), "3333", "该房源还未被选，暂不需要撤销！");
+        //旧楼号加1
+        String newBuildNum = String.valueOf(Integer.valueOf(house.getBuildNum()) + 1);
+        House newHouse = this.getHouseByAll(house.getAzProject().getId(),newBuildNum,house.getUnitNum(),house.getHouseNum());
+        Precondition.checkAjaxArguement(newHouse.getHouseStatus() == HouseStatus.ALLOW.getIndex(), "4444", "该房源已经被选择，请选择其他房源!");
+
+        //清除旧的房源信息
+        house.setChooseDate(null);
+        house.setOpName(null);   //保存操作人员姓名
+        house.sethPerson(null);
+        house.sethIdCard(null);
+        house.setHouseStatus(HouseStatus.ALLOW.getIndex());//状态设置为可选状态
+        house.setFamily(null);
+        this.save(house);
+
+        //保存新的房源信息
+        newHouse.setChooseDate(new Date());
+        newHouse.setOpName(GetCurrentUser.getLoginUser(request).getRealName());   //保存操作人员姓名
+        newHouse.sethPerson(family.getName());
+        newHouse.sethIdCard(family.getIdCard());
+        newHouse.setHouseStatus(HouseStatus.SIGNED.getIndex());//状态设置为已选择
+        newHouse.setFamily(family);
+        this.save(newHouse);
+
+        //保存历史记录
+        List<House> houseList = this.getChooseHouseById(family.getId());
+        historyInfoService.histroySave(request,family,familyPersonList,houseList,DataPhase.CHOOSEHOUSE.getIndex());
+        //更新选房面积、购房款等家庭数据
+        this.calculateHouseMoney(family.getId());
+        return response;
+    }*/
+
+    /**
+     * 东河沿其他8个地块已选房源信息公示（2284套房源）
+     */
+    public PageInfo<House> getHouseList2(PageInfo<House> pageInfo){
+        Date currentDate = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format.format(currentDate);
+
+        return this.list(pageInfo,"from House h inner join fetch h.family f inner join fetch h.azProject p where h.houseDecrip = 1 and convert(f.signNumDate,char(10)) = " + date + " and f.xfDate is not null  and f.signStatus = "+ SignStatus.SIGN.getIndex()+"  order by f.signNumDate desc");
+    }
+
+    /**
+     * 东河沿已选房源信息公示（430户家庭的房源信息）
+     */
+    public PageInfo<House> getHouseList(PageInfo<House> pageInfo){
+        return this.list(pageInfo,"from House h inner join fetch h.family f inner join fetch h.azProject p where h.houseDecrip = 2 and f.xfDate is not null order by f.id,h.chooseDate");
+    }
+
+}

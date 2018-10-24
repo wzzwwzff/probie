@@ -1,0 +1,359 @@
+package com.app.cq.service;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.en.DataPhase;
+import com.app.cq.en.SignStatus;
+import com.app.cq.exception.Precondition;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.model.House;
+import com.google.common.collect.Lists;
+import com.sqds.exception.SqdsException;
+
+import java.math.BigInteger;
+import java.text.ParseException;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.web.ParamUtils;
+import com.sqds.utils.StringUtils;
+import com.sqds.web.Servlets;
+import org.hibernate.Transaction;
+import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * Created by jmdf on 2018/9/5.
+ */
+@Service
+public class FamilyService extends HibernateDao<Family> {
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private HouseService houseService;
+    @Autowired
+    private HistoryInfoService historyInfoService;
+
+    /**
+     * 获取家庭list 三表联查
+     */
+    public PageInfo<Family> familyList(PageInfo<Family> pageInfo) {
+        return this.list(pageInfo, "from Family f left join fetch f.project p left join fetch f.area a order by p.id,a.id,f.familyCode,f.id");
+    }
+
+    /**
+     * 获取家庭form 三表联查
+     */
+    public Family familyForm(int familyId) {
+        String hql = "from Family f left join fetch f.project p left join fetch f.area a where f.id = ? order by p.id,a.id,f.familyCode,f.id";
+        return findUnique(hql,familyId);
+    }
+
+    /**
+     * 获取未电话通知list 三表联查
+     */
+    public PageInfo<Family> phoneList(PageInfo<Family> pageInfo) {
+        return this.list(pageInfo, "from Family f where f.xfBatch is null or f.xfBatch = '' order by f.id");
+    }
+
+    /**
+     * 获取已电话通知list 三表联查
+     */
+    public PageInfo<Family> handed(PageInfo<Family> pageInfo) {
+        return this.list(pageInfo, "from Family f left join fetch f.project p left join fetch f.area a where f.xfBatch is not null and f.xfBatch <> '' order by p.id,a.id,f.familyCode,f.id");
+    }
+
+    /**
+     * 查询条件查询未电话通知
+     */
+    public PageInfo<Family> getSearchPhone(String name,String familyCode,PageInfo<Family> pageInfo){
+        StringBuffer hql = new StringBuffer("from Family f where (f.xfBatch is null or f.xfBatch = '') ");
+        if (!familyCode.trim().equals("")){
+            hql.append("and f.familyCode like '" + familyCode + "%'");
+        }
+        if (!name.trim().equals("")){
+            hql.append("and f.name like '" + name + "%'");
+        }
+        hql.append(" order by f.id");
+        return this.list(pageInfo,hql.toString());
+    }
+
+    /**
+     * 获取最大选房批次
+     */
+    public BigInteger getMaxXfBatch(){
+        String hql = "select IFNULL(MAX(xfBatch),0) from Family";
+        Object o = this.getSession().createSQLQuery(hql).uniqueResult();
+        return (BigInteger) o;
+    }
+    /**
+     * 获取最大选房时间
+     */
+    public Date getMaxXyXfDate(){
+        String hql = "select MAX(xyXfDate) from Family";
+        Object o = this.getSession().createSQLQuery(hql).uniqueResult();
+        return (Date) o;
+    }
+
+    /**
+     * 获取前personNum人的id
+     */
+    public List getPersonNumId(Integer personNum){
+        String hql = "select f.id from Family f where f.xfnum is not null and (f.xfBatch is null or f.xfBatch = '') ORDER BY f.xfNum limit 0," + personNum;
+        List list = this.getSession().createSQLQuery(hql).list();
+        return list;
+    }
+
+    /**
+     * 选房批次，时间设置
+     */
+    public synchronized void setXfBatch(HttpServletRequest request){
+        String handDate = ParamUtils.getString(request,"handUpDate","");
+        String handPersonNum = ParamUtils.getString(request,"handPersonNum","");
+        if (!handDate.equals("") || !handPersonNum.equals("")){
+            Integer personNum = Integer.valueOf(handPersonNum);
+            Date date = null;
+            try {
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(handDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+//            Transaction tran = getSession().beginTransaction();
+//            while (true){
+                List personNumIdList = this.getPersonNumId(personNum);
+//                if (personNumIdList.size() == 0){
+//                    break;
+//                }
+
+                int maxXfBatch = this.getMaxXfBatch().intValue() + 1;
+                c.add(Calendar.DAY_OF_MONTH, 1);// 今天+1天
+//                int maxXfBatch =5;
+
+                for (int i = 0; i <personNumIdList.size(); i++) {
+                    Integer familyId = (Integer) personNumIdList.get(i);
+                    Family family = this.get(familyId);
+//                    Date maxXyXfDate = this.getMaxXyXfDate();
+//                    Date xyXFDate = c.getTime();
+//                    if (family == null){
+//                        tran.rollback();//
+//                    }
+                    family.setXfBatch(maxXfBatch);
+                    System.out.println("max++:*********"+maxXfBatch+"+++++"+i);
+                    family.setXyXfDate(c.getTime());
+                    this.save(family);
+
+                    System.out.println("max++:*__________________"+i);
+                    System.out.println("max++:*********"+family.getXfBatch()+"+++++"+i);
+                }
+//            }
+//            tran.commit();
+        }else {
+            throw new SqdsException("批次人数或时间为空，请核查");
+        }
+
+    }
+
+    /**
+     * 保存
+     */
+    public synchronized void saveFamily(HttpServletRequest request, Family family){
+        save(family);
+
+        //保存在册人口
+        String[] familyIdArray  = ParamUtils.getStringParameters(request, "pId");
+
+        if (familyIdArray  != null && familyIdArray .length > 0) {
+            String[] familyPersonName = ParamUtils.getStringParameters(request, "pName");
+            String[] familyPersonSex = ParamUtils.getStringParameters(request, "pSex");
+            String[] familyPersonIdCard = ParamUtils.getStringParameters(request, "pIdCard");
+            String[] familyPersonPhone = ParamUtils.getStringParameters(request, "pPhone");
+            String[] familyPersonRelation = ParamUtils.getStringParameters(request, "pRelation");
+            String[] familyPersonAddress = ParamUtils.getStringParameters(request, "pAddress");
+            String[] familyPersonIsRegistered = ParamUtils.getStringParameters(request, "isRegistered");
+            String[] familyPersonMemo = ParamUtils.getStringParameters(request, "pMemo");
+            String[] familyPersonAddressType = ParamUtils.getStringParameters(request, "pAddressType");
+            String[] familyPersonAge = ParamUtils.getStringParameters(request, "pAge");
+            String[] familyPersonLiveStatus = ParamUtils.getStringParameters(request, "liveStatus");
+            FamilyPerson familyPerson = null;
+            for (int i = 0; i < familyIdArray .length; i++) {
+                if (StringUtils.isEmpty(familyPersonName[i].trim())) {
+                    if (StringUtils.isNotEmpty(familyIdArray[i])) {
+                        this.familyPersonService.deleteByFamilyId(Integer.valueOf(familyIdArray[i]));
+                    }
+                    continue;
+                }
+                familyPerson = null;
+                if (StringUtils.isNotEmpty(familyIdArray[i])) {
+                    familyPerson = this.familyPersonService.get(Integer.valueOf(familyIdArray[i]));
+                }
+
+                if (familyPerson == null) {
+                    familyPerson = new FamilyPerson();
+                    familyPerson.setFamily(family);
+                }
+
+                List<DataDict> sexList = dataDictService.getDataDictList("在册/非在册");
+                Integer isRegistered = 0;
+                for (int j = 0; j < sexList.size(); j++) {
+                    if (sexList.get(j).getAttributeName().equals(familyPersonIsRegistered[j])){
+                        isRegistered = Integer.valueOf(sexList.get(j).getAttributeValue());
+                    }
+                }
+                List<DataDict> addressTypeList = dataDictService.getDataDictList("户籍性质");
+                Integer addressType = 0;
+                for (int j = 0; j < addressTypeList.size(); j++) {
+                    if (addressTypeList.get(j).getAttributeName().equals(familyPersonAddressType[j])){
+                        addressType = Integer.valueOf(addressTypeList.get(j).getAttributeValue());
+                    }
+                }
+
+                familyPerson.setAddressType(addressType);
+                familyPerson.setAge(familyPersonAge[i] == null ? null : Integer.valueOf(familyPersonAge[i]));
+                familyPerson.setLiveStatus(familyPersonLiveStatus[i]);
+                familyPerson.setpName(familyPersonName[i]);
+                familyPerson.setpSex(familyPersonSex[i] == null ? 1 : Integer.valueOf(familyPersonSex[i]));
+                familyPerson.setpIdCard(familyPersonIdCard[i]);
+                familyPerson.setpPhone(familyPersonPhone[i]);
+                familyPerson.setpRelation(familyPersonRelation[i]);
+                familyPerson.setpAddress(familyPersonAddress[i]);
+                familyPerson.setIsRegistered(isRegistered);
+                familyPerson.setpMemo(familyPersonMemo[i]);
+                this.familyPersonService.save(familyPerson);
+            }
+        }
+
+        //保存历史记录
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(family.getId());
+        List<House> houseList = this.houseService.getChooseHouseById(family.getId());
+
+        historyInfoService.histroySave(request,family,familyPersonList,houseList, DataPhase.SET.getIndex());
+    }
+
+    /**
+     * 删除family及对应人员
+     * @param familyId
+     */
+    public void  deleteByFamilyId(Integer familyId){
+        Family family = this.get(familyId);
+        if (family == null) {
+            throw new SqdsException("家庭信息不存在");
+        }
+
+        familyPersonService.deleteByFamilyId(familyId);
+        this.delete(familyId);
+    }
+
+    /**
+     * 编号重复验证
+     * @param familyCode
+     * @param familyId
+     * @return
+     */
+    public Family checkRepeat(String familyCode, Integer familyId) {
+        String hql = "from Family where familyCode=? and id!=?";
+        return findUnique(hql, familyCode, familyId);
+    }
+
+    /**
+     * 已选房源列表
+     * @param pageInfo
+     * @return
+     */
+    public PageInfo<Family> getChooseHouseList(PageInfo<Family> pageInfo) {
+        pageInfo.setAutoCount(false);//关闭分页条数统计
+        String hql = "from Family f inner join fetch f.houseList h inner join fetch h.azProject p where f.xfDate is not null order by h.chooseDate desc,f.familyCode";
+        pageInfo = this.list(pageInfo,hql);
+        pageInfo.setTotalCount(this.findLong(pageInfo,"select count(distinct f.id) from Family f where f.xfDate is not null").intValue());
+        return pageInfo;
+    }
+
+    /**
+     * 财务保存
+     */
+    public void financeSave(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "0010", "数据有误，请刷新重试");
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(familyId);
+        Servlets.bind(request, family);
+        this.save(family);
+        List<House> houseList = houseService.getHouseListByFamilyId(family.getId());
+        historyInfoService.histroySave(request,family,familyPersonList,houseList, DataPhase.FINANCE.getIndex());
+    }
+
+    /**
+     * 查询身份证号或姓名 like param 的家庭
+     * @param param
+     * @return
+     */
+    public List<Family> listByParam(String param) {
+        StringBuffer hql = new StringBuffer("from Family fy where 1=1 ");
+        List<Object> data = new ArrayList<Object>();
+        if (param == null || param.equals("")) {
+            return this.list(hql.toString());
+        }
+        hql.append("and ( fy.familyCode like ? ");
+        data.add("%" + param + "%");
+        hql.append("or fy.name like ? )");
+        data.add("%" + param + "%");
+        List<Family> list = this.list(hql.toString(), data.toArray());
+        return list;
+    }
+
+    /*************************************************
+     * 每天签约数
+     * @return
+     */
+    public List<Map> getTodayData() {
+        String sql =  " select  convert(varchar(10),signDate,23 ) ,COUNT(*) as signNum from  family group by convert(varchar(10),signDate,23 )  order by convert(varchar(10),signDate,23 ) desc";
+        return this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+    }
+
+    /**
+     * 入住列表（已结算）
+     * @param pageInfo
+     * @return
+     */
+    public PageInfo<Family> rzFamilyList(PageInfo<Family> pageInfo) {
+        pageInfo.setAutoCount(false);//关闭分页条数统计
+        String hql = "from Family f inner join fetch f.houseList h inner join fetch h.azProject p where f.xfDate is not null and f.jsStatus = 2 order by h.chooseDate desc,f.familyCode";
+        pageInfo = this.list(pageInfo,hql);
+        pageInfo.setTotalCount(this.findLong(pageInfo,"select count(distinct f.id) from Family f where f.xfDate is not null and f.jsStatus = 2").intValue());
+        return pageInfo;
+    }
+
+    /**
+     * 根据编号查询家庭
+     */
+    public Family getFamilyByCode(String familyCode){
+        String hql="from Family f where f.familyCode = ?";
+        return findUnique(hql,familyCode);
+    }
+
+    /**
+     * 签约信息及历史记录保存
+     * @param request
+     */
+    public void signSave(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = this.get(familyId);
+        Precondition.checkAjaxArguement(family != null,"1111","数据错误！");
+
+        family.setSignStatus(SignStatus.SIGN.getIndex());//设置签约状态
+        this.save(family);
+
+        //保存历史记录
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(familyId);
+        List<House> houseList = houseService.getChooseHouseById(family.getId());
+        historyInfoService.histroySave(request,family,familyPersonList,houseList,DataPhase.SIGN.getIndex());
+    }
+}

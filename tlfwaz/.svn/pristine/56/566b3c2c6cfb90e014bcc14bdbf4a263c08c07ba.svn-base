@@ -1,0 +1,203 @@
+package com.app.cq.web.cq;
+
+import com.app.common.service.DataDictService;
+import com.app.cq.exception.Precondition;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.model.House;
+import com.app.cq.service.FamilyPersonService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.HouseService;
+import com.app.cq.utils.GetCurrentUser;
+import com.app.permission.model.User;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.utils.DateUtils;
+import com.sqds.utils.pdf.PdfDocumentGenerator;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by lsh on 2018/3/1.
+ */
+@Controller
+@RequestMapping("/cq/housePerson/*")
+public class HousePersonController {
+    @Resource
+    private FamilyService familyService;
+    @Resource
+    private FamilyPersonService familyPersonService;
+    @Resource
+    private HouseService houseService;
+    @Resource
+    private DataDictService dataDictService;
+
+    /**
+     * 变更购房人入口
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("startList")
+    public void startList(HttpServletRequest request,ModelMap modelMap){
+
+    }
+
+    /**
+     * 变更购房人管理列表
+     *
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+        String departmentCode = GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode();
+        //如果不是管理员，只能看到本村的数据
+        if (!departmentCode.equals("110")) {
+            pageInfo.addParameter("search_eq_string_bd", departmentCode);
+        }
+        pageInfo = this.familyService.getChooseHouseList(pageInfo);
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+        }
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("houseListMap",houseListMap);
+        modelMap.addAttribute("departmentCode", departmentCode);
+    }
+
+    /**
+     * 变更购房人信息管理
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"数据错误！");
+        modelMap.addAttribute("family", family);
+        //申请人
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(family.getId());
+        modelMap.addAttribute("familyPersonList", familyPersonList);
+        //实际安置选房信息
+        List<House> houseList = this.houseService.getChooseHouseById(family.getId());
+        modelMap.addAttribute("houseList", houseList);
+    }
+
+    /**
+     * 变更购房人信息管理
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("choosePeople")
+    public void choosePeople(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Integer houseId = ParamUtils.getInt(request,"houseId",0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"数据错误！");
+        modelMap.addAttribute("family", family);
+        //申请人
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(family.getId());
+        modelMap.addAttribute("familyPersonList", familyPersonList);
+        //实际安置选房信息
+        House house = this.houseService.get(houseId);
+        modelMap.addAttribute("house", house);
+    }
+
+    /**
+     * 修改家庭成员信息
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("addPeople")
+    public void addPeople(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Integer houseId = ParamUtils.getInt(request,"houseId",0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"数据错误！");
+        modelMap.addAttribute("family", family);
+        //申请人
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(family.getId());
+        modelMap.addAttribute("familyPersonList", familyPersonList);
+        modelMap.addAttribute("houseId", houseId);
+    }
+
+    /**
+     * 保存家庭成员信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("save")
+    public String save(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request, "familyId",0);
+        Integer houseId = ParamUtils.getInt(request, "houseId",0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"数据错误！");
+        this.familyService.saveFamilyPerson(request);
+        return "redirect:choosePeople?familyId=" + familyId +"&houseId="+houseId;
+    }
+
+    /**
+     * 保存变更购房人信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("change")
+    public String change(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInt(request, "familyId",0);
+        Integer houseId = ParamUtils.getInt(request, "houseId",0);
+        Integer familyPersonId = ParamUtils.getInt(request, "familyPersonId",0);
+        this.houseService.saveChangePerson(request,familyId,houseId,familyPersonId);
+        return "redirect:form?familyId=" + familyId;
+    }
+
+    /**
+     * 变更购房人信息导出
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("export")
+    public void export(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+        String departmentCode = GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode();
+        //如果不是管理员，只能看到本村的数据
+        if (!departmentCode.equals("110")) {
+            pageInfo.addParameter("search_eq_string_bd", departmentCode);
+        }
+        pageInfo.setPageSize(Integer.MAX_VALUE);
+        pageInfo = familyService.getChooseHouseList(pageInfo);
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+        }
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("houseListMap",houseListMap);
+        modelMap.addAttribute("departmentCode",departmentCode);
+    }
+
+
+}

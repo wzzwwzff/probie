@@ -1,0 +1,42 @@
+package com.app.cq.web.cq;
+
+import com.app.cq.service.StatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 数据统计查询
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/statistics/*")
+public class StatisticsController {
+    @Autowired
+    private StatisticsService statisticsService;
+
+    /**
+     * 安置房整体情况统计
+     */
+    @RequestMapping("houseStatistics")
+    public void houseStatistics(ModelMap modelMap){
+        Map<String, Map<String, Map<String, Map>>> map = this.statisticsService.houseMap();
+        modelMap.addAttribute("map",map);
+        List list = this.statisticsService.houseStatistics();
+        modelMap.addAttribute("list",list);
+    }
+
+
+    /**
+     * 整体情况统计
+     */
+    @RequestMapping("processStatistics")
+    public void processStatistics(ModelMap modelMap){
+        Map<String,Map> map = statisticsService.processMap();
+        modelMap.addAttribute("map",map);
+    }
+}

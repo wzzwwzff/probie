@@ -1,0 +1,150 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>认购协议打印</title>
+    <%@include file="/static/common/common.jsp" %>
+    <script>
+        function toPrint() {
+            $.get("getXyPrintDate", {familyId:${family.id},_time: new Date().getTime()}, function (data) {
+            });
+            document.getElementById("printIframe").contentWindow.focus();    //获得焦点
+            document.getElementById("printIframe").contentWindow.print();
+        }
+        function toPrintCn() {
+            document.getElementById("printIframe1").contentWindow.focus();    //获得焦点
+            document.getElementById("printIframe1").contentWindow.print();
+        }
+    </script>
+</head>
+<body oncontextmenu=self.event.returnValue=false>
+<div class="title" id="printDiv">
+    <h4>【${family.name}】认购协议</h4>
+    <div id="printButton" style="position: absolute;top: 8px;right: 15px;">
+        <button type="button" class="btn btn-primary" onclick="toPrint()"><i class="fa fa-print"></i>&nbsp;打印</button>
+        <button type="button" class="btn btn-primary" onclick="history.back()"><i class="fa fa-backward"></i>&nbsp;返回
+        </button>
+    </div>
+</div>
+<table width="100%">
+    <tr>
+        <td style="vertical-align: top;height: 100%;">
+            <h3>　签约步骤：</h3>
+            <h3>　第①步：<input type="button" class="btn btn-primary btn-lg" value="补录信息" onclick="javascript:showModal(${family.id})""/></h3>
+            <h3>　第②步：<input type="button" class="btn btn-primary btn-lg" value="打印认购协议" onclick="toPrint()"/></h3>
+            <c:if test="${family.isSpecial eq 1}">
+                <h3 STYLE="padding-left: 10px"><input type="button" class="btn btn-primary btn-lg" value="打印平移补助通知" onclick="toPrintCn()"/></h3>
+            </c:if>
+            <h3>　第③步：确认签字并摁手印后，请
+                <input type="button" readonly="readonly" class="btn btn-primary btn-lg" value="设置为已签约"  <c:if
+                        test="${family.signStatus eq 1}"> onclick="javascript:setSignStatus(${family.id})"</c:if>/>
+            </h3>
+
+            <h3>　第④步：<input type="button" class="btn btn-primary btn-lg" value="添加家庭人口"
+                       onclick="location.href='addPeople?familyId=${family.id}'"/>
+            </h3>
+            <hr/>
+            <h3>　档案编号：${family.familyCode}</h3>
+            <h3>　被征收人：${family.name}</h3>
+            <%--<h3>　签约顺序号：${family.signNum}</h3>--%>
+            <h3>　签约状态：
+                <c:if test="${family.signStatus eq 2}">
+                    <span style="color: green;font-weight: bold;">已签约</span>
+                </c:if>
+                <c:if test="${family.signStatus eq 1}">
+                    <span class="require">暂未签约</span>
+                </c:if>
+            </h3>
+        </td>
+        <td width="75%" height="850px">
+            <center>
+                <iframe id="printIframe" src="printAgreementPDF?familyId=${family.id}#toolbar=0"
+                        style="width: 100%;height: 99%;"></iframe>
+            </center>
+            <center hidden="">
+                <iframe id="printIframe1" src="printMovePDF?familyId=${family.id}#toolbar=0"
+                        style="width: 100%;height: 99%;"></iframe>
+            </center>
+        </td>
+
+    </tr>
+</table>
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 1100px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">补录信息</h4>
+            </div>
+            <div class="modal-body" id="myModalBoday">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="numSave()"><i class="fa fa-save"></i>&nbsp;保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    //    设置认购协议状态
+    function setSignStatus(familyId) {
+        if (confirm("确认设置为已签约吗？")) {
+            var url = "setSignStatus?familyId=" + familyId;
+            $.get(url, {_time: new Date().getTime()}, function (data) {
+                if (data.code == '0000') {
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+    }
+
+    function showModal(familyId) {
+        $.post("addForm", {familyId: familyId, myTime: new Date().getTime()}, function (data) {
+            $("#myModalBoday").html(data);
+        });
+        $("#myModal").modal();
+    }
+
+    function numSave() {
+        var familyId = $("input[name='familyId']").val();
+        var address = $("input[name='address']").val();
+        var phone = $("input[name='phone']").val();
+        var agreementCode = $("input[name='agreementCode']").val();
+        var currentAddress = $("input[name='currentAddress']").val();
+        $.ajax({
+            type: "post",
+            url: "addSave",
+            data: {
+                familyId: familyId,
+                address: address,
+                phone: phone,
+                agreementCode: agreementCode,
+                currentAddress: currentAddress,
+                myTime: new Date().getTime()
+            },
+            success: function (data) {
+                if (data.code == "0000") {
+                    location.reload();
+                } else {
+                    bootstrapQ.msg({msg: data.message, type: 'danger'});
+                }
+            },
+            error: function () {
+                bootstrapQ.msg({msg: "请联系技术支持！", type: 'danger'});
+            }
+        })
+    }
+</script>
+</html>

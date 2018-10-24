@@ -1,0 +1,660 @@
+package com.app.cq.web.cq;
+
+import com.alibaba.fastjson.JSON;
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Area;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.model.Project;
+import com.app.cq.service.AreaService;
+import com.app.cq.service.FamilyPersonService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.ProjectService;
+import com.app.cq.utils.ReadExcel;
+import com.google.common.collect.Maps;
+import com.sqds.exception.SqdsException;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.pdf.PdfDocumentGenerator;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * 家庭信息管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/family/*")
+public class FamilyController {
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private AreaService areaService;
+    @Autowired
+    private DataDictService dataDictService;
+
+    /**
+     * 基础家庭数据列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+
+        pageInfo = familyService.familyList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 表单
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request, ModelMap modelMap){
+        int familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.familyForm(familyId);
+        family = family == null ? new Family() : family;
+
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(familyId);
+        List<Project> projectList = projectService.listAll();
+
+        modelMap.addAttribute("family", family);
+        modelMap.addAttribute("familyPersonList", familyPersonList);
+        modelMap.addAttribute("projectList", projectList);
+    }
+
+    /**
+     * 保存表单
+     */
+    @RequestMapping("save")
+    public String save(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Integer projectId = ParamUtils.getInt(request, "p_projectId", 0);
+        Integer areaId = ParamUtils.getInt(request, "areaId", 0);
+        Family family = familyService.get(familyId);
+        if (family == null) {
+            family = new Family();
+        }
+        Servlets.bind(request,family);
+        Project project = this.projectService.get(projectId);
+        family.setProject(project);
+        Area area = this.areaService.get(areaId);
+        family.setArea(area);
+        this.familyService.saveFamily(request,family);
+        return "redirect:list?" + request.getAttribute("searchParams");
+    }
+
+    /**
+     * 地块信息
+     */
+    @RequestMapping("getAreaByProjectId")
+    @ResponseBody
+    public String getZsAreaByZsProjectId(HttpServletRequest request) {
+        int projectId = ParamUtils.getInt(request, "projectId", 0);
+        List<Area> list = areaService.getListByProjectId(projectId);
+        String str = JSON.toJSONString(list);
+        return str;
+    }
+
+    /**
+     * 删除family及familyPerson
+     * @param request
+     * @return
+     */
+    @RequestMapping("delete")
+    @ResponseBody
+    public Map<String,String> delete(ServletRequest request){
+        Map<String,String> map = new HashMap<String, String>();
+        int id = ParamUtils.getInt(request,"familyId",0);
+        String message = "";
+        if (id==0){
+            message = "未找到家庭信息请重试";
+        }
+        familyService.deleteByFamilyId(id);
+        map.put("success","true");
+        return map;
+    }
+
+    /**
+     * 删除familyPerson
+     */
+    @RequestMapping("deleteFamilyPerson")
+    public void deleteFamilyPerson(ServletRequest request){
+        int familyPersonId = ParamUtils.getInt(request,"familyPersonId",0);
+        if (familyPersonId == 0){
+            throw new SqdsException("未找到此数据");
+        }
+        familyPersonService.delete(familyPersonId);
+    }
+
+    /**
+     * 编号重复验证
+     * @param request
+     * @return
+     */
+    @RequestMapping("checkRepeat")
+    @ResponseBody
+    public boolean  checkRepeat(ServletRequest request){
+        String familyCode = ParamUtils.getString(request,"familyCode","");
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+
+        Family family = familyService.checkRepeat(familyCode, familyId);
+        if (family != null) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    /**
+     * 上传家庭数据
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("innerExcel")
+    public void innerExcel(HttpServletRequest request,ModelMap modelMap){
+    }
+
+    /**
+     * 家庭信息上传
+     * @param request
+     * @param map
+     * @return
+     * @throws IOException
+     */
+    @Transactional
+    @RequestMapping("comparison")
+    public String comparison(HttpServletRequest request , ModelMap map) throws Exception {
+        //上传文件
+        byte[] filePath = Servlets.uploadFile(request,"file");
+        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+        List list = ReadExcel.read(excelInputStream,0,true);
+        List<Family> familyList=familyService.listAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (int i = 0; i < list.size() ; i++) {
+            if (i > 0){
+                List row = (List) list.get(i);
+                if (!"".equals((String)row.get(0))) {
+                    Family family = new Family();
+                    String projectName = (String) row.get(1);
+                    String areaName = (String)row.get(2);
+                    String familyCode = (String)row.get(3);
+                    String name = (String) row.get(4);
+                    String sex = (String) row.get(5);
+                    String age = (String) row.get(6);
+                    String idCard = (String) row.get(7);
+                    String phone = (String) row.get(8);
+                    String address = (String) row.get(9);
+                    String fwzl = (String) row.get(10);
+                    String totalMoney = (String) row.get(11);
+                    String houseNum = (String) row.get(12);
+                    String azArea = (String) row.get(13);
+                    String gfArea = (String) row.get(14);
+                    String inArea = (String) row.get(15);
+                    String outArea = (String) row.get(16);
+                    String inHouseMoney = (String) row.get(17);
+                    String outHouseMoney = (String) row.get(18);
+                    String totalHouseMoney = (String) row.get(19);
+                    String signDate = (String) row.get(20);
+                    String moveBackDate = (String) row.get(21);
+                    String xfBatch = (String) row.get(22);
+                    String xfStatus = (String) row.get(23);
+                    String xfDate = (String) row.get(24);
+                    String xfNum = (String) row.get(25);
+                    String signStatus = (String) row.get(26);
+                    String xyPrintDate = (String) row.get(27);
+                    String jsStatus = (String) row.get(28);
+                    String jsDate = (String) row.get(29);
+                    String jsPerson = (String) row.get(30);
+                    String memo = (String) row.get(31);
+                    String personNum = (String) row.get(32);
+                    String azHouse = (String) row.get(33);
+                    String xfTotalCount = (String) row.get(34);
+                    String oneRoomCount = (String) row.get(35);
+                    String firstTwoRoomCount = (String) row.get(36);
+                    String secondTwoRoomCount = (String) row.get(37);
+                    String thirdTwoRoomCount = (String) row.get(38);
+                    String fourthTwoRoomCount = (String) row.get(39);
+                    String threeRoomCount = (String) row.get(40);
+                    String shouldArea = (String) row.get(41);
+                    String selectedArea = (String) row.get(42);
+                    String inXyArea = (String) row.get(43);
+                    String outXyArea = (String) row.get(44);
+                    String inMoney = (String) row.get(45);
+                    String outMoney = (String) row.get(46);
+                    String gfMoney = (String) row.get(47);
+                    String settlementedMoney = (String) row.get(48);
+
+
+                    Project projectByName = projectService.getProjectByName(projectName.trim());
+                    family.setProject(projectByName);
+                    Area areaByAreaName = areaService.getAreaByAreaName(areaName.trim());
+                    family.setArea(areaByAreaName);
+                    for (Family family1:familyList) {
+                        if (family1.getFamilyCode().equals(familyCode)){
+                            throw new SqdsException("申请编号重复,请核验后重试");
+                        }
+                    }
+                    family.setFamilyCode(familyCode);
+                    family.setName(name.trim());
+                    List<DataDict> sexList = dataDictService.getDataDictList("性别");
+                    if (!sex.trim().equals("男") && !sex.trim().equals("女")){
+                        throw new SqdsException("只能填男或女");
+                    }
+                    Integer sexNum = 0;
+                    for (int j = 0; j <sexList.size() ; j++) {
+                        if (sexList.get(j).getAttributeName().equals(sex)){
+                            sexNum = Integer.valueOf(sexList.get(j).getAttributeValue());
+                        }
+                    }
+                    family.setSex(sexNum);
+                    if (age != null && !age.equals("")){
+                        family.setAge(Integer.valueOf(age));
+                    }
+                    family.setIdCard(idCard);
+                    family.setPhone(phone);
+                    family.setAddress(address);
+                    family.setFwzl(fwzl);
+                    family.setTotalMoney(totalMoney == null || totalMoney.equals("") ? new BigDecimal(0) : new BigDecimal(totalMoney));
+                    if (houseNum != null && !houseNum.equals("")){
+                        family.setHouseNum(Integer.valueOf(houseNum));
+                    }
+                    family.setAzArea(azArea == null || azArea.equals("") ? new BigDecimal(0) : new BigDecimal(azArea));
+                    family.setGfArea(gfArea == null || gfArea.equals("") ? new BigDecimal(0) : new BigDecimal(gfArea));
+                    family.setInArea(inArea == null || inArea.equals("") ? new BigDecimal(0) : new BigDecimal(inArea));
+                    family.setOutArea(outArea == null || outArea.equals("") ? new BigDecimal(0) : new BigDecimal(outArea));
+                    family.setInHouseMoney(inHouseMoney == null || inHouseMoney.equals("") ? new BigDecimal(0) : new BigDecimal(inHouseMoney));
+                    family.setOutHouseMoney(outHouseMoney == null || outHouseMoney.equals("") ? new BigDecimal(0) : new BigDecimal(outHouseMoney));
+                    family.setTotalHouseMoney(totalHouseMoney == null || totalHouseMoney.equals("") ? new BigDecimal(0) : new BigDecimal(totalHouseMoney));
+                    if (!signDate.equals("") && signDate != null) {
+                        if (signDate.contains("/")){
+                            signDate = signDate.replace("/","-");
+                        }
+                        Date signDate1 = sdf.parse(signDate);
+                        family.setSignDate(signDate1);
+                    }
+                    if (!moveBackDate.equals("") && moveBackDate != null) {
+                        if (moveBackDate.contains("/")){
+                            moveBackDate = moveBackDate.replace("/","-");
+                        }
+                        Date moveBackDate1 = sdf.parse(moveBackDate);
+                        family.setMoveBackDate(moveBackDate1);
+                    }
+                    if (xfBatch != null && !xfBatch.equals("")){
+                        family.setXfBatch(Integer.valueOf(xfBatch));
+                    }
+                    List<DataDict> xfList = dataDictService.getDataDictList("选房状态");
+                    if (!xfStatus.trim().equals("未选房") && !xfStatus.trim().equals("已选房")){
+                        throw new SqdsException("只能填未选房或已选房");
+                    }
+                    Integer xfStatus1 = 0;
+                    for (int j = 0; j <xfList.size(); j++) {
+                        if (xfList.get(j).getAttributeName().equals(xfStatus)){
+                            xfStatus1 = Integer.valueOf(xfList.get(j).getAttributeValue());
+                        }
+                    }
+                    family.setXfStatus(xfStatus1);
+                    if (!xfDate.equals("") && xfDate != null) {
+                        if (xfDate.contains("/")){
+                            xfDate = xfDate.replace("/","-");
+                        }
+                        Date xfDate1 = sdf.parse(xfDate);
+                        family.setXfDate(xfDate1);
+                    }
+                    if (xfNum != null && !xfNum.equals("")){
+                        family.setXfNum(Integer.valueOf(xfNum));
+                    }
+                    List<DataDict> signList = dataDictService.getDataDictList("签约状态");
+                    if (!signStatus.trim().equals("未签约") && !signStatus.trim().equals("已签约")){
+                        throw new SqdsException("只能填未签约或已签约");
+                    }
+                    Integer signStatus1 = 0;
+                    for (int j = 0; j <signList.size(); j++) {
+                        if (signList.get(j).getAttributeName().equals(signStatus)){
+                            signStatus1 = Integer.valueOf(signList.get(j).getAttributeValue());
+                        }
+                    }
+                    family.setSignStatus(signStatus1);
+                    if (!xyPrintDate.equals("") && xyPrintDate != null) {
+                        if (xyPrintDate.contains("/")){
+                            xyPrintDate = xyPrintDate.replace("/","-");
+                        }
+                        Date xyPrintDate1 = sdf.parse(xyPrintDate);
+                        family.setXyPrintDate(xyPrintDate1);
+                    }
+                    List<DataDict> jsList = dataDictService.getDataDictList("结算状态");
+                    if (!jsStatus.trim().equals("未结算") && !jsStatus.trim().equals("已结算")){
+                        throw new SqdsException("只能填未结算或已结算");
+                    }
+                    Integer jsStatus1 = 0;
+                    for (int j = 0; j <jsList.size(); j++) {
+                        if (jsList.get(j).getAttributeName().equals(jsStatus)){
+                            jsStatus1 = Integer.valueOf(jsList.get(j).getAttributeValue());
+                        }
+                    }
+                    family.setJsStatus(jsStatus1);
+                    if (!jsDate.equals("") && jsDate != null) {
+                        if (jsDate.contains("/")){
+                            jsDate = jsDate.replace("/","-");
+                        }
+                        Date jsDate1 = sdf.parse(jsDate);
+                        family.setJsDate(jsDate1);
+                    }
+                    family.setJsPerson(jsPerson);
+                    family.setMemo(memo);
+                    if (personNum != null && !personNum.equals("")){
+                        family.setPersonNum(Integer.valueOf(personNum));
+                    }
+                    family.setAzHouse(azHouse);
+                    if (xfTotalCount != null && !xfTotalCount.equals("")) {
+                        family.setXfTotalCount(Integer.valueOf(xfTotalCount));
+                    }
+                    if (oneRoomCount != null && !oneRoomCount.equals("")) {
+                        family.setOneRoomCount(Integer.valueOf(oneRoomCount));
+                    }
+                    if (firstTwoRoomCount != null && !firstTwoRoomCount.equals("")) {
+                        family.setFirstTwoRoomCount(Integer.valueOf(firstTwoRoomCount));
+                    }
+                    if (secondTwoRoomCount != null && !secondTwoRoomCount.equals("")) {
+                        family.setSecondTwoRoomCount(Integer.valueOf(secondTwoRoomCount));
+                    }
+                    if (thirdTwoRoomCount != null && !thirdTwoRoomCount.equals("")) {
+                        family.setThirdTwoRoomCount(Integer.valueOf(thirdTwoRoomCount));
+                    }
+                    if (fourthTwoRoomCount != null && !fourthTwoRoomCount.equals("")) {
+                        family.setFourthTwoRoomCount(Integer.valueOf(fourthTwoRoomCount));
+                    }
+                    if (threeRoomCount != null && !threeRoomCount.equals("")) {
+                        family.setThreeRoomCount(Integer.valueOf(threeRoomCount));
+                    }
+                    family.setShouldArea(shouldArea == null || shouldArea.equals("") ? new BigDecimal(0) : new BigDecimal(shouldArea));
+                    family.setSelectedArea(selectedArea == null || selectedArea.equals("") ? new BigDecimal(0) : new BigDecimal(selectedArea));
+                    family.setInXyArea(inXyArea == null || inXyArea.equals("") ? new BigDecimal(0) : new BigDecimal(inXyArea));
+                    family.setOutXyArea(outXyArea == null || outXyArea.equals("") ? new BigDecimal(0) : new BigDecimal(outXyArea));
+                    family.setInMoney(inMoney == null || inMoney.equals("") ? new BigDecimal(0) : new BigDecimal(inMoney));
+                    family.setOutMoney(outMoney == null || outMoney.equals("") ? new BigDecimal(0) : new BigDecimal(outMoney));
+                    family.setGfMoney(gfMoney == null || gfMoney.equals("") ? new BigDecimal(0) : new BigDecimal(gfMoney));
+                    family.setSettlementedMoney(settlementedMoney == null || settlementedMoney.equals("") ? new BigDecimal(0) : new BigDecimal(settlementedMoney));
+                    familyService.save(family);
+                }
+            }
+        }
+        return "redirect:/cq/family/innerExcel";
+    }
+    /**
+     * 家庭成员信息上传
+     * @param request
+     * @param map
+     * @return
+     * @throws IOException
+     */
+    @Transactional
+    @RequestMapping("comparisonFamilyPerson")
+    public synchronized String comparisonFamilyPerson(HttpServletRequest request , ModelMap map) throws Exception {
+        //上传文件
+        byte[] filePath = Servlets.uploadFile(request,"file");
+        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+        List list = ReadExcel.read(excelInputStream,0,true);
+        List<Family> familyList=familyService.listAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < list.size() ; i++) {
+            if (i > 0){
+                List row = (List) list.get(i);
+                if (!"".equals((String)row.get(0))) {
+                    FamilyPerson familyPerson = new FamilyPerson();
+                    Family family = null;
+                    String familyCode = (String) row.get(1);
+                    String addressType = (String)row.get(2);
+                    String name = (String)row.get(3);
+                    String age = (String) row.get(4);
+                    String sex = (String) row.get(5);
+                    String idCard = (String) row.get(6);
+                    String phone = (String) row.get(7);
+                    String relation = (String) row.get(8);
+                    String liveStatus = (String) row.get(9);
+                    String address = (String) row.get(10);
+                    String isRegistered = (String) row.get(11);
+                    String memo = (String) row.get(12);
+
+                    for (Family family1:familyList) {
+                        if (family1.getFamilyCode().equals(familyCode.trim())){
+                            family = family1;
+                        }
+                    }
+                    if (family == null){
+                        throw new SqdsException("此家庭编号不存在，请核验后重试");
+                    }
+                    List<DataDict> hujiList = dataDictService.getDataDictList("户籍性质");
+                    if (!addressType.trim().equals("农业") && !addressType.trim().equals("城镇")){
+                        throw new SqdsException("只能填农业或城镇");
+                    }
+                    Integer addressTypeNum = 0;
+                    for (DataDict dataDict : hujiList) {
+                        if (dataDict.getAttributeName().equals(addressType)){
+                            addressTypeNum = Integer.valueOf(dataDict.getAttributeValue());
+                        }
+                    }
+                    familyPerson.setAddressType(addressTypeNum);
+                    familyPerson.setpName(name);
+                    familyPerson.setAge(Integer.valueOf(age));
+                    List<DataDict> sexList = dataDictService.getDataDictList("性别");
+                    if (!sex.trim().equals("男") && !sex.trim().equals("女")){
+                        throw new SqdsException("只能填男或女");
+                    }
+                    Integer sexNum = 0;
+                    for (DataDict dataDict : sexList) {
+                        if (dataDict.getAttributeName().equals(sex)){
+                            sexNum = Integer.valueOf(dataDict.getAttributeValue());
+                        }
+                    }
+                    familyPerson.setpSex(sexNum);
+                    familyPerson.setpIdCard(idCard);
+                    familyPerson.setpPhone(phone);
+                    familyPerson.setpRelation(relation);
+                    familyPerson.setLiveStatus(liveStatus);
+                    familyPerson.setpAddress(address);
+                    List<DataDict> isRegisteredList = dataDictService.getDataDictList("在册/非在册");
+                    Integer isRegisterNum = 0;
+                    if (!isRegistered.trim().equals("在册") && !isRegistered.trim().equals("非在册")){
+                        throw new SqdsException("只能填在册或非在册");
+                    }
+                    for (DataDict dataDict : isRegisteredList) {
+                        if (dataDict.getAttributeName().equals(isRegistered)){
+                            isRegisterNum = Integer.valueOf(dataDict.getAttributeValue());
+                        }
+                    }
+                    familyPerson.setIsRegistered(isRegisterNum);
+                    familyPerson.setpMemo(memo);
+                    familyPerson.setFamily(family);
+                    familyPersonService.save(familyPerson);
+                }
+            }
+        }
+        return "redirect:/cq/family/innerFamilyPersonExcel";
+    }
+
+    /**
+     * 上传家庭成员数据
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("innerFamilyPersonExcel")
+    public void innerFamilyPersonExcel(HttpServletRequest request,ModelMap modelMap){
+    }
+
+    /**
+     * 电话通知列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("phoneList")
+    public void phoneList(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+
+        pageInfo = familyService.phoneList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    //家庭信息回显
+    @RequestMapping("phoneBody")
+    public void phoneBody(HttpServletRequest request, ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.familyForm(familyId);
+        modelMap.addAttribute("family", family);
+    }
+
+    //选房批次，时间设置
+    @RequestMapping("handPcNum")
+    public void handPcNum(HttpServletRequest request){
+        this.familyService.setXfBatch(request);
+    }
+
+    @RequestMapping("phoneHandList")
+    public void phoneHandList(HttpServletRequest request){
+    }
+
+    /**
+     * 基础家庭数据列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("handed")
+    public void handed(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+
+        pageInfo = familyService.handed(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 导出已有选房批次家庭
+     */
+    @RequestMapping("excelPhoneHanded")
+    public void excelPhoneHanded(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        pageInfo.setPageSize(Integer.MAX_VALUE);
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo = this.familyService.handed(pageInfo);
+        modelMap.addAttribute("pageInfo", pageInfo);
+    }
+
+    /**
+     * 已电话通知家庭表单
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("handedForm")
+    public void handedForm(HttpServletRequest request, ModelMap modelMap){
+        int familyId = ParamUtils.getInt(request, "familyId", 0);
+        if (familyId == 0){
+            throw new SqdsException("无此家庭请核查");
+        }
+        Family family = familyService.familyForm(familyId);
+
+        modelMap.addAttribute("family", family);
+    }
+
+    /**
+     * 以电话通知家庭修改保存表单
+     */
+    @RequestMapping("handedSave")
+    public String handedSave(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.get(familyId);
+        if (family == null) {
+            throw new SqdsException("无此家庭请核查");
+        }
+        Servlets.bind(request,family);
+        this.familyService.save(family);
+        return "redirect:handed?" + request.getAttribute("searchParams");
+    }
+
+    //打印选房通知单框架
+    @RequestMapping("printXfFrame")
+    public void printJfFrame(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        modelMap.put("familyId", familyId);
+    }
+
+    //打印选房通知单
+    @RequestMapping("printXf")
+    public void printXf(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.familyForm(familyId);
+        List<DataDict> contextList = this.dataDictService.getDataDictList("文本单据");
+
+
+        String template = null;
+        if (family == null) {
+            throw new SqdsException("家庭信息不存在！");
+        } else {
+
+            Map map = Maps.newHashMap();
+            map.put("family", family);
+            for (DataDict dataDict : contextList) {
+                if (dataDict.getAttributeName().equals("东河沿选房通知单")){
+                    template = dataDict.getAttributeValue();
+                }
+            }
+            PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+            OutputStream outputStream = null;
+            try {
+                outputStream = response.getOutputStream();
+                pdfDocumentGenerator.generate(template, map, outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    outputStream.flush();
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 未电话通知家庭条件查询
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("searchHead")
+    public void searchHead(HttpServletRequest request,ModelMap modelMap){
+        String familyCode = ParamUtils.getString(request, "familyCode", "");
+        String name = ParamUtils.getString(request, "name", "");
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+
+        pageInfo = familyService.getSearchPhone(name, familyCode, pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+}

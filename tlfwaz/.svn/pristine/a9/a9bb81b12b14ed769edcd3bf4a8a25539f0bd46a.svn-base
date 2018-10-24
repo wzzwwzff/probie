@@ -1,0 +1,428 @@
+package com.app.cq.web.cq;
+
+import com.alibaba.fastjson.JSON;
+import com.app.common.model.DataDict;
+import com.app.cq.exception.Precondition;
+import com.app.cq.model.Area;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.model.Project;
+import com.app.cq.service.AreaService;
+import com.app.cq.service.FamilyPersonService;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.ProjectService;
+import com.app.cq.utils.ReadExcel;
+import com.sqds.exception.SqdsException;
+import com.sqds.page.PageInfo;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 家庭信息管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/family/*")
+public class FamilyController {
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private AreaService areaService;
+
+    /**
+     * 基础家庭数据列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+
+        pageInfo = familyService.familyList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 表单
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request, ModelMap modelMap){
+        int familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.get(familyId);
+        family = family == null ? new Family() : family;
+
+        List<FamilyPerson> familyPersonList = familyPersonService.listByFamilyId(familyId);
+        List<Project> projectList = projectService.listAll();
+
+        modelMap.addAttribute("family", family);
+        modelMap.addAttribute("familyPersonList", familyPersonList);
+        modelMap.addAttribute("projectList", projectList);
+    }
+
+    /**
+     * 查看页面
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("view")
+    public void view(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"未找到数据");
+        //家庭成员列表
+        List<FamilyPerson> familyPersonList = this.familyPersonService.listByFamilyId(familyId);
+        modelMap.addAttribute("family", family);
+        modelMap.addAttribute("familyPersonList", familyPersonList);
+    }
+
+    /**
+     * 保存表单
+     */
+    @RequestMapping("save")
+    public String save(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Integer projectId = ParamUtils.getInt(request, "p_projectId", 0);
+        Family family = familyService.get(familyId);
+        if (family == null) {
+            family = new Family();
+        }
+        Servlets.bind(request,family);
+        Project project = this.projectService.get(projectId);
+        family.setProject(project);
+        this.familyService.saveFamily(request,family);
+        return "redirect:list?" + request.getAttribute("searchParams");
+    }
+
+    /**
+     * 地块信息
+     */
+    @RequestMapping("getAreaByProjectId")
+    @ResponseBody
+    public String getZsAreaByZsProjectId(HttpServletRequest request) {
+        int projectId = ParamUtils.getInt(request, "projectId", 0);
+        List<Area> list = areaService.getListByProjectId(projectId);
+        String str = JSON.toJSONString(list);
+        return str;
+    }
+
+    /**
+     * 删除family及familyPerson
+     * @param request
+     * @return
+     */
+    @RequestMapping("delete")
+    @ResponseBody
+    public Map<String,String> delete(ServletRequest request){
+        Map<String,String> map = new HashMap<String, String>();
+        int id = ParamUtils.getInt(request,"familyId",0);
+        String message = "";
+        if (id==0){
+            message = "未找到家庭信息请重试";
+        }
+        familyService.deleteByFamilyId(id);
+        map.put("success","true");
+        return map;
+    }
+
+    /**
+     * 删除familyPerson
+     */
+    @RequestMapping("deleteFamilyPerson")
+    public void deleteFamilyPerson(ServletRequest request){
+        int familyPersonId = ParamUtils.getInt(request,"familyPersonId",0);
+        if (familyPersonId == 0){
+            throw new SqdsException("未找到此数据");
+        }
+        familyPersonService.delete(familyPersonId);
+    }
+
+    /**
+     * 编号重复验证
+     * @param request
+     * @return
+     */
+    @RequestMapping("checkRepeat")
+    @ResponseBody
+    public boolean  checkRepeat(ServletRequest request){
+        String familyCode = ParamUtils.getString(request,"familyCode","");
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+
+        Family family = familyService.checkRepeat(familyCode, familyId);
+        if (family != null) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+//
+//    /**
+//     * 家庭信息上传
+//     * @param request
+//     * @param map
+//     * @return
+//     * @throws IOException
+//     */
+//    @RequestMapping("comparison")
+//    public String comparison(HttpServletRequest request , ModelMap map) throws Exception {
+//        //上传文件
+//        byte[] filePath = Servlets.uploadFile(request,"file");
+//        InputStream excelInputStream = new ByteArrayInputStream(filePath);
+//        List list = ReadExcel.read(excelInputStream,0,true);
+//        List<Family> familyList=familyService.listAll();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//
+//        for (int i = 0; i < list.size() ; i++) {
+//            if (i > 0){
+//                List row = (List) list.get(i);
+//                if (!"".equals((String)row.get(0))) {
+//                    Family family = new Family();
+//                    String projectName = (String) row.get(1);
+//                    String areaName = (String)row.get(2);
+//                    String familyCode = (String)row.get(3);
+//                    String name = (String) row.get(4);
+//                    String sex = (String) row.get(5);
+//                    String age = (String) row.get(6);
+//                    String idCard = (String) row.get(7);
+//
+//
+//                    String idCard = (String) row.get(8);
+//                    String contactName = (String) row.get(9);
+//                    String phone = (String) row.get(10);
+//                    String currentAddres = (String) row.get(11);
+//                    String postCode = (String) row.get(12);
+//                    String memo = (String) row.get(13);
+//                    String marry = (String) row.get(14);
+//                    Integer marryStatus = 0;
+//                    if (marry.equals("未婚")){
+//                        marryStatus = 1;
+//                    }
+//                    if (marry.equals("已婚")){
+//                        marryStatus = 2;
+//                    }
+//                    if (marry.equals("离异")){
+//                        marryStatus = 3;
+//                    }
+//                    String work = (String) row.get(15);
+//                    Integer workUnit = 0;
+//                    if (work.equals("丰台区")){
+//                        workUnit = 1;
+//                    }
+//                    if (work.equals("东城区")){
+//                        workUnit = 2;
+//                    }
+//                    String isThisArea = (String) row.get(16);
+//                    Integer thisArea = 0;
+//                    if (isThisArea.equals("是")){
+//                        thisArea = 1;
+//                    }
+//                    if (isThisArea.equals("否")){
+//                        thisArea = 2;
+//                    }
+//                    String address = (String) row.get(17);
+//                    String Permit1 = (String) row.get(18);
+//                    Integer residencePermit = 0;
+//                    if (Permit1.equals("北京市工作居住证")){
+//                        residencePermit = 1;
+//                    }
+//
+//                    String handleType1 = (String) row.get(19);
+//                    Integer handleType = 0;
+//                    if (handleType1.equals("身份证")){
+//                        handleType = 1;
+//                    }
+//                    if (handleType1.equals("军（警）身份证")){
+//                        handleType = 2;
+//                    }
+//                    String handleCard = (String) row.get(20);
+//                    String residencePermitCode = (String) row.get(21);
+//                    String startDate1 = (String) row.get(22);
+//                    String endDate1 = (String) row.get(23);
+//                    String armyType1 = (String) row.get(24);
+//                    Integer armyType = 0;
+//                    if (armyType1.equals("军官证")){
+//                        armyType = 1;
+//                    }
+//                    if (armyType1.equals("警官证")){
+//                        armyType = 2;
+//                    }
+//                    String armyIdCard = (String) row.get(25);
+//                    String registerCode = (String) row.get(26);
+//                    String firstOrNot1 = (String) row.get(27);
+//                    Integer firstOrNot = 0;
+//                    if (firstOrNot1.equals("是")){
+//                        firstOrNot = 1;
+//                    }
+//                    if (firstOrNot1.equals("否")){
+//                        firstOrNot = 2;
+//                    }
+//                    String continuity1 = (String) row.get(28);
+//                    Integer continuity = 0;
+//                    if (continuity1.equals("是")){
+//                        continuity = 1;
+//                    }
+//                    if (continuity1.equals("否")){
+//                        continuity = 2;
+//                    }
+//                    String education = (String) row.get(29);
+//                    String learningMethod = (String) row.get(30);
+//                    String thisParkIs = (String) row.get(31);
+//                    String educationCode = (String) row.get(32);
+//                    String job = (String) row.get(33);
+//                    String unit = (String) row.get(34);
+//                    String unitPerson = (String) row.get(35);
+//                    String unitPhone = (String) row.get(36);
+//                    String shakingBatch = (String) row.get(37);
+//                    String shakingCode = (String) row.get(38);
+//                    String shakingGroup = (String) row.get(39);
+//                    String shakingResult = (String) row.get(40);
+//                    String exSpouseName = (String) row.get(41);
+//                    String exCardTypeName = (String) row.get(42);
+//                    Integer exCardType = 0;
+//                    if (exCardTypeName.equals("军官证")){
+//                        exCardType = 1;
+//                    }
+//                    if (exCardTypeName.equals("警官证")){
+//                        exCardType = 2;
+//                    }
+//                    String exIdCard = (String) row.get(43);
+//                    String divorceDate = (String) row.get(44);
+//
+//
+//
+//                    family.setProjectName(projectName);
+//                    Integer familyType = null;
+//                    List<DataDict> familyTypeList = this.dataDictService.getDataDictList("家庭类型");
+//                    for (DataDict dataDict : familyTypeList) {
+//                        if (dataDict.getAttributeName().equals(familyTypeName)){
+//                            familyType = Integer.valueOf(dataDict.getAttributeValue());
+//                        }
+//                    }
+//                    family.setFamilyCode(familyCode);
+//                    if (familyType == null){
+//                        throw new SqdsException("家庭类型不能为空");
+//                    }else {
+//                        family.setFamilyType(familyType);
+//                    }
+//
+//                    for (Family family1:familyList) {
+//                        if (family1.getFamilyCode().equals(familyCode)){
+//                            throw new SqdsException("申请编号重复,请核验");
+//                        }
+//                    }
+//
+//
+//                    family.setName(name);
+//                    family.setAge(Integer.valueOf(age));
+//                    if (!applyDate1.equals("") && applyDate1 != null) {
+//                        if (applyDate1.contains("/")){
+//                            applyDate1 = applyDate1.replace("/","-");
+//                        }
+//                        Date applyDate = sdf.parse(applyDate1);
+//                        family.setApplyDate(applyDate);
+//                    }
+//                    if ("身份证".equals(cardType.trim())){
+//                        family.setCardType(1);
+//                    }
+//                    if ("警官证".equals(cardType.trim())){
+//                        family.setCardType(2);
+//                    }
+//                    family.setIdCard(idCard);
+//                    family.setContactName(contactName);
+//                    family.setPhone(phone);
+//                    family.setCurrentAddres(currentAddres);
+//                    family.setPostCode(postCode);
+//                    family.setMemo(memo);
+//                    family.setMarryStatus(marryStatus);
+//                    family.setWorkUnit(workUnit);
+//                    family.setThisArea(thisArea);
+//                    family.setAddress(address);
+//                    family.setResidencePermit(residencePermit);
+//                    family.setHandleType(handleType);
+//                    family.setHandleCard(handleCard);
+//                    family.setResidencePermitCode(residencePermitCode);
+//                    if (!startDate1.equals("") && startDate1 != null) {
+//                        if (startDate1.contains("/")) {
+//                            startDate1 = startDate1.replace("/", "-");
+//                        }
+//                        Date startDate = sdf.parse(startDate1);
+//                        family.setStartDate(startDate);
+//                    }
+//                    if (!endDate1.equals("") && endDate1 != null) {
+//                        if (endDate1.contains("/")){
+//                            endDate1 = endDate1.replace("/","-");
+//                        }
+//                        Date endDate = sdf.parse(endDate1);
+//                        family.setEndDate(endDate);
+//                    }
+//                    family.setArmyType(armyType);
+//                    family.setArmyIdCard(armyIdCard);
+//                    family.setRegisterCode(registerCode);
+//                    family.setFirstOrNot(firstOrNot);
+//                    family.setContinuity(continuity);
+//                    List<DataDict> dataList = dataDictService.getDataDictList("学历层次");
+//                    Integer educationLevel = 0;
+//                    for (DataDict dataDict : dataList) {
+//                        if (dataDict.getAttributeName().equals(education)){
+//                            educationLevel = Integer.valueOf(dataDict.getAttributeValue());
+//                        }
+//                    }
+//                    family.setEducation(educationLevel);
+//                    family.setLearning(learningMethod);
+//                    List<DataDict> thisParkList = dataDictService.getDataDictList("是否");
+//                    Integer thisPark = 0;
+//                    for (DataDict dataDict : thisParkList) {
+//                        if (dataDict.getAttributeName().equals(thisParkIs)){
+//                            thisPark = Integer.valueOf(dataDict.getAttributeValue());
+//                        }
+//                    }
+//                    family.setThisPark(thisPark);
+//                    family.setEducationCode(educationCode);
+//                    family.setJob(job);
+//                    family.setUnit(unit);
+//                    family.setUnitPerson(unitPerson);
+//                    family.setUnitPhone(unitPhone);
+//                    family.setShakingBatch(shakingBatch);
+//                    family.setShakingCode(shakingCode);
+//                    family.setShakingGroup(shakingGroup);
+//                    family.setShakingResult(shakingResult);
+//                    family.setExSpouseName(exSpouseName);
+//                    family.setExCardType(exCardType);
+//                    family.setExIdCard(exIdCard);
+//                    if (!divorceDate.equals("") && divorceDate != null) {
+//                        if (divorceDate.contains("/")){
+//                            divorceDate = divorceDate.replace("/","-");
+//                        }
+//                        Date divorceDates = sdf.parse(divorceDate);
+//                        family.setDivorceDate(divorceDates);
+//                    }
+//                    this.familyService.save(family);
+//                }
+//            }
+//        }
+//        return "redirect:/cq/compareInfo/innerExcelIndex";
+//    }
+}

@@ -1,0 +1,87 @@
+package com.app.cq.model;
+
+import javax.persistence.*;
+
+/**
+ * 安置项目表
+ * Created by jmdf on 2018/9/5.
+ */
+@Table(name = "azProject")
+@Entity
+public class AzProject {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;  //主键   自动生成
+    private String projectName;   //项目名称
+    private String address;   //项目位置
+    private String east;   //  项目东至
+    private Integer west;  //  项目西至
+    private String south;  //项目南至
+    private String north;  //项目北至
+    private String memo; // 备注
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEast() {
+        return east;
+    }
+
+    public void setEast(String east) {
+        this.east = east;
+    }
+
+    public Integer getWest() {
+        return west;
+    }
+
+    public void setWest(Integer west) {
+        this.west = west;
+    }
+
+    public String getSouth() {
+        return south;
+    }
+
+    public void setSouth(String south) {
+        this.south = south;
+    }
+
+    public String getNorth() {
+        return north;
+    }
+
+    public void setNorth(String north) {
+        this.north = north;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+}

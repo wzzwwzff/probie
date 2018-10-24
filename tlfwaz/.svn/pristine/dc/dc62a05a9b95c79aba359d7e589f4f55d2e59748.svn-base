@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>认购协议</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 20px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitle {
+            clear: both;
+            text-indent: 0em;
+            font-size: 22px;
+            text-align: center;
+            line-height: 20px;
+            /*font-weight: bold;*/
+            margin-top: 15px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 30px;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 24px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 40px;
+        }
+
+        .dataTable tr {
+            height: 30px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        #footer {
+            margin-bottom: 7px;
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div id="footer">
+    第<span id="pagenumber"></span>页，共<span id="pagecount"></span>页
+</div>
+<div class="printContent">
+    <p class="printTitler" >长辛店东河沿村回迁房项目<br/>购房协议</p>
+    <p style="text-align: right;margin-right:50px;">协议编号：${strings.getNotNull(agreementCode)}</p>
+    <p style="margin-top: 30px;text-indent: 0em;">甲　　方：北京鹏睿房地产开发有限公司</p>
+    <p style="text-indent: 0em;">通讯地址：北京市丰台区南三环西路三号</p>
+    <p style="text-indent: 0em;">联系电话：010-87278848</p>
+    <p style="margin-top: 30px;text-indent: 0em;">乙　　方：<span class="border">${strings.getNotNull(family.name)}</span>身份证号：<span class="border">${strings.getNotNull(family.idCard)}</span></p>
+    <p style="text-indent: 0em;">通讯地址：<span class="border">${strings.getNotNull(family.currentAddress)}</span></p>
+    <p style="text-indent: 0em;">联系电话：<span class="border">${strings.getNotNull(family.phone)}</span></p>
+
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第一条  房屋基本情况</span></p>
+    <p>1.回迁房坐落：长辛店东河沿村；回迁房的用途为住宅；层高为：2.8米；建筑结构：现浇混凝土剪力墙结构；阳台为封闭式；房屋产权性质：按经济适用住房管理。</p>
+    <p>2.本协议所称“建筑面积”均指暂估建筑面积(含公摊建筑面积)，最终以政府主管部门备案的实测建筑面积为准。</p>
+    <p>3.本协议所称“房号”均指规划施工管理号，最终以公安管理机关核定的楼门牌号为准。</p>
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第二条  面积及价款</span></p>
+    <p>1.依据乙方与腾退人签订的“宅基地房屋腾退补偿安置协议”的约定，乙方购房指标为<span class="border">${family.gfArea?default("/")}</span>平方米。乙方购买的回迁房如下：</p>
+    <div>
+        <table class="dataTable">
+            <tr>
+                <td style="width: 10%">序号</td>
+                <td style="width: 50%">房号</td>
+                <td style="width: 20%">居室</td>
+                <td style="width: 20%">建筑面积（㎡）</td>
+            </tr>
+            <#if (houseList ? size > 0)>
+                <#list houseList as house>
+                    <tr>
+                        <td>${house_index + 1}</td>
+                        <td>${house.buildNum}号楼${house.unitNum}单元${house.houseNum}</td>
+                        <td>${houseTypeMap[house.houseType+""]}</td>
+                        <td>${house.buildArea}</td>
+                    </tr>
+                </#list>
+            </#if>
+            <tr>
+                <td colspan="3" style="width: 80%">合计</td>
+                <td>${family.azArea?default("/")}</td>
+            </tr>
+        </table>
+    </div>
+    <p>2.乙方实际购买回迁房屋建筑面积为<span class="border">${family.azArea?default("/")}</span>平方米，超出购房指标15平方米以内的实际购房建筑面积为<span class="border">${family.inArea?default("/")}</span>平方米，单价4000元/平方米；超出购房指标15平方米以外的实际购房建筑面积为<span class="border">${family.outArea?default("/")}</span>平方米，单价6000元/平方米。总价款为人民币<span class="border">${family.totalHouseMoney?default("/")}</span>元（大写人民币<span class="border">${totalHouseMoneyStr?default("/")}</span>），平均价格为<span class="border">${family.averageHouseMoney?default("/")}</span>元/平方米。</p>
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第三条  付款方式</span></p>
+    <p>根据乙方签署的“宅基地房屋腾退补偿安置协议”的规定，乙方向甲方一次性支付本协议第二条第2款中暂定的购房款<span class="border">${family.totalHouseMoney?default("/")}</span>元（大写人民币：<span class="border">${totalHouseMoneyStr?default("/")}</span>）。</p>
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第四条  回迁房交付条件</span></p>
+    <p>2018年10月31日前达到下列交付条件：</p>
+    <p>1.具备竣工验收入住条件。</p>
+    <p>2.提供该回迁房的《住宅工程质量分户验收表》。</p>
+    <p>3.提供有资质的房产测绘机构完成的面积实测技术报告书。</p>
+    <p>4.提供《住宅质量保证书》和《住宅使用说明书》。</p>
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第五条  购房款结算及相关费用缴纳</span></p>
+    <p>1.本协议约定的回迁房建筑面积与实测建筑面积不一致的，甲乙双方同意，最终按照政府主管部门备案的实测建筑面积结算房款，多退少补。</p>
+    <p>2.本协议第二条中的购房款不包括购买该回迁房所应缴纳的物业费、供暖费、公共维修基金、契税及其他按照国家相应法律法规及政策所需缴纳的相关费用。</p>
+    <p>3.双方同意上述购房款及相关费用于办理入住手续前乙方一次性支付给甲方。</p>
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第六条  交接手续</span></p>
+    <p>该回迁房达到第四条约定的交付条件后，甲方应在交付日的7日前，书面通知乙方办理交接手续的时间、地点以及应当携带的资料。乙方未在《入住通知书》规定的期限和地点办理房屋交付使用手续的，则自《入住通知书》规定的期限届满之日起，即视为甲方已按期交付该回迁房。自回迁房交付或视为交付之日起，乙方开始承担与该回迁房有关的全部风险责任以及包括但不限于物业服务费、供暖费等全部相关费用。</p>
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第七条  关于网签的约定</span></p>
+    <p>依据北京市住房和城乡建设委员会相关文件要求：“暂不具备网上签约条件的回迁房项目，开发单位与购房人签订纸质协议，具备网上签约条件后需网上签约并办理房屋权属登记。”甲方与乙方一致确认：本项目具备网上签约条件后，甲方向乙方发放《网签通知书》，乙方须按通知规定的日期，与甲方办理网上签约手续。若因乙方原因未按期办理网上签约手续导致未能在约定的时间内取得不动产登记证书的，乙方承担全部责任，与甲方无关。</p>
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第八条  争议解决方式</span></p>
+    <p>本协议在履行过程中发生争议，由双方当事人协商解决；协商不成的，可依法向北京市丰台区人民法院起诉。</p>
+    <p style="margin-top:30px;text-align: left;" class="printTitle"><span class="bold">第九条  协议生效及其他</span></p>
+    <p>1.乙方应确保联系电话、地址准确无误。本协议项下甲方发出或者提供的所有通知、文件、资料，均以本协议乙方所列明的地址和电话送达。如有变更，乙方应及时书面通知甲方。甲方以邮寄方式发出的所有通知、文件、资料，快件寄出或者投邮当日视为送达。</p>
+    <p>2.本协议由甲、乙双方签字或者盖章后生效。本协议一式叁份，甲方贰份、乙方壹份。</p>
+
+    <p style="margin-top: 100px;text-indent: 0em;">甲方（盖章）：<span style="margin-left: 150px;">乙方（签字）：</span></p>
+    <p style="margin-top: 60px;text-indent: 0em;">法定代表人：<span style="margin-left: 170px;">受托代理人：</span></p>
+    <p style="margin-top: 40px;text-indent: 0em;"><span class="border">　　　　</span>年<span class="border">　　</span>月<span class="border">　　</span>日<span style="margin-left: 100px;"><span class="border">　　　　</span>年<span class="border">　　</span>月<span class="border">　　</span>日</span></p>
+</div>
+</body>
+</html>

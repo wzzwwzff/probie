@@ -1,0 +1,238 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.model.AzProject;
+import com.app.cq.model.Family;
+import com.app.cq.model.House;
+import com.app.cq.service.AzProjectService;
+import com.app.cq.service.HouseService;
+import com.app.cq.service.StatisticsService;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 公示管理
+ * Created by jmdf on 2018/9/6.
+ */
+@Controller
+@RequestMapping("/cq/publicShow/*")
+public class PublicShowController {
+    @Autowired
+    private AzProjectService azProjectService;
+    @Autowired
+    private HouseService houseService;
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private StatisticsService statisticsService;
+
+    /**
+     * 电子楼盘展示主界面
+     */
+    @RequestMapping("main")
+    public void main(HttpServletRequest request, ModelMap modelMap) {
+        //查询出所有的项目名称和楼号，保存至request域中
+        List<AzProject> projectList = this.azProjectService.listAll();
+        Map<Integer, List<String>> buildNumMap = this.houseService.getBuildNum();
+        modelMap.addAttribute("projectList", projectList);
+        modelMap.addAttribute("buildNumMap", buildNumMap);
+    }
+
+    /**
+     * 电子楼盘展示中间链接界面
+     */
+    @RequestMapping("housePic")
+    public void housePic(HttpServletRequest request, ModelMap model) {
+        int times = ParamUtils.getInt(request, "times", 10);
+        if (times <= 0)
+            times = 10;
+
+        //将前台所需要的数据封装成数组
+        List<Object[]> resultList = new ArrayList<Object[]>();
+        int index = 0;
+        Object[] objects = null;
+        String[] buildNumArray = ParamUtils.getStringParameters(request, "buildNum");
+        for (String s : buildNumArray) {
+            String projectIdStr = s.substring(0, s.indexOf("_"));
+            Integer projectId = Integer.valueOf(projectIdStr);
+            String buildNum = s.substring(s.indexOf("_") + 1);
+            objects = new Object[3];
+            objects[0] = this.azProjectService.get(projectId).getProjectName();
+            objects[1] = projectId;
+            objects[2] = buildNum;
+            resultList.add(objects);
+        }
+        model.addAttribute("resultList", resultList);
+        model.addAttribute("times", times);
+    }
+
+    /**
+     * 电子楼盘展示显示界面
+     */
+    @RequestMapping("housePicItem")
+    public void housePicItem(HttpServletRequest request, ModelMap modelMap) {
+        Integer projectId = ParamUtils.getInt(request, "searchProject", 0);
+        String buildNum = ParamUtils.getString(request, "searchBuildNum", "");
+        AzProject project = this.azProjectService.get(projectId);
+
+        Map<String, String> houseTypeDataDictMap = this.dataDictService.getMapByParentAttributeNameForValue("户型");
+        List<String> unitList = this.houseService.distinctUnit(project.getId(), buildNum);// 获取所有单元
+        // 各个单元的最大房号<单元号，最大房号>
+        Map<String, String> maxRoomByUnitMap = this.houseService.getMaxRoomByUnit(project.getId(), buildNum);
+        // 最大楼层
+        int maxFloor = this.houseService.getMaxFloor(project.getId(), buildNum);
+        // 所有房源
+        List<House> houseList = this.houseService.listHouse(project.getId(), buildNum);
+        Map<String, House> houseMap = new HashMap<String, House>();// <单元-房号:house>
+        if (Collections3.isNotEmpty(houseList) && houseList.size() > 0) {
+            for (House house : houseList) {
+                String code = house.getUnitNum() + "-" + house.getHouseNum();
+                houseMap.put(code, house);
+            }
+        }
+        //单元  房号  居室
+        Map<String, Map<String, String>> houseTypeMap = this.houseService.getHouseTypeByProjectIdAndBuildNum(project.getId(), buildNum);
+        List<DataDict> flagList = dataDictService.getDataDictList("房屋状态");
+        List<DataDict> typeList = dataDictService.getDataDictList("户型");
+        Map<String, DataDict> flagMap = Maps.newLinkedHashMap();
+        Map<String, String> typeMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(flagList)) {
+            for (DataDict dataDict : flagList) {
+                flagMap.put(dataDict.getAttributeValue(), dataDict);
+            }
+        }
+        if (Collections3.isNotEmpty(typeList)) {
+            for (DataDict dataDict : typeList) {
+                typeMap.put(dataDict.getAttributeValue(), dataDict.getAttributeColor());
+            }
+        }
+        modelMap.addAttribute("project", project);
+        modelMap.addAttribute("buildNum", buildNum);
+        modelMap.addAttribute("unitList", unitList);
+        modelMap.addAttribute("maxRoomByUnitMap", maxRoomByUnitMap);
+        modelMap.addAttribute("maxFloor", maxFloor);
+        modelMap.addAttribute("houseMap", houseMap);
+        modelMap.addAttribute("houseTypeMap", houseTypeMap);
+        modelMap.addAttribute("houseTypeDataDictMap", houseTypeDataDictMap);
+        modelMap.addAttribute("flagMap", flagMap);
+        modelMap.addAttribute("typeMap", typeMap);
+    }
+
+    /**
+     * 选房信息公示
+     */
+    @RequestMapping("houseShow")
+    public void houseShow() {
+
+    }
+
+    /**
+     * 选房信息公示
+     */
+    @RequestMapping("houseShowTable")
+    public void houseShowTable(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<House> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+
+        //得到页面传来的pageNo和pageSize并设置PageInfo信息
+        int pageNo = ParamUtils.getInt(request, "pageNo", 0);
+        int pageSize = ParamUtils.getInt(request, "pageSize", 0);
+        pageInfo.setPageSize(pageSize);
+        pageInfo.setPageNo(pageNo);
+        if (pageNo == 0) {
+            pageInfo.setPageNo(1);
+        }
+
+        pageInfo = this.houseService.getHouseList(pageInfo);
+
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+
+    /**
+     * 得到已选房源套数
+     */
+    @RequestMapping("getHouseCount")
+    @ResponseBody
+    public Map getHouseCount() {
+        Object houseCount = this.statisticsService.getHouseCount();
+        Map<String, String> resultMap = Maps.newHashMap();
+        resultMap.put("houseCount", String.valueOf(houseCount));
+        return resultMap;
+    }
+
+    /**
+     * 选房信息公示2
+     */
+    @RequestMapping("houseShow2")
+    public void houseShow2() {
+
+    }
+
+    /**
+     * 选房信息公示2
+     */
+    @RequestMapping("houseShowTable2")
+    public void houseShowTable2(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<House> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+
+        //得到页面传来的pageNo和pageSize并设置PageInfo信息
+        int pageNo = ParamUtils.getInt(request, "pageNo", 0);
+        int pageSize = ParamUtils.getInt(request, "pageSize", 0);
+        pageInfo.setPageSize(pageSize);
+        pageInfo.setPageNo(pageNo);
+        if (pageNo == 0) {
+            pageInfo.setPageNo(1);
+        }
+
+        pageInfo = this.houseService.getHouseList2(pageInfo);
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /***************************************
+     * 销控人员用
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("showHouse")
+    public void showHouse(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<House> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+
+        pageInfo.setPageSize(9999);
+
+        pageInfo = this.houseService.getHouseList2(pageInfo);
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 得到已选房源套数2
+     */
+    @RequestMapping("getHouseCount2")
+    @ResponseBody
+    public Map getHouseCount2() {
+        Object houseCount = this.statisticsService.getHouseCount2();
+        Map<String, String> resultMap = Maps.newHashMap();
+        resultMap.put("houseCount", String.valueOf(houseCount));
+        return resultMap;
+    }
+}

@@ -1,0 +1,195 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.exception.Response;
+import com.app.cq.model.Family;
+import com.app.cq.model.House;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.HouseService;
+import com.app.cq.utils.GetCurrentUser;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.StringUtils;
+import com.sqds.utils.pdf.PdfDocumentGenerator;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 选房管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/rzBusinessManager/*")
+public class rzManagerController {
+
+    @Resource
+    private FamilyService familyService;
+    @Resource
+    private HouseService houseService;
+    @Resource
+    private DataDictService dataDictService;
+
+    /**
+     * 入住业务列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        String departmentCode = GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode();
+        if (!departmentCode.equals("110")){
+            pageInfo.addParameter("search_eq_string_bd",departmentCode);
+        }
+        pageInfo = familyService.rzFamilyList(pageInfo);
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+        }
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("houseListMap",houseListMap);
+        modelMap.addAttribute("departmentCode",departmentCode);
+    }
+
+    /**
+     * 打印入住通知书
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("printrzReport")
+    public void printrzReport(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);//家庭id
+        Family family = this.familyService.get(familyId);
+        modelMap.addAttribute("family",family);
+    }
+
+    /**
+     * 打印入住通知书
+     * @param request
+     * @param response
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    @RequestMapping("printrzReportPDF")
+    public void printrzReportPDF(HttpServletRequest request, HttpServletResponse response) throws InvocationTargetException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);//家庭id
+        Family family = this.familyService.get(familyId);
+        List<House> houseList = this.houseService.getHouseListByFamilyId(family.getId());
+
+        Map map = Maps.newHashMap();
+        map.put("family",family);
+        map.put("houseList", houseList);
+        List<DataDict> contextList = this.dataDictService.getDataDictList("文本单据");
+
+        String template = "";   //入住通知书模板
+        for (DataDict dataDict : contextList) {
+            if (dataDict.getAttributeName().equals("东河沿入住通知单")){
+                template = dataDict.getAttributeValue();
+            }
+        }
+
+        PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            pdfDocumentGenerator.generate(template, map, outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 入住信息导出
+     */
+    @RequestMapping("excelForm")
+    public void excelForm(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<Family>();
+        pageInfo.setPageSize(Integer.MAX_VALUE);
+        Servlets.initPageInfo(request, pageInfo);
+        pageInfo = this.familyService.rzFamilyList(pageInfo);
+
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+        }
+
+        modelMap.addAttribute("pageInfo", pageInfo);
+        modelMap.addAttribute("houseListMap", houseListMap);
+    }
+
+    /**
+     * 入住状态
+     */
+    @RequestMapping("statusUpdate")
+    public void statusUpdate(){
+
+    }
+
+    /**
+     * 入住状态保存
+     */
+    @RequestMapping("batchStatusSave")
+    @ResponseBody
+    public Response batchStatusSave(HttpServletRequest request) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        String content = ParamUtils.getString(request, "content", "");
+        int i = 0;
+        if (StringUtils.isNotEmpty(content)) {
+            String[] rowStrs = content.split("\n");
+            for (String row : rowStrs) {
+                String[] colStrs = row.split("\t");
+                String familyCode = null;
+                Integer rzStatus = null;
+                for(String s:colStrs){
+                    String[] msg = s.split(" ");
+                    familyCode = msg[0];
+                    rzStatus = Integer.valueOf(msg[1]);
+                }
+
+                Family family = this.familyService.getFamilyByCode(familyCode);
+                List<House> houseList = this.houseService.getChooseHouseById(family.getId());
+                for(House house:houseList){
+                    house.setRzStatus(rzStatus);
+                    this.houseService.save(house);
+                }
+                family.setHouseList(houseList);
+                this.familyService.save(family);
+                i++;
+            }
+        }
+        Response response = new Response();
+        response.setCode("1111");
+        response.setMessage("本次共更新了"+ i + "条数据！");
+
+        return response;
+    }
+
+}

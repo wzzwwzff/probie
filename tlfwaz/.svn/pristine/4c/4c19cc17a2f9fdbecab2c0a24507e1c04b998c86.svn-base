@@ -1,0 +1,193 @@
+package com.app.cq.web.cq;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.exception.Precondition;
+import com.app.cq.model.Area;
+import com.app.cq.model.Family;
+import com.app.cq.service.AreaService;
+import com.app.cq.service.FamilyService;
+import com.app.permission.utils.UserSession;
+import com.google.common.collect.Maps;
+import com.sqds.exception.SqdsException;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.pdf.PdfDocumentGenerator;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 财务管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/financial/*")
+public class FinanceController {
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private AreaService areaService;
+
+    /**
+     * 结算批次入口
+     */
+    @RequestMapping("startList")
+    public void startList(HttpServletRequest request , ModelMap modelMap){
+        PageInfo<Area> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+
+        pageInfo = areaService.list(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 财务批次，地块，时间设置
+     */
+    @RequestMapping("setBatchNum")
+    public void setBatchNum(HttpServletRequest request){
+        try {
+            this.familyService.setFinanceBatch(request);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 财务结算列表
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request , ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+
+        pageInfo = this.familyService.financeList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 财务结算from
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null, "数据错误，请重试！");
+        modelMap.put("family", family);
+        modelMap.addAttribute("jsPerson", UserSession.getUserFromSession(request).getRealName());
+    }
+
+    /**
+     * 结算信息保存
+     */
+    @RequestMapping("save")
+    public String save(HttpServletRequest request) {
+        this.familyService.financeSave(request);
+        return "redirect:list?" + request.getAttribute("searchParams");
+    }
+
+    /**
+     *  结算证明打印页面
+     */
+    @RequestMapping("print")
+    public void print(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family!= null , "数据有误");
+        modelMap.addAttribute("family",family);
+    }
+
+    /**
+     * 结算证明打印
+     */
+    @RequestMapping("printJsPDF")
+    public void printJsPDF(HttpServletRequest request, HttpServletResponse response) throws InvocationTargetException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException {
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family!= null , "数据有误");
+
+        Map map = Maps.newHashMap();
+        map.put("family",family);
+
+        List<DataDict> contextList = this.dataDictService.getDataDictList("文本单据");
+
+        String template = "";
+        for (DataDict dataDict : contextList) {
+            if (dataDict.getAttributeName().equals("东河沿结算证明")){
+                template = dataDict.getAttributeValue();
+            }
+        }
+        PdfDocumentGenerator pdfDocumentGenerator = new PdfDocumentGenerator();
+        OutputStream outputStream = null;
+        try {
+            response.setHeader("Expires", "0");
+            response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+            outputStream = response.getOutputStream();
+            pdfDocumentGenerator.generate(template, map, outputStream);
+        } catch (IOException e) {
+
+        } finally {
+
+        }
+    }
+
+    /**
+     * 取得地块的所有签约时间
+     */
+    @ResponseBody
+    @RequestMapping("getSignDateS")
+    public String getSignDateS(HttpServletRequest request){
+        String areaName = ParamUtils.getString(request, "areaName", "");
+        if (areaName != ""){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String Dates = "";
+            String formatDate = "";
+            if (areaName.equals("换签")){
+                String areaIds = "'1','2','3','4','5','6','7','8'";
+                List<Family> familyList = familyService.listByAreaSignDate(areaIds);
+                for (int i = 0; i <familyList.size() ; i++) {
+                    String familyDate = sdf.format(familyList.get(i).getSignNumDate());
+                    if (!formatDate.equals(familyDate)){
+                        Dates += "," + familyDate;
+                        formatDate = familyDate;
+                    }
+                }
+            }
+            if (areaName.equals("东河沿")){
+                Area area = areaService.getAreaByAreaName(areaName);
+                String areaIds = "'" + area.getId() + "'";
+                List<Family> familyList = familyService.listByAreaSignDate(areaIds);
+                for (int i = 0; i <familyList.size() ; i++) {
+                    String familyDate = sdf.format(familyList.get(i).getSignNumDate());
+                    if (formatDate != familyDate){
+                        Dates += "," + familyDate;
+                        formatDate = familyDate;
+                    }
+                }
+            }
+            if (Dates.startsWith(",")){
+                Dates = Dates.substring(1,Dates.length());
+            }
+            return Dates;
+        }else{
+            throw new SqdsException("请选择时间，请核查");
+        }
+    }
+}

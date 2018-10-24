@@ -1,0 +1,31 @@
+package com.app.cq.service;
+
+import com.app.cq.model.House;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by jmdf on 2018/9/5.
+ */
+@Service
+public class HouseService extends HibernateDao<House> {
+
+    public PageInfo<House> houseList(PageInfo pageInfo,Integer projectId){
+        String hql = "from House where azProjectId=? order by id";
+        return list(pageInfo,hql, projectId);
+    }
+
+    /**
+     * 得到家庭选择房源
+     * @param familyId
+     * @return
+     */
+    public List<House> getHouseListByFamilyId(Integer familyId) {
+        String hql = "from House h inner join fetch h.project where h.family.id = ? order by h.houseSort";
+        return this.list(hql, familyId);
+    }
+
+}

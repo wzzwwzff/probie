@@ -1,0 +1,503 @@
+package com.app.cq.model;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 家庭表
+ * Created by jmdf on 2018/9/5.
+ */
+@Table(name = "family")
+@Entity
+public class Family {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;              //	主键	自动增加
+    private String familyCode;      //	档案编号	该户唯一标识符
+    private String name;            //	姓名
+    private String idCard;          //	身份证号
+    private Integer sex;            //	性别  数据字典（1男，2女）
+    private Integer age;            //	年龄
+    private String phone;            //	联系电话
+    private String address;         //	联系地址
+    private String fwzl;             //	房屋坐落
+    private BigDecimal totalMoney;  //	补偿款总计
+    private Integer houseNum;            //	已选房套数
+    private BigDecimal azArea;        //	已选房面积
+    private BigDecimal gfArea;        //	购房指标
+    private BigDecimal inArea;        //	超15㎡内面积
+    private BigDecimal outArea;        //	超15㎡外面积
+    private BigDecimal inHouseMoney;        //	超标内房款(4000／㎡）
+    private BigDecimal outHouseMoney;        //	超标外房款6000／㎡）
+    private BigDecimal totalHouseMoney;        //	总购房款
+    private BigDecimal jsMoney;        //	结算款
+    private Date signDate;              //	签约日期
+    private Date moveBackDate;        //	回迁日期
+    private Integer xfBatch;         //选房批次
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = true)
+    private Integer xfStatus;       //选房状态 1未选房  2已选房
+    private Date xfDate;             //选房日期
+    private Integer xfNum;           //选房顺序号
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = true)
+    private Integer signStatus;       //认购协议签约状态 1未签约 2已签约
+    private Date xyPrintDate;        //认购协议打印日期
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = true)
+    private Integer jsStatus;       //结算状态 1未结算  2已结算
+    private Date jsDate;             //结算日期
+    private String jsPerson;           //	结算经办人
+    private String memo;        //	备注
+    private Integer personNum;   //人口
+
+
+    //2018.09.06添加字段
+    private String azHouse;   //安置房源
+    private Integer xfTotalCount;   //实际选房套数
+    private Integer oneRoomCount;   //一居室套数
+    private Integer firstTwoRoomCount;//第一种二居室套数
+    private Integer secondTwoRoomCount;//第二种二居室套数
+    private Integer thirdTwoRoomCount;//第三种二居室套数
+    private Integer fourthTwoRoomCount;//第四种二居室套数
+    private Integer threeRoomCount;   //三居室套数
+
+    private BigDecimal shouldArea;   //应选面积
+    private BigDecimal selectedArea;   //实际选房面积
+    private BigDecimal inXyArea;      //指标内面积(15㎡以内)
+    private BigDecimal outXyArea;      //超指标面积(15㎡以外)
+    private BigDecimal inMoney;      //指标内购房款
+    private BigDecimal outMoney;      //指标外购房款
+    private BigDecimal gfMoney;   //购房款
+    private BigDecimal settlementedMoney; //结算后款
+
+    @ManyToOne
+    @JoinColumn(name = "projectId")
+    private Project project;        //	项目
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "areaId")
+    private Area area;        //地块
+
+    @OneToMany(mappedBy = "family", fetch = FetchType.LAZY)
+    private List<FamilyPerson> familyPersonList;
+
+    @OneToMany(mappedBy = "family", fetch = FetchType.LAZY)
+    private List<House> houseList;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFamilyCode() {
+        return familyCode;
+    }
+
+    public void setFamilyCode(String familyCode) {
+        this.familyCode = familyCode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getFwzl() {
+        return fwzl;
+    }
+
+    public void setFwzl(String fwzl) {
+        this.fwzl = fwzl;
+    }
+
+    public BigDecimal getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(BigDecimal totalMoney) {
+        this.totalMoney = totalMoney;
+    }
+
+    public Integer getHouseNum() {
+        return houseNum;
+    }
+
+    public void setHouseNum(Integer houseNum) {
+        this.houseNum = houseNum;
+    }
+
+    public BigDecimal getAzArea() {
+        return azArea;
+    }
+
+    public void setAzArea(BigDecimal azArea) {
+        this.azArea = azArea;
+    }
+
+    public BigDecimal getGfArea() {
+        return gfArea;
+    }
+
+    public void setGfArea(BigDecimal gfArea) {
+        this.gfArea = gfArea;
+    }
+
+    public BigDecimal getInArea() {
+        return inArea;
+    }
+
+    public void setInArea(BigDecimal inArea) {
+        this.inArea = inArea;
+    }
+
+    public BigDecimal getOutArea() {
+        return outArea;
+    }
+
+    public void setOutArea(BigDecimal outArea) {
+        this.outArea = outArea;
+    }
+
+    public BigDecimal getInHouseMoney() {
+        return inHouseMoney;
+    }
+
+    public void setInHouseMoney(BigDecimal inHouseMoney) {
+        this.inHouseMoney = inHouseMoney;
+    }
+
+    public BigDecimal getOutHouseMoney() {
+        return outHouseMoney;
+    }
+
+    public void setOutHouseMoney(BigDecimal outHouseMoney) {
+        this.outHouseMoney = outHouseMoney;
+    }
+
+    public BigDecimal getTotalHouseMoney() {
+        return totalHouseMoney;
+    }
+
+    public void setTotalHouseMoney(BigDecimal totalHouseMoney) {
+        this.totalHouseMoney = totalHouseMoney;
+    }
+
+    public BigDecimal getJsMoney() {
+        return jsMoney;
+    }
+
+    public void setJsMoney(BigDecimal jsMoney) {
+        this.jsMoney = jsMoney;
+    }
+
+    public Date getSignDate() {
+        return signDate;
+    }
+
+    public void setSignDate(Date signDate) {
+        this.signDate = signDate;
+    }
+
+    public Date getMoveBackDate() {
+        return moveBackDate;
+    }
+
+    public void setMoveBackDate(Date moveBackDate) {
+        this.moveBackDate = moveBackDate;
+    }
+
+    public Integer getXfBatch() {
+        return xfBatch;
+    }
+
+    public void setXfBatch(Integer xfBatch) {
+        this.xfBatch = xfBatch;
+    }
+
+    public Integer getXfStatus() {
+        return xfStatus;
+    }
+
+    public void setXfStatus(Integer xfStatus) {
+        this.xfStatus = xfStatus;
+    }
+
+    public Date getXfDate() {
+        return xfDate;
+    }
+
+    public void setXfDate(Date xfDate) {
+        this.xfDate = xfDate;
+    }
+
+    public Integer getXfNum() {
+        return xfNum;
+    }
+
+    public void setXfNum(Integer xfNum) {
+        this.xfNum = xfNum;
+    }
+
+    public Integer getSignStatus() {
+        return signStatus;
+    }
+
+    public void setSignStatus(Integer signStatus) {
+        this.signStatus = signStatus;
+    }
+
+    public Date getXyPrintDate() {
+        return xyPrintDate;
+    }
+
+    public void setXyPrintDate(Date xyPrintDate) {
+        this.xyPrintDate = xyPrintDate;
+    }
+
+    public Integer getJsStatus() {
+        return jsStatus;
+    }
+
+    public void setJsStatus(Integer jsStatus) {
+        this.jsStatus = jsStatus;
+    }
+
+    public Date getJsDate() {
+        return jsDate;
+    }
+
+    public void setJsDate(Date jsDate) {
+        this.jsDate = jsDate;
+    }
+
+    public String getJsPerson() {
+        return jsPerson;
+    }
+
+    public void setJsPerson(String jsPerson) {
+        this.jsPerson = jsPerson;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public List<FamilyPerson> getFamilyPersonList() {
+        return familyPersonList;
+    }
+
+    public void setFamilyPersonList(List<FamilyPerson> familyPersonList) {
+        this.familyPersonList = familyPersonList;
+    }
+
+    public List<House> getHouseList() {
+        return houseList;
+    }
+
+    public void setHouseList(List<House> houseList) {
+        this.houseList = houseList;
+    }
+
+    public Integer getPersonNum() {
+        return personNum;
+    }
+
+    public void setPersonNum(Integer personNum) {
+        this.personNum = personNum;
+    }
+
+    public String getAzHouse() {
+        return azHouse;
+    }
+
+    public void setAzHouse(String azHouse) {
+        this.azHouse = azHouse;
+    }
+
+    public Integer getXfTotalCount() {
+        return xfTotalCount;
+    }
+
+    public void setXfTotalCount(Integer xfTotalCount) {
+        this.xfTotalCount = xfTotalCount;
+    }
+
+    public Integer getOneRoomCount() {
+        return oneRoomCount;
+    }
+
+    public void setOneRoomCount(Integer oneRoomCount) {
+        this.oneRoomCount = oneRoomCount;
+    }
+
+    public Integer getFirstTwoRoomCount() {
+        return firstTwoRoomCount;
+    }
+
+    public void setFirstTwoRoomCount(Integer firstTwoRoomCount) {
+        this.firstTwoRoomCount = firstTwoRoomCount;
+    }
+
+    public Integer getSecondTwoRoomCount() {
+        return secondTwoRoomCount;
+    }
+
+    public void setSecondTwoRoomCount(Integer secondTwoRoomCount) {
+        this.secondTwoRoomCount = secondTwoRoomCount;
+    }
+
+    public Integer getThirdTwoRoomCount() {
+        return thirdTwoRoomCount;
+    }
+
+    public void setThirdTwoRoomCount(Integer thirdTwoRoomCount) {
+        this.thirdTwoRoomCount = thirdTwoRoomCount;
+    }
+
+    public Integer getFourthTwoRoomCount() {
+        return fourthTwoRoomCount;
+    }
+
+    public void setFourthTwoRoomCount(Integer fourthTwoRoomCount) {
+        this.fourthTwoRoomCount = fourthTwoRoomCount;
+    }
+
+    public Integer getThreeRoomCount() {
+        return threeRoomCount;
+    }
+
+    public void setThreeRoomCount(Integer threeRoomCount) {
+        this.threeRoomCount = threeRoomCount;
+    }
+
+    public BigDecimal getShouldArea() {
+        return shouldArea;
+    }
+
+    public void setShouldArea(BigDecimal shouldArea) {
+        this.shouldArea = shouldArea;
+    }
+
+    public BigDecimal getSelectedArea() {
+        return selectedArea;
+    }
+
+    public void setSelectedArea(BigDecimal selectedArea) {
+        this.selectedArea = selectedArea;
+    }
+
+    public BigDecimal getInXyArea() {
+        return inXyArea;
+    }
+
+    public void setInXyArea(BigDecimal inXyArea) {
+        this.inXyArea = inXyArea;
+    }
+
+    public BigDecimal getOutXyArea() {
+        return outXyArea;
+    }
+
+    public void setOutXyArea(BigDecimal outXyArea) {
+        this.outXyArea = outXyArea;
+    }
+
+    public BigDecimal getInMoney() {
+        return inMoney;
+    }
+
+    public void setInMoney(BigDecimal inMoney) {
+        this.inMoney = inMoney;
+    }
+
+    public BigDecimal getOutMoney() {
+        return outMoney;
+    }
+
+    public void setOutMoney(BigDecimal outMoney) {
+        this.outMoney = outMoney;
+    }
+
+    public BigDecimal getGfMoney() {
+        return gfMoney;
+    }
+
+    public void setGfMoney(BigDecimal gfMoney) {
+        this.gfMoney = gfMoney;
+    }
+
+    public BigDecimal getSettlementedMoney() {
+        return settlementedMoney;
+    }
+
+    public void setSettlementedMoney(BigDecimal settlementedMoney) {
+        this.settlementedMoney = settlementedMoney;
+    }
+}

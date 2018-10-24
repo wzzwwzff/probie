@@ -1,0 +1,94 @@
+package com.app.cq.map;
+
+import com.google.common.collect.Maps;
+
+import java.util.Map;
+
+/**
+ * 综合导出excel时使用的map
+ * Created by lsh on 2017/7/27.
+ */
+public class ContractExcelMap {
+
+    /**
+     * 申请家庭信息Map
+     *
+     * @return
+     */
+    public static Map familyMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("f_familyCode", "档案编号");
+        map.put("f_name", "姓名");
+        map.put("f_idCard", "身份证号");
+        map.put("f_sex", "性别");
+        map.put("f_age", "年龄");
+        map.put("f_phone", "联系电话");
+        map.put("f_address", "联系地址");
+        map.put("f_familyPerson", "家庭成员");
+        map.put("f_fwzl", "房屋坐落");
+        map.put("f_totalMoney", "补偿款总计");
+        map.put("f_houseNum", "已选套数");
+        map.put("f_azArea", "已选房面积");
+        map.put("f_gfArea", "购房指标");
+        map.put("f_inArea", "超15㎡内面积");
+        map.put("f_outArea", "超15㎡外面积");
+        map.put("f_inHouseMoney", "超标内房款");
+        map.put("f_outHouseMoney", "超标外房款");
+        map.put("f_totalHouseMoney", "总购房款");
+        map.put("f_jsMoney", "结算款");
+        map.put("f_signDate", "签约日期");
+        map.put("f_moveBackDate", "回迁日期");
+        map.put("f_xfBatch", "选房批次");
+        map.put("f_xfStatus", "选房状态");
+        map.put("f_xfDate", "选房日期");
+        map.put("f_xfNum", "选房顺序号");
+        map.put("f_signStatus", "认购协议签约状态");
+        map.put("f_xyPrintDate", "认购协议打印日期");
+        map.put("f_jsStatus", "结算状态");
+        map.put("f_jsDate", "结算日期");
+        map.put("f_jsPerson", "结算经办人");
+        map.put("f_memo", "备注");
+        map.put("f_personNum", "人口");
+        map.put("f_houseInfo", "房源信息");
+        map.put("f_azHouse", "安置房源");
+        map.put("f_xfTotalCount", "实际选房套数");
+        map.put("f_oneRoomCount", "一居室套数");
+        map.put("f_firstTwoRoomCount", "第一种二居室套数");
+        map.put("f_secondTwoRoomCount", "第二种二居室套数");
+        map.put("f_thirdTwoRoomCount", "第三种二居室套数");
+        map.put("f_fourthTwoRoomCount", "第四种二居室套数");
+        map.put("f_threeRoomCount", "三居室套数");
+        map.put("f_shouldArea", "应选面积");
+        map.put("f_selectedArea", "实际选房面积");
+        map.put("f_inXyArea", "指标内面积(15㎡以内)");
+        map.put("f_outXyArea", "超指标面积(15㎡以外)");
+        map.put("f_inMoney", "指标内购房款");
+        map.put("f_outMoney", "指标外购房款");
+        map.put("f_gfMoney", "购房款");
+        map.put("f_settlementedMoney", "结算后款");
+
+        return map;
+    }
+
+    /**
+     * 标题Map
+     *
+     * @return
+     */
+    public static Map<String, Map> jspShowMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.put("家庭信息", familyMap());
+        return map;
+    }
+
+    /**
+     * 总Map
+     *
+     * @return
+     */
+    public static Map excelMap() {
+        Map map = Maps.newLinkedHashMap();
+        map.putAll(familyMap());
+        return map;
+    }
+}

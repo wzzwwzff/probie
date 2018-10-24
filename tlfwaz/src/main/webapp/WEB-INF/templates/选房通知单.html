@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 680px;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        /*@page {*/
+        /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            /*margin: 6.6mm 12.6mm 6.6mm 12.6mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        .printTable tr td {
+
+            border: 1px solid #000000;
+            text-align: center;
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+
+</head>
+<body>
+    <div class="printContent">
+        <p style="text-align:center;line-height: 26px;margin: 20px ;"><span style="font-weight: bold">选房批次结果单</span></p>
+        <table class="printTable" cellpadding="0" cellspacing="0" style="width: 98%">
+            <tr style="text-align: center;height: 50px">
+                <td>
+                    家庭编号:
+                </td>
+                <td>
+                    姓名:
+                </td>
+                <td>
+                    选房批次:
+                </td>
+                <td>
+                    选房时间:
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    ${family.familyCode?default("/")}
+                </td>
+                <td>
+                    ${family.name?default("/")}
+                </td>
+                <td>
+                    ${family.xfBatch?default("/")}
+                </td>
+                <td>
+                    ${family.xyXfDate?default("/")}
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

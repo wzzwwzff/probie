@@ -1,0 +1,281 @@
+package com.app.cq.model;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * 房源表
+ * Created by jmdf on 2018/9/5.
+ */
+@Table(name = "house")
+@Entity
+public class House {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;//主键
+    private String buildNum;//楼号
+    private String unitNum;//单元号
+    private String houseNum;//房间号
+    private Integer houseType;//户型
+    private BigDecimal buildArea;//房屋建筑面积
+    private BigDecimal sjBuildArea;//实测建筑面积
+    private String houseNumAll;//984套原房号
+    private BigDecimal price;//单价
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = true)
+    private Integer houseStatus;//房屋状态 1、未选2、已选3、伪选
+    private Date chooseDate;//被选日期
+    private String opName;//操作人员
+    private Date opDate;//操作日期
+    private String hPerson;//购房人
+    private String hIdCard;//购房人身份证号
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer rzStatus;//入住状态 1、未入住2、已入住
+    private String rzName;//入住经办人
+    private Date rzDate;//入住日期
+    @Column(columnDefinition = "TEXT")
+    private String memo;//备注
+
+    private Integer isSpecial;       //是否是984户需要变更房源的户 1是  2否
+    private BigDecimal moveSubsidyFee;//平移补助费
+
+    private Integer houseDecrip;    //是2000户房源还是500户房源(电子选房公示)  1--2000户房源   2--500户房源
+
+    @Column(columnDefinition = "INT default 2", nullable = false, insertable = false)
+    private Integer inheritType;  //是否是继承人  1是  2否
+    @Column(columnDefinition = "INT default 2", nullable = false, insertable = false)
+    private Integer inheritStatus;       //继承人是否审核通过   1是 2否
+    private String inheritPassword;  //审核密码
+
+    @ManyToOne
+    @JoinColumn(name = "familyId")
+    private Family family;//入户家庭
+    @ManyToOne
+    @JoinColumn(name = "azProjectId")
+    private AzProject azProject;//项目
+
+    @ManyToOne
+    @JoinColumn(name = "areaId")
+    private Area area;//地块
+
+    public String getInheritPassword() {
+        return inheritPassword;
+    }
+
+    public void setInheritPassword(String inheritPassword) {
+        this.inheritPassword = inheritPassword;
+    }
+
+    public Integer getInheritStatus() {
+        return inheritStatus;
+    }
+
+    public void setInheritStatus(Integer inheritStatus) {
+        this.inheritStatus = inheritStatus;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getBuildNum() {
+        return buildNum;
+    }
+
+    public void setBuildNum(String buildNum) {
+        this.buildNum = buildNum;
+    }
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
+    }
+
+    public String getHouseNum() {
+        return houseNum;
+    }
+
+    public void setHouseNum(String houseNum) {
+        this.houseNum = houseNum;
+    }
+
+    public Integer getHouseType() {
+        return houseType;
+    }
+
+    public void setHouseType(Integer houseType) {
+        this.houseType = houseType;
+    }
+
+    public BigDecimal getBuildArea() {
+        return buildArea;
+    }
+
+    public void setBuildArea(BigDecimal buildArea) {
+        this.buildArea = buildArea;
+    }
+
+    public BigDecimal getSjBuildArea() {
+        return sjBuildArea;
+    }
+
+    public void setSjBuildArea(BigDecimal sjBuildArea) {
+        this.sjBuildArea = sjBuildArea;
+    }
+
+    public String getHouseNumAll() {
+        return houseNumAll;
+    }
+
+    public void setHouseNumAll(String houseNumAll) {
+        this.houseNumAll = houseNumAll;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Integer getHouseStatus() {
+        return houseStatus;
+    }
+
+    public void setHouseStatus(Integer houseStatus) {
+        this.houseStatus = houseStatus;
+    }
+
+    public Date getChooseDate() {
+        return chooseDate;
+    }
+
+    public void setChooseDate(Date chooseDate) {
+        this.chooseDate = chooseDate;
+    }
+
+    public String getOpName() {
+        return opName;
+    }
+
+    public void setOpName(String opName) {
+        this.opName = opName;
+    }
+
+    public Date getOpDate() {
+        return opDate;
+    }
+
+    public void setOpDate(Date opDate) {
+        this.opDate = opDate;
+    }
+
+    public String gethPerson() {
+        return hPerson;
+    }
+
+    public void sethPerson(String hPerson) {
+        this.hPerson = hPerson;
+    }
+
+    public String gethIdCard() {
+        return hIdCard;
+    }
+
+    public void sethIdCard(String hIdCard) {
+        this.hIdCard = hIdCard;
+    }
+
+    public Integer getRzStatus() {
+        return rzStatus;
+    }
+
+    public void setRzStatus(Integer rzStatus) {
+        this.rzStatus = rzStatus;
+    }
+
+    public String getRzName() {
+        return rzName;
+    }
+
+    public void setRzName(String rzName) {
+        this.rzName = rzName;
+    }
+
+    public Date getRzDate() {
+        return rzDate;
+    }
+
+    public void setRzDate(Date rzDate) {
+        this.rzDate = rzDate;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    public void setFamily(Family family) {
+        this.family = family;
+    }
+
+    public AzProject getAzProject() {
+        return azProject;
+    }
+
+    public void setAzProject(AzProject azProject) {
+        this.azProject = azProject;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public Integer getIsSpecial() {
+        return isSpecial;
+    }
+
+    public void setIsSpecial(Integer isSpecial) {
+        this.isSpecial = isSpecial;
+    }
+
+    public Integer getHouseDecrip() {return houseDecrip;}
+
+    public void setHouseDecrip(Integer houseDecrip) {this.houseDecrip = houseDecrip;}
+
+    public BigDecimal getMoveSubsidyFee() {
+        return moveSubsidyFee;
+    }
+
+    public void setMoveSubsidyFee(BigDecimal moveSubsidyFee) {
+        this.moveSubsidyFee = moveSubsidyFee;
+    }
+
+    public Integer getInheritType() {
+        return inheritType;
+    }
+
+    public void setInheritType(Integer inheritType) {
+        this.inheritType = inheritType;
+    }
+}

@@ -1,0 +1,13 @@
+package com.app.cq.web.cq;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 入住管理
+ * Created by jmdf on 2018/9/5.
+ */
+@RequestMapping("/cq/checkIn/*")
+@Controller
+public class CheckInController {
+}

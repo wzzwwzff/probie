@@ -1,0 +1,21 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div class="form-group">
+    <div class="input-group input-group-sm">
+        <div class="input-group-addon">家庭编号</div>
+        <tags:searchInput name="f.familyCode" fieldType="string" size="25" operator="like"
+                          className="form-control"/>
+    </div>
+    <div class="input-group input-group-sm">
+        <div class="input-group-addon">姓名</div>
+        <tags:searchInput name="f.name" fieldType="string" size="20" operator="like" className="form-control"/>
+    </div>
+    <div class="input-group input-group-sm">
+        <div class="input-group-addon">身份证号</div>
+        <tags:searchInput name="f.idCard" fieldType="string" size="20" operator="like" className="form-control"/>
+    </div>
+    <div class="input-group input-group-sm">
+        <div class="input-group-addon">房屋坐落</div>
+        <tags:searchInput name="f.fwzl" fieldType="string" size="20" operator="like" className="form-control"/>
+    </div>
+</div>

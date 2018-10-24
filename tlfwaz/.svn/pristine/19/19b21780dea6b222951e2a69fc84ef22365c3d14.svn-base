@@ -1,0 +1,37 @@
+package com.app.cq.web.cq;
+
+import com.app.cq.en.SignStatus;
+import com.app.cq.model.Family;
+import com.app.cq.service.FamilyService;
+import com.sqds.page.PageInfo;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * 财务管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/financial/*")
+public class FinanceController {
+    @Autowired
+    private FamilyService familyService;
+
+    /**
+     * 财务结算列表
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request , ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+
+        pageInfo.addParameter("search_eq_integer_signStatus", SignStatus.SIGN.getIndex());
+        pageInfo = this.familyService.familyList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+}

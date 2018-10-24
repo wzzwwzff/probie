@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>变更购房人申请</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 680px;
+            font-size: 20px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitle {
+            clear: both;
+            text-indent: 0em;
+            font-size: 22px;
+            text-align: center;
+            line-height: 20px;
+            /*font-weight: bold;*/
+            margin-top: 15px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 30px;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 24px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 20px;
+        }
+
+        .dataTable tr {
+            height: 30px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        #footer {
+            margin-bottom: 7px;
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="footer">-->
+    <!--第<span id="pagenumber"></span>页，共<span id="pagecount"></span>页-->
+<!--</div>-->
+<div class="printContent">
+    <p class="printTitler">长辛店东河沿村回迁房项目<br/>变更购房人申请书</p>
+    <p style="text-align: right;margin-right:50px;">协议编号：${strings.getNotNull(family.agreementCode)}</p>
+    <div>
+        <table class="dataTable">
+            <tr>
+                <td rowspan="2" style="width: 150px;">申请变更<br/>房屋信息</td>
+                <td colspan="4">房号</td>
+            </tr>
+            <tr>
+                <td colspan="4">${strings.getNotNull(house.buildNum)}号楼${strings.getNotNull(house.unitNum)}单元${strings.getNotNull(house.houseNum)}</td>
+            </tr>
+            <tr>
+                <td rowspan="2">被腾退人信息（申请人）</td>
+                <td>姓名</td>
+                <td>证件名称</td>
+                <td>证件号码</td>
+                <td>双方关系</td>
+            </tr>
+            <tr>
+                <td>${strings.getNotNull(family.name)}</td>
+                <td>身份证</td>
+                <td>${strings.getNotNull(family.idCard)}</td>
+                <td rowspan="3">${strings.getNotNull(pRelation)}</td>
+            </tr>
+            <tr>
+                <td rowspan="2">变更后权利人（购房人）</td>
+                <td>姓名</td>
+                <td>证件名称</td>
+                <td>证件号码</td>
+            </tr>
+            <tr>
+                <td>${strings.getNotNull(house.hPerson)}</td>
+                <td>身份证</td>
+                <td>${strings.getNotNull(house.hIdCard)}</td>
+            </tr>
+            <tr>
+                <td>提交材料</td>
+                <td colspan="4">
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">被腾退人身份证复印件</p>
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">购房人身份证复印件</p>
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">《北京市宅基地房屋腾退补偿安置协议》复印件</p>
+                </td>
+            </tr>
+            <tr>
+                <td>承诺与声明</td>
+                <td colspan="4">
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">1、本人有权决定由上述购房人购买房屋,并签订房屋买卖合同。同时，本人放弃购买及拥有房屋的权利,与其相关的一切权益均由上述购房人享有。</p>
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">2、本人承诺，房屋购房人变更后，仍履行《北京市宅基地房屋腾退补偿安置协议》项下全部义务。本人代为交纳房款后，房屋即为购房人所有，贵单位有权直接向上述购房人开具相关凭证。</p>
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">3、本人向贵单位做出的任何陈述或提供的全部资料均真实有效。否则，愿意承担由此而引发的一切法律责任。</p>
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">4、因与本申请书内容相关的事项而发生的一切纠纷，本人自行负责解决，并保证不因该等纠纷而使贵单位遭受任何损失。否则，一切损失及责任均由本人承担。</p>
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">5、购房人必须是《北京市宅基地房屋腾退补偿安置协议》中的认定人口。</p>
+                    <p style="text-indent: 0em;margin-left: -2px;margin-top: -2px;">6、以上承诺为不可撤销承诺。</p>
+                    <div style="margin-top: 5px;">
+                        <span style="margin-left: -40px">被腾退人（签字）： </span>
+                        <span style="margin-left: 100px">年　　月　　日</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>初审意见</td>
+                <td colspan="4">
+                    <div>
+                        <span style="margin-left: -40px">经办人：</span>
+                        <span style="margin-left: 200px">年　　月　　日</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>审核意见</td>
+                <td colspan="4">
+                    <div>
+                        <span style="margin-left: -40px">负责人：</span>
+                        <span style="margin-left: 200px">年　　月　　日</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

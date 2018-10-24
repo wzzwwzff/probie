@@ -1,0 +1,136 @@
+package com.app.cq.web.cq;
+
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Area;
+import com.app.cq.model.Project;
+import com.app.cq.service.AreaService;
+import com.app.cq.service.ProjectService;
+import com.app.permission.exception.NoLoginException;
+import com.app.permission.model.User;
+import com.app.permission.utils.UserSession;
+import com.sqds.page.PageInfo;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 项目管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/project/*")
+public class ProjectController {
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private AreaService areaService;
+    @Autowired
+    private DataDictService dataDictService;
+
+    @RequestMapping("navigation")
+    public void navigation(HttpServletRequest request, ModelMap modelMap){
+        User user = UserSession.getUserFromSession(request);
+        if(user==null){
+            throw new NoLoginException();
+        }
+        modelMap.put("user",user);
+        String systemName = dataDictService.getDataDict("系统名称").getAttributeValue();
+        modelMap.put("systemName",systemName);
+    }
+
+    /**
+     * 项目首页
+     */
+    @RequestMapping("index")
+    public void index(HttpServletRequest request, ModelMap modelMap){
+        List<Project> projectList = this.projectService.listAll();
+        modelMap.addAttribute("projectList",projectList);
+        User user = UserSession.getUserFromSession(request);
+        if(user==null){
+            throw new NoLoginException();
+        }
+        modelMap.put("user",user);
+        String systemName = dataDictService.getDataDict("系统名称").getAttributeValue();
+        modelMap.put("systemName",systemName);
+    }
+
+    /**
+     * 项目管理list
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request , ModelMap modelMap){
+        PageInfo<Project> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request, pageInfo);
+
+        pageInfo = this.projectService.list(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 项目管理form
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request, ModelMap modelMap){
+        Integer id = ParamUtils.getInt(request,"id",0);
+        Project project = this.projectService.get(id);
+        if(project==null){
+            project = new Project();
+        }
+        List<Area> areaList = this.areaService.getListByProjectId(id);
+        modelMap.addAttribute("project",project);
+        modelMap.addAttribute("areaList",areaList);
+    }
+
+    /**
+     * 项目管理save
+     * @param request
+     * @return
+     */
+    @RequestMapping("save")
+    public String save(HttpServletRequest request){
+        Integer id = ParamUtils.getInt(request,"id",0);
+        Project project = this.projectService.get(id);
+        if(project == null){
+            project = new Project();
+        }
+        this.projectService.saveProjectAndArea(request, project);
+        return "redirect:list?"+request.getAttribute("searchParams");
+    }
+
+    /**
+     * 项目数据删除
+     * @param request
+     * @return
+     */
+    @RequestMapping("delete")
+    @ResponseBody
+    public Map<String,String> delete(ServletRequest request){
+        int id = ParamUtils.getInt(request,"id",0);
+        String success = "true";
+        String message = "";
+        try {
+            this.projectService.deleteByProjectId(id);
+        } catch (Exception e) {
+            success = "false";
+            message = "数据正在使用中！";
+        }
+        Map<String,String> map = new HashMap<String, String>();
+        map.put("success",success);
+        map.put("message",message);
+        return map;
+    }
+}

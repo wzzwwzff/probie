@@ -1,0 +1,84 @@
+package com.app.cq.web.cq;
+
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Family;
+import com.app.cq.model.House;
+import com.app.cq.service.FamilyService;
+import com.app.cq.service.HouseService;
+import com.app.cq.service.ProjectService;
+import com.app.cq.utils.GetCurrentUser;
+import com.google.common.collect.Maps;
+import com.sqds.page.PageInfo;
+import com.sqds.web.Servlets;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 选房管理
+ * Created by jmdf on 2018/9/5.
+ */
+@Controller
+@RequestMapping("/cq/chooseHouse/*")
+public class ChooseHouseController {
+
+    @Resource
+    private FamilyService familyService;
+    @Resource
+    private HouseService houseService;
+    @Resource
+    private ProjectService projectService;
+    @Resource
+    private DataDictService dataDictService;
+
+    /**
+     * 选房入口
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("chooseHouseList")
+    public void chooseHouseList(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        String departmentCode = GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode();
+        if (!departmentCode.equals("110")){
+            pageInfo.addParameter("search_eq_string_bd",departmentCode);
+        }
+        //pageInfo.addParameter("search_eq_integer_rhStatus", DataStatus.LOCK.getIndex());
+        pageInfo = familyService.familyList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("departmentCode",departmentCode);
+    }
+
+    /**
+     * 已选房源列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("choosedHouseList")
+    public void choosedHouseList(HttpServletRequest request, ModelMap modelMap) {
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        String departmentCode = GetCurrentUser.getLoginUser(request).getDepartment().getDepartmentCode();
+        if (!departmentCode.equals("110")){
+            pageInfo.addParameter("search_eq_string_bd",departmentCode);
+        }
+        pageInfo = familyService.getChooseHouseList(pageInfo);
+        Map<Integer, List<House>> houseListMap = Maps.newLinkedHashMap();
+        for (Family family : pageInfo.getResult()) {
+            Integer familyUuid = family.getId();
+            List houseList = this.houseService.getHouseListByFamilyId(familyUuid);
+            houseListMap.put(familyUuid, houseList);
+        }
+
+        modelMap.addAttribute("pageInfo",pageInfo);
+        modelMap.addAttribute("houseListMap",houseListMap);
+        modelMap.addAttribute("departmentCode",departmentCode);
+    }
+
+}
