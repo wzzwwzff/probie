@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        .table tr {
+            height: 1px;
+        }
+    </style>
+</head>
+<body>
+<div class="title"><h5>基本情况调查表登记</h5></div>
+<div class="content">
+    <form class="form-inline">
+        <fieldset>
+            <legend>一、房屋所在分指信息</legend>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="fieldName">分指</td>
+                    <td class="fieldValue">
+                        <select class="form-control">
+                            <option value="">--全部--</option>
+                            <option value="">一标</option>
+                            <option value="">二标</option>
+                            <option value="">三标</option>
+                            <option value="">四标</option>
+                        </select>
+                    </td>
+                    <td class="fieldName">组别</td>
+                    <td class="fieldValue">
+                        <select class="form-control">
+                            <option value="">--全部--</option>
+                            <option value="">一组</option>
+                            <option value="">二组</option>
+                            <option value="">三组</option>
+                            <option value="">四组</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend>二、房屋基本信息</legend>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="fieldName">档案编号</td>
+                    <td class="fieldValue"><input class="form-control" type="text" placeholder="必填项" value=""/><span class="require">*</span></td>
+                    <td class="fieldName">单位联系人</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">办公电话</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                    <td class="fieldName">移动电话</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">所属部门</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                    <td class="fieldName">联系人职务</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">单位电子邮箱</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                    <td class="fieldName">房屋地址门牌</td>
+                    <td class="fieldValue"><input class="form-control" size="50" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">房屋产权单位名称（全称）</td>
+                    <td class="fieldValue"><input class="form-control" size="50" type="text" value=""/></td>
+                    <td class="fieldName">房屋产权单位办公地址门牌</td>
+                    <td class="fieldValue"><input class="form-control" size="50" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">房屋日常管理单位</td>
+                    <td class="fieldValue"><input class="form-control" size="50" type="text" value=""/></td>
+                    <td class="fieldName">有无专业管理单位</td>
+                    <td class="fieldValue">
+                        <div class="radio">
+                            <label class="radio-inline"><input type="radio" checked/>有</label>
+                            <label class="radio-inline"><input type="radio"/>无</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">现状</td>
+                    <td class="fieldValue">
+                        <select class="form-control">
+                            <option value="">--请选择--</option>
+                            <option value="">出租经营</option>
+                            <option value="">加油站</option>
+                            <option value="">居住</option>
+                            <option value="">空置</option>
+                            <option value="">营业</option>
+                        </select>
+                    </td>
+                    <td class="fieldName">房屋实际使用单位</td>
+                    <td class="fieldValue"><input class="form-control" size="50" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">房屋产权单位性质</td>
+                    <td class="fieldValue">
+                        <select class="form-control">
+                            <option value="">--请选择--</option>
+                            <option value="">国有企业</option>
+                            <option value="">集体企业</option>
+                            <option value="">事业单位</option>
+                            <option value="">私营企业</option>
+                            <option value="">其它</option>
+                        </select>
+                    </td>
+                    <td class="fieldName">房屋产权单位隶属关系</td>
+                    <td class="fieldValue">
+                        <div class="radio">
+                            <label class="radio-inline"><input type="radio" checked/>央属</label>
+                            <label class="radio-inline"><input type="radio"/>区属</label>
+                            <label class="radio-inline"><input type="radio"/>街道</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">房屋权属证书号</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                    <td class="fieldName">土地使用证号</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">房屋用途</td>
+                    <td class="fieldValue">
+                        <select class="form-control">
+                            <option value="">--请选择--</option>
+                            <option value="">住宅</option>
+                            <option value="">居住</option>
+                            <option value="">商业</option>
+                            <option value="">公厕</option>
+                            <option value="">公交</option>
+                        </select>
+                    </td>
+                    <td class="fieldName">房屋总建筑面积（M²）</td>
+                    <td class="fieldValue"><input class="form-control" size="10" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">占地总面积（M²）</td>
+                    <td class="fieldValue"><input class="form-control" size="10" type="text" value=""/></td>
+                    <td class="fieldName">平房建筑面积（M²）</td>
+                    <td class="fieldValue"><input class="form-control" size="10" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">临时房屋面积（M²）</td>
+                    <td class="fieldValue"><input class="form-control" size="10" type="text" value=""/></td>
+                    <td class="fieldName">无证房屋建筑面积（M²）</td>
+                    <td class="fieldValue"><input class="form-control" size="10" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">房屋是否用于经营</td>
+                    <td class="fieldValue">
+                        <div class="radio">
+                            <label class="radio-inline"><input type="radio" checked/>是</label>
+                            <label class="radio-inline"><input type="radio"/>否</label>
+                        </div>
+                    </td>
+                    <td class="fieldName">营业状态</td>
+                    <td class="fieldValue">
+                        <div class="radio">
+                            <label class="radio-inline"><input type="radio" checked/>营业</label>
+                            <label class="radio-inline"><input type="radio"/>关闭</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">房屋有无转租</td>
+                    <td class="fieldValue">
+                        <div class="radio">
+                            <label class="radio-inline"><input type="radio" checked/>有</label>
+                            <label class="radio-inline"><input type="radio"/>无</label>
+                        </div>
+                    </td>
+                    <td class="fieldName">有无转租协议</td>
+                    <td class="fieldValue">
+                        <div class="radio">
+                            <label class="radio-inline"><input type="radio" checked/>有</label>
+                            <label class="radio-inline"><input type="radio"/>无</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">经营范围（业务）</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                    <td class="fieldName">营业执照号</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">注册登记类型</td>
+                    <td class="fieldValue">
+                        <select class="form-control">
+                            <option value="">--请选择--</option>
+                            <option value="">集体所有制（股份合作）</option>
+                            <option value="">其它有限责任公司</option>
+                            <option value="">有限责任公司（法人独资）</option>
+                            <option value="">有限责任公司（自然人投资或控股）</option>
+                            <option value="">有限责任分公司（法人独资）</option>
+                        </select>
+                    </td>
+                    <td class="fieldName">产权单位法定代表人（单位负责人）</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">产权单位行业类别</td>
+                    <td class="fieldValue">
+                        <select class="form-control">
+                            <option value="">--请选择--</option>
+                            <option value="">餐饮服务</option>
+                            <option value="">工程项目</option>
+                            <option value="">公厕保洁</option>
+                            <option value="">投资咨询</option>
+                            <option value="">危险化学品经营</option>
+                            <option value="">五金交电</option>
+                        </select>
+                    </td>
+                    <td class="fieldName">产权单位是否有上级法人单位</td>
+                    <td class="fieldValue">
+                        <div class="radio">
+                            <label class="radio-inline"><input type="radio" checked/>有</label>
+                            <label class="radio-inline"><input type="radio"/>无</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">经营间数</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                    <td class="fieldName">居住间数</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">仓储间数</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                    <td class="fieldName">其他间数</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">间数合计</td>
+                    <td class="fieldValue">自动计算</td>
+                    <td class="fieldName">预估建筑面积（M²）</td>
+                    <td class="fieldValue"><input class="form-control" type="text" value=""/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">未登记房屋备注</td>
+                    <td class="fieldValue" colspan="3"><textarea class="form-control" type="text" cols="120" rows="5"></textarea></td>
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend>三、其他信息</legend>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="fieldName">登记人</td>
+                    <td class="fieldValue"><input type="text" class="form-control" readonly value="当前用户"></td>
+                    <td class="fieldName">登记日期</td>
+                    <td class="fieldValue"><input type="text" class="form-control" readonly value="2018-04-24"/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">备注</td>
+                    <td class="fieldValue" colspan="3"><textarea class="form-control" type="text" name="bz" cols="120" rows="5"></textarea></td>
+                </tr>
+            </table>
+        </fieldset>
+        <br/><br/><br/>
+        <div class="footer">
+            <button class="btn btn-primary" type="button" onclick="location.href='list.html';"><i class="fa fa-save"></i>&nbsp;保存</button>
+            <button class="btn btn-white" type="button" onclick="history.back()"><i class="fa fa-backward"></i>返回</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

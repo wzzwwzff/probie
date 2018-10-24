@@ -1,0 +1,267 @@
+package com.app.cq.service;
+
+import com.alibaba.fastjson.JSON;
+import com.app.cq.en.DataInfo;
+import com.app.cq.en.IsValid;
+import com.app.cq.en.Type;
+import com.app.cq.model.*;
+import com.app.cq.utils.BigDecimalUtils;
+import com.app.cq.utils.GetCurrentUser;
+import com.google.common.collect.Lists;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by lsh on 2018/5/7.
+ * 家庭业务层
+ */
+@Service
+public class FamilyService extends HibernateDao<Family>{
+
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private HistoryInfoService historyInfoService;
+    @Autowired
+    private FamilyHouseService familyHouseService;
+    @Autowired
+    private FamilyHousePersonService familyHousePersonService;
+
+    /**
+     * 得到有效、无效的家庭（管理员使用）
+     * @param pageInfo
+     * @return
+     */
+    public PageInfo<Family> getAllFamilyList(PageInfo<Family> pageInfo) {
+        return list(pageInfo, "from Family f order by f.isValid,f.bdCode,f.groupCode,f.familyCode");
+    }
+
+
+    /**
+     * 得到有自建房的家庭信息
+     * @param pageInfo
+     * @return
+     */
+    public PageInfo<Family> getHouseStatusList(PageInfo<Family> pageInfo) {
+        return list(pageInfo, "from Family f where f.isValid = ? and f.houseStatus = ? order by f.bdCode,f.groupCode,f.familyCode", Type.YES.getIndex(), IsValid.YES.getIndex());
+    }
+
+    /**
+     * 得到有效的家庭
+     * @param pageInfo
+     * @return
+     */
+    public PageInfo<Family> getFamilyList(PageInfo<Family> pageInfo) {
+        return list(pageInfo, "from Family f where f.isValid = ? order by f.bdCode,f.groupCode,f.familyCode", IsValid.YES.getIndex());
+    }
+
+    /**
+     * 得到有效/无效的家庭
+     * @param pageInfo
+     * @return
+     */
+    public PageInfo<Family> getFamilyList(PageInfo<Family> pageInfo,Integer isValid) {
+        return list(pageInfo, "from Family f where f.isValid = ? order by f.bdCode,f.groupCode,f.familyCode", isValid);
+    }
+
+    /**
+     * 家庭编号查重
+     * @param familyCode
+     * @param familyId
+     * @return
+     */
+    public Family checkRepeat(String familyCode, Integer familyId) {
+        return findUnique("from Family where familyCode = ? and isValid = ? and id <> ?", familyCode, IsValid.YES.getIndex(),familyId);
+    }
+
+    /**
+     * 基础数据家庭信息保存
+     * @param request
+     * @return
+     */
+    public synchronized Integer familySave(HttpServletRequest request){
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.get(familyId);
+
+        HistoryInfo historyInfo = new HistoryInfo();
+        if (family == null) {
+            family = new Family();
+            historyInfo.setType(DataInfo.ADD.getName());   //新增数据
+        }else {
+            historyInfo.setType(DataInfo.ALERT.getName());   //修改数据
+        }
+
+        Servlets.bind(request, family);
+        this.save(family);
+
+        //保存家庭成员信息
+        String[] personIdArray = ParamUtils.getStringParameters(request, "fp_id");   //id
+        String[] personTypeArray = ParamUtils.getStringParameters(request, "fp_type");   //是否在本址
+        String[] personHkNumArray = ParamUtils.getStringParameters(request, "fp_hkNum");   //户口本数
+        String[] personNameArray = ParamUtils.getStringParameters(request, "fp_name");   //姓名
+        String[] personIdCardArray = ParamUtils.getStringParameters(request, "fp_idCard");   //身份证号
+        String[] personRelationArray = ParamUtils.getStringParameters(request, "fp_relation");   //（在本址：与户主关系；不在本址：与被拆迁人关系）
+        String[] personHzRelationArray = ParamUtils.getStringParameters(request, "fp_hzRelation");   //户主与被拆迁人关系
+        String[] personUnitArray = ParamUtils.getStringParameters(request, "fp_unit");   //工作单位
+        String[] personHjAddressArray = ParamUtils.getStringParameters(request, "fp_hjAddress");   //户口所在地（不在本址）
+        String[] personStatusArray = ParamUtils.getStringParameters(request, "fp_status");   //是否享受过保障性住房政策 1：是，2：否（录入界面默认为否）
+        String[] personAveStatusArray = ParamUtils.getStringParameters(request, "fp_aveStatus");   //是否享受人均5平米 1：是，2：否（录入界面默认为是）
+        String[] personFlagArray = ParamUtils.getStringParameters(request, "fp_flag");   //是否长期居住在未登记房屋中（在本址）
+
+        List<String[]> list = Lists.newArrayList();
+        list.add(0, personIdArray);
+        list.add(1, personTypeArray);
+        list.add(2, personHkNumArray);
+        list.add(3, personNameArray);
+        list.add(4, personIdCardArray);
+        list.add(5, personRelationArray);
+        list.add(6, personHzRelationArray);
+        list.add(7, personUnitArray);
+        list.add(8, personHjAddressArray);
+        list.add(9, personStatusArray);
+        list.add(10, personAveStatusArray);
+        list.add(11, personFlagArray);
+        this.familyPersonService.saveFamilyPerson(list,family.getId());
+
+        //如果没有标准自建或者没有选择，将自建房信息删除
+        if (family.getHouseStatus() == null || family.getHouseStatus() == 2){
+            List<FamilyHouse> familyHouseList = Lists.newArrayList();
+            familyHouseList = this.familyHouseService.getFamilyHouseListByFamilyId(family.getId());
+            if (Collections3.isNotEmpty(familyHouseList)){
+                for (FamilyHouse familyHouse : familyHouseList){
+                    this.familyHousePersonService.deletePersonByFamilyHouseId(familyHouse.getId());
+                    this.familyHouseService.delete(familyHouse.getId());
+                }
+            }
+        }
+
+        List<FamilyPerson> familyPersonList = this.familyPersonService.getPersonListByFamilyId(family.getId());
+        // 保存家庭信息之前，先保存修改记录（保存的数据是修改之前的数据）
+        historyInfo.setData(JSON.toJSONString(family));//家庭表信息
+        historyInfo.setFamilyPersonData(JSON.toJSONString(familyPersonList));
+        historyInfo.setOperateDate(new Date());
+        historyInfo.setOperatePerson(GetCurrentUser.getLoginUser(request).getUsername());//操作人姓名
+        historyInfo.setComputerId(GetCurrentUser.getIpAddr(request));//操作人IP地址
+        historyInfo.setFamilyId(family.getId());//家庭表Id
+        historyInfoService.save(historyInfo);
+
+        return family.getId();
+    }
+
+    //就地安置房源情况
+    public String getJdaz(Family family){
+        Integer oneRoom = 0;//一居室套数
+        Integer twoRoom = 0;//二居室套数
+        Integer threeRoom = 0;//三居室套数
+        Integer fourRoom = 0;//四居室套数
+        BigDecimal hbbcMoney = new BigDecimal(0);//不足10平米货币补偿
+        BigDecimal familyBuildArea = family.getBuildArea();
+        BigDecimal familyHjPersonNum = new BigDecimal(family.getHjPersonNum());
+        if ((familyBuildArea.divide(familyHjPersonNum)).compareTo(new BigDecimal(5)) == -1){
+            familyBuildArea = BigDecimalUtils.getBigAndBigMul(familyHjPersonNum,new BigDecimal(5));
+        }
+
+        //非成套
+        if (family.getHouseStyle() == 2 || family.getHouseStyle() == 3){
+            if (familyBuildArea.compareTo(new BigDecimal(20)) == -1){
+                oneRoom += 1;
+            }else if ((familyBuildArea.compareTo(new BigDecimal(20)) >= 0) && (familyBuildArea.compareTo(new BigDecimal(30)) == -1)){
+                twoRoom += 1;
+            }else if ((familyBuildArea.compareTo(new BigDecimal(30)) >= 0 ) && (familyBuildArea.compareTo(new BigDecimal(40)) == -1)){
+                threeRoom += 1;
+            }else if (familyBuildArea.compareTo(new BigDecimal(40)) >= 0){
+                while (1==1){
+                    threeRoom += 1;
+                    familyBuildArea = BigDecimalUtils.getBigAndBigSub(familyBuildArea,new BigDecimal(40));
+                    if (familyBuildArea.compareTo(new BigDecimal(10)) == -1){
+                        break;
+                    }else if ((familyBuildArea.compareTo(new BigDecimal(10)) >= 0) && (familyBuildArea.compareTo(new BigDecimal(20)) == -1)){
+                        oneRoom += 1;
+                        break;
+                    }else if ((familyBuildArea.compareTo(new BigDecimal(20)) >= 0) && (familyBuildArea.compareTo(new BigDecimal(30)) == -1)){
+                        twoRoom += 1;
+                        break;
+                    }else if ((familyBuildArea.compareTo(new BigDecimal(30)) >= 0 ) && (familyBuildArea.compareTo(new BigDecimal(40)) == -1)){
+                        threeRoom += 1;
+                        break;
+                    }
+                }
+            }
+        }else if (family.getHouseStyle() == 1){//成套
+            if (familyBuildArea.compareTo(new BigDecimal(45)) == -1){
+                oneRoom += 1;
+            }else if (familyBuildArea.compareTo(new BigDecimal(45)) >= 0 && familyBuildArea.compareTo(new BigDecimal(60)) == -1){
+                twoRoom += 1;
+            }else if (familyBuildArea.compareTo(new BigDecimal(60)) > 0 && familyBuildArea.compareTo(new BigDecimal(75)) == -1){
+                threeRoom += 1;
+            }else if (familyBuildArea.compareTo(new BigDecimal(75)) > 0){
+                fourRoom += 1;
+            }
+        }
+
+        String azfy = "";
+        if (oneRoom > 0){
+            azfy += oneRoom + ",套一居室";
+        }
+        if (twoRoom > 0){
+            azfy += "," + twoRoom + "套二居室";
+        }
+        if (threeRoom > 0){
+            azfy += "," + threeRoom + "套三居室";
+        }if (fourRoom > 0){
+            azfy += "," + fourRoom + "套四居室";
+        }
+        return azfy;
+    }
+
+    //货币+异地补偿 异地安置房源情况
+    public String getYdaz(Family family){
+        String azfy = "";
+
+        BigDecimal hbbcMoney = new BigDecimal(0);//不足10平米货币补偿
+        BigDecimal familyBuildArea = family.getBuildArea();
+        BigDecimal familyHjPersonNum = new BigDecimal(family.getHjPersonNum());
+        if ((familyBuildArea.divide(familyHjPersonNum)).compareTo(new BigDecimal(5)) == -1){
+            familyBuildArea = BigDecimalUtils.getBigAndBigMul(familyHjPersonNum,new BigDecimal(5));
+        }
+
+        //非成套
+        if (family.getHouseStyle() == 2 || family.getHouseStyle() == 3){
+            if (familyBuildArea.compareTo(new BigDecimal(20)) == -1){
+                azfy = ",二居室或一居室";
+            }else if ((familyBuildArea.compareTo(new BigDecimal(20)) >= 0) && (familyBuildArea.compareTo(new BigDecimal(30)) == -1)){
+                azfy = "三居室或二居室或一居室";
+            }else if ((familyBuildArea.compareTo(new BigDecimal(30)) >= 0 ) && (familyBuildArea.compareTo(new BigDecimal(40)) == -1)){
+                azfy = ",三居室+一居室或二居室+二居室";
+            }else if (familyBuildArea.compareTo(new BigDecimal(40)) >= 0 && familyBuildArea.compareTo(new BigDecimal(50)) == -1){
+                azfy = ",三居室+二居室";
+            }else if (familyBuildArea.compareTo(new BigDecimal(50)) >= 0){
+                azfy = ",三居室+三居室";
+            }
+        }else if (family.getHouseStyle() == 1){//成套
+            if (familyBuildArea.compareTo(new BigDecimal(45)) == -1){
+                azfy = ",二居室或一居室";
+            }else if (familyBuildArea.compareTo(new BigDecimal(45)) >= 0 && familyBuildArea.compareTo(new BigDecimal(60)) == -1){
+                azfy = ",三居室或二居室或一居室";
+            }else if (familyBuildArea.compareTo(new BigDecimal(60)) >= 0 && familyBuildArea.compareTo(new BigDecimal(75)) == -1){
+                azfy = ",三居室+一居室或二居室+二居室";
+            }else if (familyBuildArea.compareTo(new BigDecimal(75)) >= 0 && familyBuildArea.compareTo(new BigDecimal(80)) == -1){
+                azfy = ",三居室+二居室";
+            }else if (familyBuildArea.compareTo(new BigDecimal(80)) >= 0){
+                azfy = ",三居室+三居室";
+            }
+        }
+
+        return azfy;
+    }
+}

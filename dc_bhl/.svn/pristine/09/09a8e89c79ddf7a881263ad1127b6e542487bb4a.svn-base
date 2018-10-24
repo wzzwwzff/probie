@@ -1,0 +1,137 @@
+html{
+         height:100%;
+         margin:0;
+        }
+body {
+	color: #777777;
+	margin: 0;
+	padding:0;
+	border:0;
+	outline:0;
+	font-size: 14px;
+	font-family: "Microsoft YaHei", Tahoma, SimSun, sans-serif;
+	-webkit-text-size-adjust:none;
+	overflow:hidden;
+	   height:100%;
+}
+img { border: none 0; vertical-align: middle;cursor: pointer; }
+.loginPageBody {
+	background:url(../image/loginbodybg.gif) repeat-x left center #d6dedf;
+	height:100%;
+	width:100%;
+	 z-index:1;
+	 overflow: hidden;
+}
+
+.loginWrapbg {
+	background:url(../image/loginimgbg.jpg) no-repeat center center;
+	height:100%;
+	width:100%;
+	overflow: hidden;
+}
+
+.loginCt {
+	background-color:#fff;
+	width:600px;
+	border-radius: 3px;
+	margin:0 auto;
+	padding-top:10px;
+	padding-bottom:10px;
+
+}
+.loginLogo {
+	width: 350px;
+	height: 36px;
+	margin: 0 auto;
+	background: url(../images/logo_login.png);
+	_filter: progid : DXImageTransform.Microsoft.AlphaImageLoader ( src ='../images/logo_login.png', sizingMethod =   'scale' );
+	_background: none;	
+}
+.welcome {
+	color: #2477b3;
+	font-size: 13px;
+	padding:5px 0;
+	text-align: center;
+}
+
+.loginBar {
+	text-align: center;
+	width: 360px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 5px;
+	font-size:15px;
+}
+.fieldWrap {
+	text-align: left;
+	/*height: 30px;*/
+	padding: 3px 0 2px;
+	width:auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.fieldWrap .userName {
+	border:1px solid #CCCCCC;
+	height:30px;
+	line-height:30px;
+	width:240px;
+	text-align:left;
+	padding-left:25px;
+	background: url(../image/icon_user_18px.png) 0 no-repeat;
+}
+.fieldWrap .passWord {
+	border:1px solid #CCCCCC;
+	height:30px;
+	line-height:30px;
+	width:240px;
+	text-align:left;
+	padding-left:25px;
+	background: url(../image/icon_key_18px.png) 0 no-repeat;
+}
+.fieldWrap .maskCode {
+	border:1px solid #CCCCCC;
+	height:30px;
+	line-height:30px;
+	width:160px;
+	text-align:left;
+	padding-left:25px;
+	background: url(../image/icon_lock_18px.png) 0 no-repeat;
+}
+.loginBtnWrap {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top:20px;
+	margin-bottom:20px;
+	text-align: center;
+	background:#2A87D3 none;
+	border-radius: 3px;
+	width: 265px;
+	height: 38px;
+	color: #ffffff;
+	font-size: 14px;
+	line-height: 38px;
+	word-spacing: 1px;
+	letter-spacing: 6px;
+	cursor:pointer;
+}
+.copyright {
+	padding-top: 30px;
+	color:#2477B3;
+	font-size:12px;
+	text-align:center;
+}
+
+.login_label{
+	width: 80px;
+	text-align: right;
+}
+
+
+login_error{
+	color: #ff0000;
+}
+
+.login_success{
+	color: blue;
+}
+

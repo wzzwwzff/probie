@@ -1,0 +1,24 @@
+package com.app.cq.service;
+
+import com.app.cq.model.HistoryInfo;
+import com.sqds.hibernate.HibernateDao;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by lsh on 2018/5/7.
+ * 历史数据记录表业务层
+ */
+@Service
+public class HistoryInfoService extends HibernateDao<HistoryInfo>{
+
+    /**
+     * 根据某一家庭id获取该家庭所有历史记录
+     * @param familyId
+     * @return
+     */
+    public List<HistoryInfo> listByFamilyId(Integer familyId){
+        return this.list("from HistoryInfo h where h.familyId = ? order by h.operateDate desc,h.id",familyId);
+    }
+}

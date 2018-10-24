@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="refresh" content="5">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <title>安置房源使用情况实时展示</title>
+    <style>
+        body {
+            background-color: #000;
+        }
+
+        tr {
+            background-color: #000;
+        }
+
+        td {
+            color: #FFF;
+            font-size: 32px;
+            font-family: "宋体";
+            font-weight: bold;
+            text-align: center;
+        }
+        .residue td{
+            color: red;
+        }
+        .haveSel td{
+            color: greenyellow;
+        }
+    </style>
+</head>
+
+<body>
+<div style="text-align: center;font-size: 45px;font-weight: bold;color: #ffffff;margin: 20px;">安置房源使用情况实时展示</div>
+<div style="position: absolute;top: 10px;left: 60px;font-size: 30px;font-weight: bold;text-align: center;color: #ffffff;">2016年12月30日<br/><span id="time1"></span></div>
+<script>
+    var now = new Date();
+    function createtime() {
+
+        var grt = new Date("7/31/2016 20:00:00");
+
+        now.setTime(now.getTime() + 250);
+        days = (grt - now) / 1000 / 60 / 60 / 24;
+        dnum = Math.floor(days);
+        hours = (grt - now) / 1000 / 60 / 60 - (24 * dnum);
+        hnum = Math.floor(hours);
+        if (String(hnum).length == 1) {
+            hnum = "0" + hnum;
+        }
+        minutes = (grt - now) / 1000 / 60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes);
+        if (String(mnum).length == 1) {
+            mnum = "0" + mnum;
+        }
+        seconds = (grt - now) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds);
+        if (String(snum).length == 1) {
+            snum = "0" + snum;
+        }
+
+//        document.getElementById(timeDate).innerHTML = dnum;
+        document.getElementById("time1").innerHTML = hnum + "时" + mnum + "分" + snum + "秒";
+    }
+    setInterval("createtime()", 250);
+</script>
+<div class="content">
+    <table id="myData" width="95%" border="0" cellspacing="1" cellpadding="10" align="center" bgcolor="#FFFFFF">
+        <thead>
+        <tr>
+            <td rowspan="2" colspan="2" style="width: 30%;">地块</td>
+            <td colspan="3">居室</td>
+            <td rowspan="2">总计</td>
+        </tr>
+        <tr>
+            <td>一居</td>
+            <td>二居</td>
+            <td>三居</td>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="3">回迁安置房</td>
+                <td>全部/套</td>
+                <td>919</td>
+                <td>325</td>
+                <td>456</td>
+                <td>4562</td>
+            </tr>
+            <tr class="haveSel">
+                <td>已选/套</td>
+                <td>502</td>
+                <td>235</td>
+                <td>324</td>
+                <td>1250</td>
+            </tr>
+            <tr class="residue">
+                <td>剩余/套</td>
+                <td>452</td>
+                <td>125</td>
+                <td>325</td>
+                <td>3250</td>
+            </tr>
+            <tr>
+                <td rowspan="3">兴悦居小区</td>
+                <td>全部/套</td>
+                <td>919</td>
+                <td>325</td>
+                <td>456</td>
+                <td>4562</td>
+            </tr>
+            <tr class="haveSel">
+                <td>已选/套</td>
+                <td>502</td>
+                <td>235</td>
+                <td>324</td>
+                <td>1250</td>
+            </tr>
+            <tr class="residue">
+                <td>剩余/套</td>
+                <td>452</td>
+                <td>125</td>
+                <td>325</td>
+                <td>3250</td>
+            </tr>
+            <tr>
+                <td rowspan="3">美澜湾小区</td>
+                <td>全部/套</td>
+                <td>919</td>
+                <td>325</td>
+                <td>456</td>
+                <td>4562</td>
+            </tr>
+            <tr class="haveSel">
+                <td>已选/套</td>
+                <td>502</td>
+                <td>235</td>
+                <td>324</td>
+                <td>1250</td>
+            </tr>
+            <tr class="residue">
+                <td>剩余/套</td>
+                <td>452</td>
+                <td>125</td>
+                <td>325</td>
+                <td>3250</td>
+            </tr>
+            <tr>
+                <td rowspan="3">总计</td>
+                <td>全部/套</td>
+                <td>1824</td>
+                <td>654</td>
+                <td>902</td>
+                <td>9032</td>
+            </tr>
+            <tr class="haveSel">
+                <td>已选/套</td>
+                <td>801</td>
+                <td>425</td>
+                <td>325</td>
+                <td>2354</td>
+            </tr>
+            <tr class="residue">
+                <td>剩余/套</td>
+                <td>904</td>
+                <td>250</td>
+                <td>650</td>
+                <td>6500</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!--<script>-->
+    <!--$(function () {-->
+        <!--var trHtml = "";-->
+        <!--for (var i = 0, j = chart_data.length; i < j; i++) {-->
+            <!--var data = chart_data[i];-->
+            <!--trHtml += "<tr>";-->
+            <!--trHtml += "<td>" + data.fz + "</td>";-->
+            <!--trHtml += "<td>" + data.prent1 + "</td>";-->
+            <!--trHtml += "<td>" + data.prent2 + "</td>";-->
+            <!--trHtml += "<td>" + data.prent3 + "</td>";-->
+            <!--trHtml += "<td>" + data.prent4 + "</td>";-->
+            <!--trHtml += "</tr>";-->
+        <!--}-->
+        <!--$("#myData > tbody").append(trHtml);-->
+    <!--});-->
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 微软雅黑;
+        }
+        body {
+            background-image: url(static/images/headbg.png);
+        }
+    </style>
+</head>
+<body>
+<center>
+    <div style="width: 100%;line-height: 65px;font-weight: bold;font-size: 16px;color:#ffffff;">
+        版权所有：XXX&nbsp;&nbsp;&nbsp;技术支持：北京佳木东方科技有限公司
+    </div>
+</center>
+</body>
+</html>

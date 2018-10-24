@@ -1,0 +1,45 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <LINK href="../styles/styles.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <title>列表</title>
+</head>
+<div id="content">
+    <div class="title">
+        <h5>开始选房</h5>
+    </div>
+    <div class="content">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="form.html">开始选房</a>
+            </li>
+            <li>
+                <a href="list.html">已选房源列表</a>
+            </li>
+        </ul>
+        <center>
+            <div class="input-group" style="width: 650px;margin-top: 120px;">
+                <input type="text" id="chooseNum" name="chooseNum" placeholder="请输入签约顺序号" class="input form-control"/>
+        <span class="input-group-btn">
+            <button type="button" class="btn btn btn-primary" onclick="location.href='chooseForm.html'" id="searchParam"><i class="glyphicon glyphicon-stats"></i> 进入选房页面</button>
+        </span>
+            </div>
+        </center>
+    </div>
+</div>
+</html>

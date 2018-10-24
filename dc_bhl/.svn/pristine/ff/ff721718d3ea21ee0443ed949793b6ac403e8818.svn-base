@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>东城区宝华里危改项目签约选房管理系统</title>
+</head>
+<frameset rows="60,*" cols="*" framespacing="0" frameborder="no" border="0">
+    <frame src="header.html" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" />
+    <frameset rows="*" cols="220,*" id="menu">
+        <frame src="menu.html" name="menuFrame" id="menuFrame" scrolling="no"/>
+        <frame src="dashboard.html" id="mainFrame" name="mainFrame"/>
+    </frameset>
+</frameset>
+<noframes>
+    <body>
+    </body>
+</noframes>
+</html>

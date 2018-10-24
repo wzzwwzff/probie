@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        html, body {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="title"><h4>各分支签约情况统计</h4></div>
+<div class="content">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <td class="text-center" style="vertical-align: middle" rowspan="2">分指</td>
+            <td class="text-center">全部（户）</td>
+            <td class="text-center" colspan="5">【2016年07月01号】<br/>当日签约（户）</td>
+            <td class="text-center" colspan="5">累计签约（户）</td>
+        </tr>
+        <tr>
+            <td class="text-center">合计</td>
+            <!--<td class="text-center" >外迁</td>-->
+            <!--<td class="text-center" >回迁</td>-->
+            <!--<td class="text-center" >货币</td>-->
+            <td class="text-center">合计</td>
+            <td class="text-center">回迁</td>
+            <td class="text-center">外迁</td>
+            <td class="text-center">货币</td>
+            <td class="text-center">产权调换</td>
+            <td class="text-center">合计</td>
+            <td class="text-center">回迁</td>
+            <td class="text-center">外迁</td>
+            <td class="text-center">货币</td>
+            <td class="text-center">产权调换</td>
+        </tr>
+        </thead>
+        <!-- json 形式数据添加 -->
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(function () {
+        var trHtml = "";
+        for (var i = 0, j = json_data_tj3.length; i < j; i++) {
+            var data = json_data_tj3[i];
+            var c = parseFloat((parseInt((i + 60)) / parseInt(125)) * 100).toFixed(2);
+            trHtml += "<tr class='text-center'>";
+            trHtml += "<td>" + data.fz + "</td>";
+            trHtml += "<td>" + data.code + "</td>";
+            trHtml += "<td>" + data.hq + "</td>";
+            trHtml += "<td>" + data.wq + "</td>";
+            trHtml += "<td>" + data.hb + "</td>";
+            trHtml += "<td>" + data.jfMemo + "</td>";
+            trHtml += "<td>" + data.wq1 + "</td>";
+            trHtml += "<td>" + data.hq1 + "(" + c + "%)" +"</td>";
+            trHtml += "<td>" + data.hb1 + "</td>";
+            trHtml += "<td>" + data.hb1 + "</td>";
+            trHtml += "<td>" + data.jf1 + "</td>";
+            trHtml += "<td>" + data.jf1 + "</td>";
+//            trHtml += "<td>" + data.wq2 + "</td>";
+//            trHtml += "<td>" + data.hq2 + "</td>";
+//            trHtml += "<td>" + data.hb2 + "</td>";
+            trHtml += "</tr>";
+        }
+        $(".table > tbody").append(trHtml);
+    });
+</script>
+</body>
+</html>

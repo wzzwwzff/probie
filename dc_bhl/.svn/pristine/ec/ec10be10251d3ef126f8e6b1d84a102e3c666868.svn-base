@@ -1,0 +1,65 @@
+package com.app.cq.web.cq.jfManager;
+
+import com.app.cq.model.Family;
+import com.app.cq.service.FamilyService;
+import com.sqds.exception.SqdsException;
+import com.sqds.page.PageInfo;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+
+@Controller
+@RequestMapping("/cq/jfManager/*")
+public class JfManagerController {
+
+    @Autowired
+    private FamilyService familyService;
+
+    /**
+     * 交房列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = this.familyService.getJfList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 交房表单
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request,ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request,"familyId",0);
+        Family family = this.familyService.get(familyId);
+        if (family == null){
+            throw new SqdsException("家庭不存在请核查");
+        }
+        modelMap.addAttribute("family",family);
+    }
+
+
+    /**
+     * 交房保存
+     * @param request
+     * @return
+     */
+    @RequestMapping("save")
+    public String save(HttpServletRequest request){
+        this.familyService.saveJf(request);
+        //计算方法
+        return "redirect:list?" + request.getAttribute("searchParams");
+    }
+
+
+}

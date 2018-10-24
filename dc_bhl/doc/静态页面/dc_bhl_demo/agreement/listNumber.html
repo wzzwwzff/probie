@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+    <script src="../static/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+</head>
+<body>
+<div class="title"><h4>签约顺序号管理</h4></div>
+<div class="content">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="listNumber.html">住宅协议号查询</a>
+        </li>
+        <li>
+            <a href="fzListNumber.html">非住宅协议号查询</a>
+        </li>
+    </ul>
+    <div class="search_content">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <div class="input-group">
+                <div class="input-group-addon">分指</div>
+                <select class="form-control">
+                    <option value="">--全部--</option>
+                    <option value="">第一分指</option>
+                    <option value="">第二分指</option>
+                    <option value="">第三分指</option>
+                    <option value="">第四分指</option>
+                    <option value="">第五分指</option>
+                    <option value="">第六分指</option>
+                </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">组别</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">一组</option>
+                        <option value="">二组</option>
+                        <option value="">三组</option>
+                        <option value="">四组</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">协议类型</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">外迁协议</option>
+                        <option value="">回签协议</option>
+                        <option value="">货币</option>
+                        <option value="">产权调换</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">签约顺序号</div>
+                    <input class="form-control" type="text" placeholder="" style="width: 80px;">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">被拆迁人</div>
+                    <input class="form-control" type="text" placeholder="" style="width: 120px;">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">身份证号</div>
+                    <input class="form-control" type="text" placeholder="">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">地址门牌号</div>
+                    <input class="form-control" type="text" placeholder="" style="width: 200px;">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</button>
+        </form>
+        </div>
+    <table class="table table-bordered table-hover" id="dataTable">
+        <thead>
+        <tr>
+            <th class="text-center" width="5%">序号</th>
+            <th class="text-center">分指</th>
+            <th class="text-center">组别</th>
+            <th class="text-center">测绘编号</th>
+            <th class="text-center">被拆迁人</th>
+            <th class="text-center">身份证号</th>
+            <th class="text-center">建筑面积（平米）</th>
+            <th class="text-center">在册人口</th>
+            <th class="text-center">协议类型</th>
+            <th class="text-center">签约顺序号</th>
+            <th class="text-center">获取时间</th>
+            <!--<th class="text-center">获取顺序号</th>-->
+            <th class="text-center">打印告知单</th>
+        </tr>
+        </thead>
+        <!-- json 形式数据添加 -->
+        <tbody>
+        </tbody>
+    </table>
+    <div class="col-xs-4 text-left">
+        当前第1页，共13页，共条200记录
+    </div>
+    <div class="col-xs-8 text-right">
+        <div class="" id="editable_paginate">
+            <ul class="pagination">
+                <li class="disabled"><a href="#">首 页</a></li>
+                <li class="disabled"><a href="#">上一页</a></li>
+                <li class="active"><a href="?_pageNo=1&_orderField=&_orderType=desc&">1</a></li>
+                <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">2</a></li>
+                <li><a href="?_pageNo=3&_orderField=&_orderType=desc&">3</a></li>
+                <li><a href="?_pageNo=4&_orderField=&_orderType=desc&">4</a></li>
+                <li><a href="?_pageNo=5&_orderField=&_orderType=desc&">5</a></li>
+                <li><a href="?_pageNo=6&_orderField=&_orderType=desc&">6</a></li>
+                <li><a href="?_pageNo=7&_orderField=&_orderType=desc&">7</a></li>
+                <li><a href="?_pageNo=8&_orderField=&_orderType=desc&">8</a></li>
+                <li><a href="?_pageNo=9&_orderField=&_orderType=desc&">9</a></li>
+                <li><a href="?_pageNo=10&_orderField=&_orderType=desc&">10</a></li>
+                <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">下一页</a></li>
+                <li><a href="?_pageNo=1334&_orderField=&_orderType=desc&">末 页</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var trHtml = "";
+        var printBtn = "<a href='printNumber.html'><i class='a fa-big fa-print'></i>打印</a>";
+        var setBtn = "<a href='javascript:openModal();'><i class='a fa-big fa-edit'></i>获取签约顺序号</a>";
+        for (var i = 1, j = json_data_family.length; i < j; i++) {
+            var data = json_data_family[i];
+            var fzState = "";
+            var xfDate = "";
+            var xfHtml = "<a href='javascript:getNumber();'>【点击获取签约顺序号】</a>";
+            var printButton = "";
+            if (data.xfNumber != null && data.xfNumber != "") {
+                xfDate = "2016年6月30日 12时2" + (10 - i) + "分36秒" + (5 - i) + "51毫秒";
+                xfHtml = "";
+                printButton = printBtn;
+            }
+            //为空默认为0
+            if (data.xfNumber == 0) {
+                continue;
+            }
+            trHtml += "<tr class='text-center'>";
+            trHtml += "<td>" + i + "</td>";
+            trHtml += "<td>" + data.fz + "</td>";
+            trHtml += "<td>" + data.group + "</td>";
+            trHtml += "<td>" + data.code + "</td>";
+            trHtml += "<td>" + data.name + "</td>";
+            trHtml += "<td>" + data.idCard + "</td>";
+            trHtml += "<td>" + data.area + "</td>";
+            trHtml += "<td>" + data.azPersonCount + "</td>";
+            trHtml += "<td>" + data.bcType + "</td>";
+            trHtml += "<td style='color: green;font-weight: bold;'>" + data.xfNumber + "</td>";
+            trHtml += "<td>" + xfDate + "</td>";
+//            trHtml += "<td>" + xfHtml + "</td>";
+            trHtml += "<td>" + printButton + "</td>";
+            trHtml += "</tr>";
+        }
+        $("#dataTable > tbody").append(trHtml);
+    });
+    function getNumber() {
+        if (confirm("将要获取【尹铁友】的选房顺序号，一旦获取该户的基础数据、方案数据将被锁定\r\r确定获取吗？")) {
+            location.href = 'printNumber.html';
+        }
+    }
+</script>
+</body>
+</html>

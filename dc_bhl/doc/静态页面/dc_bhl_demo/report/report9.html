@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        html, body {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="title"><h4>各分支交房情况统计</h4></div>
+<div class="content">
+    <table class="table table-bordered table-hover" >
+        <thead>
+        <tr>
+            <td class="text-center">分指</td>
+            <td class="text-center" >总数</td>
+            <td class="text-center" >【2016年07月01号】<br/>今日交房</td>
+            <td class="text-center" >累计交房</td>
+            <td class="text-center" >交房比例</td>
+        </tr>
+        </thead>
+        <!-- json 形式数据添加 -->
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(function () {
+        var trHtml = "";
+        for (var i = 0, j = json_data_tj2.length; i < j; i++) {
+            var data = json_data_tj2[i];
+
+            trHtml += "<tr class='text-center'>";
+            trHtml += "<td>" + data.fz + "</td>";
+            trHtml += "<td>" + data.code + "</td>";
+            trHtml += "<td>" + data.fwzl + "</td>";
+            trHtml += "<td>" + data.jfMemo + "</td>";
+            trHtml += "<td>" + data.fy2 + "</td>";
+            trHtml += "</tr>";
+        }
+        $(".table > tbody").append(trHtml);
+    });
+</script>
+</body>
+</html>

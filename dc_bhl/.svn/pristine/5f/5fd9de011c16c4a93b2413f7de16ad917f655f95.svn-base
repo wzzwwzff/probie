@@ -1,0 +1,1043 @@
+package com.app.cq.model;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by lsh on 2018/5/7.
+ * 被拆迁家庭信息表
+ */
+@Table(name = "family")
+@Entity
+public class Family {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;//家庭id
+    private String familyCode;//家庭编号 一家一房一编号
+    private String bdCode;//分指编号
+    private String groupCode;//组别编号
+    private String name;//被拆迁人姓名
+    private String idCard;//被拆迁人身份证号
+    private String tel;//联系电话
+    private Integer marryStatus;//婚姻状况
+    private String address;//地址门牌
+    private Integer houseType;//房屋产别1：直管公房，2：单位自管，3:成本价出售住宅4：私房，5：文革产，6：独立自建,7：标准价出售住宅
+    private String houseCompany;//产权单位
+    private Integer houseStyle;//房屋类型1：成套，2：简易楼，3：平房
+    private BigDecimal useArea;//使用面积
+    private BigDecimal buildArea;//建筑面积
+    private BigDecimal houseNum;//房屋间数
+    private Integer houseUse;//用途1：出租经营，2：出租居住，3：自营，4：自住
+    private String businessCode;//营业执照号
+    private BigDecimal businessArea;//营业面积
+    private BigDecimal zjHouseNum;//自建房间数
+    private BigDecimal zjHouseArea;//自建房面积
+    private Integer houseStatus;//是否有标准自建1：是，2：否
+    private Integer hjNum;//户籍数
+    private Integer hjPersonNum;//户籍人数
+    private Integer livePersonNum;//现居住人数
+    private Integer ktNum;//空调
+    private Integer dhNum;//电话
+    private Integer yxNum;//有线电视
+    private Integer rsqNum;//热水器
+    private Integer kdNum;//宽带
+    private Integer dnqNum;//煤改电装用电暖气
+    private Integer dbNum;//低保
+    private Integer cjNum;//残疾证
+//    private Integer dabNum;//大病
+//    private Integer lowNum;//低收入家庭救助
+//    private Integer armyNum;//现役军人
+    private Integer teacherNum;//教师资格数
+    private Integer glNum;//夫妻工龄之和
+    private Integer helpNum;//援藏人数
+    private BigDecimal fgFee;//房改售房代扣款
+    @Column(columnDefinition = "TEXT")
+    private String summary;//备注(入户数据登记)
+    private String pgCompany;//评估公司名称
+    private BigDecimal houseMoney;//房屋价值补偿
+    private BigDecimal fitPgMoney;//装修补偿
+    private BigDecimal houseNewMoney;//重置成新价
+    private BigDecimal yjMoney;//移机费用
+    private BigDecimal ktFee;//空调费
+    private BigDecimal dhFee;//电话费
+    private BigDecimal tvFee;//有线电视费
+    private BigDecimal rsqFee;//热水器费
+    private BigDecimal kdFee;//宽带费
+    private BigDecimal dnqFee;//煤改电装用电暖气
+    private BigDecimal cjFee;//残疾费
+    private BigDecimal dbFee;//低保费
+    private BigDecimal shknFee;//生活困难补助费
+    private BigDecimal dabFee;//大病费
+    private BigDecimal lowFee;//低收入补助费
+    private BigDecimal armyFee;//军人补助费
+    private BigDecimal qysdFee;//签约速度奖
+    private BigDecimal wqFee;//外迁奖励
+    private BigDecimal sfpfFee;//私房平房补助费
+    private BigDecimal bqMoney;//搬迁费
+    private BigDecimal zhknMoney;//综合困难补助费
+    private BigDecimal ydjlfyMoney;//异地奖励房源购房补助费
+    private BigDecimal hbbcMoney;//货币补偿综合补助费
+    private BigDecimal gcphMoney;//工程配合奖
+    private BigDecimal tctyFee;//停产停业补助费
+    private BigDecimal zjfTctyFee;//自建房停产停业补助费
+    private Integer bcType;//补偿方式1:房屋安置 2:货币补偿 3:货币补偿+异地奖励房源
+    private Integer signNum;//意向签约顺序号
+    private String filePath;//文件路径(签约产权人图片)
+    private String pgFilePath;//评估报告文件路径
+    private String problem;//初审退回原因
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer signStatus;// 签约状态 1：未签约 2：已签约
+    private Date signYxDate; //意向签约时间(前往签约时间)
+    private Long signYxDateLong;//意向签约时间(取号时的毫秒值)
+
+    private Date signDate;//实际签约时间
+    private Long signDateLong;//签约时间
+    private String signPerson;//签约操作人姓名
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer jfStatus;//交房状态1：未交房 2：已交房
+    private Date jfDate;//交房时间
+    private String jfDateHour;//交房时间
+    private String jfPerson;//交房操作人姓名
+    @Column(columnDefinition = "TEXT")
+    private String jfMemo;//交房备注
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer xfStatus;       //选房状态 1未选房  2已选房
+    private Date xfDate;//选房时间
+    private Long xfDateLong;//选房时间
+    private Integer xfNum;//选房顺序号
+    private Date waitXfDate; //等待选房时间
+
+    private BigDecimal yjzMoney;//原建筑面积购房款
+    private BigDecimal wcjzArea;//超出原建筑面积但未超过人均15 ㎡部分面积
+    private BigDecimal wcjzMoney;//超出原建筑面积但未超过人均15 ㎡部分购房款
+    private BigDecimal ccjzMoney;//人均超过部分购房款
+    private BigDecimal ccjzArea;//人均超过部分面积
+    private BigDecimal gfTotalMoney;//购房款总计
+
+    private BigDecimal teacherYhMoney;//教师优惠
+    private BigDecimal helpYhMoney;//援藏优惠
+
+    private Date buChongDate; //补充协议签订时间
+    private Long buChongDateLong;//补充协议签订时间
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer sureStatus;   //数据锁定状态 1:未锁定，2：已锁定
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer firstCheckStatus;//审计初审状态1：未审核；2：已审核；0：退回
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer buChongStatus;//补偿安置协议书签约状态 1：未签约 2：已签约
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer lastCheckStatus;//审计终审状态  1：未审核；2：已审核；
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer settleStatus;//财务结算状态  1：未结算；2：已结算；
+
+    @Column(columnDefinition = "INT default 1", nullable = false, insertable = false)
+    private Integer isValid;//数据是否有效1：有效 2：无效
+
+    //安置房源
+    @JSONField(serialize = false)
+    @OneToMany(mappedBy = "family",fetch = FetchType.LAZY)
+    private List<House> houseList;
+
+    //家庭成员
+    @JSONField(serialize = false)
+    @OneToMany(mappedBy = "family",fetch = FetchType.LAZY)
+    private List<FamilyPerson> familyPersonList;
+
+    //标准自建房
+    @JSONField(serialize = false)
+    @OneToMany(mappedBy = "family",fetch = FetchType.LAZY)
+    private List<FamilyHouse> familyHouseList;
+
+    //退回表
+    @JSONField(serialize = false)
+    @OneToMany(mappedBy = "family",fetch = FetchType.LAZY)
+    private List<BackInfo> backList;
+
+    public BigDecimal getTeacherYhMoney() {
+        return teacherYhMoney;
+    }
+
+    public void setTeacherYhMoney(BigDecimal teacherYhMoney) {
+        this.teacherYhMoney = teacherYhMoney;
+    }
+
+    public BigDecimal getHelpYhMoney() {
+        return helpYhMoney;
+    }
+
+    public void setHelpYhMoney(BigDecimal helpYhMoney) {
+        this.helpYhMoney = helpYhMoney;
+    }
+
+    public BigDecimal getWcjzArea() {
+        return wcjzArea;
+    }
+
+    public void setWcjzArea(BigDecimal wcjzArea) {
+        this.wcjzArea = wcjzArea;
+    }
+
+    public BigDecimal getCcjzArea() {
+        return ccjzArea;
+    }
+
+    public void setCcjzArea(BigDecimal ccjzArea) {
+        this.ccjzArea = ccjzArea;
+    }
+
+    public BigDecimal getYjzMoney() {
+        return yjzMoney;
+    }
+
+    public void setYjzMoney(BigDecimal yjzMoney) {
+        this.yjzMoney = yjzMoney;
+    }
+
+    public BigDecimal getWcjzMoney() {
+        return wcjzMoney;
+    }
+
+    public void setWcjzMoney(BigDecimal wcjzMoney) {
+        this.wcjzMoney = wcjzMoney;
+    }
+
+    public BigDecimal getCcjzMoney() {
+        return ccjzMoney;
+    }
+
+    public void setCcjzMoney(BigDecimal ccjzMoney) {
+        this.ccjzMoney = ccjzMoney;
+    }
+
+    public BigDecimal getGfTotalMoney() {
+        return gfTotalMoney;
+    }
+
+    public void setGfTotalMoney(BigDecimal gfTotalMoney) {
+        this.gfTotalMoney = gfTotalMoney;
+    }
+
+    public String getPgFilePath() {
+        return pgFilePath;
+    }
+
+    public void setPgFilePath(String pgFilePath) {
+        this.pgFilePath = pgFilePath;
+    }
+
+    public Integer getSettleStatus() {
+        return settleStatus;
+    }
+
+    public void setSettleStatus(Integer settleStatus) {
+        this.settleStatus = settleStatus;
+    }
+
+    public Integer getBuChongStatus() {
+        return buChongStatus;
+    }
+
+    public void setBuChongStatus(Integer buChongStatus) {
+        this.buChongStatus = buChongStatus;
+    }
+
+    public Integer getTeacherNum() {
+        return teacherNum;
+    }
+
+    public void setTeacherNum(Integer teacherNum) {
+        this.teacherNum = teacherNum;
+    }
+
+    public Integer getGlNum() {
+        return glNum;
+    }
+
+    public void setGlNum(Integer glNum) {
+        this.glNum = glNum;
+    }
+
+    public Integer getHelpNum() {
+        return helpNum;
+    }
+
+    public void setHelpNum(Integer helpNum) {
+        this.helpNum = helpNum;
+    }
+
+    public String getJfDateHour() {
+        return jfDateHour;
+    }
+
+    public void setJfDateHour(String jfDateHour) {
+        this.jfDateHour = jfDateHour;
+    }
+
+    public BigDecimal getZjfTctyFee() {
+        return zjfTctyFee;
+    }
+
+    public void setZjfTctyFee(BigDecimal zjfTctyFee) {
+        this.zjfTctyFee = zjfTctyFee;
+    }
+
+    public Long getSignYxDateLong() {
+        return signYxDateLong;
+    }
+
+    public void setSignYxDateLong(Long signYxDateLong) {
+        this.signYxDateLong = signYxDateLong;
+    }
+
+    public BigDecimal getGcphMoney() {
+        return gcphMoney;
+    }
+
+    public void setGcphMoney(BigDecimal gcphMoney) {
+        this.gcphMoney = gcphMoney;
+    }
+
+    public BigDecimal getHbbcMoney() {
+        return hbbcMoney;
+    }
+
+    public void setHbbcMoney(BigDecimal hbbcMoney) {
+        this.hbbcMoney = hbbcMoney;
+    }
+
+    public BigDecimal getYdjlfyMoney() {
+        return ydjlfyMoney;
+    }
+
+    public void setYdjlfyMoney(BigDecimal ydjlfyMoney) {
+        this.ydjlfyMoney = ydjlfyMoney;
+    }
+
+    public BigDecimal getZhknMoney() {
+        return zhknMoney;
+    }
+
+    public void setZhknMoney(BigDecimal zhknMoney) {
+        this.zhknMoney = zhknMoney;
+    }
+
+    public List<BackInfo> getBackList() {
+        return backList;
+    }
+
+    public void setBackList(List<BackInfo> backList) {
+        this.backList = backList;
+    }
+
+    public String getProblem() {
+        return problem;
+    }
+
+    public void setProblem(String problem) {
+        this.problem = problem;
+    }
+
+    public Date getBuChongDate() {
+        return buChongDate;
+    }
+
+    public void setBuChongDate(Date buChongDate) {
+        this.buChongDate = buChongDate;
+    }
+
+    public Long getBuChongDateLong() {
+        return buChongDateLong;
+    }
+
+    public void setBuChongDateLong(Long buChongDateLong) {
+        this.buChongDateLong = buChongDateLong;
+    }
+
+    public Long getXfDateLong() {
+        return xfDateLong;
+    }
+
+    public void setXfDateLong(Long xfDateLong) {
+        this.xfDateLong = xfDateLong;
+    }
+
+    public Date getWaitXfDate() {
+        return waitXfDate;
+    }
+
+    public void setWaitXfDate(Date waitXfDate) {
+        this.waitXfDate = waitXfDate;
+    }
+
+    public Integer getXfStatus() {
+        return xfStatus;
+    }
+
+    public void setXfStatus(Integer xfStatus) {
+        this.xfStatus = xfStatus;
+    }
+
+    public Date getXfDate() {
+        return xfDate;
+    }
+
+    public Integer getXfNum() {
+        return xfNum;
+    }
+
+    public void setXfNum(Integer xfNum) {
+        this.xfNum = xfNum;
+    }
+
+    public void setXfDate(Date xfDate) {
+        this.xfDate = xfDate;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public Date getSignYxDate() {
+        return signYxDate;
+    }
+
+    public void setSignYxDate(Date signYxDate) {
+        this.signYxDate = signYxDate;
+    }
+
+    public BigDecimal getShknFee() {
+        return shknFee;
+    }
+
+    public void setShknFee(BigDecimal shknFee) {
+        this.shknFee = shknFee;
+    }
+
+    public BigDecimal getTctyFee() {
+        return tctyFee;
+    }
+
+    public void setTctyFee(BigDecimal tctyFee) {
+        this.tctyFee = tctyFee;
+    }
+
+    public BigDecimal getBqMoney() {
+        return bqMoney;
+    }
+
+    public void setBqMoney(BigDecimal bqMoney) {
+        this.bqMoney = bqMoney;
+    }
+
+    public BigDecimal getSfpfFee() {
+        return sfpfFee;
+    }
+
+    public void setSfpfFee(BigDecimal sfpfFee) {
+        this.sfpfFee = sfpfFee;
+    }
+
+    public BigDecimal getWqFee() {
+        return wqFee;
+    }
+
+    public void setWqFee(BigDecimal wqFee) {
+        this.wqFee = wqFee;
+    }
+
+    public BigDecimal getQysdFee() {
+        return qysdFee;
+    }
+
+    public void setQysdFee(BigDecimal qysdFee) {
+        this.qysdFee = qysdFee;
+    }
+
+    public Integer getDnqNum() {
+        return dnqNum;
+    }
+
+    public void setDnqNum(Integer dnqNum) {
+        this.dnqNum = dnqNum;
+    }
+
+    public BigDecimal getDnqFee() {
+        return dnqFee;
+    }
+
+    public void setDnqFee(BigDecimal dnqFee) {
+        this.dnqFee = dnqFee;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFamilyCode() {
+        return familyCode;
+    }
+
+    public void setFamilyCode(String familyCode) {
+        this.familyCode = familyCode;
+    }
+
+    public String getBdCode() {
+        return bdCode;
+    }
+
+    public void setBdCode(String bdCode) {
+        this.bdCode = bdCode;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public Integer getMarryStatus() {
+        return marryStatus;
+    }
+
+    public void setMarryStatus(Integer marryStatus) {
+        this.marryStatus = marryStatus;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getHouseType() {
+        return houseType;
+    }
+
+    public void setHouseType(Integer houseType) {
+        this.houseType = houseType;
+    }
+
+    public String getHouseCompany() {
+        return houseCompany;
+    }
+
+    public void setHouseCompany(String houseCompany) {
+        this.houseCompany = houseCompany;
+    }
+
+    public Integer getHouseStyle() {
+        return houseStyle;
+    }
+
+    public void setHouseStyle(Integer houseStyle) {
+        this.houseStyle = houseStyle;
+    }
+
+    public BigDecimal getUseArea() {
+        return useArea;
+    }
+
+    public void setUseArea(BigDecimal useArea) {
+        this.useArea = useArea;
+    }
+
+    public BigDecimal getBuildArea() {
+        return buildArea;
+    }
+
+    public void setBuildArea(BigDecimal buildArea) {
+        this.buildArea = buildArea;
+    }
+
+    public Integer getHouseUse() {
+        return houseUse;
+    }
+
+    public void setHouseUse(Integer houseUse) {
+        this.houseUse = houseUse;
+    }
+
+    public String getBusinessCode() {
+        return businessCode;
+    }
+
+    public void setBusinessCode(String businessCode) {
+        this.businessCode = businessCode;
+    }
+
+    public BigDecimal getBusinessArea() {
+        return businessArea;
+    }
+
+    public void setBusinessArea(BigDecimal businessArea) {
+        this.businessArea = businessArea;
+    }
+
+    public BigDecimal getZjHouseArea() {
+        return zjHouseArea;
+    }
+
+    public void setZjHouseArea(BigDecimal zjHouseArea) {
+        this.zjHouseArea = zjHouseArea;
+    }
+
+    public Integer getHouseStatus() {
+        return houseStatus;
+    }
+
+    public void setHouseStatus(Integer houseStatus) {
+        this.houseStatus = houseStatus;
+    }
+
+    public BigDecimal getHouseNum() {
+        return houseNum;
+    }
+
+    public void setHouseNum(BigDecimal houseNum) {
+        this.houseNum = houseNum;
+    }
+
+    public BigDecimal getZjHouseNum() {
+        return zjHouseNum;
+    }
+
+    public void setZjHouseNum(BigDecimal zjHouseNum) {
+        this.zjHouseNum = zjHouseNum;
+    }
+
+    public Integer getHjNum() {
+        return hjNum;
+    }
+
+    public void setHjNum(Integer hjNum) {
+        this.hjNum = hjNum;
+    }
+
+    public Integer getHjPersonNum() {
+        return hjPersonNum;
+    }
+
+    public void setHjPersonNum(Integer hjPersonNum) {
+        this.hjPersonNum = hjPersonNum;
+    }
+
+    public Integer getLivePersonNum() {
+        return livePersonNum;
+    }
+
+    public void setLivePersonNum(Integer livePersonNum) {
+        this.livePersonNum = livePersonNum;
+    }
+
+    public Integer getKtNum() {
+        return ktNum;
+    }
+
+    public void setKtNum(Integer ktNum) {
+        this.ktNum = ktNum;
+    }
+
+    public Integer getDhNum() {
+        return dhNum;
+    }
+
+    public void setDhNum(Integer dhNum) {
+        this.dhNum = dhNum;
+    }
+
+    public Integer getYxNum() {
+        return yxNum;
+    }
+
+    public void setYxNum(Integer yxNum) {
+        this.yxNum = yxNum;
+    }
+
+    public Integer getRsqNum() {
+        return rsqNum;
+    }
+
+    public void setRsqNum(Integer rsqNum) {
+        this.rsqNum = rsqNum;
+    }
+
+    public Integer getKdNum() {
+        return kdNum;
+    }
+
+    public void setKdNum(Integer kdNum) {
+        this.kdNum = kdNum;
+    }
+
+    public Integer getDbNum() {
+        return dbNum;
+    }
+
+    public void setDbNum(Integer dbNum) {
+        this.dbNum = dbNum;
+    }
+
+    public Integer getCjNum() {
+        return cjNum;
+    }
+
+    public void setCjNum(Integer cjNum) {
+        this.cjNum = cjNum;
+    }
+
+//    public Integer getDabNum() {
+//        return dabNum;
+//    }
+//
+//    public void setDabNum(Integer dabNum) {
+//        this.dabNum = dabNum;
+//    }
+//
+//    public Integer getLowNum() {
+//        return lowNum;
+//    }
+//
+//    public void setLowNum(Integer lowNum) {
+//        this.lowNum = lowNum;
+//    }
+//
+//    public Integer getArmyNum() {
+//        return armyNum;
+//    }
+//
+//    public void setArmyNum(Integer armyNum) {
+//        this.armyNum = armyNum;
+//    }
+
+    public BigDecimal getFgFee() {
+        return fgFee;
+    }
+
+    public void setFgFee(BigDecimal fgFee) {
+        this.fgFee = fgFee;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getPgCompany() {
+        return pgCompany;
+    }
+
+    public void setPgCompany(String pgCompany) {
+        this.pgCompany = pgCompany;
+    }
+
+    public BigDecimal getHouseMoney() {
+        return houseMoney;
+    }
+
+    public void setHouseMoney(BigDecimal houseMoney) {
+        this.houseMoney = houseMoney;
+    }
+
+    public BigDecimal getFitPgMoney() {
+        return fitPgMoney;
+    }
+
+    public void setFitPgMoney(BigDecimal fitPgMoney) {
+        this.fitPgMoney = fitPgMoney;
+    }
+
+    public BigDecimal getHouseNewMoney() {
+        return houseNewMoney;
+    }
+
+    public void setHouseNewMoney(BigDecimal houseNewMoney) {
+        this.houseNewMoney = houseNewMoney;
+    }
+
+    public BigDecimal getYjMoney() {
+        return yjMoney;
+    }
+
+    public void setYjMoney(BigDecimal yjMoney) {
+        this.yjMoney = yjMoney;
+    }
+
+    public BigDecimal getKtFee() {
+        return ktFee;
+    }
+
+    public void setKtFee(BigDecimal ktFee) {
+        this.ktFee = ktFee;
+    }
+
+    public BigDecimal getDhFee() {
+        return dhFee;
+    }
+
+    public void setDhFee(BigDecimal dhFee) {
+        this.dhFee = dhFee;
+    }
+
+    public BigDecimal getTvFee() {
+        return tvFee;
+    }
+
+    public void setTvFee(BigDecimal tvFee) {
+        this.tvFee = tvFee;
+    }
+
+    public BigDecimal getRsqFee() {
+        return rsqFee;
+    }
+
+    public void setRsqFee(BigDecimal rsqFee) {
+        this.rsqFee = rsqFee;
+    }
+
+    public BigDecimal getKdFee() {
+        return kdFee;
+    }
+
+    public void setKdFee(BigDecimal kdFee) {
+        this.kdFee = kdFee;
+    }
+
+    public BigDecimal getCjFee() {
+        return cjFee;
+    }
+
+    public void setCjFee(BigDecimal cjFee) {
+        this.cjFee = cjFee;
+    }
+
+    public BigDecimal getDbFee() {
+        return dbFee;
+    }
+
+    public void setDbFee(BigDecimal dbFee) {
+        this.dbFee = dbFee;
+    }
+
+    public BigDecimal getDabFee() {
+        return dabFee;
+    }
+
+    public void setDabFee(BigDecimal dabFee) {
+        this.dabFee = dabFee;
+    }
+
+    public BigDecimal getLowFee() {
+        return lowFee;
+    }
+
+    public void setLowFee(BigDecimal lowFee) {
+        this.lowFee = lowFee;
+    }
+
+    public BigDecimal getArmyFee() {
+        return armyFee;
+    }
+
+    public void setArmyFee(BigDecimal armyFee) {
+        this.armyFee = armyFee;
+    }
+
+    public Integer getBcType() {
+        return bcType;
+    }
+
+    public void setBcType(Integer bcType) {
+        this.bcType = bcType;
+    }
+
+    public Integer getSignNum() {
+        return signNum;
+    }
+
+    public void setSignNum(Integer signNum) {
+        this.signNum = signNum;
+    }
+
+    public Integer getSignStatus() {
+        return signStatus;
+    }
+
+    public void setSignStatus(Integer signStatus) {
+        this.signStatus = signStatus;
+    }
+
+    public Date getSignDate() {
+        return signDate;
+    }
+
+    public void setSignDate(Date signDate) {
+        this.signDate = signDate;
+    }
+
+    public Long getSignDateLong() {
+        return signDateLong;
+    }
+
+    public void setSignDateLong(Long signDateLong) {
+        this.signDateLong = signDateLong;
+    }
+
+    public String getSignPerson() {
+        return signPerson;
+    }
+
+    public void setSignPerson(String signPerson) {
+        this.signPerson = signPerson;
+    }
+
+    public Integer getJfStatus() {
+        return jfStatus;
+    }
+
+    public void setJfStatus(Integer jfStatus) {
+        this.jfStatus = jfStatus;
+    }
+
+    public Date getJfDate() {
+        return jfDate;
+    }
+
+    public void setJfDate(Date jfDate) {
+        this.jfDate = jfDate;
+    }
+
+    public String getJfPerson() {
+        return jfPerson;
+    }
+
+    public void setJfPerson(String jfPerson) {
+        this.jfPerson = jfPerson;
+    }
+
+    public String getJfMemo() {
+        return jfMemo;
+    }
+
+    public void setJfMemo(String jfMemo) {
+        this.jfMemo = jfMemo;
+    }
+
+    public Integer getSureStatus() {
+        return sureStatus;
+    }
+
+    public void setSureStatus(Integer sureStatus) {
+        this.sureStatus = sureStatus;
+    }
+
+    public Integer getFirstCheckStatus() {
+        return firstCheckStatus;
+    }
+
+    public void setFirstCheckStatus(Integer firstCheckStatus) {
+        this.firstCheckStatus = firstCheckStatus;
+    }
+
+    public Integer getLastCheckStatus() {
+        return lastCheckStatus;
+    }
+
+    public void setLastCheckStatus(Integer lastCheckStatus) {
+        this.lastCheckStatus = lastCheckStatus;
+    }
+
+    public Integer getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(Integer isValid) {
+        this.isValid = isValid;
+    }
+
+    public List<House> getHouseList() {
+        return houseList;
+    }
+
+    public void setHouseList(List<House> houseList) {
+        this.houseList = houseList;
+    }
+
+    public List<FamilyPerson> getFamilyPersonList() {
+        return familyPersonList;
+    }
+
+    public void setFamilyPersonList(List<FamilyPerson> familyPersonList) {
+        this.familyPersonList = familyPersonList;
+    }
+
+    public List<FamilyHouse> getFamilyHouseList() {
+        return familyHouseList;
+    }
+
+    public void setFamilyHouseList(List<FamilyHouse> familyHouseList) {
+        this.familyHouseList = familyHouseList;
+    }
+
+    @Transient
+    public String getFormatSignNum() {
+        DecimalFormat decimalFormat = new DecimalFormat("0000");
+        if (signNum != null) {
+            return decimalFormat.format(signNum);
+        } else {
+            return "";
+        }
+    }
+}

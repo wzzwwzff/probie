@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta http-equiv="refresh" content="5">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+        .myscroll {
+            width: 1600px;
+            height:600px;
+            position: absolute;
+            left: 450px;
+            top:50px;
+            margin: 0 auto;
+            line-height: 26px;
+            font-size: 12px;
+            overflow: hidden;
+        }
+        .myscroll ul{
+            list-style: none;
+        }
+        .myscroll li {
+            height: 80px;
+            margin-left: 25px;
+            font-size: 60px;
+            color: white;
+            font-weight: bold;
+            line-height: 80px;
+        }
+        .myscroll a {
+            color: #333;
+            text-decoration: none;
+        }
+        .myscroll a:hover {
+            color: #ED5565;
+            text-decoration: underline;
+        }
+    </style>
+    <script type="text/javascript" src="../static/jquery/1.11.3/jquery.min.js "></script>
+    <script type="text/javascript" src="../static/jquery/scoll/scroll.js"></script>
+    <!--<script type="text/javascript">-->
+        <!--$(function(){-->
+            <!--$('.myscroll').myScroll({-->
+                <!--speed: 40, //数值越大，速度越慢-->
+                <!--rowHeight: 80//li的高度-->
+            <!--});-->
+        <!--});-->
+    <!--</script>-->
+</head>
+
+<body>
+<div class="myscroll">
+    <ul>
+       <li>&nbsp;&nbsp;截止到2016年07月07日12点15分</li>
+        <li></li>
+       <li>&nbsp;&nbsp;&nbsp; 总签约户数：&nbsp;5562户</li>
+       <li>&nbsp;&nbsp;&nbsp; 今日交房户数：1250户</li>
+       <li>&nbsp;&nbsp;&nbsp; 累计交房户数：4900户</li>
+       <li>&nbsp;&nbsp;&nbsp; 剩余交房户数：662户</li>
+       <li>&nbsp;&nbsp;&nbsp; 整体交房比例：<font color="red">88.12%</font></li>
+        <li></li>
+    </ul>
+</div>
+
+
+</body>
+</html>

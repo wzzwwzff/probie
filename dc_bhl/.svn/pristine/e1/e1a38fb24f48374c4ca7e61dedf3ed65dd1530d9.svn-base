@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>日常签约情况报表</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="refresh" content="10">
+    <LINK href="styles/styles.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        td {
+            font-size: 16px;
+            font-family: "宋体";
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="title"><h4>日常签约情况报表</h4></div>
+<div class="content">
+    <div class="search_content">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">日期</div>
+                    <input name="addDate" type="text" style="width:130px;height:32px;"
+                           class="form-date-time dateISO form-control"
+                           value="2016-12-30"/>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</button>
+            </div>
+        </form>
+    </div>
+    <h2 align="center" style="margin-top: 40px;"><font>截止到【2016-12-30】签约情况：已签约户数：3094户</font></h2>
+    <table class="table table-bordered table-striped table-hover" id="myData" width="95%">
+        <thead>
+        <tr>
+            <th rowspan="2" style="vertical-align: middle" class="text-center">序号</th>
+            <th rowspan="2" style="vertical-align: middle" class="text-center">年-月</th>
+            <th rowspan="2" style="vertical-align: middle" class="text-center">分类</th>
+            <th colspan="31" style="vertical-align: middle" class="text-center">日</th>
+        </tr>
+        <tr id="dality"></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<script>
+    $(function () {
+        var trHtml = "";
+        for (var i = 0, j = chart_data_daily.length; i < j; i++) {
+            var data = chart_data_daily[i];
+            trHtml += "<th>" + data.day + "</th>";
+        }
+        $("#myData > thead > #dality").append(trHtml);
+    });
+    $(function () {
+        var trHtml = "";
+        for (var i = 0, j = chart_data_year_month.length; i < j; i++) {
+            var data = chart_data_year_month[i];
+            trHtml += "<tr>";
+            trHtml += "<td>" + data.index + "</td>";
+            trHtml += "<td>" + data.year_month + "</td>";
+            trHtml += "<td>" + data.type + "</td>";
+            trHtml += "<td>" + data.num1 + "</td>";
+            trHtml += "<td>" + data.num2 + "</td>";
+            trHtml += "<td>" + data.num3 + "</td>";
+            trHtml += "<td>" + data.num4 + "</td>";
+            trHtml += "<td>" + data.num5 + "</td>";
+            trHtml += "<td>" + data.num6 + "</td>";
+            trHtml += "<td>" + data.num7 + "</td>";
+            trHtml += "<td>" + data.num8 + "</td>";
+            trHtml += "<td>" + data.num9 + "</td>";
+            trHtml += "<td>" + data.num10 + "</td>";
+            trHtml += "<td>" + data.num11 + "</td>";
+            trHtml += "<td>" + data.num12 + "</td>";
+            trHtml += "<td>" + data.num13 + "</td>";
+            trHtml += "<td>" + data.num14 + "</td>";
+            trHtml += "<td>" + data.num15 + "</td>";
+            trHtml += "<td>" + data.num16 + "</td>";
+            trHtml += "<td>" + data.num17 + "</td>";
+            trHtml += "<td>" + data.num18 + "</td>";
+            trHtml += "<td>" + data.num19 + "</td>";
+            trHtml += "<td>" + data.num20 + "</td>";
+            trHtml += "<td>" + data.num21 + "</td>";
+            trHtml += "<td>" + data.num22 + "</td>";
+            trHtml += "<td>" + data.num23 + "</td>";
+            trHtml += "<td>" + data.num24 + "</td>";
+            trHtml += "<td>" + data.num25 + "</td>";
+            trHtml += "<td>" + data.num26 + "</td>";
+            trHtml += "<td>" + data.num27 + "</td>";
+            trHtml += "<td>" + data.num28 + "</td>";
+            trHtml += "<td>" + data.num29 + "</td>";
+            trHtml += "<td>" + data.num30 + "</td>";
+            trHtml += "<td>" + data.num31 + "</td>";
+            trHtml += "</tr>";
+        }
+        $("#myData > tbody").append(trHtml);
+    });
+</script>
+</div>
+</body>
+</html>

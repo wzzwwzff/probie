@@ -1,0 +1,124 @@
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
+<style type="text/css">
+    .stepInfo {
+        position: relative;
+        background: #f2f2f2;
+        margin: 20px auto 0 auto;
+        width: 500px;
+    }
+
+    .stepInfo li {
+        float: left;
+        margin-left: -280px;
+        width: 900px;
+        height: 0.15em;
+        background: #bbb;
+        margin-top: 1em;
+        list-style-type: none
+    }
+
+    .stepIco {
+        border-radius: 2em;
+        padding: 0.03em;
+        background: #bbb;
+        text-align: center;
+        line-height: 1.5em;
+        color: #fff;
+        position: absolute;
+        width: 3.6em;
+        height: 3.6em;
+    }
+
+    .stepIco1 {
+        top: -0.7em;
+        left: -50%;
+    }
+
+    .stepIco2 {
+        top: -0.7em;
+        left: -25%;
+    }
+
+    .stepIco3 {
+        top: -0.7em;
+        left: 0%;
+    }
+
+    .stepIco4 {
+        top: -0.7em;
+        left: 25%;
+    }
+
+    .stepIco5 {
+        top: -0.7em;
+        left: 50%;
+    }
+    .stepIco6 {
+        top: -0.7em;
+        left: 75%;
+    }
+    .stepIco7 {
+        top: -0.7em;
+        left: 100%;
+    }
+    .stepIco8 {
+        top: -0.7em;
+        left: 125%;
+    }
+
+    .stepText {
+        color: black;
+        margin-top: 1.2em;
+        width: 6em;
+        text-align: center;
+        margin-left: -1em;
+        font-size: 15px;
+    }
+
+    .num {
+        margin-top: 0.6em;
+        font-size: 20px;
+    }
+
+    .liCls {
+        width: 200px;
+        text-align: center;
+    }
+</style>
+<div class="stepInfo">
+    <ul>
+        <li></li>
+    </ul>
+    <div class="stepIco stepIco1" <c:if test="${not empty family.name}"> style="background-color: #1d7ece;" </c:if>>
+        <div class="num">1</div>
+        <div class="stepText">入户登记</div>
+    </div>
+    <div class="stepIco stepIco2" <c:if test="${family.sureStatus eq 2}"> style="background-color: #1d7ece;" </c:if>>
+        <div class="num">2</div>
+        <div class="stepText">确认状态</div>
+    </div>
+    <div class="stepIco stepIco3" <c:if test="${family.firstCheckStatus eq 2}"> style="background-color: #1d7ece;" </c:if>>
+        <div class="num">3</div>
+        <div class="stepText">初审状态</div>
+    </div>
+    <div class="stepIco stepIco4" <c:if test="${family.signStatus eq 2}"> style="background-color: #1d7ece;" </c:if>>
+        <div class="num">4</div>
+        <div class="stepText">签约状态</div>
+    </div>
+    <div class="stepIco stepIco5" <c:if test="${family.jfStatus eq 2}"> style="background-color: #1d7ece;" </c:if>>
+        <div class="num">5</div>
+        <div class="stepText">交房状态</div>
+    </div>
+    <div class="stepIco stepIco6">
+        <div class="num">6</div>
+        <div class="stepText">选房状态</div>
+    </div>
+    <div class="stepIco stepIco7">
+        <div class="num">7</div>
+        <div class="stepText">补充签约状态</div>
+    </div>
+    <div class="stepIco stepIco8" <c:if test="${family.lastCheckStatus eq 2}"> style="background-color: #1d7ece;" </c:if>>
+        <div class="num">8</div>
+        <div class="stepText">终审状态</div>
+    </div>
+</div>

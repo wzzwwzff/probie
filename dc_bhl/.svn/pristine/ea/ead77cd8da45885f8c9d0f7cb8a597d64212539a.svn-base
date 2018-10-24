@@ -1,0 +1,59 @@
+<html>
+<head>
+    <title>登录</title>
+    <meta charset="utf-8" />
+    <script src="static/jquery/1.11.3/jquery.min.js"></script>
+    <link href="static/style/login.css" rel="stylesheet" type="text/css">
+    <style>
+        .login_success {
+            color: green;
+        }
+        .login_error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="loginPageBody" >
+    <div class="loginWrapbg">
+        <div style="width: 100%; height: 25%; left: 0; top: 0;"></div>
+        <div class="loginCt">
+            <div style="text-align: center">
+                <!--<img src="static/image/logo.png">-->
+                <span style="line-height:70px;font-size: 25px;padding-top:20px;margin-top: 15px;font-family:'微软雅黑','黑体' "><b>东城区宝华里危改项目签约选房管理系统</b></span>
+            </div>
+            <div class="welcome"><span id="logining_info">请输入用户名、密码、验证码</span></div>
+            <div class="loginBar" id="loginBar">
+                <form name="submitForm" id="submitForm">
+
+                    <div class="" style="text-align: center">
+                        <div class="fieldWrap">
+                            <span class="login_label">用户名：</span>
+                            <input name="username" id="username" type="text "class="userName inputText" >
+                        </div>
+
+                        <div class="fieldWrap">
+                            <span class="login_label">密　码：</span>
+                            <input name="password" id="password" type="password" class="passWord inputText" >
+                        </div>
+
+
+                        <div class="fieldWrap">
+                            <span class="login_label">验证码：</span>
+                            <input name="code"  id="code" type="text" class="maskCode inputText">
+                            &nbsp;<a href="javascript:reloadCode();"><img id="licenceImg" src="static/image/code.jpg" alt='验证码,看不清楚? 请点击刷新验证码'></a>
+                        </div>
+
+                        <div class="loginBtnWrap" onClick="location.href='main.html'">登 录</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+
+            技术支持：北京佳木东方科技有限公司</div>
+    </div>
+</div>
+</body>
+
+</html>

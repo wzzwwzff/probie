@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目签约走势图</title>
+    <meta http-equiv="refresh" content="5">
+    <LINK href="styles/styles.css" type="text/css" rel="stylesheet"/>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/plugin/highcharts/highcharts.js"></script>
+    <style>
+        html, body {
+            font-family: '微软雅黑';
+        }
+
+        .chart_content div {
+            float: left;
+            width: 48%;
+            height: 480px;
+            margin-top: 15px;
+        }
+
+        .chart_content .div_ul {
+            list-style: none;
+
+        }
+
+        .chart_content .div_ul li {
+            line-height: 60px;
+            font-weight: bold;
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center;font-size: 45px;font-weight: bold;">东城区宝华里危改项目签约走势图</div>
+<div style="width: 100%;" class="chart_content">
+    <div id="chart1" style="width: 30%;"></div>
+    <div id="chart2" style="width: 68%;"></div>
+    <div id="chart3" style="width: 100%;"></div>
+</div>
+<script>
+    $(function () {
+        $('#chart1').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: '本周签约走势图',
+                style: {
+                    color: "#000",
+                    fontSize: 22,
+                    fontWeight: "bold"
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: ['07月04日', '07月05日', '07月06日', '07月07日', '07月08日', '07月09日', '07月10日']
+            },
+            tooltip: {
+                enabled: false,
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' + this.x + ': ' + this.y + '°C';
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: true
+                }
+            },
+            series: [{
+                name: '签约户',
+                data: [150, 180, 190, 168, 144, 158, 172]
+            }]
+        });
+        $('#chart2').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: '本月签约走势图',
+                style: {
+                    color: "#000",
+                    fontSize: 22,
+                    fontWeight: "bold"
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: ['07月01日', '07月02日', '07月03日', '07月04日', '07月05日', '07月06日', '07月07日', '07月08日', '07月09日', '07月10日', '07月11日', '07月12日', '07月13日', '07月14日', '07月15日', '07月16日', '07月17日', '07月18日', '07月19日', '07月20日', '07月21日', '07月22日', '07月23日', '07月24日', '07月25日', '07月26日', '07月27日', '07月28日', '07月29日', '07月30日']
+            },
+            tooltip: {
+                enabled: false,
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' + this.x + ': ' + this.y + '°C';
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: true
+                }
+            },
+            series: [{
+                name: '签约户',
+                data: [150, 180, 120, 168, 144, 138, 172, 140, 190, 158, 144, 168, 122, 130, 190, 148, 144, 168, 172, 180, 190, 168, 144, 158, 172, 180, 190, 168, 144, 158]
+            }]
+        });
+        $('#chart3').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: '整体签约走势图',
+                style: {
+                    color: "#000",
+                    fontSize: 22,
+                    fontWeight: "bold"
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: ['07月01日', '07月02日', '07月03日', '07月04日', '07月05日', '07月06日', '07月07日', '07月08日', '07月09日', '07月10日', '07月11日', '07月12日', '07月13日', '07月14日', '07月15日', '07月16日', '07月17日', '07月18日', '07月19日', '07月20日', '07月21日', '07月22日', '07月23日', '07月24日', '07月25日', '07月26日', '07月27日', '07月28日', '07月29日', '07月30日']
+            },
+            tooltip: {
+                enabled: false,
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' + this.x + ': ' + this.y + '°C';
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: true
+                }
+            },
+            series: [{
+                name: '签约户',
+                data: [150, 180, 120, 168, 144, 138, 172, 140, 190, 158, 144, 168, 122, 130, 190, 148, 144, 168, 172, 180, 190, 168, 144, 158, 172, 180, 190, 168, 144, 158]
+            }]
+        });
+    });
+</script>
+</body>
+</html>

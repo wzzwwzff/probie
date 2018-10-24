@@ -1,0 +1,2683 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>电子选房管理</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+
+</head>
+<body>
+<div class="title">
+    <h5>电子选房管理（张丽梅）</h5>
+</div>
+<div class="content">
+    <form id="inputForm" action="" method="post">
+        <div><h5>一、基本信息</h5></div>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="fieldName">院号：</td>
+                <td class="fieldValue">1号院</td>
+                <td class="fieldName">地址门牌号：</td>
+                <td class="fieldValue"><span class="text-center">蒲黄榆一里5号楼501号</span></td>
+            </tr>
+            <tr>
+                <td class="fieldName">被拆迁人：</td>
+                <td class="fieldValue">张丽梅</td>
+                <td class="fieldName">身份证号码：</td>
+                <td class="fieldValue">110108198103121</td>
+            </tr>
+            <tr>
+                <td class="fieldName">协议编号：</td>
+                <td class="fieldValue">XHC-HD-012AZ</td>
+                <td class="fieldName">安置套数情况：</td>
+                <td class="fieldValue">一居：1套；2居：2套
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">应安置面积:</td>
+                <td class="fieldValue">150
+                    平米
+                </td>
+                <td class="fieldName"></td>
+                <td class="fieldValue">
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        <div><h5>二、已选房信息</h5></div>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="text-center">序号</th>
+                <th class="text-center">项目名称</th>
+                <th class="text-center">楼号</th>
+                <th class="text-center">单元</th>
+                <th class="text-center">房号</th>
+                <th class="text-center">面积</th>
+                <th class="text-center">居室</th>
+                <th class="text-center">删除</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="text-center">杨坨三号地</td>
+                    <td class="text-center">16</td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">101</td>
+                    <td class="text-center">86平米</td>
+                    <td class="text-center">二居</td>
+                    <!--<td><a href="javascript:if(confirm('确定删除吗？')){}">删除</a></td>-->
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="5"  class="text-center">面积合计</td>
+                    <td class="text-center">86平米</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        <div style="text-align: center;">
+            <button class="btn btn-primary" type="button"  onclick="location.href='print.html';" >打印《选房结果告知单》</button>
+        </div>
+
+        <div><h5>三、电子选房</h5></div>
+        <div style="text-align: center;padding: 8px;vertical-align:middle;">
+            项目：<select name="projectId" id="projectId" onchange="getBuilding();">
+            <option value='1'>XX安置楼1</option>
+            <option value='2'>XX安置楼2</option>
+
+        </select>
+            楼号：
+            <select name="buildId" id="buildId">
+                <option value="">1号楼</option>
+                <option value="">2号楼</option>
+                <option value="">3号楼</option>
+            </select>
+            <input type="button" value="查  看" onclick="search();"/>&nbsp;
+        </div>
+        <form id="xfForm">
+            <input type="hidden" name="fyId" id="fyId" value="6814"/>
+            <div id="xfContent" style="width:100%;padding: 8px;">
+
+                <table width="100%" border="0" align="center" cellpadding="1" cellspacing="1" bgcolor="#999999">
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="35" bgcolor="#cccccc" align="center"><b>户型</b></td>
+
+                        <td bgcolor="#cccccc" align="center" style="border-left:#999999 1px solid;"><b>三居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>一居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>一居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>三居</b></td>
+
+                        <td bgcolor="#cccccc" align="center" style="border-left:#999999 1px solid;"><b>三居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>一居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>一居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>三居</b></td>
+
+                        <td bgcolor="#cccccc" align="center" style="border-left:#999999 1px solid;"><b>三居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>一居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>一居</b></td>
+
+                        <td bgcolor="#cccccc" align="center"><b>三居</b></td>
+
+                    </tr>
+
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">27</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#ffffff"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#ffffff"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#ffffff"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#ffffff"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#ffffff"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                ">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio8" value="radio"/>
+          </span>D2(55㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                ">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio9" value="radio"/>
+          </span>D1(55㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#ffffff"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">26</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#ffffff"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio" value="radio"/>
+                            <label for="radio"></label>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio5" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#ffffff"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">25</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio2" value="radio"/>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio3" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">24</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio4" value="radio"/>
+      </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio7" value="radio"/>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio6" value="radio"/>
+        </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">23</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio10" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">22</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio11" value="radio"/>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">21</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio12" value="radio"/>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio13" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">20</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio14" value="radio"/>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">19</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio15" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">18</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">17</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio16" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">16</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">15</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio17" value="radio"/>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">14</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio18" value="radio"/>
+      </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio22" value="radio"/>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio23" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">13</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            <input type="radio" name="radio" id="radio19" value="radio"/>
+                            C1(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">12</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">11</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio20" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">10</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">9</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">8</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio21" value="radio"/>
+        </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                <span style="text-align:center;border-left:#999999 1px solid;
+                ">
+                <input type="radio" name="radio" id="radio24" value="radio"/>
+          </span>C2(110㎡)
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">7</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">6</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">5</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">4</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">3</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">2</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr bgcolor="#FFFFFF">
+                        <td width="4%" height="18" bgcolor="#D6D3D6">
+                            <div align="center">1</div>
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#00a600"
+                            style="text-align:center;
+                border-right:#999999 1px solid;">
+                            C2(110㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D2(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;
+                ">
+                            D1(55㎡)
+
+                        </td>
+
+                        <td height="40" width="7.0%" bgcolor="#FF4A4A"
+                            style="text-align:center;border-left:#999999 1px solid;
+                ">
+                            C1(110㎡)
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td bgcolor="#cccccc" height="35">
+                            <div class="out">
+                                <span class="bm">单元</span>
+                                <span class="em">楼层</span>
+                            </div>
+                        </td>
+
+                        <td height="25" colspan="4" bgcolor="#BDBABD" align="center" style="border-left:#999999 1px solid; border-right:#999999 1px solid;">3单元</td>
+
+                        <td height="25" colspan="4" bgcolor="#BDBABD" align="center" style="border-left:#999999 1px solid; border-right:#999999 1px solid;">2单元</td>
+
+                        <td height="25" colspan="4" bgcolor="#BDBABD" align="center" style="border-left:#999999 1px solid; border-right:#999999 1px solid;">1单元</td>
+
+                    </tr>
+                </table>
+                <table border="0" align="center" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <td colspan="9" height="10"></td>
+                    </tr>
+                    <tr>
+                        <td>图示颜色说明：</td>
+
+                        <td bgcolor="#00a600">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td>
+                            &nbsp;待选择
+                            &nbsp;&nbsp;
+                        </td>
+                        <td bgcolor="#FF4A4A">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td>
+                            &nbsp;已选房
+                            &nbsp;&nbsp;
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="9" height="10"></td>
+                    </tr>
+                </table>
+
+            </div>
+        </form>
+        <div class="form_button">
+            <button class="btn btn-primary" type="button" onclick="location.href='list.html'">选 房</button>
+            <button class="btn btn-white" type="button" onclick="history.back();">取 消</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

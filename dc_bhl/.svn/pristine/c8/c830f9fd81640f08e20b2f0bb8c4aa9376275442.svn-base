@@ -1,0 +1,94 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: jmdf
+  Date: 2018/9/13
+  Time: 17:49
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page import="com.app.cq.en.CheckState" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>交房数据管理</title>
+    <%@include file="/static/common/common.jsp"%>
+</head>
+<body>
+<div class="title">
+    <h5>交房数据管理</h5>
+</div>
+<form id="form" class="form-inline" method="post" action="save?<tags:searchParams/>">
+    <input type="hidden" name="familyId" id="familyId" value="${family.id}"/>
+    <div class="content">
+        <fieldset>
+            <legend>一、被拆迁人信息</legend>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="fieldName">编号</td>
+                    <td class="fieldValue"><input type="text" class="form-control required" name="familyCode" placeholder="必填项" value="${family.familyCode}"/><span class="require">*</span></td>
+                    <td class="fieldName">分指</td>
+                    <td class="fieldValue">
+                        <tags:dataDictInput dataDict="分指" name="bdCode" value="${family.bdCode}" className="form-control required" firstValue="-请选择-"/><span class="require">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fieldName">组别</td>
+                    <td class="fieldValue">
+                        <tags:dataDictInput dataDict="组别" name="groupCode" value="${family.groupCode}" className="form-control required" firstValue="-请选择-"/><span class="require">*</span>
+                    </td>
+                    <td class="fieldName">被拆迁人</td>
+                    <td class="fieldValue"><input type="text" class="form-control required" name="name" placeholder="必填项" value="${family.name}"/><span class="require">*</span></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">身份证号</td>
+                    <td class="fieldValue"><input type="text" class="form-control" name="idCard" size="36" value="${family.idCard}"/></td>
+                    <td class="fieldName">联系电话</td>
+                    <td class="fieldValue"><input type="text" class="form-control" size="50" name="tel" value="${family.tel}"/></td>
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend>二、交房相关</legend>
+            <table class="table table-bordered">
+                <tr>
+                    <td class="fieldName">交房状态</td>
+                    <td class="fieldValue"><tags:dataDictInput name="jfStatus" dataDict="交房状态" className="form-control" value="${family.jfStatus}" /></td>
+                    <td class="fieldName">交房时间</td>
+                    <td class="fieldValue"><input type="text" class="form-control datetimePicker dateISO" style="width: 120px;height: 36px;background-image:url(/static/plugin/datepicker/img/icon.png); background-repeat:no-repeat; background-position:right center;" name="jfDate" value="<fmt:formatDate value="${family.jfDate}" pattern="yyyy-MM-dd" />"/></td>
+                </tr>
+                <tr>
+                    <td class="fieldName">交房操作人</td>
+                    <td class="fieldValue"><input type="text" class="form-control" name="jfPerson" size="24" value="${family.jfPerson}"/></td>
+                    <td class="fieldName">交房备注</td>
+                    <td class="fieldValue">
+                        <textarea class="form-control" type="text" name="jfMemo" cols="60" rows="6">${family.jfMemo}</textarea>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div><br/><br/><br/>
+    <div class="footer resizeLayout">
+        <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-save"></i>&nbsp;保存</button>
+        &nbsp;&nbsp;
+        <button class="btn btn-white btn-sm" type="button" onclick="history.back()"><i class="fa fa-backward"></i>&nbsp;返回</button>
+    </div>
+</form>
+</body>
+</html>
+<script>
+    //日期控件
+    $(".datetimePicker").datetimepicker({
+        format: 'yyyy-mm-dd',//显示格式
+        language: 'zh-CN',
+        todayHighlight: 1,//今天高亮
+        minView: 2,  //日期最小选择的范围
+        startView: 2, //设置开始视图为月
+        forceParse: 0,
+        showMeridian: 1,
+        autoclose: 1,//选择后自动关闭
+        showSecond: false, //显示秒
+        todayBtn: true
+    })
+</script>

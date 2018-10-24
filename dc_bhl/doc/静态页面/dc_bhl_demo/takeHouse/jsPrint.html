@@ -1,0 +1,177 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>临时安置补偿费结算单</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 600px;
+            font-size: 16px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 25px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 32px;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+        }
+
+        .printContent .dataTable {
+            width: 100%;
+            background-color: #000000;
+            border-color: black;
+        }
+
+        .printContent .dataTable tr {
+            height: 30px;
+        }
+
+        .printContent .dataTable tr td {
+            line-height: 15px;
+            font-size: 14px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+        .maxBorder {
+            padding-left: 30px;
+            padding-right: 30px;
+            border-bottom: 1px solid #000000;
+        }
+    </style>
+    <script type="text/javascript">
+        function toPrint() {
+            $(".printHide").hide();
+            window.print();
+            $(".printHide").show();
+        }
+    </script>
+</head>
+<body style="height: 90%;">
+<div class="title printHide"><h4>临时安置补偿费结算单</h4>
+    <div style="position: absolute;top: 8px;right: 15px;" id="printDiv">
+        <button class="btn btn-primary" onclick="javascript:toPrint()"><i class="fa fa-print"></i>&nbsp;打印</button>
+        <button class="btn btn-white btn-sm" type="button" onclick="history.back()"><i class="fa fa-backward"></i>&nbsp;返回</button>
+    </div>
+</div>
+<center>
+    <div class="printContent resizeLayout">
+        <p class="printTitler" style="padding-top: 20px;">东城宝华里项目</p>
+        <p class="printTitler">临时安置补偿费结算单</p>
+        <table width="100%" style="margin-top: 20px;margin-bottom: 5px;">
+            <tr>
+                <td style="text-align: left;font-size: 16px;">合同编号：</td>
+                <td style="text-align: right;font-size: 16px;">补偿方式：/（选择）</td>
+            </tr>
+        </table>
+        <table class="dataTable" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td colspan="4" style="text-align: left;">一、被拆迁房屋情况</td>
+            </tr>
+            <tr>
+                <td style="width: 20%;">产权人或承租人</td>
+                <td style="width: 30%;"></td>
+                <td style="width: 20%;">所属分指</td>
+                <td style="width: 30%;"></td>
+            </tr>
+            <tr>
+                <td style="width: 20%;">身份证号</td>
+                <td style="width: 30%;"></td>
+                <td>建筑面积</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>产权性质</td>
+                <td></td>
+                <td>房屋类型</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>房屋坐落</td>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+        <table class="dataTable" border="1" style="border-top: 0px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td colspan="4" style="text-align: left;">二、临时安置补偿费<span class="border"></span>元</td>
+            </tr>
+            <tr>
+                <td style="width: 10%">序号</td>
+                <td style="width: 25%">名称</td>
+                <td style="width: 45%">计算公式</td>
+                <td style="width: 20%">金额（元）</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>临时安置补偿费</td>
+                <td>/个月；<br/>不足/元/月的补足至/元/月
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: left;">
+                    <p>本单一式<span class="border">肆</span>份，甲方<span class="border">壹</span>份，乙方<span
+                            class="border">壹</span>份，丙方<span class="border">壹</span>份，存档<span class="border">壹</span>份。
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: left;">
+                    <p>注：产权人或承租人/<span class="border"></span>于/年/月/日<span class="border"></span>完成房屋移交，
+
+                            临时安置补偿费发放至/年/月/日止共<span class="border"></span>/个月
+
+                            临时安置补偿费发放<span class="border"></span>/个月
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p style="margin-top: 20px;text-align: right;font-size: 28px;font-weight: bold;">应付总计：<span
+                class="border"></span>元</p>
+        <table width="100%" style="margin-top: 10px;">
+            <tr>
+                <td style="text-align: left;height: 50px;width: 60%;font-size: 16px;">北京市东城区人民政府房屋拆迁办公室（盖章）</td>
+                <td style="text-align: left;height: 50px;width: 40%;font-size: 16px;">被拆迁人（签字）：</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;height: 50px;font-size: 16px;"></td>
+                <td style="text-align: left;height: 50px;font-size: 16px;">经办人：</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;height: 50px;font-size: 16px;">北京市东城区房屋拆迁事务中心（盖章）</td>
+                <td style="text-align: left;height: 50px;font-size: 16px;">签约组长（签字）：</td>
+            </tr>
+        </table>
+        <p style="margin-top: 20px; text-align: right;">日期：<span class="maxBorder"></span>年<span class="maxBorder"></span>月<span class="maxBorder"></span>日</p>
+    </div>
+</center>
+</body>
+</html>

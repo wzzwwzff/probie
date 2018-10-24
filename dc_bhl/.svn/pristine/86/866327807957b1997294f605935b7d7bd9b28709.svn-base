@@ -1,0 +1,222 @@
+package com.app.cq.utils;
+
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Family;
+import com.app.cq.service.FamilyService;
+import com.google.common.collect.Maps;
+import com.sqds.utils.DateUtils;
+import com.sqds.web.Servlets;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+
+public class CalUtils {
+    private static DataDictService dataDictService;
+    private static FamilyService familyService;
+    private static Map<String, String> bzMap = Maps.newHashMap();
+    private static Boolean ifReward = false;
+    private static Boolean ifOneReward = false;
+
+
+    /**
+     * 计算方法
+     */
+    public synchronized static void calc(Family family) {
+        WebApplicationContext webApplicationContext = Servlets.getWebApplicationContext();
+        familyService = (FamilyService) webApplicationContext.getBean(FamilyService.class);
+        dataDictService = (DataDictService) webApplicationContext.getBean(DataDictService.class);
+        bzMap = dataDictService.getMapByParentAttributeNameForName("协议费用标准");
+        if (family == null) {
+            return;
+        }
+
+        ifReward = rewardYes(family);  //是否在奖励期内签约
+        ifOneReward = oneRewardYes(family);  //是否在第一个奖励期内签约
+
+        //计算搬迁费
+        calBqMoney(family);
+        //计算移机补助费
+        calYjMoney(family);
+        //计算生活困难补助费（残疾，低保）
+        calShknMoney(family);
+        //计算签约速度奖
+        calQysdMoney(family);
+        //计算外迁奖励
+        calWqMoney(family);
+        //计算私房平房补助费
+        calSfpfMoney(family);
+
+        familyService.save(family);
+    }
+
+
+    /**
+     * 计算搬迁费
+     * @param family
+     */
+    private static void calBqMoney(Family family) {
+        BigDecimal bqFee = new BigDecimal(bzMap.get("搬迁费"));
+        BigDecimal bqMoney = BigDecimalUtils.getBigAndBigMul(bqFee, family.getBuildArea());
+        family.setBqMoney(bqMoney);
+    }
+
+
+    /**
+     * 计算私房平房补助费
+     * @param family
+     */
+    private static void calSfpfMoney(Family family) {
+        //从数据字典中取出单价费用
+        BigDecimal sfpfMoney = new BigDecimal(bzMap.get("私房平房补助"));
+        BigDecimal houseArea = family.getBuildArea();
+        BigDecimal sfpfFee = BigDecimalUtils.getBigAndBigMul(sfpfMoney, houseArea);
+
+        family.setSfpfFee(sfpfFee);
+    }
+
+
+    /**
+     * 计算外迁奖励
+     * @param family
+     */
+    private static void calWqMoney(Family family) {
+        //从数据字典中取出单价费用
+        BigDecimal wqMoney = new BigDecimal(bzMap.get("外迁奖励"));
+        BigDecimal houseArea = family.getBuildArea();
+        if (houseArea.compareTo(new BigDecimal(20)) < 0){
+            houseArea = new BigDecimal(20);
+        }
+        BigDecimal wqFee = BigDecimalUtils.getBigAndBigMul(wqMoney, houseArea);
+
+        family.setWqFee(wqFee);
+    }
+
+
+    /**
+     * 计算签约速度费
+     * @param family
+     */
+    private static void calQysdMoney(Family family) {
+        //从数据字典中取出单价费用
+        BigDecimal firstMoney = new BigDecimal(bzMap.get("第一签约速度奖"));
+        BigDecimal secondMoney = new BigDecimal(bzMap.get("第二签约速度奖"));
+        BigDecimal qysdMoney = firstMoney;
+
+        //第二奖励期内
+        if (!ifOneReward){
+            qysdMoney = secondMoney;
+        }
+
+        //奖励期外
+        if (!ifReward){
+            qysdMoney = new BigDecimal(0);
+        }
+
+        family.setQysdFee(qysdMoney);
+    }
+
+
+    /**
+     * 计算生活困难补助费
+     * @param family
+     */
+    private static void calShknMoney(Family family) {
+        //从数据字典中取出单价费用
+        BigDecimal dbMoney = new BigDecimal(bzMap.get("低保补助费"));
+        BigDecimal cjMoney = new BigDecimal(bzMap.get("残疾补助费"));
+
+        BigDecimal dbFee = BigDecimalUtils.getBigAndIntMul(dbMoney, family.getDbNum());
+        BigDecimal cjFee = BigDecimalUtils.getBigAndIntMul(cjMoney,family.getCjNum());
+        BigDecimal shknFee = BigDecimalUtils.getSum(dbFee, cjFee);//生活苦难补助费
+
+        family.setDbFee(dbFee);
+        family.setCjFee(cjFee);
+        family.setShknFee(shknFee);
+    }
+
+
+    /**
+     * 计算移机补助费
+     * @param family
+     */
+    private static void calYjMoney(Family family) {
+        //从数据字典中取出各移机的单价费用
+        BigDecimal ktMoney = new BigDecimal(bzMap.get("空调移机费"));
+        BigDecimal rsqMoney = new BigDecimal(bzMap.get("热水器移机费"));
+        BigDecimal yxMoney = new BigDecimal(bzMap.get("有线电视安装费"));
+        BigDecimal kdMoney = new BigDecimal(bzMap.get("数据终端安装费"));//宽带费
+        BigDecimal dhMoney = new BigDecimal(bzMap.get("固定电话移机费"));
+        BigDecimal dnqMoney = new BigDecimal(bzMap.get("煤改电专用电暖器"));
+
+        BigDecimal ktFee = BigDecimalUtils.getBigAndIntMul(ktMoney, family.getKtNum());
+        BigDecimal rsqFee = BigDecimalUtils.getBigAndIntMul(rsqMoney,family.getRsqNum());
+        BigDecimal yxFee = BigDecimalUtils.getBigAndIntMul(yxMoney,family.getYxNum());
+        BigDecimal kdFee = BigDecimalUtils.getBigAndIntMul(kdMoney,family.getKdNum());
+        BigDecimal dhFee = BigDecimalUtils.getBigAndIntMul(dhMoney,family.getDhNum());
+        BigDecimal dnqFee = BigDecimalUtils.getBigAndIntMul(dnqMoney,family.getDnqNum());
+        BigDecimal yjMoney = BigDecimalUtils.getSum(ktFee, rsqFee, yxFee, kdFee, dhFee);
+
+        family.setYjMoney(yjMoney);
+        family.setDnqFee(dnqFee);
+        family.setKtFee(ktFee);
+        family.setRsqFee(rsqFee);
+        family.setTvFee(yxFee);
+        family.setKdFee(kdFee);
+        family.setDhFee(dhFee);
+    }
+
+
+    /**
+     * 判断是否是奖励期内
+     *
+     * @param family
+     */
+    public static boolean rewardYes(Family family) {
+        //判断是否为奖励期内
+        Map<String, String> jlqMap = dataDictService.getMapByParentAttributeNameForName("奖励期时间");
+        String endDate = jlqMap.get("签约结束时间");
+        Date signDate = family.getSignDate() != null ? family.getSignDate() : new Date();
+
+        Calendar endDateC = Calendar.getInstance();
+        Calendar signDateC = Calendar.getInstance();
+
+        endDateC.setTime(DateUtils.string2date(endDate));
+        signDateC.setTime(DateUtils.string2date(DateUtils.date2string(signDate)));
+
+        if (signDateC.compareTo(endDateC) < 0) {//奖励期内
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * 判断是否是第一奖励期60日（含）内
+     *
+     * @param family
+     */
+    public static boolean oneRewardYes(Family family) {
+        //判断是否为奖励期内
+        Map<String, String> jlqMap = dataDictService.getMapByParentAttributeNameForName("奖励期时间");
+        String endDate = jlqMap.get("第一奖励期结束时间");
+        Date signDate = family.getSignDate() != null ? family.getSignDate() : new Date();
+
+        Calendar endDateC = Calendar.getInstance();
+        Calendar signDateC = Calendar.getInstance();
+
+        endDateC.setTime(DateUtils.string2date(endDate));
+        signDateC.setTime(signDate);
+
+        if (signDateC.compareTo(endDateC) <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+}

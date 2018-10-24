@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+        .myscroll {
+            width: 1250px;
+            height: 750px;
+            margin: 0 auto;
+            line-height: 26px;
+            font-size: 12px;
+            overflow: hidden;
+        }
+        .myscroll ul{
+            list-style: none;
+        }
+        .myscroll li {
+            height: 40px;
+            margin-left: 25px;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            line-height: 40px;
+        }
+        .myscroll a {
+            color: #333;
+            text-decoration: none;
+        }
+        .myscroll a:hover {
+            color: #ED5565;
+            text-decoration: underline;
+        }
+    </style>
+    <script type="text/javascript" src="../static/jquery/1.11.3/jquery.min.js "></script>
+    <script type="text/javascript" src="../static/jquery/scoll/scroll.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('.myscroll').myScroll({
+                speed: 40, //数值越大，速度越慢
+                rowHeight: 40//li的高度
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div class="myscroll">
+    <ul>
+        <li style="color: #0F0" >总户数：5560户，当日签约：120户，累计签约：1560户， 剩余户数：3560户，签约比例：23.56%</li>
+        <li>第一分指：&nbsp;&nbsp;总户数：321户， 当日签约：11户， 累计签约：98户，&nbsp;&nbsp;剩余户数：223户， 签约比例：30.52%</li>
+        <li>第二分指：&nbsp;&nbsp;总户数：298户， 当日签约：9户，&nbsp;&nbsp;累计签约：101户， 剩余户数：197户， 签约比例：33.89%</li>
+        <li>第三分指：&nbsp;&nbsp;总户数：301户， 当日签约：12户， 累计签约：150户， 剩余户数：151户， 签约比例：49.98%</li>
+        <li>第四分指：&nbsp;&nbsp;总户数：423户， 当日签约：23户， 累计签约：201户， 剩余户数：222户， 签约比例：47.51%</li>
+        <li>第五分指：&nbsp;&nbsp;总户数：258户， 当日签约：58户， 累计签约：152户， 剩余户数：106户， 签约比例：58.91%</li>
+        <li>第六分指：&nbsp;&nbsp;总户数：364户， 当日签约：25户， 累计签约：64户，&nbsp;&nbsp;剩余户数：300户， 签约比例：16.56%</li>
+        <li>第七分指：&nbsp;&nbsp;总户数：264户， 当日签约：11户， 累计签约：56户，&nbsp;&nbsp;剩余户数：208户， 签约比例：26.23%</li>
+        <li>第八分指：&nbsp;&nbsp;总户数：236户， 当日签约：12户， 累计签约：46户，&nbsp;&nbsp;剩余户数：190户， 签约比例：26.89%</li>
+        <li>第九分指：&nbsp;&nbsp;总户数：358户， 当日签约：8户，&nbsp;&nbsp;累计签约：158户， 剩余户数：200户， 签约比例：<font color="red">95.64%</font></li>
+        <li>第十分指：&nbsp;&nbsp;总户数：240户， 当日签约：6户，&nbsp;&nbsp;累计签约：40户，&nbsp;&nbsp;剩余户数：200户， 签约比例：16.66%</li>
+        <li>第十一分指：总户数：221户， 当日签约：21户， 累计签约：121户， 剩余户数：100户， 签约比例：52.52%</li>
+        <li>第十二分指：总户数：398户， 当日签约：9户，&nbsp;&nbsp;累计签约：101户， 剩余户数：297户， 签约比例：<font color="red">85.56%</font></li>
+        <li>第十三分指：总户数：301户， 当日签约：12户， 累计签约：150户， 剩余户数：151户， 签约比例：49.98%</li>
+        <li>第十四分指：总户数：323户， 当日签约：23户， 累计签约：101户， 剩余户数：222户， 签约比例：33.51%</li>
+        <li>第十五分指：总户数：258户， 当日签约：58户， 累计签约：152户， 剩余户数：106户， 签约比例：58.91%</li>
+        <li>第十六分指：总户数：364户， 当日签约：25户， 累计签约：64户，&nbsp;&nbsp;剩余户数：300户， 签约比例：<font color="red">92.12%</font></li>
+        <li>第十七分指：总户数：264户， 当日签约：11户， 累计签约：56户，&nbsp;&nbsp;剩余户数：208户， 签约比例：26.23%</li>
+        <li>第十八分指：总户数：236户， 当日签约：12户， 累计签约：46户，&nbsp;&nbsp;剩余户数：190户， 签约比例：26.89%</li>
+        <li></li>
+    </ul>
+</div>
+
+
+</body>
+</html>

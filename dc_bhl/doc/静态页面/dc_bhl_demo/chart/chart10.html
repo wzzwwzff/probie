@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+        .myscroll {
+            width: 1300px;
+            height: 650px;
+            margin: 0 auto;
+            line-height: 26px;
+            font-size: 12px;
+            overflow: hidden;
+        }
+        .myscroll ul{
+            list-style: none;
+        }
+        .myscroll li {
+            padding-left: 100px;;
+            height: 40px;
+            margin-left: 25px;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+            line-height: 40px;
+        }
+        .myscroll a {
+            color: #333;
+            text-decoration: none;
+        }
+        .myscroll a:hover {
+            color: #ED5565;
+            text-decoration: underline;
+        }
+    </style>
+    <script type="text/javascript" src="../static/jquery/1.11.3/jquery.min.js "></script>
+    <script type="text/javascript" src="../static/jquery/scoll/scroll.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('.myscroll').myScroll({
+                speed: 40, //数值越大，速度越慢
+                rowHeight: 40//li的高度
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div class="myscroll">
+    <ul>
+        <li></li>
+        <li>瀛海安置房源（<font size="25">外迁</font>）：</li>
+        <li> 一居：  总套数：180套， 已选：50套， 剩余：130套， 已选比例：<font color="red">98.23%</font>  </li>
+        <li> 二居：  总套数：220套， 已选：40套， 剩余：180套， 已选比例：19.98% </li>
+        <li> 三居：  总套数：180套， 已选：40套， 剩余：140套， 已选比例：22.22% </li>
+        <li> 合计：  总套数：580套， 已选：130套，剩余：450套， 已选比例：23.65%</li>
+        <li></li>
+        <li>  团河安置房源（<font size="25">外迁</font>）：</li>
+        <li> 一居：  总套数：160套， 已选：50套， 剩余：110套， 已选比例：<font color="red">94.98%</font>  </li>
+        <li> 二居：  总套数：200套， 已选：40套， 剩余：160套， 已选比例：20.00% </li>
+        <li> 三居：  总套数：200套， 已选：40套， 剩余：160套， 已选比例：<font color="red">86.23%</font> </li>
+        <li> 合计：  总套数：560套， 已选：130套，剩余：430套， 已选比例：23.21%</li>
+        <li></li>
+        <li>  回迁安置房源（<font size="25">回迁</font>）：</li>
+        <li> 一居：  总套数：160套， 已选：50套， 剩余：110套， 已选比例：23.56  </li>
+        <li> 二居：  总套数：200套， 已选：40套， 剩余：160套， 已选比例：<font color="red">84.98%</font> </li>
+        <li> 三居：  总套数：200套， 已选：40套， 剩余：160套， 已选比例：<font color="red">89.23%</font> </li>
+        <li> 合计：  总套数：560套， 已选：130套，剩余：430套， 已选比例：23.21%</li>
+        <li></li>
+        <li style="color: #FF0"> 总计：</li>
+        <li style="color: #FF0"> 一居：  总套数：340套， 已选：100套，剩余：240套， 已选比例：<font color="red">96.23%</font>  </li>
+        <li style="color: #FF0"> 二居：  总套数：420套， 已选：80套， 剩余：340套， 已选比例：19.05% </li>
+        <li style="color: #FF0"> 三居：  总套数：380套， 已选：80套， 剩余：300套， 已选比例：21.05% </li>
+        <li style="color: #FF0"> 合计：  总套数：1140套，已选：260套，剩余：880套， 已选比例：22.80%</li>
+    </ul>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+
+    <link type="image/x-icon" href="static/images/favicon.ico" rel="shortcut icon">
+
+    <link rel="stylesheet" href="static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/style/style.css">
+    <link rel="stylesheet" href="static/style/sea.css">
+
+    <link rel="stylesheet" href="static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="static/plugin/jquery-validation/1.11.1/validate.css">
+
+    <script src="static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="static/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+    <script src="static/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="static/plugin/jquery-validation/1.11.1/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="static/plugin/jquery-validation/1.11.1/messages_bs_zh.js" type="text/javascript"></script>
+    <script src="static/js/common.js"></script>
+    <script src="static/plugin/metisMenu/jquery.metisMenu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#side-menu').metisMenu();
+        });
+        function setActive(i) {
+            for (j = 0; j < 50; j++) {
+                $(".liMy_" + j).removeClass("menu_active");
+            }
+            $(".liMy_" + i).addClass("menu_active");
+        }
+        function setUlActive(i) {
+            for (j = 0; j < 20; j++) {
+                $(".ulMy_" + j).removeClass("parent_active");
+            }
+            $(".ulMy_" + i).addClass("parent_active");
+        }
+    </script>
+    <style>
+        html, body {
+            margin: 0px;
+            height: 100%;
+        }
+
+        .menu_active {
+            border-right: 5px solid #009acc;
+            background-color: #e0e0e0;
+        }
+
+        .parent_active {
+            border-left: 5px solid #0099CC;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+            background-color: #f1f1f1;
+        }
+
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        /*定义滑块 内阴影+圆角*/
+        ::-webkit-scrollbar-thumb {
+            background-color: #c1c1c1;
+        }
+
+    </style>
+</head>
+<body>
+<div id="content">
+    <div class="sidebar-collapse navbar-default menu-body">
+        <ul class="nav metismenu" id="side-menu">
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color fa-edit"></i><span class="nav-label">住宅信息管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_1" onclick="setUlActive(1)">
+                    <li class="liMy_1" onclick="setActive(1)"><a href="family/list.html" target="mainFrame">住宅数据管理</a></li>
+                    <li class="liMy_2" onclick="setActive(2)"><a href="family/checkList.html" target="mainFrame">住宅数据确认</a></li>
+                    <li class="liMy_4" onclick="setActive(4)"><a href="history/list.html" target="mainFrame">操作记录查看</a></li>
+                    <li class="liMy_6" onclick="setActive(6)"><a href="signHistory/list.html" target="mainFrame">历史签约管理</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color fa-edit"></i><span class="nav-label">预分方案管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_2" onclick="setUlActive(2)">
+                    <li class="liMy_3" onclick="setActive(3)"><a href="family/pgList.html" target="mainFrame">评估数据管理</a></li>
+                    <li class="liMy_5" onclick="setActive(5)"><a href="family/printCalList.html" target="mainFrame">匡算单据打印</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i> <span class="nav-label">审计审核管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_3" onclick="setUlActive(3)">
+                    <li class="liMy_7" onclick="setActive(7)"><a href="audit/list.html" target="mainFrame">审计审核列表</a></li>
+                    <li class="liMy_8" onclick="setActive(8)"><a href="audit/auditHistorylist.html" target="mainFrame">审计过程记录</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i> <span class="nav-label">签约业务办理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_4" onclick="setUlActive(4)">
+                    <li class="liMy_6" onclick="setActive(6)"><a href="agreement/list.html" target="mainFrame">协议打印管理</a></li>
+                    <li class="liMy_8" onclick="setActive(8)"><a href="agreement/list2.html" target="mainFrame">协议打印管理2</a></li>
+                    <li class="liMy_7" onclick="setActive(7)"><a href="agreement/signList.html" target="mainFrame">签约取号管理</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i><span class="nav-label">交房业务办理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_5" onclick="setUlActive(5)">
+                    <li class="liMy_8" onclick="setActive(8)"><a href="takeHouse/list.html" target="mainFrame">交房验收管理</a></li>
+                    <li class="liMy_9" onclick="setActive(9)"><a href="takeHouse/firstList.html" target="mainFrame">结算单打印管理</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i><span class="nav-label">选房业务办理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_6" onclick="setUlActive(6)">
+                    <li class="liMy_10" onclick="setActive(10)"><a href="choose/form.html" target="mainFrame">回迁选房管理</a></li>
+                    <li class="liMy_11" onclick="setActive(11)"><a href="choose/form.html" target="mainFrame">异地选房管理</a></li>
+                    <li class="liMy_12" onclick="setActive(12)"><a href="choose/listCompact.html" target="mainFrame">安置协议管理</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i> <span class="nav-label">补充协议管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_7" onclick="setUlActive(7)">
+                    <li class="liMy_13" onclick="setActive(13)"><a href="finnace/bcList.html" target="mainFrame">补充协议签订</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i> <span class="nav-label">财务结算管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_8" onclick="setUlActive(8)">
+                    <li class="liMy_14" onclick="setActive(14)"><a href="finnace/list.html" target="mainFrame">财务结算管理</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i> <span class="nav-label">非宅信息管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_8" onclick="setUlActive(8)">
+                    <li class="liMy_15" onclick="setActive(15)"><a href="noFamily/list.html" target="mainFrame">非宅数据管理</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i><span class="nav-label">基础数据维护</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_9" onclick="setUlActive(9)">
+                    <li class="liMy_17" onclick="setActive(17)"><a href="takeHouse/list.html" target="mainFrame">住宅数据维护</a></li>
+                    <li class="liMy_18" onclick="setActive(18)"><a href="takeHouse/fzList.html" target="mainFrame">非宅数据维护</a></li>
+                    <li class="liMy_18" onclick="setActive(18)"><a href="takeHouse/fzList.html" target="mainFrame">历史签约维护</a></li>
+                </ul>
+            </li>
+            <!--<li>-->
+                <!--<a href="#"><i class="fa-big menu-icon-color  fa-edit"></i> <span class="nav-label">棚改信息公示</span><span class="fa arrow"></span></a>-->
+                <!--<ul class="nav nav-second-level ulMy_1" onclick="setUlActive(1)">-->
+                    <!--<li class="liMy_1" onclick="setActive(1)"><a href="chart/chart1.html" target="mainFrame">实时交房情况公示</a></li>-->
+                    <!--<li class="liMy_1" onclick="setActive(1)"><a href="chart/chart2.html" target="mainFrame">签约走势情况公示</a></li>-->
+                    <!--<li class="liMy_1" onclick="setActive(1)"><a href="chart/chart3.html" target="mainFrame">签约比例情况公示(整体)</a></li>-->
+                    <!--<li class="liMy_1" onclick="setActive(1)"><a href="chart/chart4.html" target="mainFrame">签约比例情况公示(分指)</a></li>-->
+                    <!--<li class="liMy_1" onclick="setActive(1)"><a href="chart/chart5.html" target="mainFrame">分类签约比例公示</a></li>-->
+                    <!--<li class="liMy_1" onclick="setActive(1)"><a href="chart/chart6.html" target="mainFrame">重点人员签约情况</a></li>-->
+                    <!--<li class="liMy_1" onclick="setActive(1)"><a href="chart/chart7.html" target="mainFrame">安置及房源使用情况</a></li>-->
+                    <!--<li class="liMy_1" onclick="setActive(1)"><a href="chart/chart8.html" target="mainFrame">安置房源销控情况</a></li>-->
+                <!--</ul>-->
+            <!--</li>-->
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i> <span class="nav-label">数据查询汇总</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_10" onclick="setUlActive(10)">
+                    <li class="liMy_19" onclick="setActive(19)"><a href="report/report13.html" target="mainFrame">住宅统计日报表</a></li>
+                    <li class="liMy_20" onclick="setActive(20)"><a href="report/report7.html" target="mainFrame">各分指入户情况统计</a></li>
+                    <li class="liMy_21" onclick="setActive(21)"><a href="report/report8.html" target="mainFrame">各分指签约情况统计</a></li>
+                    <li class="liMy_22" onclick="setActive(22)"><a href="report/report9.html" target="mainFrame">各分指交房情况统计</a></li>
+                    <li class="liMy_23" onclick="setActive(23)"><a href="report/report3.html" target="mainFrame">综合协议台账</a></li>
+                    <li class="liMy_24" onclick="setActive(24)"><a href="report/report6.html" target="mainFrame">签约顺序号台账</a></li>
+                    <li class="liMy_25" onclick="setActive(25)"><a href="report/report4.html" target="mainFrame">安置选房台账</a></li>
+                    <li class="liMy_26" onclick="setActive(26)"><a href="report/dailyStatement.html" target="mainFrame">签约情况日报表</a></li>
+                    <li class="liMy_27" onclick="setActive(27)"><a href="report/report5.html" target="mainFrame">选房情况日报表</a></li>
+                    <li class="liMy_28" onclick="setActive(28)"><a href="report/report11.html" target="mainFrame">安置房源销控查询</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa-big menu-icon-color  fa-edit"></i> <span class="nav-label">系统配置管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ulMy_11" onclick="setUlActive(11)">
+                    <li class="liMy_29" onclick="setActive(29)"><a href="report/report2.html" target="mainFrame">操作日志查看</a></li>
+                    <li class="liMy_30" onclick="setActive(30)"><a href="report/report2.html" target="mainFrame">历史版本记录</a></li>
+                    <li class="liMy_31" onclick="setActive(31)"><a href="report/report2.html" target="mainFrame">数据字典管理</a></li>
+                    <li class="liMy_32" onclick="setActive(32)"><a href="report/report2.html" target="mainFrame">菜单功能管理</a></li>
+                    <li class="liMy_33" onclick="setActive(33)"><a href="report/report2.html" target="mainFrame">用户角色管理</a></li>
+                    <li class="liMy_34" onclick="setActive(34)"><a href="report/report2.html" target="mainFrame">角色权限分配</a></li>
+                    <li class="liMy_35" onclick="setActive(35)"><a href="report/report2.html" target="mainFrame">组织结构管理</a></li>
+                    <li class="liMy_36" onclick="setActive(36)"><a href="report/report2.html" target="mainFrame">组织用户管理</a></li>
+                    <li class="liMy_37" onclick="setActive(37)"><a href="report/searchAll.html" target="mainFrame">综合统计查询</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        /*@page {*/
+        /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            /*margin: 6.6mm 12.6mm 6.6mm 12.6mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        .printTable tr td {
+
+            border: 1px solid #000000;
+            text-align: center;
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+
+</head>
+<body>
+<div class="printContent">
+    <div style="float:left;text-align: center;height: 100%;margin-left:10% ">
+        <div style="font-size: 35px;margin-top: 20px;"><b>宝华里房改带危改一级开发项目</b></div>
+        <div style="font-size: 35px;margin-top: 30px;"><b>选房通知单</b></div>
+    </div>
+    <div style="float: right;text-align: right;margin-right: 6%;width: 100%;margin-top: 5%;">
+        安置方式： ${bcName?default("/")}
+    </div>
+    <div style="float:left;margin-top: 3%;">
+        <b>被拆迁人：</b>${family.name?default("")}<br/>
+        <b>身份证号：</b>${family.idCard?default("")}<br/>
+        <b>地址门牌：</b>${family.address?default("")}<br/>
+    </div>
+    <div style="float:left;margin-top: 20px;width: 96%;">
+        <p>
+            请被拆迁人及奖励房源购买人<span class="span">2018年12月01日 10:00-12:00</span>到<span class="span">XXX</span>等候参加选房，该家庭签约顺序号为<span class="span">${family.signNum?default("/")}</span>，选房顺序号为<span class="span">${family.xfNum?default("/")}</span> 。
+        </p>
+        <p>
+            该家庭可购买奖励房源<span class="span">${houseNumCount}</span>套，购房人信息如下：
+        </p>
+        <#if (personList ? size > 0 ) >
+            <#list personList as familyPerson>
+                <p>
+                    购房人姓名:<span class="span">${familyPerson.name}</span> ，身份证号:<span class="span">${familyPerson.idCard?default("/")}</span>；
+                </p>
+            </#list>
+        </#if>
+    </div>
+    <div style="float: left;margin-left: 10%;width: 100%;margin-top: 5%;">
+        <b>⭐温馨提示：</b>所购改建地段奖励房源购房款不得超过<span class="span"><b>6093747.44</b></span>元。
+    </div>
+    <div style="float: left;margin-top: 5%;margin-left: 10%;width: 100%">
+        <div style="float: left;">附件：</div>
+        <div style="float: left;">1.选房须知<br/>
+            2.预选单
+        </div>
+    </div>
+    <div style="float: right;margin-top: 5%;width: 45%;text-align: right;margin-right: 5%;">
+            宝华里危改项目总指挥部<br/>
+            2018 年 11 月 20 日
+    </div>
+    <div style="float: left;width: 100%;margin-left: 10%;margin-top: 3%">
+        被拆迁人（委托代理人）签字：<br/><br/>
+        签收日期：
+    </div>
+    <div style="float: left;width: 100%;margin-top: 8%;margin-left: 2%;">
+        备注：一式<span class="span">贰</span>份，被拆迁人执<span class="span">壹</span>份，指挥部留存<span class="span">壹</span>份
+    </div>
+</div>
+</body>
+</html>

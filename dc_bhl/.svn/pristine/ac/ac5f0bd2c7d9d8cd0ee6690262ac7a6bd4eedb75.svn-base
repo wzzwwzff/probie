@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        html, body {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="title"><h4>安置选房台账</h4></div>
+<div class="content">
+    <div class="search_content">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">分指</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">第一分指</option>
+                        <option value="">第二分指</option>
+                        <option value="">第三分指</option>
+                        <option value="">第四分指</option>
+                        <option value="">第五分指</option>
+                        <option value="">第六分指</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">组别</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">一组</option>
+                        <option value="">二组</option>
+                        <option value="">三组</option>
+                        <option value="">四组</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">产权性质</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">直管公房</option>
+                        <option value="">自管公房</option>
+                        <option value="">文革产</option>
+                        <option value="">私房</option>
+                        <option value="">标准租私房</option>
+                        <option value="">纯自建</option>
+                        <option value="">非宅住人</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">房屋类型</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">成套</option>
+                        <option value="">非成套</option>
+                        <option value="">平房</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">锁定状态</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">已锁定</option>
+                        <option value="">未锁定</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">被拆迁人</div>
+                    <input class="form-control" type="text" style="width: 150px;" placeholder="">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">地址门牌</div>
+                    <input class="form-control" type="text" style="width: 215px;">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">建筑面积</div>
+                    <input class="form-control" type="text" style="width: 80px;" placeholder="㎡">
+                    <div class="input-group-addon">至</div>
+                    <input class="form-control" type="text" style="width: 80px;" placeholder="㎡">
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</button>
+                <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</button>
+            </div>
+        </form>
+    </div>
+    <table class="table table-bordered table-hover" style="width: 2200px">
+        <thead>
+        <tr>
+            <td class="text-center" style="vertical-align: middle" rowspan="2">序号</td>
+            <td class="text-center" colspan="8">基本信息</td>
+            <td class="text-center" style="vertical-align: middle" rowspan="2">选房日期</td>
+            <td class="text-center" colspan="6">安置房屋信息</td>
+            <td class="text-center" style="vertical-align: middle" rowspan="2">实际选房面积合计（㎡）</td>
+            <td class="text-center" style="vertical-align: middle" rowspan="2">购房款（元）</td>
+        </tr>
+        <tr>
+            <td class="text-center">测绘编号</td>
+            <td class="text-center">被拆迁人</td>
+            <td class="text-center">身份证号</td>
+            <td class="text-center">地址门牌</td>
+            <td class="text-center">使用面积 （㎡）</td>
+            <td class="text-center">建筑面积（㎡）</td>
+            <td class="text-center">签约顺序号</td>
+            <td class="text-center">补偿方式</td>
+            <td class="text-center">安置项目</td>
+            <td class="text-center">楼号</td>
+            <td class="text-center">单元</td>
+            <td class="text-center">房号</td>
+            <td class="text-center">居室</td>
+            <td class="text-center">面积（㎡）</td>
+        </tr>
+        </thead>
+        <!-- json 形式数据添加 -->
+        <tbody>
+        <tr class="text-center">
+            <td>1</td>
+            <td>1-2-1-0301</td>
+            <td>李文远</td>
+            <td>&nbsp;110102195804061535</td>
+            <td>崇文区桃杨路北里5楼2层29号</td>
+            <td>47.00</td>
+            <td>70.00</td>
+            <td>001</td>
+            <td><font color="#green">回迁协议</font></td>
+            <td>2016-06-09</td>
+            <td>团河安置项目</td>
+            <td>01</td>
+            <td>04</td>
+            <td>451</td>
+            <td>一居室</td>
+            <td>56</td>
+            <td>56</td>
+            <td>200000</td>
+
+        </tr>
+        <tr class="text-center">
+            <td rowspan="3">2</td>
+            <td rowspan="3">2-3-3-0847</td>
+            <td rowspan="3">陈秋影</td>
+            <td rowspan="3">110105197108243149</td>
+            <td rowspan="3">崇文区杨家园6号-3</td>
+            <td rowspan="3">49.12</td>
+            <td rowspan="3">67.00</td>
+            <td rowspan="3">002</td>
+            <td rowspan="3"><font color="#green">回迁协议</font></td>
+            <td rowspan="3">2016-06-18</td>
+            <td>团河安置项目</td>
+            <td>02</td>
+            <td>04</td>
+            <td>162</td>
+            <td>二居室</td>
+            <td>100</td>
+            <td rowspan="3">300</td>
+            <td rowspan="3">300000</td>
+        </tr>
+        <tr class="text-center">
+            <td>团河安置项目</td>
+            <td>02</td>
+            <td>01</td>
+            <td>662</td>
+            <td>一居室</td>
+            <td>80</td>
+        </tr>
+        <tr class="text-center">
+            <td>团河安置项目</td>
+            <td>03</td>
+            <td>04</td>
+            <td>421</td>
+            <td>三居室</td>
+            <td>120</td>
+        </tr>
+        <tr class="text-center">
+            <td rowspan="2">3</td>
+            <td rowspan="2">2-3-3-0848</td>
+            <td rowspan="2">白原野</td>
+            <td rowspan="2">142602195107020046</td>
+            <td rowspan="2">崇文区杨家园6号</td>
+            <td rowspan="2">56.12</td>
+            <td rowspan="2">70.12</td>
+            <td rowspan="2">003</td>
+            <td rowspan="2"><font color="#green">回迁协议</font></td>
+            <td rowspan="2">2016-06-11</td>
+            <td>团河安置项目</td>
+            <td>02</td>
+            <td>04</td>
+            <td>432</td>
+            <td>二居室</td>
+            <td>89</td>
+            <td rowspan="2">179</td>
+            <td rowspan="2">300000</td>
+        </tr>
+        <tr class="text-center">
+            <td>团河安置项目</td>
+            <td>05</td>
+            <td>01</td>
+            <td>136</td>
+            <td>二居室</td>
+            <td>90</td>
+        </tr>
+        <tr class="text-center">
+            <td>4</td>
+            <td>3-3-5-1566</td>
+            <td>李秀琴</td>
+            <td>110103195709090406</td>
+            <td>崇文区桃杨路14号</td>
+            <td>55.55</td>
+            <td>70.89</td>
+            <td>004</td>
+            <td><font color="#green">回迁协议</font></td>
+            <td>2016-06-12</td>
+            <td>团河安置项目</td>
+            <td>01</td>
+            <td>03</td>
+            <td>332</td>
+            <td>二居室</td>
+            <td>89</td>
+            <td>89</td>
+            <td>321541</td>
+
+        </tr>
+        <tr class="text-center">
+            <td>5</td>
+            <td>3-3-5-1567</td>
+            <td>高起云(已故)</td>
+            <td></td>
+            <td>崇文区侯庄12号院6-72</td>
+            <td>51.23</td>
+            <td>75.23</td>
+            <td>005</td>
+            <td><font color="#green">回迁协议</font></td>
+            <td>2016-06-17</td>
+            <td>团河安置项目</td>
+            <td>01</td>
+            <td>04</td>
+            <td>411</td>
+            <td>一居室</td>
+            <td>56</td>
+            <td>56</td>
+            <td>223154</td>
+
+        </tr>
+        <tr class="text-center">
+            <td>6</td>
+            <td>4-3-1-1242</td>
+            <td>贾克勤</td>
+            <td>110103195102021877</td>
+            <td>崇文区琉璃井北里46号</td>
+            <td>78.56</td>
+            <td>98.23</td>
+            <td>006</td>
+            <td><font color="#green">回迁协议</font></td>
+            <td>2016-07-17</td>
+            <td>团河安置项目</td>
+            <td>01</td>
+            <td>04</td>
+            <td>421</td>
+            <td>一居室</td>
+            <td>56</td>
+            <td>56</td>
+            <td>212545</td>
+
+        </tr>
+        <tr class="text-center">
+            <td>7</td>
+            <td>4-3-1-1243</td>
+            <td>王智</td>
+            <td>110103196210151577</td>
+            <td>崇文区琉璃井北里75号</td>
+            <td>23.25</td>
+            <td>33.26</td>
+            <td>007</td>
+            <td><font color="#green">回迁协议</font></td>
+            <td>2016-06-17</td>
+            <td>团河安置项目</td>
+            <td>03</td>
+            <td>04</td>
+            <td>421</td>
+            <td>一居室</td>
+            <td>56</td>
+            <td>56</td>
+            <td>222545</td>
+        </tr>
+        <tr class="text-center">
+            <td>8</td>
+            <td>5-3-2-1432</td>
+            <td>宋建新</td>
+            <td>110103196312011831</td>
+            <td>崇文区桃杨路头条9号</td>
+            <td>102.23</td>
+            <td>150.26</td>
+            <td>008</td>
+            <td><font color="#green">回迁协议</font></td>
+            <td>2016-06-17</td>
+            <td>团河安置项目</td>
+            <td>03</td>
+            <td>02</td>
+            <td>221</td>
+            <td>一居室</td>
+            <td>55</td>
+            <td>55</td>
+            <td>222545</td>
+
+        </tr>
+        <tr class="text-center">
+            <td>9</td>
+            <td>5-3-1-1433</td>
+            <td>张玉林</td>
+            <td>110103191901301818</td>
+            <td>北京市崇文区郭庄二条12号</td>
+            <td>98.23</td>
+            <td>123.25</td>
+            <td>009</td>
+            <td><font color="#green">回迁协议</font></td>
+            <td>2016-06-17</td>
+            <td>团河安置项目</td>
+            <td>03</td>
+            <td>02</td>
+            <td>223</td>
+            <td>三居室</td>
+            <td>102</td>
+            <td>102</td>
+            <td>500000</td>
+        </tr>
+        <tr class="text-center">
+            <td>10</td>
+            <td>6-3-1-0001</td>
+            <td>殷燕华</td>
+            <td>110103195811261849</td>
+            <td>北京市崇文区郭庄头条3号</td>
+            <td>56.26</td>
+            <td>70.25</td>
+            <td>010</td>
+            <td><font color="blue">外迁协议</font></td>
+            <td>2016-06-17</td>
+            <td>瀛海安置项目</td>
+            <td>03</td>
+            <td>02</td>
+            <td>221</td>
+            <td>一居室</td>
+            <td>55</td>
+            <td>55</td>
+            <td>222545</td>
+
+        </tr>
+        <tr class="text-center">
+            <td>11</td>
+            <td>6-3-1-0002</td>
+            <td>何子桥</td>
+            <td>110103191705071832</td>
+            <td>崇文区桃杨路北里5楼2层29号</td>
+            <td>89.65</td>
+            <td>106.36</td>
+            <td>011</td>
+            <td><font color="blue">外迁协议</font></td>
+            <td>2016-06-17</td>
+            <td>瀛海安置项目</td>
+            <td>03</td>
+            <td>02</td>
+            <td>221</td>
+            <td>一居室</td>
+            <td>56</td>
+            <td>56</td>
+            <td>222545</td>
+
+        </tr>
+        </tbody>
+    </table>
+    <div class="col-xs-4 text-left">
+        当前第1页，共13页，共条200记录
+    </div>
+    <div class="col-xs-8 text-right">
+        <div class="" id="editable_paginate">
+            <ul class="pagination">
+                <li class="disabled"><a href="#">首 页</a></li>
+                <li class="disabled"><a href="#">上一页</a></li>
+                <li class="active"><a href="?_pageNo=1&_orderField=&_orderType=desc&">1</a></li>
+                <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">2</a></li>
+                <li><a href="?_pageNo=3&_orderField=&_orderType=desc&">3</a></li>
+                <li><a href="?_pageNo=4&_orderField=&_orderType=desc&">4</a></li>
+                <li><a href="?_pageNo=5&_orderField=&_orderType=desc&">5</a></li>
+                <li><a href="?_pageNo=6&_orderField=&_orderType=desc&">6</a></li>
+                <li><a href="?_pageNo=7&_orderField=&_orderType=desc&">7</a></li>
+                <li><a href="?_pageNo=8&_orderField=&_orderType=desc&">8</a></li>
+                <li><a href="?_pageNo=9&_orderField=&_orderType=desc&">9</a></li>
+                <li><a href="?_pageNo=10&_orderField=&_orderType=desc&">10</a></li>
+                <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">下一页</a></li>
+                <li><a href="?_pageNo=1334&_orderField=&_orderType=desc&">末 页</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

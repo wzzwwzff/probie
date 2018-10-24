@@ -1,0 +1,125 @@
+package com.app.cq.service;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.en.IsValid;
+import com.app.cq.model.Family;
+import com.app.cq.utils.BigDecimalUtils;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.utils.StringUtils;
+import com.sqds.web.ParamUtils;
+import org.apache.logging.log4j.util.Strings;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.*;
+
+/**
+ * 综合数据统计查询
+ * Created by lsh on 2018/5/10.
+ */
+@Service
+public class StatisticsService extends HibernateDao<Family> {
+
+    @Resource
+    private DataDictService dataDictService;
+
+    private String getParamString(String param) {
+        String[] array = param.split(",");
+        StringBuffer paramSb = new StringBuffer();
+        for (String s : array) {
+            paramSb.append("'" + s + "'").append(",");
+        }
+        paramSb.deleteCharAt(paramSb.lastIndexOf(","));
+        return paramSb.toString();
+    }
+
+    /**
+     * 查询条件的处理
+     *
+     * @param request
+     * @return
+     */
+    private String getSearchString(HttpServletRequest request) {
+        StringBuffer resultString = new StringBuffer();
+        Enumeration<String> paramsArray = request.getParameterNames();
+        while (paramsArray.hasMoreElements()) {
+            String name = paramsArray.nextElement();
+            String value = ParamUtils.getString(request, name, "");
+            //多选的处理
+            if (name.endsWith("Array")) {
+                if (Strings.isNotEmpty(value)) {
+                    if (name.indexOf("_string") > 0) {
+                        value = this.getParamString(value);
+                    }
+                    String newName = name.substring(name.indexOf("_") + 1);
+                    String columnName = newName.substring(0, newName.indexOf("_"));
+                    resultString.append(" and f." + columnName + " in (" + value + ")");
+                }
+            }
+            //大于小于的处理
+            if (name.indexOf("_ge") > 0) {
+                if (StringUtils.isNotEmpty(value)) {
+                    String gtName = name.substring(name.lastIndexOf("_") + 1);
+                    resultString.append(" and " + gtName + ">='" + value + "'");
+                }
+            }
+            if (name.indexOf("_le") > 0) {
+                if (StringUtils.isNotEmpty(value)) {
+                    String gtName = name.substring(name.lastIndexOf("_") + 1);
+                    resultString.append(" and " + gtName + "<='" + value + "'");
+                }
+            }
+            //单选的处理
+            if (name.indexOf("_status") > 0) {
+                if (StringUtils.isNotEmpty(value)) {
+                    String oneName = name.substring(name.lastIndexOf("_") + 1);
+                    resultString.append(" and " + oneName + "=" + value);
+                }
+            }
+
+            //单选框的处理
+
+            if (name.indexOf("like") > 0) {
+                if (StringUtils.isNotEmpty(value)) {
+                    String inputName = name.substring(name.lastIndexOf("_") + 1);
+                    resultString.append(" and " + inputName + " like '%" + value + "%'");
+                }
+            }
+        }
+        return resultString.toString();
+    }
+
+    /**
+     * 综合统计查询方法
+     *
+     * @param pageInfo
+     */
+    public PageInfo<Family> getListForCompositeSearch(PageInfo<Family> pageInfo, HttpServletRequest request) {
+        StringBuffer hql = new StringBuffer(" from Family f where f.isValid = " + IsValid.YES.getIndex() + " ");   //and len(f.idCode) = 10
+        Enumeration<String> paramsArray = request.getParameterNames();
+        while (paramsArray.hasMoreElements()) {
+            String name = paramsArray.nextElement();
+            if (name.endsWith("Array")) {
+                String value = ParamUtils.getString(request, name, "");
+                if (Strings.isNotEmpty(value)) {
+                    if (name.indexOf("_string") > 0) {
+                        value = this.getParamString(value);
+                    }
+                    String newName = name.substring(name.indexOf("_") + 1);
+                    String columnName = newName.substring(0, newName.indexOf("_"));
+                    hql.append(" and f." + columnName + " in (" + value + ")");
+                }
+            }
+        }
+        hql.append(" order by f.groupCode,familyCode ");
+        return this.list(pageInfo, hql.toString());
+    }
+}

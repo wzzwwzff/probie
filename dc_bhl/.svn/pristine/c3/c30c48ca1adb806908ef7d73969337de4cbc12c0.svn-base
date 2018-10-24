@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>电子选房管理</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+</head>
+<body>
+<div id="content">
+    <div class="title">
+        <h5>已选房源列表</h5>
+    </div>
+
+    <div class="content">
+        <ul class="nav nav-tabs">
+            <li>
+                <a href="form.html">开始选房</a>
+            </li>
+            <li class="active">
+                <a href="list.html">已选房源列表</a>
+            </li>
+        </ul>
+    </div>
+    <div class="search">
+        <div class="search_content">
+            <form class="form-inline" role="form">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">分指</div>
+                        <select class="form-control">
+                            <option value="">--全部--</option>
+                            <option value="">一标</option>
+                            <option value="">二标</option>
+                            <option value="">三标</option>
+                            <option value="">四标</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-addon">组别</div>
+                        <select class="form-control">
+                            <option value="">--全部--</option>
+                            <option value="">一组</option>
+                            <option value="">二组</option>
+                            <option value="">三组</option>
+                            <option value="">四组</option>
+                        </select>
+                    </div>
+                    <!--<div class="input-group">-->
+                        <!--<div class="input-group-addon">产权性质</div>-->
+                        <!--<select class="form-control">-->
+                            <!--<option value="">&#45;&#45;全部&#45;&#45;</option>-->
+                            <!--<option value="">直管公房</option>-->
+                            <!--<option value="">自管公房</option>-->
+                            <!--<option value="">文革产</option>-->
+                            <!--<option value="">私房</option>-->
+                            <!--<option value="">标准租私房</option>-->
+                            <!--<option value="">纯自建</option>-->
+                            <!--<option value="">非宅住人</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
+                    <!--<div class="input-group">-->
+                        <!--<div class="input-group-addon">房屋类型</div>-->
+                        <!--<select class="form-control">-->
+                            <!--<option value="">&#45;&#45;全部&#45;&#45;</option>-->
+                            <!--<option value="">成套</option>-->
+                            <!--<option value="">非成套</option>-->
+                            <!--<option value="">平房</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
+                    <div class="input-group">
+                        <div class="input-group-addon">锁定状态</div>
+                        <select class="form-control">
+                            <option value="">--全部--</option>
+                            <option value="">已锁定</option>
+                            <option value="">未锁定</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">被拆迁人</div>
+                        <input class="form-control" type="text" style="width: 150px;" placeholder="">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-addon">地址门牌</div>
+                        <input class="form-control" type="text" style="width: 215px;">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-addon">签约顺序号</div>
+                        <input class="form-control" type="text" style="width: 80px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th rowspan="2" class="text-center">序号</th>
+            <th rowspan="2" class="text-center">分指</th>
+            <th rowspan="2" class="text-center">编号</th>
+            <th rowspan="2" class="text-center">被拆迁人</th>
+            <th rowspan="2" class="text-center">身份证号</th>
+            <th rowspan="2" class="text-center">签约顺序号</th>
+            <th rowspan="2" class="text-center">选房日期</th>
+            <th rowspan="2" class="text-center">实际选房面积</th>
+            <th colspan="6" class="text-center">选房信息</th>
+            <th rowspan="2" class="text-center">打印</th>
+        </tr>
+        <tr>
+            <th class="text-center">项目名称</th>
+            <th class="text-center">楼号</th>
+            <th class="text-center">单元</th>
+            <th class="text-center">房号</th>
+            <th class="text-center">建筑面积</th>
+            <th class="text-center">居室</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td rowspan="2" class="text-center">1</td>
+            <td rowspan="2" class="text-center">一标</td>
+            <td rowspan="2" class="text-center">XHC-HD-012AZ</td>
+            <td rowspan="2" class="text-center">赵连山</td>
+            <td rowspan="2" class="text-center">/</td>
+            <td rowspan="2" class="text-center">010</td>
+            <td rowspan="2" class="text-center">2016-06-19</td>
+            <td rowspan="2" class="text-center">130</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">4</td>
+            <td class="text-center">1</td>
+            <td class="text-center">19层D2</td>
+            <td class="text-center">55.00</td>
+            <td class="text-center">一居</td>
+            <td rowspan="2" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">5</td>
+            <td class="text-center">1</td>
+            <td class="text-center">4层D1</td>
+            <td class="text-center"> 55.00</td>
+            <td class="text-center">一居</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">2</td>
+            <td rowspan="2" class="text-center">一标</td>
+            <td rowspan="2" class="text-center">XHC-HD-013AZ</td>
+            <td rowspan="2" class="text-center">张彤茂</td>
+            <td rowspan="2" class="text-center">110223196907163915</td>
+            <td rowspan="2" class="text-center">009</td>
+            <td rowspan="2" class="text-center">2016-06-19</td>
+            <td rowspan="2" class="text-center">160</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">1</td>
+            <td class="text-center">2</td>
+            <td class="text-center">2层A1</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+            <td rowspan="2" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">6</td>
+            <td class="text-center">2</td>
+            <td class="text-center">2层B1</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+        </tr>
+        <tr>
+            <td rowspan="3" class="text-center">3</td>
+            <td rowspan="3" class="text-center">一标</td>
+            <td rowspan="3" class="text-center">XHC-HD-014AZ</td>
+            <td rowspan="3" class="text-center">张彤春</td>
+            <td rowspan="3" class="text-center">110223195612303912</td>
+            <td rowspan="3" class="text-center">008</td>
+            <td rowspan="3" class="text-center">2016-06-19</td>
+            <td rowspan="3" class="text-center">150</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">西区4</td>
+            <td class="text-center">1</td>
+            <td class="text-center">0104</td>
+            <td class="text-center">100.98</td>
+            <td class="text-center">三居</td>
+            <td rowspan="3" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">7</td>
+            <td class="text-center">2</td>
+            <td class="text-center">2层D1</td>
+            <td class="text-center">55.00</td>
+            <td class="text-center">一居</td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">7</td>
+            <td class="text-center">3</td>
+            <td class="text-center">2层D1</td>
+            <td class="text-center">55.00</td>
+            <td class="text-center">一居</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">4</td>
+            <td rowspan="2" class="text-center">一标</td>
+            <td rowspan="2" class="text-center">XHC-HD-015AZ</td>
+            <td rowspan="2" class="text-center">屈庆海</td>
+            <td rowspan="2" class="text-center">110223194906283916</td>
+            <td rowspan="2" class="text-center">007</td>
+            <td rowspan="2" class="text-center">2016-06-20</td>
+            <td rowspan="2" class="text-center">80</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">东区1</td>
+            <td class="text-center">2</td>
+            <td class="text-center">1802</td>
+            <td class="text-center">61.48</td>
+            <td class="text-center">一居</td>
+            <td rowspan="2" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">7</td>
+            <td class="text-center">3</td>
+            <td class="text-center">8层C1</td>
+            <td class="text-center">110.00</td>
+            <td class="text-center">三居</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">5</td>
+            <td rowspan="2" class="text-center">一标</td>
+            <td rowspan="2" class="text-center">XHC-HD-016AZ</td>
+            <td rowspan="2" class="text-center">屈宝</td>
+            <td rowspan="2" class="text-center">11022319820329393X</td>
+            <td rowspan="2" class="text-center">006</td>
+            <td rowspan="2" class="text-center">2016-06-20</td>
+            <td rowspan="2" class="text-center">180</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">4</td>
+            <td class="text-center">1</td>
+            <td class="text-center">4层B1</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+            <td rowspan="2" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">4</td>
+            <td class="text-center">1</td>
+            <td class="text-center">1层A2</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+        </tr>
+        <tr>
+            <td rowspan="3" class="text-center">6</td>
+            <td rowspan="3" class="text-center">一标</td>
+            <td rowspan="3" class="text-center">XHC-HD-017AZ</td>
+            <td rowspan="3" class="text-center">杨连河</td>
+            <td rowspan="3" class="text-center">110223196710263912</td>
+            <td rowspan="3" class="text-center">005</td>
+            <td rowspan="3" class="text-center">2016-06-20</td>
+            <td rowspan="3" class="text-center">180</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">1</td>
+            <td class="text-center">2</td>
+            <td class="text-center">27层B1</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+            <td rowspan="3" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">西区8</td>
+            <td class="text-center">2</td>
+            <td class="text-center">0802</td>
+            <td class="text-center">77.07</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">西区9</td>
+            <td class="text-center">3</td>
+            <td class="text-center">1803</td>
+            <td class="text-center">61.75</td>
+            <td class="text-center">一居</td>
+        </tr>
+        <tr>
+            <td rowspan="3" class="text-center">7</td>
+            <td rowspan="3" class="text-center">一标</td>
+            <td rowspan="3" class="text-center">XHC-HD-018AZ</td>
+            <td rowspan="3" class="text-center">王玉山</td>
+            <td rowspan="3" class="text-center">110223195911013915</td>
+            <td rowspan="3" class="text-center">004</td>
+            <td rowspan="3" class="text-center">2016-06-21</td>
+            <td rowspan="3" class="text-center">160</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">西区1</td>
+            <td class="text-center">1</td>
+            <td class="text-center">0104</td>
+            <td class="text-center">86.10</td>
+            <td class="text-center">二居</td>
+            <td rowspan="3" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">15</td>
+            <td class="text-center">2</td>
+            <td class="text-center">7层B2</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">7</td>
+            <td class="text-center">2</td>
+            <td class="text-center">4层D1</td>
+            <td class="text-center">55.00</td>
+            <td class="text-center">一居</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">8</td>
+            <td rowspan="2" class="text-center">一标</td>
+            <td rowspan="2" class="text-center">XHC-HD-019AZ</td>
+            <td rowspan="2" class="text-center">王刚</td>
+            <td rowspan="2" class="text-center">110223198607183913</td>
+            <td rowspan="2" class="text-center">003</td>
+            <td rowspan="2" class="text-center">2016-06-21</td>
+            <td rowspan="2" class="text-center">90</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">10</td>
+            <td class="text-center">1</td>
+            <td class="text-center">12层D2</td>
+            <td class="text-center">55.00</td>
+            <td class="text-center">一居</td>
+            <td rowspan="2" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">西区3</td>
+            <td class="text-center">3</td>
+            <td class="text-center">1502</td>
+            <td class="text-center">77.23</td>
+            <td class="text-center"></td>
+        </tr>
+        <tr>
+            <td rowspan="3" class="text-center">9</td>
+            <td rowspan="3" class="text-center">一标</td>
+            <td rowspan="3" class="text-center">XHC-HD-020AZ</td>
+            <td rowspan="3" class="text-center">王建海</td>
+            <td rowspan="3" class="text-center">110223195609073917</td>
+            <td rowspan="3" class="text-center">002</td>
+            <td rowspan="3" class="text-center">2016-06-21</td>
+            <td rowspan="3" class="text-center">210</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">1</td>
+            <td class="text-center">2</td>
+            <td class="text-center">14层B1</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+            <td rowspan="3" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">15</td>
+            <td class="text-center">2</td>
+            <td class="text-center">7层B1</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">6</td>
+            <td class="text-center">3</td>
+            <td class="text-center">20层C1</td>
+            <td class="text-center">110.00</td>
+            <td class="text-center">三居</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">10</td>
+            <td rowspan="2" class="text-center">一标</td>
+            <td rowspan="2" class="text-center">XHC-HD-021AZ</td>
+            <td rowspan="2" class="text-center">孙新明</td>
+            <td rowspan="2" class="text-center">110223197609273934</td>
+            <td rowspan="2" class="text-center">001</td>
+            <td rowspan="2" class="text-center">2016-06-21</td>
+            <td rowspan="2" class="text-center">154</td>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">西区3</td>
+            <td class="text-center">3</td>
+            <td class="text-center">0201</td>
+            <td class="text-center">86.23</td>
+            <td class="text-center">二居</td>
+            <td rowspan="2" class="text-center"><a href="print.html"><i class='a fa-big fa-print'></i>打印</a></td>
+        </tr>
+        <tr>
+            <td class="text-center">XX安置项目</td>
+            <td class="text-center">1</td>
+            <td class="text-center">1</td>
+            <td class="text-center">23层B1</td>
+            <td class="text-center">87.00</td>
+            <td class="text-center">二居</td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <div class="col-xs-4 text-left">
+            当前第1，共13页，共条200记录
+        </div>
+        <div class="col-xs-8 text-right">
+            <div class="" id="editable_paginate">
+
+                <ul class="pagination">
+                    <li class="disabled"><a href="#">首 页</a></li>
+                    <li class="disabled"><a href="#">上一页</a></li>
+                    <li class="active"><a href="?_pageNo=1&_orderField=&_orderType=desc&">1</a></li>
+                    <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">2</a></li>
+                    <li><a href="?_pageNo=3&_orderField=&_orderType=desc&">3</a></li>
+                    <li><a href="?_pageNo=4&_orderField=&_orderType=desc&">4</a></li>
+                    <li><a href="?_pageNo=5&_orderField=&_orderType=desc&">5</a></li>
+                    <li><a href="?_pageNo=6&_orderField=&_orderType=desc&">6</a></li>
+                    <li><a href="?_pageNo=7&_orderField=&_orderType=desc&">7</a></li>
+                    <li><a href="?_pageNo=8&_orderField=&_orderType=desc&">8</a></li>
+                    <li><a href="?_pageNo=9&_orderField=&_orderType=desc&">9</a></li>
+                    <li><a href="?_pageNo=10&_orderField=&_orderType=desc&">10</a></li>
+                    <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">下一页</a></li>
+                    <li><a href="?_pageNo=1334&_orderField=&_orderType=desc&">末 页</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

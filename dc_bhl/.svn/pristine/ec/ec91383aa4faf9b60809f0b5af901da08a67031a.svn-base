@@ -1,0 +1,85 @@
+.printContent {
+    margin: 0px;
+    padding: 0px;
+    width: 680px;
+    font-family: 宋体;
+    font-size: 16px;
+    clear: both;
+}
+
+.printContent p {
+    margin: 8px 0;
+    padding: 0px;
+    text-align: left;
+    text-indent: 2em;
+    line-height: 28px;
+}
+
+.printContent .right {
+    text-align: right;
+    margin-right: 10px;
+}
+
+.printContent .bold {
+    font-weight: bold;
+}
+.printContent .bold{
+    font-weight: bold;
+}
+.printContent .printTitle {
+    clear: both;
+    text-indent: 0em;
+    font-size: 30px;
+    text-align: center;
+    line-height: 32px;
+}
+
+.printContent .printTitle_default {
+    clear: both;
+    text-indent: 0em;
+    text-align: center;
+}
+
+.printContent .font-size-default {
+    font-size: 16px;
+}
+
+.printContent .font-size-18 {
+    font-size: 18px;
+}
+
+.printContent .font-size-20 {
+    font-size: 20px;
+}
+
+.printContent .font-size-22 {
+    font-size: 22px;
+}
+
+.printContent .font-size-28 {
+    font-size: 28px;
+}
+
+.printContent .dataTable {
+    width: 100%;
+    border-color: #000000;
+    border-collapse: collapse;
+    background-color: #ffffff;
+
+}
+
+/*.printContent .dataTable tr{*/
+    /*page-break-inside: avoid;*/
+/*}*/
+
+.printContent .dataTable tr td {
+    line-height: 28px;
+    height: 28px;
+    text-align: center;
+    padding: 3px 0 3px 5px;
+    font-size: 16px;
+}
+
+.printContent .pageBreak {
+    page-break-before: always
+}

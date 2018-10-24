@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>匡算单打印</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 640px;
+            font-size: 16px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 22px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 30px;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 28px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 40px;
+        }
+
+        .dataTable tr {
+            height: 28px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+            line-height: 24px;
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .space {
+            padding-left: 210px;
+        }
+    </style>
+</head>
+<body style="background-image: url('${path}');z-index: 999;">
+<div class="printContent">
+    <p class="printTitler">东城区宝华里危改项目匡算单</p>
+    <p class="printTitler">（货币补偿+异地奖励房源）</p>
+    <p style="text-align: right;">家庭编号：${strings.getNotNull(family.familyCode)}</p>
+</div>
+</body>
+</html>

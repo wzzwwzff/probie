@@ -1,0 +1,162 @@
+package com.app.cq.model;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * 房源表
+ * Created by ZYK on 2018/3/12.
+ */
+@Table(name = "house")
+@Entity
+public class House {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;             //主键
+    private String buildNum;    //楼号
+    private String unitNum;        //单元号
+    private String houseNum;    //房间号
+    private Integer houseHold;  //房屋户型  数据字典
+    private String houseType;  //房屋居室  数据字典（11：一居，21：二居，31：三居）
+    private BigDecimal buildArea;   //房屋建筑面积
+    private Date chooseDate;   //选房时间
+    private String choosePerson;   //选房操作人姓名
+    private Integer houseStatus;    //房屋状态  数据字典（1：可选，2：已选，3：伪选）
+    private String hPerson;//购房人
+    private String hIdCard;//购房人身份证号
+    @Column(columnDefinition = "TEXT")
+    private String memo;   //备注
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "projectId")
+    private Project project;
+
+    @JSONField(serialize = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "familyId")
+    private Family family;
+
+    public String gethPerson() {
+        return hPerson;
+    }
+
+    public void sethPerson(String hPerson) {
+        this.hPerson = hPerson;
+    }
+
+    public String gethIdCard() {
+        return hIdCard;
+    }
+
+    public void sethIdCard(String hIdCard) {
+        this.hIdCard = hIdCard;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getBuildNum() {
+        return buildNum;
+    }
+
+    public void setBuildNum(String buildNum) {
+        this.buildNum = buildNum;
+    }
+
+    public String getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(String unitNum) {
+        this.unitNum = unitNum;
+    }
+
+    public String getHouseNum() {
+        return houseNum;
+    }
+
+    public void setHouseNum(String houseNum) {
+        this.houseNum = houseNum;
+    }
+
+    public Integer getHouseHold() {
+        return houseHold;
+    }
+
+    public void setHouseHold(Integer houseHold) {
+        this.houseHold = houseHold;
+    }
+
+    public String getHouseType() {
+        return houseType;
+    }
+
+    public void setHouseType(String houseType) {
+        this.houseType = houseType;
+    }
+
+    public BigDecimal getBuildArea() {
+        return buildArea;
+    }
+
+    public void setBuildArea(BigDecimal buildArea) {
+        this.buildArea = buildArea;
+    }
+
+    public Integer getHouseStatus() {
+        return houseStatus;
+    }
+
+    public void setHouseStatus(Integer houseStatus) {
+        this.houseStatus = houseStatus;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Date getChooseDate() {
+        return chooseDate;
+    }
+
+    public void setChooseDate(Date chooseDate) {
+        this.chooseDate = chooseDate;
+    }
+
+    public String getChoosePerson() {
+        return choosePerson;
+    }
+
+    public void setChoosePerson(String choosePerson) {
+        this.choosePerson = choosePerson;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    public void setFamily(Family family) {
+        this.family = family;
+    }
+}

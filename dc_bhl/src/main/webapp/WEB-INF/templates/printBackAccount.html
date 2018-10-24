@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>参考单打印</title>
+    <style>
+        body {
+            font-family: SimSun, Arial Unicode MS, Lucida Sans Unicode, Arial, verdana, arial, helvetica, sans-serif;
+        }
+
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 640px;
+            font-size: 16px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 22px;
+            margin-left: 40px;
+        }
+
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 0em;
+            font-size: 22px;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+        }
+
+        .printTable {
+            width: 100%;
+            font-size: 13px;
+            text-align: center;
+            border: 1px solid #000000;
+        }
+
+        .printTable tr {
+            height: 28px;
+        }
+
+        .printTable tr td {
+            line-height: 14px;
+            border: 1px solid #000000;
+            /*border-bottom: 1px solid #000000;*/
+            text-align: center;
+        }
+
+        .dataTable {
+            width: 95%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-spacing: inherit;
+            line-height: 28px;
+            -fs-table-paginate: paginate; /*处理分页断行问题*/
+            margin-left: 40px;
+        }
+
+        .dataTable tr {
+            height: 28px;
+        }
+
+        .dataTable tr td {
+            text-align: center;
+            padding: 2px;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+            line-height: 24px;
+        }
+
+        .border {
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: 1px solid #000000;
+        }
+
+        .space {
+            padding-left: 210px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 30px;
+        }
+    </style>
+</head>
+<body style="background-image: url('${path}');z-index: 999;">
+<div style="font-size: 15px;"><p class="printTitler">【附件】就地安置参考单</p></div>
+<div class="printContent" style="margin-top: -10px;">
+    <p class="printTitler">宝华里房改带危改一级开发项目</p>
+    <p class="printTitler">就地安置参考单</p>
+    <p style="text-align: right;font-size: 15px;">家庭编号：${strings.getNotNull(family.familyCode)}</p><br/>
+    <table class="printTable" style="border-bottom: 0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td colspan="4" style="text-align: left;padding-left: 5px;">
+               <b> 一、被拆迁人和房屋基本情况</b>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">分指</td>
+            <td>${family.bdCode?default("/")}</td>
+            <td style="text-align: center;">组别</td>
+            <td>${family.groupCode?default("/")}</td>
+        </tr>
+        <tr>
+            <td width="28%" >被拆迁人</td>
+            <td style="width: 22%;">${family.name?default("/")}</td>
+            <td style="width: 30%;">身份证号码</td>
+            <td style="width: 20%;">${family.idCard?default("/")}</td>
+        </tr>
+        <tr>
+            <td colspan="1">地址门牌</td>
+            <td colspan="3">${family.address?default("/")}</td>
+        </tr>
+        <tr>
+            <td>房屋产别</td>
+            <td>${fwcb?default("/")}</td>
+            <td>房屋类型</td>
+            <td>${fwlx?default("/")}</td>
+        </tr>
+        <tr>
+            <td>房屋间数</td>
+            <td>${family.houseNum?default("/")}</td>
+            <td>建筑面积</td>
+            <td>${family.buildArea?default("/")}</td>
+        </tr>
+        <tr>
+            <td>援藏人数</td>
+            <td>${family.helpNum?default("/")}</td>
+            <td>夫妻工龄之和</td>
+            <td>${family.glNum?default("/")}</td>
+        </tr>
+        <tr>
+            <td>教师资格数</td>
+            <td>${family.teacherNum?default("/")}</td>
+            <td>安置人口</td>
+            <td>${family.personSize?default("/")}</td>
+        </tr>
+    </table>
+    <table class="printTable" style="border-top: 0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td colspan="4" style="text-align: left;padding-left: 5px;">
+                <b>二、补偿、补助、奖励费明细</b>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 22%;">序号</td>
+            <td  style="width: 28%;">项目</td>
+            <td style="width: 50%;">金额</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>搬迁费</td>
+            <td>${family.bqMoney?default("0")}</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>空调移机费</td>
+            <td>${family.ktFee?default("0")}</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>热水器移机费</td>
+            <td>${family.rsqFee?default("0")}</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>有线电视安装费</td>
+            <td>${family.tvFee?default("0")}</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>数据终端安装费</td>
+            <td>${family.kdFee}</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>固定电话移机费</td>
+            <td>${family.dhFee}</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>煤改电装用电暖气</td>
+            <td>${family.dnqFee}</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>停产停业损失补偿费</td>
+            <td>${family.tctyFee?default("0")}</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>房屋配套综合补助</td>
+            <td>${family.zhknMoney?default("0")}</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>私房平房补助</td>
+            <td>${family.sfpfFee}</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>生活困难补助</td>
+            <td>${family.shknFee}</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>签约速度奖（最大）</td>
+            <td>${qysd}</td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>工程配合奖（最大）</td>
+            <td>${gcph}</td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align: right;padding-left: 5px;">
+                合计：<span class="span">${total1?default("0")}</span>元（大写：人民币<span class="span">${moneyUtils(total1?default("0"))}</span>元整）
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align: left;padding-left: 5px;">
+                <b>三、可申请购买房源</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align: left;padding-left: 5px;">根据补偿安置实施方法可选就地安置房源:${azfy}。</td>
+        </tr>
+    </table>
+    <div>
+        <p style="text-align: left;margin-left: -20px;margin-top: -1px;">说明:</p>
+        <p style="text-align: left;margin-left: -20px;margin-top: -5px;">以上费用仅供参考，请以实际签约补偿安置协议为准;</p>
+        <p style="text-align: right;margin-top: -5px;">2018 年<span class="fix_span"></span>月<span class="fix_span"></span>日</p>
+    </div>
+</div>
+</body>
+</html>

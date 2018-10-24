@@ -1,0 +1,112 @@
+<%@ page import="com.app.cq.en.CheckState" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数据初审</title>
+    <%@include file="/static/common/common.jsp" %>
+    <script src="/static/bigDecimal/BigDecimal-all-last.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="title"><h4>数据初审页面【${family.name}】</h4></div>
+<div class="content">
+    <%@include file="/WEB-INF/pages/cq/family/common/view/rhView.jsp" %><br/>
+    <div class="footer">
+        <c:set var="noCheck" value="<%=CheckState.NOCHECK.getIndex()%>"/>
+        <c:set var="firstBack" value="<%=CheckState.FIRSTBACK.getIndex()%>"/>
+        <button type="button" class="btn btn-lg btn-primary"
+                onclick="handUp('${family.id}')" ${ family.firstCheckStatus le noCheck  ? '':'disabled'}>
+            <i class="fa fa-check"></i>&nbsp;初审通过
+        </button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-lg btn-danger" ${ family.lastCheckStatus eq 2 ? 'disabled':''}
+                onclick="submitData('${family.id}')"><i class="fa fa-close"></i>&nbsp;初审退回
+        </button>
+        &nbsp;&nbsp;
+        <button class="btn btn-white btn-lg" type="button" onclick="history.back()"><i class="fa fa-backward"></i>&nbsp;返回
+        </button>
+    </div>
+
+</div>
+<%--审计初审退回原因--%>
+<%--<div class="modal fade" id="myModalCs" tabindex="-1" role="dialog" aria-labelledby="myModalLabe1"--%>
+     <%--aria-hidden="true">--%>
+    <%--<div class="modal-dialog">--%>
+        <%--<div class="modal-content">--%>
+            <%--<form class="form-horizontal" id="myFormCs" method="post">--%>
+                <%--<div class="modal-header">--%>
+                    <%--<button type="button" class="close" data-dismiss="modal"><span--%>
+                            <%--aria-hidden="true">&times;</span><span--%>
+                            <%--class="sr-only">Close</span></button>--%>
+                    <%--<h4 class="modal-title" id="myModalLabel2">请填写初审退回原因</h4>--%>
+                <%--</div>--%>
+                <%--<div class="modal-body" id="modalBodyCs">--%>
+                    <%--<input type="hidden" name="familyId" value="${family.id}">--%>
+                    <%--<table class="table table-bordered">--%>
+                        <%--<tr>--%>
+                            <%--<td class="active text-right" style="width: 20%;">退回原因：</td>--%>
+                            <%--<td>--%>
+                                <%--<textarea id="reasonCs" class="form-control" style="width: 100%;height: 200px;"--%>
+                                          <%--name="problem"></textarea>--%>
+                            <%--</td>--%>
+                        <%--</tr>--%>
+                    <%--</table>--%>
+                <%--</div>--%>
+                <%--<div class="modal-footer">--%>
+                    <%--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>--%>
+                    <%--<button id="subButtonCs" type="button" class="btn btn-primary" onclick="submitData()">保存</button>--%>
+                <%--</div>--%>
+            <%--</form>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+<%--</div>--%>
+<script>
+    // 数据初审通过
+    function handUp(familyId, searchParams) {
+        if (confirm("确定数据初审通过吗？")) {
+            var type = "first";
+            $.get("handUp", {
+                familyId: familyId,
+                type: type,
+                _date: new Date().getTime()
+            }, function (data) {
+                window.location.href = "list?<tags:searchParams/>";
+            })
+        }
+    }
+
+    function backData(familyId) {
+//        $.get(url, {familyId: familyId, _date: new Date().getTime()}, function (data) {
+//            $("#modalBodyCs").html(data);
+//        });
+        $("#myModalCs").modal();
+        $("input[name='familyId']").val(familyId);
+    }
+    function submitData(familyId) {
+//        var reasonCs = $("#reasonCs").val();
+//        if (reasonCs != "") {
+        if (confirm("确定数据初审退回吗？")) {
+            $.ajax({
+                url: "backData",
+                data: {
+                    familyId: familyId
+                },
+                method: "post",
+//                data: $("#myFormCs").serialize(),
+                success: function (data) {
+                    window.location.href = "list?<tags:searchParams/>";
+                }
+            });
+        }
+//        } else {
+//            alert("必须填写退回原因！");
+//        }
+    }
+</script>
+</body>
+</html>

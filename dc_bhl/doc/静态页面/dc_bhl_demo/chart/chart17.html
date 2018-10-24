@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>安置及房源使用情况</title>
+    <meta http-equiv="refresh" content="5">
+    <LINK href="styles/styles.css" type="text/css" rel="stylesheet"/>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/plugin/highcharts/highcharts.js"></script>
+    <style>
+        html, body {
+            font-family: '微软雅黑';
+        }
+        .chart_content div {
+            float: left;
+            width: 33%;
+            height: 620px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<!--<div style="text-align: center;font-size: 45px;font-weight: bold;">东城区望坛棚改拆迁项目安置项目使用情况</div>-->
+<div class="chart_content">
+    <div id="chart"></div>
+    <div id="chart1"></div>
+    <div id="chart2"></div>
+</div>
+
+<script>
+    $(function () {
+        $("#chart").highcharts( {
+            chart: {
+                renderTo: 'pie_chart',
+                plotBackgroundColor: 'white',//背景颜色
+                plotBorderWidth: 0,
+                plotShadow: false
+            },
+            title: {
+                text:'回迁安置房（回迁）',
+                x:0,
+                y:20,
+                style: {
+                    color: "#000",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                }
+            },
+            colors:  ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {//鼠标移动到每个饼图显示的内容
+                pointFormat: '{series.name}:{point.percentage:.1f}%',
+                percentageDecimals: 1,
+//                    formatter: function() {
+//                        return pointFormat+ this.point.name+this.point.percentage/100;
+//                    }
+            },
+            plotOptions: {
+                pie: {
+                    borderWidth: 0,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000',
+                        distance: -50,//通过设置这个属性，将每个小饼图的显示名称和每个饼图重叠
+                        style: {
+                            fontSize: '10px',
+                            lineHeight: '10px'
+                        },
+                        formatter: function () {
+                            //'{point.name}: {point.percentage:.1f} %'
+
+                            return this.point.name + this.point.percentage.toFixed(2) + "%";
+                        }
+                    },
+                    padding:20
+                }
+            },
+            series: [{//设置每小个饼图的颜色、名称、百分比
+                type: 'pie',
+                name: '占比',
+                data: [
+                    {name:'已选',y:1600},
+                    {name:'剩余',y:400}
+
+                ]
+            }]
+        });
+        $("#chart1").highcharts( {
+            chart: {
+                renderTo: 'pie_chart',
+                plotBackgroundColor: 'white',//背景颜色
+                plotBorderWidth: 0,
+                plotShadow: false
+            },
+            title: {
+                text:'兴悦居小区(外迁)',
+                x:0,
+                y:20,
+                style: {
+                    color: "#000",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                }
+            },
+            colors:  ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {//鼠标移动到每个饼图显示的内容
+                pointFormat: '{series.name}:{point.percentage:.1f}%',
+                percentageDecimals: 1,
+//                    formatter: function() {
+//                        return pointFormat+ this.point.name+this.point.percentage/100;
+//                    }
+            },
+            plotOptions: {
+                pie: {
+                    borderWidth: 0,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000',
+                        distance: -50,//通过设置这个属性，将每个小饼图的显示名称和每个饼图重叠
+                        style: {
+                            fontSize: '10px',
+                            lineHeight: '10px'
+                        },
+                        formatter: function () {
+                            //'{point.name}: {point.percentage:.1f} %'
+
+                            return this.point.name + this.point.percentage.toFixed(2) + "%";
+                        }
+                    },
+                    padding:20
+                }
+            },
+            series: [{//设置每小个饼图的颜色、名称、百分比
+                type: 'pie',
+                name: '占比',
+                data: [
+                    {name:'已选',y:1700},
+                    {name:'剩余',y:300}
+
+
+                ]
+            }]
+        });
+        $("#chart2").highcharts( {
+            chart: {
+                renderTo: 'pie_chart',
+                plotBackgroundColor: 'white',//背景颜色
+                plotBorderWidth: 0,
+                plotShadow: false
+            },
+            title: {
+                text:'美澜湾小区(外迁)',
+                x:0,
+                y:20,
+                style: {
+                    color: "#000",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                }
+            },
+            colors:  ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {//鼠标移动到每个饼图显示的内容
+                pointFormat: '{series.name}:{point.percentage:.1f}%',
+                percentageDecimals: 1,
+//                    formatter: function() {
+//                        return pointFormat+ this.point.name+this.point.percentage/100;
+//                    }
+            },
+            plotOptions: {
+                pie: {
+                    borderWidth: 0,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000',
+                        distance: -50,//通过设置这个属性，将每个小饼图的显示名称和每个饼图重叠
+                        style: {
+                            fontSize: '10px',
+                            lineHeight: '10px'
+                        },
+                        formatter: function () {
+                            //'{point.name}: {point.percentage:.1f} %'
+
+                            return this.point.name + this.point.percentage.toFixed(2) + "%";
+                        }
+                    },
+                    padding:20
+                }
+            },
+            series: [{//设置每小个饼图的颜色、名称、百分比
+                type: 'pie',
+                name: '占比',
+                data: [
+                    {name:'已选',y:900},
+                    {name:'剩余',y:365}
+
+
+                ]
+            }]
+        });
+    });
+
+</script>
+</body>
+</html>

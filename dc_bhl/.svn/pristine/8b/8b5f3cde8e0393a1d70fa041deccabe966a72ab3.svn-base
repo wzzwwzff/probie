@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>安置及房源使用情况</title>
+    <meta http-equiv="refresh" content="5">
+    <LINK href="styles/styles.css" type="text/css" rel="stylesheet"/>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/plugin/highcharts/highcharts.js"></script>
+    <style>
+        html, body {
+            font-family: '微软雅黑';
+        }
+
+        .chart_content div {
+            float: left;
+            width: 33%;
+            height: 480px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center;font-size: 45px;font-weight: bold;">东城区宝华里危改项目安置及房源使用情况</div>
+<div style="width: 2200px;" class="chart_content">
+    <div id="chart1"></div>
+    <div id="chart2" style="width: 450px;"></div>
+    <div id="chart3"></div>
+</div>
+<div style="width: 2200px;" class="chart_content">
+    <div id="chart4"></div>
+    <div id="chart5" style="width: 450px;"></div>
+    <div id="chart6" style="width: 450px;"></div>
+</div>
+<script>
+    $(function () {
+        $('#chart1').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: '瀛海房源使用情况',
+                x: 0,
+                y: 10,
+                style: {
+                    color: "#000",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                }
+            },
+            colors: [ '#F9F900','#FF44FF'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                pointFormat: '{series.name}:{point.percentage:.1f}%'
+            },
+            plotOptions: {
+                pie: {
+                    //   size:'60%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        distance:'1',
+                        formatter: function () {
+                            //'{point.name}: {point.percentage:.1f} %'
+
+                            return this.point.name + this.point.percentage.toFixed(2) + "%";
+                        }
+                    },
+                    showInLegend: false
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '',
+                data: [
+                    ['剩余', 90],
+                    ['已签约', 216]
+
+                ]
+            }]
+        });
+        $('#chart2').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['一居室', '二居室','三居室'],
+                title: {
+                    text: '居室'
+                }
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总套数'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '签约',
+                data: [110, 189,100],
+            }, {
+                name: '剩余',
+                data: [350, 289,200],
+            }]
+        });
+        $('#chart3').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: '已签约安置方案占比',
+                x: 0,
+                y: 10,
+                style: {
+                    color: "#000",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                }
+            },
+            colors: ['#EAC100','#F9F900','#009100'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                pointFormat: '{series.name}:{point.percentage:.1f}%'
+            },
+            plotOptions: {
+                pie: {
+                    // size:'60%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        distance:'1',
+                        formatter: function () {
+                            //'{point.name}: {point.percentage:.1f} %'
+
+                            return this.point.name + this.point.percentage.toFixed(2) + "%";
+                        }
+                    },
+                    showInLegend: false
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '比例',
+                data: [
+                    ['选择弃房比例',100],
+                    ['选择回迁比例', 200],
+                    ['选择外迁比例', 150]
+                ]
+            }]
+        });
+        $('#chart4').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: '团河房源使用情况',
+                x: 0,
+                y: 30,
+                style: {
+                    color: "#000",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                }
+            },
+            colors: [ '#4A4AFF','#00EC00'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                pointFormat: '{series.name}:{point.percentage:.1f}%'
+            },
+            plotOptions: {
+                pie: {
+                    //   size:'60%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        distance:'1',
+                        formatter: function () {
+                            //'{point.name}: {point.percentage:.1f} %'
+
+                            return this.point.name + this.point.percentage.toFixed(2) + "%";
+                        }
+                    },
+                    showInLegend: false
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '',
+                data: [
+                    ['剩余', 66],
+                    ['已签约', 132]
+
+                ]
+            }]
+        });
+        $('#chart5').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['一居室', '二居室','三居室'],
+                title: {
+                    text: '居室'}
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总套数'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [150, 89,56],
+            }, {
+                name: '剩余',
+                data: [250, 189,250],
+            }]
+        });
+        $('#chart6').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '回迁房使用情况'
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['零居室', '一居室','二居室','三居室'],
+                title: {
+                    text: '居室'
+                }
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总套数'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [110, 189,100,80],
+            }, {
+                name: '剩余',
+                data: [350, 289,200,56],
+            }]
+        });
+    });
+</script>
+</body>
+</html>

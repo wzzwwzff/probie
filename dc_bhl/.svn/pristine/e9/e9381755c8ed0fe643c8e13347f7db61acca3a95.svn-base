@@ -1,0 +1,99 @@
+package com.app.cq.service;
+
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.model.HistoryFamily;
+import com.app.cq.model.HistoryFamilyPerson;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.utils.Collections3;
+import com.sqds.utils.StringUtils;
+import com.sun.tools.jdi.LinkedHashMap;
+import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by lsh on 2018/5/7.
+ * 历时签约家庭 家庭成员业务层
+ */
+@Service
+public class HistoryFamilyPersonService extends HibernateDao<HistoryFamilyPerson>{
+
+    @Autowired
+    private HistoryFamilyService historyFamilyService;
+
+    /**
+     * 根据family id取得这个所有家庭成员信息
+     *
+     * @param historyFamilyId
+     * @return
+     */
+    public List<HistoryFamilyPerson> getPersonListByHistoryFamilyId(Integer historyFamilyId) {
+        return list("from HistoryFamilyPerson hfp where hfp.historyFamily.id = ? order by hfp.id", historyFamilyId);
+    }
+
+    /**
+     * 保存历史签约家庭成员
+     * @param list
+     * @param historyFamilyId
+     */
+    public synchronized void saveHistoryFamilyPerson(List<String[]> list, Integer historyFamilyId){
+        HistoryFamily historyFamily = this.historyFamilyService.get(historyFamilyId);
+        String[] personIdArray = list.get(0);
+        if (personIdArray != null && personIdArray.length > 0) {
+            String[] personTypeArray = list.get(1);
+            String[] personNameArray = list.get(2);
+            String[] personIdCardArray = list.get(3);
+            for (int i = 0; i < personIdArray.length; i++) {
+                if (StringUtils.isEmpty(personNameArray[i]) && StringUtils.isNotEmpty(personIdArray[i])) {
+                    this.delete(Integer.valueOf(personIdArray[i]));
+                } else if (StringUtils.isNotEmpty(personNameArray[i])) {
+                    HistoryFamilyPerson historyFamilyPerson = new HistoryFamilyPerson();
+                    if (StringUtils.isNotEmpty(personIdArray[i])) {
+                        historyFamilyPerson = this.get(Integer.valueOf(personIdArray[i]));
+                    }
+                    if (StringUtils.isNotEmpty(personTypeArray[i])) {
+                        historyFamilyPerson.setType(Integer.valueOf(personTypeArray[i]));   //类别
+                    }
+                    historyFamilyPerson.setName(personNameArray[i]);   //姓名
+                    historyFamilyPerson.setIdCard(personIdCardArray[i]);   //身份证号
+                    historyFamilyPerson.setHistoryFamily(historyFamily);
+                    this.save(historyFamilyPerson);
+                }
+            }
+        }
+    }
+
+    /**
+     * 通过家庭id删除家庭成员
+     * @param historyFamilyId
+     */
+    public synchronized void deletePersonByFamilyId(Integer historyFamilyId){
+        String sql = "DELETE FROM historyfamilyperson WHERE historyFamilyId =:historyFamilyId";
+        this.getSession().createSQLQuery(sql).setInteger("historyFamilyId",historyFamilyId).executeUpdate();
+    }
+
+    /**
+     * 得到所有的历史签约家庭成员信息
+     * Map<historyFamilyUuid,List<HistoryFamilyperson>>
+     */
+    public Map<Integer,List<HistoryFamilyPerson>> getFamilyPersonList(){
+        String hql = " from HistoryFamilyPerson as fp order by fp.historyFamily,fp.type ";
+        List<HistoryFamilyPerson> list = this.getSession().createQuery(hql.toString()).list();
+        Map<Integer,List<HistoryFamilyPerson>> resultMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(list)){
+            for (HistoryFamilyPerson historyFamilyPerson : list){
+                List<HistoryFamilyPerson> itemList = resultMap.get(historyFamilyPerson.getHistoryFamily().getId()) == null ? new ArrayList<HistoryFamilyPerson>() : resultMap.get(historyFamilyPerson.getHistoryFamily().getId());
+                itemList.add(historyFamilyPerson);
+                resultMap.put(historyFamilyPerson.getHistoryFamily().getId(), itemList);
+            }
+        }
+
+        return resultMap;
+    }
+}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>东城区宝华里危改项目信息展示系统</title>
+</head>
+<frameset rows="100,*,60" cols="*" framespacing="0" frameborder="no" border="0">
+    <frame src="headerPublicize.html" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" />
+    <frame src="desktopPublicize.html" name="mainFrame" scrolling="auto" noresize="noresize" id="mainFrame" />
+    <frame src="bottomPublicize.html" name="bottomFrame" scrolling="No" noresize="noresize" id="bottomFrame" />
+</frameset>
+<noframes>
+    <body>
+    </body>
+</noframes>
+</html>

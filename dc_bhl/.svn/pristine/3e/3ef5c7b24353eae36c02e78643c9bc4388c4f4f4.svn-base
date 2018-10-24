@@ -1,0 +1,66 @@
+package com.app.cq.model;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
+import javax.persistence.*;
+import java.util.Date;
+
+/**
+ * Created by lsh on 2018/9/18.
+ * 退回信息表
+ */
+@Table(name = "BackInfo")
+@Entity
+public class BackInfo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;//主键
+    private String problem;//退回原因
+    private Date backDate;//退回时间
+    private Integer backType;//退回类型   数据字典(1、初审退回    2、终审退回) (没用)
+
+    @JSONField(serialize = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "familyId")
+    private Family family;
+
+    public Integer getBackType() {
+        return backType;
+    }
+
+    public void setBackType(Integer backType) {
+        this.backType = backType;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getProblem() {
+        return problem;
+    }
+
+    public void setProblem(String problem) {
+        this.problem = problem;
+    }
+
+    public Date getBackDate() {
+        return backDate;
+    }
+
+    public void setBackDate(Date backDate) {
+        this.backDate = backDate;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    public void setFamily(Family family) {
+        this.family = family;
+    }
+}

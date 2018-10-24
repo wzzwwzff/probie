@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>打印</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/docs.min.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/style/printStyle.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: '宋体';
+        }
+    </style>
+    <script type="text/javascript">
+        function toPrint() {
+            $("#printDiv").hide();
+            $(".title").hide();
+            $(".content").hide();
+            window.print();
+            $(".title").show();
+            $(".content").show();
+            $("#printDiv").show();
+
+        }
+    </script>
+</head>
+<body>
+<div class="title"><h4>【谭怀起】匡算单</h4>
+    <div style="position: absolute;top: 8px;right: 15px;" id="printDiv">
+        <input type="button" class="btn btn-primary" value="打印" onclick="javascript:toPrint()"/>
+        <input type="button" class="btn btn-primary" value="返回" onclick="location.href='printCalList.html';"/>
+    </div>
+</div>
+<div class="content" >
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="printCal.html">就地安置匡算单</a>
+        </li>
+        <li  class="active">
+            <a href="printCal2.html">货币补偿+异地奖励房源匡算单</a>
+        </li>
+        <li>
+            <a href="printCal3.html">货币补偿</a>
+        </li>
+    </ul>
+</div>
+<center>
+    <div class="printContent" style="width:660px;">
+        <p class="printTitle bold">东城区宝华里危改项目</p>
+        <p class="printTitle bold">补偿结果居民匡算单</p>
+        <p class="printTitle bold" style="font-size: 20px;">（货币补偿+异地奖励房源）</p>
+        <p style="float: right;font-weight: bold;">编号：</p>
+        <table class="dataTable" border="1">
+            <tr>
+                <td colspan="4" style="text-align: left;">一、被拆迁人和房屋基本情况</td>
+            </tr>
+            <tr>
+                <td width="80px">被拆迁人</td>
+                <td></td>
+                <td width="80px">身份证号</td>
+                <td></td>
+            </tr>
+        </table>
+        <table class="dataTable" border="1" style="border-top: 0px;">
+            <tr>
+                <td width="80px">房屋地址</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td style="width: 25%;">产别</td>
+                <td style="width: 25%;"></td>
+                <td style="width: 25%;">房屋类型</td>
+                <td style="width: 25%;"></td>
+            </tr>
+            <tr>
+                <td>使用面积</td>
+                <td></td>
+                <td>建筑面积</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>被拆迁房屋标准房屋市场价格</td>
+                <td></td>
+                <td>标准房屋重置成新价</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;" colspan="4">二、被拆迁房屋评估款<u>&nbsp;&nbsp;</u>元</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;text-indent:2em;" colspan="4">
+                    <p>其中被拆迁房屋价值<u>&nbsp;&nbsp;</u>元，被拆迁房屋装修、设备及附属物评估价值<u>&nbsp;&nbsp;</u>元。</p>
+                </td>
+            </tr>
+        </table>
+        <table class="dataTable" border="1" style="border-top: 0px;">
+            <tr>
+                <td class="left" style="text-align: left;" colspan="5">三、因拆迁房屋造成的搬迁及停产停业损失补偿：<u>&nbsp;&nbsp;</u>元</td>
+            </tr>
+            <tr>
+                <td class="text-center">序号</td>
+                <td class="text-center">名称</td>
+                <td class="text-center">费用标准</td>
+                <td class="text-center">数量</td>
+                <td class="text-center" style="text-align: right;">金额（元）</td>
+            </tr>
+            <tr>
+                <td class="text-center">1</td>
+                <td class="text-center">搬迁费</td>
+                <td class="text-center">40元/平方米</td>
+                <td class="text-center"></td>
+                <td class="text-center" style="text-align: right;"></td>
+            </tr>
+            <tr>
+                <td class="text-center">2</td>
+                <td class="text-center">空调移机费</td>
+                <td class="text-center">400元/台</td>
+                <td class="text-center"></td>
+                <td class="text-center" style="text-align: right;"></td>
+            </tr>
+            <tr>
+                <td class="text-center">3</td>
+                <td class="text-center">热水器移机费</td>
+                <td class="text-center">400元/台</td>
+                <td class="text-center"></td>
+                <td class="text-center" style="text-align: right;"></td>
+            </tr>
+            <tr>
+                <td class="text-center">4</td>
+                <td class="text-center">有线电视安装费</td>
+                <td class="text-center">350元/端</td>
+                <td class="text-center"></td>
+                <td class="text-center" style="text-align: right;"></td>
+            </tr>
+            <tr>
+                <td class="text-center">5</td>
+                <td class="text-center">数据终端安装费</td>
+                <td class="text-center">300元/端</td>
+                <td class="text-center"></td>
+                <td class="text-center" style="text-align: right;"></td>
+            </tr>
+            <tr>
+                <td class="text-center">6</td>
+                <td class="text-center">固定电话移机费</td>
+                <td class="text-center">235元/部</td>
+                <td class="text-center"></td>
+                <td class="text-center" style="text-align: right;"></td>
+            </tr>
+            <tr>
+                <td class="text-center">7</td>
+                <td class="text-center">停产停业补偿费</td>
+                <td class="text-center">据实</td>
+                <td class="text-center">/</td>
+                <td class="text-center" style="text-align: right;"></td>
+            </tr>
+        </table>
+        <table class="dataTable" border="1" style="border-top: 0px;">
+            <tr>
+                <td style="text-align: left;">四、综合困难补助<u>&nbsp;&nbsp;</u>元</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;text-indent:2em;">
+                    <p>被拆迁人为平房和非成套楼房的，按以下标准一次性给予被拆迁人（含公房承租人）住宅综合困难补助:</p>
+                    <p>综合困难补助 = 房屋评估价值×0.2;</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">五、私房平房补助<u>&nbsp;&nbsp;</u>元</td>
+            </tr>
+            <tr>
+                <td class="left1">
+                    <p>对被拆迁房屋产权性质为私房，且房屋类型为平房的被拆迁人，区房屋拆迁办按照被拆迁房屋建筑面积，一次性给予私房产权人私房平房补助1万元/建筑平方米。</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="bold">
+                    <p>以上第二、三、四、五条款项合计<u>&nbsp;&nbsp;</u>元；</p>
+                </td>
+            </tr>
+        </table>
+        <table class="dataTable" border="1">
+            <p class="pageBreak">&nbsp;</p>
+            <tr>
+                <td style="text-align: left;">八、奖励房源</td>
+            </tr>
+            <tr>
+                <td class="left1">
+                    <p>提供改建地段奖励房源，其中可选安置房屋面积为<u>&nbsp;&nbsp;</u>㎡至<u>&nbsp;&nbsp;</u>㎡，所购奖励房源金额总和不能超过可用于购房款项合计金额。</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">九、房改售房代扣款<u>&nbsp;&nbsp;</u>元(针对做房改的情况)</td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">十、临时安置补偿费</td>
+            </tr>
+            <tr>
+                <td class="left1">
+                    <p>临时安置补偿按照被拆迁人原房屋建筑面积每月每平方米150元计算。不足4000元/月的，补足到4000元/月；</p>
+                    <p>实行货币补偿或者以现房进行安置的，临时安置费发放期限为4个月；</p>
+                    <p>以期房进行安置的，发放期限自搬家交房之日起至实际交房日期后的第4个月。</p>
+                    <p>在预签拆迁补偿协议生效后另行与被拆迁人签订补充协议确定。</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">十一、生活补助</td>
+            </tr>
+            <tr>
+                <td class="left1">
+                    <p>残疾人补助：40000元/人；低保补助：40000元/家庭；大病补助：40000元/人。</p>
+                    <p>生活补助根据被拆迁人提交的证明材料及申请材料，经公示无异议后，另行与被拆迁人签订补充协议确定。</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">十二、签约速度奖</td>
+            </tr>
+            <tr>
+                <td class="left1">
+                    <p>在规定期限内签约的，按照每产籍户一次性给予40万元奖励。规定期限后，每日递减2万元，直至递减为零。</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">十三、工程支持奖</td>
+            </tr>
+            <tr>
+                <td class="left1">
+                    <p>在规定期限内签约、腾房的按照被拆迁房屋建筑面积，给予5000元/㎡工程支持奖励。原房面积不足20平米的，按照20平米计算。</p>
+                </td>
+            </tr>
+        </table>
+        <p class="bold">注：</p>
+        <p class="bold">①参考单中的金额部分为初步测算结果，仅供参考，准确金额以签约的协议为主；</p>
+        <p class="bold">②如被拆迁人姓名、身份证号、房屋面积和地址等信息有误，请和所在分指工作人员查档核实。</p>
+    </div>
+</center>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>打印</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        .tablePrint {
+            width: 650px;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+        }
+
+        .tablePrint tr td {
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        .tdCls {
+            border-bottom: 1px solid #000000;
+            border-right: 1px solid #000000;
+            padding-left: 0px;
+            text-align: center;
+            font-size: 14px;
+            height: 27px;
+        }
+
+        .tdClsq {
+            border-bottom: 1px solid #000000;
+            border-right: 1px solid #000000;
+            text-align: left;
+            padding-left: 4px;
+            font-size: 17px;
+            height: 36px;
+        }
+
+        .pageBreak {
+            page-break-before: always
+        }
+
+        .sp {
+            text-decoration: underline;
+            font-size: 14pt;
+            font-family: 宋体;
+        }
+
+        .p1 {
+            text-align: left;
+            text-indent: 2em;
+            line-height: 26px;
+        }
+
+        .rightCls {
+            text-align: right;
+            padding-right: 25px;
+        }
+    </style>
+    <script>
+        function toPrint() {
+            $("#printDiv").hide();
+            window.print();
+            $("#printDiv").show();
+            $.get("qyPrintSet.do", {id: 49, mydate: new Date().getTime()}, function (data) {
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="title"><h5>交房单</h5></div>
+<div style="position: absolute;top: 8px;right: 15px;" id="printDiv">
+    <input type="button" class="btn btn-primary" value="打印" onclick="toPrint()"/>
+    <input type="button" class="btn btn-default" value="返回" onclick="history.back();"/>
+</div>
+<div class="content">
+    <center>
+        <table class="tablePrint" cellpadding="0" cellspacing="0" width="650px;" style="margin-top: 50px;">
+            <tr>
+                <td colspan="14" style="text-align: center; font-weight:bold;font-family:simsun; font-size: 20px;border-top: 0 solid #000000;">东城区望坛棚改项目临时安置补偿费告知单</td>
+            </tr>
+            <tr>
+                <td width="10%" class="tdCls">被拆迁人</td>
+                <td width="11%" class="tdCls" colspan="2">&nbsp;刘士学&nbsp;</td>
+                <td width="12%" class="tdCls" colspan="2">身份证号</td>
+                <td width="17%" class="tdCls" colspan="2">&nbsp;110105193710021815&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="12%" class="tdCls">地址门牌号</td>
+                <td class="tdCls" colspan="2">&nbsp;东城区琉璃井12号&nbsp; </td>
+                <td class="tdCls">使用面积</td>
+                <td class="tdCls">&nbsp;20.38&nbsp;</td>
+                <td class="tdCls">确定建筑面积</td>
+                <td class="tdCls">&nbsp;27.167&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="tdCls" colspan="14"><p class="p1">被拆迁人选择货币补偿方式，并购买本项目奖励房源<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>，
+                    在达到预签生效比例（75%）后于<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时</u>前搬离原房屋，将正式房屋及其全部附属自建房整体移交拆除公司,明细如下： </p></td>
+            </tr>
+        </table>
+        <table class="tablePrint" cellpadding="0" cellspacing="0" style="border-top: 0 solid #000000;">
+            <tr>
+                <td width="7%" class="tdCls">序号</td>
+                <td width="35%" class="tdCls">项目</td>
+                <td width="28%" class="tdCls">发放标准</td>
+                <td width="7%" class="tdCls">数量</td>
+                <td width="23%" class="tdCls rightCls">金额(元)</td>
+            </tr>
+            <tr>
+                <td class="tdCls">1</td>
+                <td class="tdCls">临时安置补偿费</td>
+                <td class="tdCls">150元/月/建筑平方米</td>
+                <td class="tdCls">&nbsp;4&nbsp;</td>
+                <td class="tdCls rightCls">&nbsp;16300.20&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="tdCls" style="text-align: right;padding-right: 5px;" colspan="14">以上款项合计：<span class="sp">&nbsp;32600.40&nbsp;</span>元</td>
+            </tr>
+            <tr>
+                <td class="tdClsq" colspan="2" style="width:49%;">被拆迁人：</td>
+                <td class="tdClsq" colspan="3" style="width:49%;">经办人：</td>
+            </tr>
+            <tr>
+                <td class="tdClsq" colspan="2">日期：</td>
+                <td class="tdClsq" colspan="3">日期：</td>
+            </tr>
+        </table>
+
+        <br/>
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td height="35">
+                    <hr style="BORDER-BOTTOM-STYLE: dotted; BORDER-LEFT-STYLE: dotted; BORDER-RIGHT-STYLE: dotted; BORDER-TOP-STYLE: dotted" color="#000000" size="1" width="650"/>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <table class="tablePrint" cellpadding="0" cellspacing="0" style="margin-top: 5px;">
+            <tr>
+                <td colspan="14" style="text-align: center; font-weight:bold;font-family:simsun; font-size: 20px;border-right: 1px solid #000000;">东城区望坛棚改项目临时安置补偿费告知单</td>
+            </tr>
+            <tr>
+                <td class="tdCls" colspan="14">拆迁编号：XZ(二)[2016]-ZS-Z12-01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;打印日期:2016年06月27日</td>
+            </tr>
+            <tr>
+                <td width="10%" class="tdCls">被拆迁人/承租人</td>
+                <td width="11%" class="tdCls" colspan="2">&nbsp;刘士学&nbsp;</td>
+                <td width="12%" class="tdCls" colspan="2">身份证号</td>
+                <td width="17%" class="tdCls" colspan="2">&nbsp;110105193710021815&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="12%" class="tdCls">地址门牌号</td>
+                <td class="tdCls" colspan="2">&nbsp;东城区忠实里12号&nbsp; </td>
+                <td class="tdCls">使用面积</td>
+                <td class="tdCls">&nbsp;20.38&nbsp;</td>
+                <td class="tdCls">确定建筑面积</td>
+
+                <td class="tdCls">&nbsp;27.167&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="tdCls" colspan="14"><p class="p1">被拆迁人选择货币补偿方式，并购买本项目奖励房源青荷里·南山园小区（朝阳区豆各庄地块），在达到预签生效比例（85%）后于2016年06月11日24时前搬离原房屋，将正式房屋及其全部附属自建房整体移交拆除公司的，其临时安置费发放时间在《房屋拆迁补偿协议》中原4个月的基础上增加2个月，并再奖励2个月(共计8个月），明细如下： </p></td>
+            </tr>
+        </table>
+        <table class="tablePrint" cellpadding="0" cellspacing="0" style="border-top: 0 solid #000000;">
+            <tr>
+                <td width="7%" class="tdCls">序号</td>
+                <td width="35%" class="tdCls">项目</td>
+                <td width="28%" class="tdCls">发放标准</td>
+                <td width="7%" class="tdCls">数量</td>
+                <td width="23%" class="tdCls rightCls">金额(元)</td>
+            </tr>
+            <tr>
+                <td class="tdCls">1</td>
+                <td class="tdCls">临时安置补偿费</td>
+                <td class="tdCls">150元/月/建筑平方米</td>
+                <td class="tdCls">&nbsp;4&nbsp;</td>
+                <td class="tdCls rightCls">&nbsp;16300.20&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="tdCls">2</td>
+                <td class="tdCls">提前搬家增加临时安置补偿费</td>
+                <td class="tdCls">150元/月/建筑平方米</td>
+                <td class="tdCls">&nbsp;2&nbsp;</td>
+                <td class="tdCls rightCls">&nbsp;8150.10&nbsp; </td>
+            </tr>
+
+            <tr>
+                <td class="tdCls">3</td>
+                <td class="tdCls">提前搬家奖励临时安置补偿费</td>
+                <td class="tdCls">150元/月/建筑平方米</td>
+                <td class="tdCls">&nbsp;2&nbsp; </td>
+                <td class="tdCls rightCls">&nbsp;8150.10&nbsp; </td>
+            </tr>
+            <tr>
+                <td class="tdCls" style="text-align: right;padding-right: 5px;" colspan="14">以上款项合计：<span class="sp">&nbsp;32600.40&nbsp;</span>元</td>
+            </tr>
+            <tr>
+                <td class="tdClsq" colspan="2" style="width:49%;">被拆迁人：</td>
+                <td class="tdClsq" colspan="3" style="width:49%;">经办人：</td>
+            </tr>
+            <tr>
+                <td class="tdClsq" colspan="2">日期：</td>
+                <td class="tdClsq" colspan="3">日期：</td>
+            </tr>
+        </table>
+    </center>
+</div>
+</body>
+</html>

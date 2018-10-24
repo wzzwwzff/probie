@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 90%;
+            height: 100%;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        /*@page {*/
+        /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            /*margin: 6.6mm 12.6mm 6.6mm 12.6mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        .printTable tr td {
+            border: 1px solid #000000;
+            text-align: center;
+        }
+
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table td{
+            text-align: center;
+            border: 1px solid #000000;
+            height: 25px;
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+
+</head>
+<body>
+<div class="printContent">
+    <div style="width: 90%;float: left;">
+        <div style="width: 100%;float: left;text-align: right;margin-top: 10%;">合同编号:</div>
+        <div style="float:left;margin-left:10%;width:100%;font-size: 30px;text-align: center;margin-top: 20%;">
+            <b>北京市东城区宝华里危改项目</b><br/>
+            <b>就地安置协议书</b>
+        </div>
+    </div>
+    <div style="width: 100%;float: left;margin-top: 120%;">
+        <div style="width: 100%;float: left;text-align: center;"><b style="font-size: 27px;">北京市东城区宝华里危改项目就地安置协议书</b></div>
+        <div style="float:left;margin-top: 5%;margin-left: 5%;line-height: 27px;width: 100%;">
+            
+            <p>甲 方：北京宝华地产有限公司</p>
+            <p>联系方式：</p>
+        </div>
+        <div style="float:left;margin-top: 5%;margin-left: 5%;line-height: 27px;width: 100%;">
+            <p>乙 方：${family.name?default("")}</p>
+            <p>身份证号：${family.idCard?default("")}</p>
+            <p>被拆迁房屋地址：${family.address?default("")}</p>
+            <p>联系方式：${family.tel?default("")}</p>
+        </div>
+        <div style="float:left;margin-top: 20px;">
+            <p>
+                依据《北京市东城区宝华里危改项目区拆迁补偿安置实施办法》（以下简称“实施办法”）相关规定，经甲乙双方协商一致，达成就地安置协议如下：
+            </p>
+            <p>
+                <b>一、原房屋情况</b>
+            </p>
+            <p>
+                乙方在宝华里危改项目范围内原住址为<span class="span">${family.address?default("")}</span>，有${ctType}正式住房<span class="span">${family.houseNum?default("0")}</span>间（居室），房屋性质<span class="span">${fwcb?default("")}</span>，建筑面积<span class="span">${family.buildArea?default("0")}</span>平方米；有违章建筑<span class="span">${zjfNum?default("0")}</span>处；有正式户口<span class="span">${personListSize?default("0")}</span>人，分别为<span class="span">${personListStr?default("")}</span>。
+            </p>
+            <p>
+                <b>二、安置方式</b>
+            </p>
+            <p>
+                乙方自愿选择就地安置，放弃其他安置方式。
+            </p>
+            <p>
+                <b>三、安置房屋</b>
+            </p>
+            <p>
+                乙方选定的就地安置房屋为：
+            </p>
+            <#if (houseList ? size > 0 ) >
+                <#list houseList as house>
+                    <p>宝华里小区<span class="span">${house.buildNum}</span>号楼（施工楼号）<span class="span">${house.unitNum}</span>单元<span class="span">${house.houseNum}</span>号
+                        <#list jsList as dataDict>
+                            <#if (dataDict.attributeValue = house.houseType)>
+                                <span class="span">${dataDict.attributeName}</span>居室，建筑面积<span class="span">${house.buildArea}</span>平方米。
+                            </#if>
+                        </#list>
+                    </p>
+                </#list>
+            </#if>
+            <p>
+                根据《实施办法》有关规定，乙方同意购买甲方安置乙方的上述房屋。以上房屋楼房楼号为施工号，单元号、房号为暂定，待楼房建成交付使用后，以政府有关管理部门审批确定的楼号、单元号、房号为准。房屋建筑面积均以最终实测建筑面积为准，进行核算。
+            </p>
+            <p>
+                <b>四、权证移交及房屋移交</b>
+            </p>
+            <p>
+                乙方已在    年   月   日将被拆迁房屋权属文件包括但不限于《房屋所有权证》、《公有住宅租赁合同》等（原件）交予甲方，并于    年   月   日将被拆迁房屋及全部相关未登记房屋及附属物（含非本人实际居住使用的未登记房屋及附属物）腾空后完整移交甲方拆除。
+            </p>
+            <p>
+                <b>五、甲乙双方应按照下列各项计算就地安置购房款：</b>
+            </p>
+            <p>
+                1.原建筑面积<span class="span">${family.buildArea?default("0")}</span>㎡，<span class="span">${family.yjzMoney}</span>元。（教师优惠<span class="span">${family.teacherYhMoney?default("0")}</span>%，援藏优惠<span class="span">${family.helpYhMoney?default("0")}</span>%）。
+            </p>
+            <p>
+                2.超出原建筑面积但未超过人均15 ㎡部分<span class="span">${family.wcjzArea}</span>㎡，<span class="span">${family.wcjzMoney}</span>元。
+            </p>
+            <p>
+                3.人均超过部分<span class="span">${family.ccjzArea}</span>㎡，<span class="span">${family.ccjzMoney}</span>元。
+            </p>
+            <p>
+                就地安置房购房款合计<span class="span">${family.gfTotalMoney}</span>元，大写：<span class="span">${moneyUtils(family.gfTotalMoney?default("0"))}</span>。
+            </p>
+        </div>
+    </div>
+    <script>
+        aaa();
+        function aaa() {
+            alert("1");
+        }
+    </script>
+    <div style="float: left;width: 100%;margin-top: 20px;margin-left: 3%;">
+        甲方（盖章）：<br/><br/>
+        乙方（签字并摁手印）：<br/><br/>
+    </div>
+    <div style="float: left;width: 100%;margin-top: 30px;margin-left: 3%;">
+        签订日期：<span class="span"></span>年<span class="span"></span>月<span class="span"></span>日<span class="span"></span>分<span class="span"></span>秒<span class="span"></span>分秒。
+    </div>
+</div>
+</body>
+</html>

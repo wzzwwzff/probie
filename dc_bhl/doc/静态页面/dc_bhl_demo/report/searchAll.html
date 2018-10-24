@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        table {
+            borde: 1px;
+        }
+        #filter {
+            width: 620px;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 12px;
+        }
+
+        #filter dl {
+            padding: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            clear: both;
+            padding: 4px 0;
+        }
+
+        #filter dt, dd {
+            display: block;
+            float: left;
+            width: auto;
+            padding: 0;
+            margin: 3px 0;
+        }
+
+        #filter dt {
+            height: 14px;
+            padding-bottom: 4px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        #filter dd {
+            color: #005AA0;
+            margin-right: 8px;
+        }
+
+        #filter a {
+            cursor: pointer;
+        }
+
+        .seling {
+            background-color: #005AA0;
+            color: #FFFFFF;
+        }
+
+        .seled {
+            background-color: #005AA0;
+            color: #FFFFFF;
+        }
+
+        .myDiv dl dd {
+            font-size: 15px;;
+        }
+        .myDiv dl dt {
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="title"><h4>住宅统计日报表</h4></div>
+<div class="content">
+    <form class="form-inline">
+        <table class="table table-bordered">
+            <tr>
+                <td style="vertical-align: middle;text-align: center;font-weight: bold;width: 10%;">自然情况</td>
+                <td colspan="12" style="padding-right: 800px;">
+                    <div class="myDiv" id="filter" style="padding-left: 0px;width: 700px;">
+                        <dl>
+                            <dt style="width: 170px;">补偿方式（多选）：</dt>
+                            <dd>
+                                <div><a>全部</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>外迁</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>回迁</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>货币</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>产权调换</a></div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt style="width: 170px;">补偿协议签订状态：</dt>
+                            <dd>
+                                <div><a>全部</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>已签订</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>未签订</a></div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt style="width: 170px;padding-left: 60px;">安置选房：</dt>
+                            <dd>
+                                <div><a>全部</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>已选房</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>未选房</a></div>
+                            </dd>
+                        </dl>
+                        <dl style="width: 1600px;height: 20px;">
+                            <dt style="width: 170px;">所属分指（多选）：</dt>
+                            <dd>
+                                <div><a>全部</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第一分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第二分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第三分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第四分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第五分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第六分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第七分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第八分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第九分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十一分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十二分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十三分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十四分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十五分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十六分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十七分指</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>第十八分指</a></div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt style="width: 170px;">所属社区（多选）：</dt>
+                            <dd>
+                                <div><a>全部</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>杨家园社区</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>李村社区</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>民主北街社区</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>琉璃井社区</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>桃杨路社区</a></div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt style="width: 170px;padding-left: 60px;">房屋产别：</dt>
+                            <dd>
+                                <div><a>全部</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>直管公房</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>自管公房</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>文革产</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>私房</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>标准租私房</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>纯自建</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>非宅住人</a></div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt style="width: 170px;padding-left: 60px;">房屋类型：</dt>
+                            <dd>
+                                <div><a>全部</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>平房</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>简易楼</a></div>
+                            </dd>
+                            <dd>
+                                <div><a>成套楼房</a></div>
+                            </dd>
+                        </dl>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: middle;text-align: center;font-weight: bold">房屋情况</td>
+                <td colspan="12">被拆迁人：
+                    <input class="form-control" type="text" size="10">；&nbsp;
+                    身份证号：
+                    <input class="form-control" type="text" size="20">；&nbsp;
+                    地址门牌号：
+                    <input class="form-control" type="text" size="20">；&nbsp;
+                    使用面积：
+                    <input class="form-control" type="text" size="8">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="8">&nbsp;平米；&nbsp;
+                    建筑面积：
+                <input class="form-control" type="text" size="8">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="8">&nbsp;平米
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="6" style="vertical-align: middle;text-align: center;font-weight: bold">附属物情况</td>
+                <td class="fieldName" style="width: 10%">固定电话：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;部
+                </td>
+                <td class="fieldName" style="width: 10%">空调：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;台
+                </td>
+                <td class="fieldName" style="width: 10%">数据终端：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;部
+                </td>
+
+                <td class="fieldName" style="width: 10%">热水器：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;台
+                </td>
+                <td class="fieldName" style="width: 10%">有线电视终端：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;端
+                </td>
+                <td class="fieldName" style="width: 10%">煤改电专用电暖器：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;台
+                </td>
+            </tr>
+        </table>
+        <div style="text-align: center">
+            <button class="btn btn-primary" type="button" onclick="location.href='report131.html';"><i
+                    class="fa fa-search"></i>&nbsp;查询
+            </button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //选中filter下的所有a标签，为其添加hover方法，该方法有两个参数，分别是鼠标移上和移开所执行的函数。
+        $("#filter a").hover(
+                function () {
+                    $(this).addClass("seling");
+                },
+                function () {
+                    $(this).removeClass("seling");
+                }
+        );
+
+
+        //选中filter下所有的dt标签，并且为dt标签后面的第一个dd标签下的a标签添加样式seled。(感叹jquery的强大)
+        $("#filter dt+dd a").attr("class", "seled");
+        /*注意：这儿应该是设置(attr)样式，而不是添加样式(addClass)，
+         不然后面通过$("#filter a[class='seled']")访问不到class样式为seled的a标签。*/
+
+        //为filter下的所有a标签添加单击事件
+        $("#filter a").click(function () {
+            $(this).parents("dl").children("dd").each(function () {
+                //下面三种方式效果相同（第三种写法的内部就是调用了find()函数，所以，第二、三种方法是等价的。）
+                //$(this).children("div").children("a").removeClass("seled");
+                //$(this).find("a").removeClass("seled");
+                $('a', this).removeClass("seled");
+            });
+
+            $(this).attr("class", "seled");
+
+//            alert(RetSelecteds()); //返回选中结果
+        });
+//        alert(RetSelecteds()); //返回选中结果
+    });
+
+    function RetSelecteds() {
+        var result = "";
+        $("#filter a[class='seled']").each(function () {
+            result += $(this).html() + "\n";
+        });
+        return result;
+    }
+</script>
+</body>
+</html>

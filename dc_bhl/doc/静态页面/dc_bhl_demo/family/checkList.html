@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>住宅信息确认</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="title"><h4>住宅信息确认</h4></div>
+<div class="content">
+    <div class="search_content">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">分指</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">一标</option>
+                        <option value="">二标</option>
+                        <option value="">三标</option>
+                        <option value="">四标</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">组别</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">一组</option>
+                        <option value="">二组</option>
+                        <option value="">三组</option>
+                        <option value="">四组</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">产别</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">直管公房</option>
+                        <option value="">单位自管</option>
+                        <option value="">文革产</option>
+                        <option value="">私房</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-addon">房屋类型</div>
+                    <select class="form-control">
+                        <option value="">--全部--</option>
+                        <option value="">成套</option>
+                        <option value="">简易楼</option>
+                        <option value="">平房</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="input-group-addon">被拆迁人</div>
+                <input class="form-control" type="text">
+            </div>
+            <div class="input-group">
+                <div class="input-group-addon">地址门牌</div>
+                <input class="form-control" type="text">
+            </div>
+            <div class="input-group">
+                <div class="input-group-addon">确认状态</div>
+                <select class="form-control">
+                    <option value="">--全部--</option>
+                    <option value="">已确认</option>
+                    <option value="">未确认</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</button>
+        </form>
+    </div>
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+            <th class="text-center" width="5%">序号</th>
+            <th class="text-center">分指</th>
+            <th class="text-center">组别</th>
+            <th class="text-center">编号</th>
+            <th class="text-center">被拆迁人</th>
+            <th class="text-center">地址门牌</th>
+            <th class="text-center">建筑面积（平米）</th>
+            <th class="text-center">产别</th>
+            <th class="text-center">房屋类型</th>
+            <th class="text-center">确认状态</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <!-- json 形式数据添加 -->
+        <tbody>
+        </tbody>
+    </table>
+    <div class="col-sm-4 text-left">
+        当前第1页，共13页，共条200记录
+    </div>
+    <div class="col-sm-8 text-right">
+        <div class="" id="editable_paginate">
+            <ul class="pagination">
+                <li class="disabled"><a href="#">首 页</a></li>
+                <li class="disabled"><a href="#">上一页</a></li>
+                <li class="active"><a href="?_pageNo=1&_orderField=&_orderType=desc&">1</a></li>
+                <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">2</a></li>
+                <li><a href="?_pageNo=3&_orderField=&_orderType=desc&">3</a></li>
+                <li><a href="?_pageNo=4&_orderField=&_orderType=desc&">4</a></li>
+                <li><a href="?_pageNo=5&_orderField=&_orderType=desc&">5</a></li>
+                <li><a href="?_pageNo=6&_orderField=&_orderType=desc&">6</a></li>
+                <li><a href="?_pageNo=7&_orderField=&_orderType=desc&">7</a></li>
+                <li><a href="?_pageNo=8&_orderField=&_orderType=desc&">8</a></li>
+                <li><a href="?_pageNo=9&_orderField=&_orderType=desc&">9</a></li>
+                <li><a href="?_pageNo=10&_orderField=&_orderType=desc&">10</a></li>
+                <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">下一页</a></li>
+                <li><a href="?_pageNo=1334&_orderField=&_orderType=desc&">末 页</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var trHtml = "";
+        var viewBtn = "<a href='view.html'><i class='a fa-big fa-eye'></i>查看</a>";
+        var checkBtn = "<a href='javascript:checkData();'><i class='a fa-big fa-check'></i>确认</a>";
+        for (var i = 0, j = json_data_family.length; i < j; i++) {
+            var data = json_data_family[i];
+            var fzState = "<font color='red'>未确认</font>";
+            var con = viewBtn + "&nbsp;&nbsp;" + checkBtn;
+            if (i == 1 || i == 4) {//锁定状态
+                fzState = "<font color='green'>已确认</font>";
+                con = viewBtn;
+            }
+            trHtml += "<tr class='text-center'>";
+            trHtml += "<td>" + (i + 1) + "</td>";
+            trHtml += "<td>" + data.fz + "</td>";
+            trHtml += "<td>" + data.group + "</td>";
+            trHtml += "<td>" + data.code + "</td>";
+            trHtml += "<td>" + data.name + "</td>";
+            trHtml += "<td class='text-left'>" + data.fwzl + "</td>";
+            trHtml += "<td>" + data.area + "</td>";
+            trHtml += "<td>" + data.houseSource + "</td>";
+            trHtml += "<td>" + data.houseType + "</td>";
+            trHtml += "<td>" + fzState + "</td>";
+            trHtml += "<td>" + con + "</td>";
+            trHtml += "</tr>";
+        }
+        $(".table > tbody").append(trHtml);
+    });
+    function checkData() {
+        if (confirm("数据确认通过吗？")) {
+
+        }
+    }
+</script>
+</body>
+</html>

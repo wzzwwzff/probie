@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分类签约比例公示</title>
+    <meta http-equiv="refresh" content="5">
+    <LINK href="styles/styles.css" type="text/css" rel="stylesheet"/>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/plugin/highcharts/highcharts.js"></script>
+    <style>
+        html, body {
+            font-family: '微软雅黑';
+        }
+
+        .chart_content div {
+            float: left;
+            width: 33%;
+            height: 480px;
+            margin-top: 15px;
+        }
+        .chart_content1 div {
+            float: left;
+            width: 48%;
+            height: 480px;
+            margin-top: 15px;
+        }
+        .chart_content1 .div_ul {
+            list-style: none;
+
+        }
+
+        .chart_content1 .div_ul li {
+            line-height: 60px;
+            font-weight: bold;
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center;font-size: 45px;font-weight: bold;">东城区宝华里危改项目房屋分类签约情况</div>
+<div style="position: absolute;top: 10px;left: 20px;font-size: 25px;font-weight: bold;text-align: center;">2016年07月23日<br/><span id="time1"></span></div>
+<script>
+    var now = new Date();
+    function createtime()
+    {
+
+        var grt= new Date("7/31/2016 20:00:00");
+
+        now.setTime(now.getTime()+250);
+        days = (grt - now) / 1000 / 60 / 60 / 24;
+        dnum = Math.floor(days);
+        hours = (grt - now) / 1000 / 60 / 60 - (24 * dnum);
+        hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;}
+        minutes = (grt - now) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes);
+        if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (grt - now) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds);
+        if(String(snum).length ==1 ){snum = "0" + snum;}
+
+//        document.getElementById(timeDate).innerHTML = dnum;
+        document.getElementById("time1").innerHTML = hnum + "时" + mnum + "分" + snum + "秒";
+    }
+    setInterval("createtime()",250);
+</script>
+<div style="width: 100%;" class="chart_content">
+    <div id="chart1"></div>
+    <div id="chart2"></div>
+    <div id="chart3"></div>
+</div>
+<div style="width: 100%;text-align: center" class="chart_content1">
+    <div id="chart4"></div>
+    <div id="chart5" style="width: 460px;margin-left: 300px;"></div>
+    <!--<div style="background-color: #FFFF37;padding-top: 10px;">-->
+        <!--<ul class="div_ul">-->
+            <!--<li>2016年08月02日 星期二</li>-->
+            <!--<li>距离奖励期结束还有28天12小时54分钟15秒</li>-->
+            <!--<li>在总户数5560户中，住宅3800户，占51%，非住宅2760户，占比49%；</li>-->
+            <!--<li>平房478户，占比37%，成套楼490户，占比38%，简易楼300户，占比25%；</li>-->
+            <!--<li>在住宅3800户中，私房2015户，占59%，公房1785户，占41%；</li>-->
+            <!--<li>在公房800户中，自管公房350户，占45%,直管公房450户，占55%；</li>-->
+            <!--<li></li>-->
+        <!--</ul>-->
+    <!--</div>-->
+</div>
+<script>
+    $(function () {
+        $('#chart1').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '住宅/非住宅签约比例',
+                x:0,
+                y:20,
+                style: {
+                    color: "#000",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                }
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['住宅', '非住宅']
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [300, 214],
+            }, {
+                name: '未签约',
+                data: [1590, 810],
+            }]
+        });
+        $('#chart2').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '私房/公房签约比例',
+                x:0,
+                y:20,
+                style: {
+                    color: "#000",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                }
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['私房', '公房']
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [300, 125],
+            }, {
+                name: '未签约',
+                data: [790, 675],
+            }]
+        });
+        $('#chart3').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '直管公房/自管公房签约比例',
+                x:0,
+                y:20,
+                style: {
+                    color: "#000",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                }
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['直管公房', '资管公房']
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [35, 125],
+            }, {
+                name: '未签约',
+                data: [315, 325],
+            }]
+        });
+        $('#chart4').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '平房/成套楼/简易楼签约比例',
+                x:0,
+                y:20,
+                style: {
+                    color: "#000",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                }
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['平房', '成套楼','简易楼']
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [189, 150,100],
+            }, {
+                name: '未签约',
+                data: [289, 340,200],
+            }]
+        });
+        $('#chart5').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '整体签约情况',
+                x:0,
+                y:20,
+                style: {
+                    color: "#000",
+                    fontSize: 30,
+                    fontWeight: "bold",
+                }
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['整体',
+                ]
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [4500],
+            }, {
+                name: '未签约',
+                data: [5560],
+            }]
+        });
+    });
+</script>
+</body>
+</html>

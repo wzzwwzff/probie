@@ -1,0 +1,409 @@
+package com.app.cq.utils;
+
+import com.app.common.service.DataDictService;
+import com.app.cq.model.Family;
+import com.app.cq.service.FamilyService;
+import com.google.common.collect.Maps;
+import com.sqds.utils.DateUtils;
+import com.sqds.web.Servlets;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+
+public class CalUtils {
+    private static DataDictService dataDictService;
+    private static FamilyService familyService;
+    private static Map<String, String> bzMap = Maps.newHashMap();
+    private static Boolean ifReward = false;
+    private static Boolean ifOneReward = false;
+
+
+    /**
+     * 计算方法
+     */
+    public synchronized static void calc(Family family,String typeAccount) {
+        WebApplicationContext webApplicationContext = Servlets.getWebApplicationContext();
+        familyService = (FamilyService) webApplicationContext.getBean(FamilyService.class);
+        dataDictService = (DataDictService) webApplicationContext.getBean(DataDictService.class);
+        bzMap = dataDictService.getMapByParentAttributeNameForName("协议费用标准");
+        if (family == null) {
+            return;
+        }
+
+        ifReward = rewardYes(family);  //是否在奖励期内签约
+        ifOneReward = oneRewardYes(family);  //是否在第一个奖励期内签约
+
+        //一、补偿
+        //计算搬迁费
+        calBqMoney(family);
+        //计算移机补助费
+        calYjMoney(family);
+
+        //二、补助
+        //计算生活困难补助费（残疾，低保）
+        calShknMoney(family);
+        //计算住宅房屋专项补助费
+        calSfpfMoney(family);
+        //计算综合困难补助费
+        calZhknMoney(family);
+        //计算外迁奖励房源购房补助费
+        calWqgfMoney(family);
+        //计算货币补偿综合补助费
+        calHbbcMoney(family,typeAccount);
+
+        //三、奖励
+        //计算签约速度奖
+        calQysdMoney(family);
+        if (family.getSignDate() != null){//已签约家庭
+            //计算工程配合奖
+            calGcphMoney(family);
+        }
+
+//        //计算外迁奖励
+//        calWqMoney(family);
+
+        familyService.save(family);
+    }
+
+
+    /**
+     * 计算搬迁费
+     * @param family
+     */
+    private static void calBqMoney(Family family) {
+        BigDecimal bqFee = new BigDecimal(bzMap.get("搬迁费"));
+        BigDecimal bqMoney = BigDecimalUtils.getBigAndBigMul(bqFee, family.getBuildArea());
+        family.setBqMoney(bqMoney);
+    }
+
+    /**
+     * 计算综合困难补助费
+     * @param family
+     */
+    private static void calZhknMoney(Family family) {
+        BigDecimal fee = new BigDecimal(0);
+        if (family.getHouseStyle() == 1){
+            fee = new BigDecimal(bzMap.get("成套住宅房屋综合困难补助"));
+        }
+        if (family.getHouseStyle() == 2 || family.getHouseStyle() == 3){
+            fee = new BigDecimal(bzMap.get("非成套住宅房屋综合困难补助"));
+        }
+        family.setZhknMoney(fee);
+    }
+
+    /**
+     * 计算外迁奖励房源购房补助费
+     * @param family
+     */
+    private static void calWqgfMoney(Family family) {
+        BigDecimal oneArea = new BigDecimal(bzMap.get("外迁奖励房源一居室面积"));
+        BigDecimal twoArea = new BigDecimal(bzMap.get("外迁奖励房源二居室面积"));
+        BigDecimal threeArea = new BigDecimal(bzMap.get("外迁奖励房源三居室面积"));
+        BigDecimal wqjlFee = new BigDecimal(bzMap.get("外迁奖励房源购房补助"));
+
+        BigDecimal hbbcMoney = new BigDecimal(0);
+            String azfy = "";
+            BigDecimal familyBuildArea = family.getBuildArea();
+            //非成套
+            if (family.getHouseStyle() == 2 || family.getHouseStyle() == 3){
+                if (familyBuildArea.compareTo(new BigDecimal(20)) == -1){
+                    azfy = ",二居室或一居室";
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,twoArea);
+                }else if ((familyBuildArea.compareTo(new BigDecimal(20)) >= 0) && (familyBuildArea.compareTo(new BigDecimal(30)) == -1)){
+                    azfy = "三居室或二居室或一居室";
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,twoArea);
+                }else if ((familyBuildArea.compareTo(new BigDecimal(30)) >= 0 ) && (familyBuildArea.compareTo(new BigDecimal(40)) == -1)){
+                    azfy = ",三居室+一居室或二居室+二居室";
+                    BigDecimal bigAndIntMul = BigDecimalUtils.getBigAndIntMul(twoArea, 2);//选2+2
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,bigAndIntMul);
+                }else if (familyBuildArea.compareTo(new BigDecimal(40)) >= 0 && familyBuildArea.compareTo(new BigDecimal(50)) == -1){
+                    azfy = ",三居室+二居室";
+                    BigDecimal bigAndBigSub = BigDecimalUtils.getBigAndBigSub(threeArea, twoArea);
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,bigAndBigSub);
+                }else if (familyBuildArea.compareTo(new BigDecimal(50)) >= 0){
+                    azfy = ",三居室+三居室";
+                    BigDecimal bigAndIntMul = BigDecimalUtils.getBigAndIntMul(threeArea, 2);
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,bigAndIntMul);
+                }
+            }else if (family.getHouseStyle() == 1){//成套
+                if (familyBuildArea.compareTo(new BigDecimal(45)) == -1){
+                    azfy = ",二居室或一居室";
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,twoArea);
+                }else if (familyBuildArea.compareTo(new BigDecimal(45)) >= 0 && familyBuildArea.compareTo(new BigDecimal(60)) == -1){
+                    azfy = ",三居室或二居室或一居室";
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,threeArea);
+                }else if (familyBuildArea.compareTo(new BigDecimal(60)) >= 0 && familyBuildArea.compareTo(new BigDecimal(75)) == -1){
+                    azfy = ",三居室+一居室或二居室+二居室";
+                    BigDecimal bigAndBigSub = BigDecimalUtils.getBigAndBigSub(twoArea, twoArea);
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,bigAndBigSub);
+                }else if (familyBuildArea.compareTo(new BigDecimal(75)) >= 0 && familyBuildArea.compareTo(new BigDecimal(80)) == -1){
+                    azfy = ",三居室+二居室";
+                    BigDecimal bigAndBigSub = BigDecimalUtils.getBigAndBigSub(twoArea, threeArea);
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,bigAndBigSub);
+                }else if (familyBuildArea.compareTo(new BigDecimal(80)) >= 0){
+                    azfy = ",三居室+三居室";
+                    BigDecimal bigAndBigSub = BigDecimalUtils.getBigAndBigSub(threeArea, threeArea);
+                    hbbcMoney = BigDecimalUtils.getBigAndBigMul(wqjlFee,bigAndBigSub);
+                }
+            }
+        family.setYdjlfyMoney(hbbcMoney);
+    }
+
+
+    /**
+     * 计算货币补偿综合补助费
+     * @param family
+     */
+    private static void calHbbcMoney(Family family,String typeAccount) {
+        BigDecimal fctwq = new BigDecimal(bzMap.get("非成套外迁补助系数"));
+        BigDecimal fctfwq = new BigDecimal(bzMap.get("非成套非外迁补助系数"));
+        BigDecimal ctwq = new BigDecimal(bzMap.get("成套外迁补助系数"));
+        BigDecimal ctfwq = new BigDecimal(bzMap.get("成套非外迁补助系数"));
+        BigDecimal bzPrice = new BigDecimal(bzMap.get("标准房屋市场价格"));
+
+        BigDecimal hbbc = new BigDecimal(0);
+
+        if (family.getHouseStyle() == 2 || family.getHouseStyle() == 3){//非成套
+            if (family.getBcType() != null){
+                if (family.getBcType() == 3){//外迁房源
+                    hbbc = BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigSub(bzPrice,family.getHouseNewMoney())),family.getBuildArea())),fctwq);
+                }
+                if (family.getBcType() == 2){//非外迁房源
+                    hbbc = BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigSub(bzPrice,family.getHouseNewMoney())),family.getBuildArea())),fctfwq);
+                }
+            }
+            if (typeAccount != null){//参考单打印进入
+                if (typeAccount.equals("out")){
+                    hbbc = BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigSub(bzPrice,family.getHouseNewMoney())),family.getBuildArea())),fctwq);
+                }
+                if (typeAccount.equals("money")){//非外迁房源
+                    hbbc = BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigSub(bzPrice,family.getHouseNewMoney())),family.getBuildArea())),fctfwq);
+                }
+            }
+        }
+
+        if (family.getHouseStyle() == 1){//成套
+            if (family.getBcType() != null){
+                if (family.getBcType() == 3){//外迁房源
+                    hbbc = BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigSub(bzPrice,family.getHouseNewMoney())),family.getBuildArea())),ctwq);
+                }
+                if (family.getBcType() == 2){//非外迁房源
+                    hbbc = BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigSub(bzPrice,family.getHouseNewMoney())),family.getBuildArea())),ctfwq);
+                }
+            }
+            if (typeAccount != null){//参考单打印进入
+                if (typeAccount.equals("out")){
+                    hbbc = BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigSub(bzPrice,family.getHouseNewMoney())),family.getBuildArea())),ctwq);
+                }
+                if (typeAccount.equals("money")){//非外迁房源
+                    hbbc = BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigMul((BigDecimalUtils.getBigAndBigSub(bzPrice,family.getHouseNewMoney())),family.getBuildArea())),ctfwq);
+                }
+            }
+        }
+        family.setHbbcMoney(hbbc);
+    }
+
+
+    /**
+     * 计算住宅房屋专项补助费
+     * @param family
+     */
+    private static void calSfpfMoney(Family family) {
+        BigDecimal sfpfFee = new BigDecimal(0);
+        BigDecimal houseArea = family.getBuildArea();
+
+        if (family.getHouseType() == 4 && family.getHouseStyle() == 3){
+            //从数据字典中取出单价费用
+            BigDecimal sfpfMoney = new BigDecimal(bzMap.get("私房平房补助"));
+            sfpfFee = BigDecimalUtils.getBigAndBigMul(sfpfMoney, houseArea);
+        }
+
+        if (family.getHouseStyle() == 1){
+            //从数据字典中取出单价费用
+            BigDecimal ctMoney = new BigDecimal(bzMap.get("成套住宅补助"));
+            sfpfFee = BigDecimalUtils.getBigAndBigMul(ctMoney, houseArea);
+        }
+
+        family.setSfpfFee(sfpfFee);
+    }
+
+//
+//    /**
+//     * 计算外迁奖励
+//     * @param family
+//     */
+//    private static void calWqMoney(Family family) {
+//        //从数据字典中取出单价费用
+//        BigDecimal wqMoney = new BigDecimal(bzMap.get("外迁奖励"));
+//        BigDecimal houseArea = family.getBuildArea();
+//        if (houseArea.compareTo(new BigDecimal(20)) < 0){
+//            houseArea = new BigDecimal(20);
+//        }
+//        BigDecimal wqFee = BigDecimalUtils.getBigAndBigMul(wqMoney, houseArea);
+//
+//        family.setWqFee(wqFee);
+//    }
+
+
+    /**
+     * 计算签约速度费
+     * @param family
+     */
+    private static void calQysdMoney(Family family) {
+        //从数据字典中取出单价费用
+        BigDecimal firstMoney = new BigDecimal(bzMap.get("第一签约速度奖"));
+        BigDecimal secondMoney = new BigDecimal(bzMap.get("第二签约速度奖"));
+        BigDecimal qysdMoney = firstMoney;
+
+        //第一奖励期外
+        if (!ifOneReward){
+            qysdMoney = secondMoney;
+        }
+
+        //奖励期外
+        if (!ifReward){
+            qysdMoney = new BigDecimal(0);
+        }
+
+        family.setQysdFee(qysdMoney);
+    }
+
+    /**
+     * 计算工程配合奖
+     * @param family
+     */
+    private static void calGcphMoney(Family family) {
+        BigDecimal gcphFee = new BigDecimal(bzMap.get("工程配合奖"));
+        Map<String, String> jlqMap = dataDictService.getMapByParentAttributeNameForName("奖励期时间");
+        String endDate = jlqMap.get("工程配合奖结束时间");
+        Date signDate = family.getSignDate() != null ? family.getSignDate() : new Date();
+
+        BigDecimal gcphMoney = new BigDecimal(0);
+
+        Calendar endDateC = Calendar.getInstance();
+        Calendar signDateC = Calendar.getInstance();
+
+        endDateC.setTime(DateUtils.string2date(endDate));
+        signDateC.setTime(signDate);
+
+        BigDecimal buildArea = family.getBuildArea();
+        if (signDateC.compareTo(endDateC) < 0) {//工程配合奖励期内
+            if ((family.getHouseStyle() == 2 || family.getHouseStyle() == 3) && buildArea.compareTo(new BigDecimal(20)) == -1){//非成套且建筑面积小于20
+                buildArea = new BigDecimal(20);
+            }
+            if (family.getHouseStyle() == 1 && buildArea.compareTo(new BigDecimal(45)) == -1){//成套且建筑面积小于45
+                buildArea = new BigDecimal(45);
+            }
+        } else {
+            buildArea = new BigDecimal(0);
+        }
+
+        gcphMoney = BigDecimalUtils.getBigAndBigMul(gcphFee,buildArea);
+        family.setGcphMoney(gcphMoney);
+    }
+
+
+    /**
+     * 计算生活困难补助费
+     * @param family
+     */
+    private static void calShknMoney(Family family) {
+        //从数据字典中取出单价费用
+        BigDecimal dbMoney = new BigDecimal(bzMap.get("低保补助费"));
+        BigDecimal cjMoney = new BigDecimal(bzMap.get("残疾补助费"));
+
+        BigDecimal dbFee = BigDecimalUtils.getBigAndIntMul(dbMoney, family.getDbNum());
+        BigDecimal cjFee = BigDecimalUtils.getBigAndIntMul(cjMoney,family.getCjNum());
+        BigDecimal shknFee = BigDecimalUtils.getSum(dbFee, cjFee);//生活苦难补助费
+
+        family.setDbFee(dbFee);
+        family.setCjFee(cjFee);
+        family.setShknFee(shknFee);
+    }
+
+
+    /**
+     * 计算移机补助费
+     * @param family
+     */
+    private static void calYjMoney(Family family) {
+        //从数据字典中取出各移机的单价费用
+        BigDecimal ktMoney = new BigDecimal(bzMap.get("空调移机费"));
+        BigDecimal rsqMoney = new BigDecimal(bzMap.get("热水器移机费"));
+        BigDecimal yxMoney = new BigDecimal(bzMap.get("有线电视安装费"));
+        BigDecimal kdMoney = new BigDecimal(bzMap.get("数据终端安装费"));//宽带费
+        BigDecimal dhMoney = new BigDecimal(bzMap.get("固定电话移机费"));
+        BigDecimal dnqMoney = new BigDecimal(bzMap.get("煤改电专用电暖器"));
+
+        BigDecimal ktFee = BigDecimalUtils.getBigAndIntMul(ktMoney, family.getKtNum());
+        BigDecimal rsqFee = BigDecimalUtils.getBigAndIntMul(rsqMoney,family.getRsqNum());
+        BigDecimal yxFee = BigDecimalUtils.getBigAndIntMul(yxMoney,family.getYxNum());
+        BigDecimal kdFee = BigDecimalUtils.getBigAndIntMul(kdMoney,family.getKdNum());
+        BigDecimal dhFee = BigDecimalUtils.getBigAndIntMul(dhMoney,family.getDhNum());
+        BigDecimal dnqFee = BigDecimalUtils.getBigAndIntMul(dnqMoney,family.getDnqNum());
+        BigDecimal yjMoney = BigDecimalUtils.getSum(ktFee, rsqFee, yxFee, kdFee, dhFee);
+
+        family.setYjMoney(yjMoney);
+        family.setDnqFee(dnqFee);
+        family.setKtFee(ktFee);
+        family.setRsqFee(rsqFee);
+        family.setTvFee(yxFee);
+        family.setKdFee(kdFee);
+        family.setDhFee(dhFee);
+    }
+
+
+    /**
+     * 判断是否是奖励期内
+     *
+     * @param family
+     */
+    public static boolean rewardYes(Family family) {
+        //判断是否为奖励期内
+        Map<String, String> jlqMap = dataDictService.getMapByParentAttributeNameForName("奖励期时间");
+        String endDate = jlqMap.get("签约结束时间");
+        Date signDate = family.getSignDate() != null ? family.getSignDate() : new Date();
+
+        Calendar endDateC = Calendar.getInstance();
+        Calendar signDateC = Calendar.getInstance();
+
+        endDateC.setTime(DateUtils.string2date(endDate));
+        signDateC.setTime(DateUtils.string2date(DateUtils.date2string(signDate)));
+
+        if (signDateC.compareTo(endDateC) < 0) {//奖励期内
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * 判断是否是第一奖励期60日（含）内
+     *
+     * @param family
+     */
+    public static boolean oneRewardYes(Family family) {
+        //判断是否为奖励期内
+        Map<String, String> jlqMap = dataDictService.getMapByParentAttributeNameForName("奖励期时间");
+        String endDate = jlqMap.get("第一奖励期结束时间");
+        Date signDate = family.getSignDate() != null ? family.getSignDate() : new Date();
+
+        Calendar endDateC = Calendar.getInstance();
+        Calendar signDateC = Calendar.getInstance();
+
+        endDateC.setTime(DateUtils.string2date(endDate));
+        signDateC.setTime(signDate);
+
+        if (signDateC.compareTo(endDateC) <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+}

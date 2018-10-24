@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>打印</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: '宋体';
+        }
+
+        .content {
+            width: 632px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .content .title {
+            text-align: center;
+            line-height: 32px;
+            height: 32px;
+            font-size: 32px;
+            font-weight: bold;
+            padding-bottom: 20px;
+            padding-top: 30px;
+        }
+
+        .content .title1 {
+            text-align: center;
+            line-height: 32px;
+            height: 32px;
+            font-size: 18px;
+        }
+
+        .content .leftTitle {
+            text-align: left;
+            text-indent: 2em;
+            line-height: 70px;
+            height: 70px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .content .leftTitle2 {
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+            height: 30px;
+            font-weight: bold;
+        }
+
+        .content .left {
+            text-align: left;
+            text-indent: 2em;
+            line-height: 28px;
+        }
+
+        .content .left1 {
+            text-align: left;
+            text-indent: 2em;
+            line-height: 45px;
+            font-size: 17px;
+        }
+
+        .content .pCls {
+            border: 1px solid #000000;
+        }
+
+        .content .n1 {
+            text-align: center;
+        }
+
+        .content .right {
+            text-align: right;
+            line-height: 32px;
+        }
+
+        .content .hr {
+            height: 1px;
+            border: none;
+            border-top: 1px dashed #000000;
+            margin: 20px 0 20px 0;
+        }
+
+        .content u {
+            padding: 0 5px 0 5px;
+        }
+
+        .contentbr {
+            clear: both;
+        }
+
+        .content .u1 {
+            font-weight: bold;
+            font-family: '黑体';
+        }
+
+        .content .table1 {
+            width: 98%;
+            border-top: 1px solid #000000;
+            border-left: 1px solid #000000;
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+        }
+
+        .content .table1 tr {
+            page-break-inside: avoid;
+        }
+
+        .content .table1 td {
+            text-align: center;
+            height: 25px;
+            line-height: 25px;
+        }
+
+        .content .table1 .td_top_1 {
+            border-bottom: 1px solid #000000;
+            border-right: 1px solid #000000;
+        }
+
+        .content .table1 .td_top_2 {
+            border-top: 0.2mm black solid;
+            border-right: 0.1mm black solid;
+            border-bottom: 0.1mm black solid;
+            border-left: 0.1mm black solid;
+        }
+
+        .content .table1 .td_top_3 {
+            border-top: 0.2mm black solid;
+            border-right: 0.2mm black solid;
+            border-bottom: 0.1mm black solid;
+            border-left: 0.1mm black solid;
+        }
+
+        .content .table1 .td_content_1 {
+            border-bottom: 1px solid #000000;
+            border-right: 1px solid #000000;
+        }
+
+        .content .table1 .td_content_2 {
+            border-bottom: 1px solid #000000;
+            border-right: 1px solid #000000;
+            text-align: right;
+            padding-right: 5px;
+        }
+
+        .content .table1 .td_content_3 {
+            border-top: 0.1mm black solid;
+            border-right: 0.2mm black solid;
+            border-bottom: 0.1mm black solid;
+            border-left: 0.1mm black solid;
+        }
+
+        .content .table1 .td_content_4 {
+            border-top: 0.1mm black solid;
+            border-right: 0.2mm black solid;
+            border-bottom: 0.1mm black solid;
+            border-left: 0.2mm black solid;
+        }
+
+        .content .table1 .td_bottom {
+            border-top: 0.1mm black solid;
+            border-right: 0.2mm black solid;
+            border-bottom: 0.3mm black solid;
+            border-left: 0.2mm black solid;
+        }
+
+        .contentLeft {
+            width: 50px;
+        }
+
+        .contentLeft p {
+            text-align: left;
+        }
+    </style>
+    <script type="text/javascript">
+        function toPrint() {
+        }
+    </script>
+</head>
+<body>
+<div class="title">
+    <h4>【谭怀起】安置协议</h4>
+    <div style="position: absolute;top: 5px;right: 10px;">
+        <button class="btn btn-primary" onclick="javascript:toPrint()"><i class="fa fa-print"></i>&nbsp;打印</button>
+        <button type="button" class="btn btn-white" onclick="location.href='listCompact.html'">返回</button>
+    </div>
+</div>
+<center>
+        <div class="content">
+            <p style="margin-top: 30px;font-size: 32px;font-weight: bold;">东城区宝华里项目</p>
+            <p style="font-size: 32px;font-weight: bold;">房屋安置协议</p>
+            <p class="leftTitle" style="margin-top: 120px;">甲方：<u>&nbsp;北京市东城区人民政府房屋拆迁办公室&nbsp;</u></p>
+            <p class="leftTitle">乙方： <u>&nbsp;高洪彩&nbsp;</u></p>
+            <p class="leftTitle">身份证件号码: <u>&nbsp;110104195809142118&nbsp;</u></p>
+            <p class="leftTitle">被拆迁房屋地址: <u>&nbsp;东城区桃杨路社区55号&nbsp;</u></p>
+            <p class="leftTitle">房屋证件号码: <u>&nbsp;╱&nbsp;</u></p>
+            <p class="leftTitle">委托代理人: <u>&nbsp;╱&nbsp;</u></p>
+            <p class="leftTitle">委托代理人身份证件号码: <u>&nbsp;╱&nbsp;</u></p>
+            <p class="leftTitle">丙方： <u>&nbsp;北京市东城区房屋拆迁事务中心&nbsp;</u></p>
+
+
+            <p class="pageBreak">&nbsp;</p>
+
+
+            <p class="leftTitle2">第一条&nbsp;&nbsp;（补充协议依据说明）</p>
+            <p class="left">根据《东城宝华里项目房屋安置协议》(以下简称原协议)，结合乙方选房及组团预签协议比例情况，双方签订如下补充协议。</p>
+            <p class="leftTitle2">第二条&nbsp;&nbsp;（房屋的最终补偿价值）</p>
+            <p class="left">被拆迁房屋经<u>&nbsp;北京华源龙泰房地产土地资产评估有限公司&nbsp;</u>评估，被拆迁房屋的评估基准价格调整为人民币<u>&nbsp;49466.00&nbsp;</u>元；房地产市场评估总价为<u>&nbsp;1313961.00&nbsp;</u>元。其中被拆迁房屋重置成新价为<u>&nbsp;13957.00&nbsp;</u>元，被拆迁房屋附属物价为<u>&nbsp;1213.00&nbsp;</u>元。</p>
+            <p class="leftTitle2">第三条&nbsp;&nbsp;（项目最终的专项补助）</p>
+            <p class="left">本项目专项补助为<u>&nbsp;395629.07&nbsp;</u>元，计算公式如下：<u>&nbsp;评估基准价格（49466.00）*40%*最终认定的建筑面积（19.995） &nbsp;</u>。</p>
+
+
+            <p class="leftTitle2">第四条&nbsp;&nbsp;（最终的其他各类奖励、补助及补偿费用，不含增加的临时安置补偿费）</p>
+            <table class="table1" cellpadding="0" cellspacing="0" width="650px;">
+                <tr>
+                    <td class="td_top_1">序号</td>
+                    <td class="td_top_1">补助补偿名称</td>
+                    <td class="td_top_1">费用标准</td>
+                    <td class="td_top_1">数量</td>
+                    <td class="td_top_1">金额（元）</td>
+                </tr>
+                <tr>
+                    <td class="td_content_1">1</td>
+                    <td class="td_content_1">速签奖励</td>
+                    <td class="td_content_1">&nbsp;&nbsp;╱&nbsp;&nbsp;</td>
+                    <td class="td_content_1">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;80000.00&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="td_content_1">2</td>
+                    <td class="td_content_1">签约比例奖</td>
+                    <td class="td_content_1">&nbsp;&nbsp;╱&nbsp;&nbsp;</td>
+                    <td class="td_content_1">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;110000.00&nbsp;&nbsp;</td>
+                </tr>
+
+
+                <tr>
+                    <td class="td_content_1">3</td>
+                    <td class="td_content_1">大病人员补助</td>
+                    <td class="td_content_1">&nbsp;&nbsp;40000元/证&nbsp;&nbsp;</td>
+                    <td class="td_content_1">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;40000.00&nbsp;&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td class="td_content_1">4</td>
+                    <td class="td_content_1">搬家补助费</td>
+                    <td class="td_content_1">40元/平方米</td>
+                    <td class="td_content_1">&nbsp;&nbsp;19.995&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;799.80&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="td_content_1">5</td>
+                    <td class="td_content_1">空调移机费</td>
+                    <td class="td_content_1">400元/台</td>
+                    <td class="td_content_1">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;400.00&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="td_content_1">6</td>
+                    <td class="td_content_1">热水器移机费</td>
+                    <td class="td_content_1">400元/台</td>
+                    <td class="td_content_1">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;400.00&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="td_content_1">7</td>
+                    <td class="td_content_1">有线电视安装费</td>
+                    <td class="td_content_1">350元/端</td>
+                    <td class="td_content_1">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;350.00&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="td_content_1">8</td>
+                    <td class="td_content_1">数据终端安装费</td>
+                    <td class="td_content_1">300元/端</td>
+                    <td class="td_content_1">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;300.00&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="td_content_1">9</td>
+                    <td class="td_content_1">电话移机费</td>
+                    <td class="td_content_1">235元/部</td>
+                    <td class="td_content_1">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;235.00&nbsp;&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td class="td_content_1">10</td>
+                    <td class="td_content_1">临时安置补偿费(已发放)</td>
+                    <td class="td_content_1">150元/月/平方米，4个月</td>
+                    <td class="td_content_1">&nbsp;&nbsp;19.995&nbsp;&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;11997.00&nbsp;&nbsp;</td>
+                </tr>
+
+                <tr>
+                    <td class="td_content_1" colspan="4">合计</td>
+                    <td class="td_content_2">&nbsp;&nbsp;244481.80&nbsp;&nbsp;</td>
+                </tr>
+            </table>
+
+
+            <p class="leftTitle2">第五条&nbsp;&nbsp;（最终的补偿款项合计)</p>
+
+            <p class="left">乙方第二、第三及第四条款项所得补偿、补助及奖励合计<u>&nbsp;1954071.87&nbsp;</u>元，大写人民币<u>&nbsp;壹佰玖拾伍万肆仟零柒拾壹元捌角柒分&nbsp;</u>。</p>
+
+            <p class="leftTitle2">第六条&nbsp;&nbsp;（奖励房源选房情况）</p>
+            <p class="left">乙方选择的奖励房屋为朝阳区豆各庄青荷里.南山园项目（朝阳区豆各庄地块保障性住房项目），房屋售价21800元/建筑平方米（不含各类税费），详细的选房情况如下：</p>
+            <table class="table1" cellpadding="0" cellspacing="0" width="650px;">
+                <tr>
+                    <td class="td_top_1">序号</td>
+                    <td class="td_top_1">楼号</td>
+                    <td class="td_top_1">单元</td>
+                    <td class="td_top_1">房号</td>
+                    <td class="td_top_1">居室</td>
+                    <td class="td_top_1">建筑面积（㎡）</td>
+                    <td class="td_top_1">房屋总价（元）</td>
+                </tr>
+
+                <tr>
+                    <td class="td_top_1">1</td>
+                    <td class="td_top_1">&nbsp;1-03号楼&nbsp;</td>
+                    <td class="td_top_1">&nbsp;2&nbsp;</td>
+                    <td class="td_top_1">&nbsp;1102&nbsp;</td>
+                    <td class="td_top_1">&nbsp;一居&nbsp;</td>
+                    <td class="td_top_1">&nbsp;66.41&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;
+                        1447738.00
+                        &nbsp;&nbsp;</td>
+                </tr>
+
+            </table>
+            <p class="left">上述奖励房源售价合计人民币<u>&nbsp;1447738.00&nbsp;</u>元。(注：所有楼号、房号均为施工号，建筑物地名以主管部门审批为准。所选房屋建筑面积均以最终实测建筑面积为准，进行核算。)</p>
+
+            <p class="pageBreak">&nbsp;</p>
+            <p class="leftTitle2">第七条&nbsp;&nbsp;（奖励房源购房补助）</p>
+            <p class="left">根据该项目的拆迁补偿方案规定，乙方选择的奖励房屋补助情况如下：</p>
+            <table class="table1" cellpadding="0" cellspacing="0" width="650px;">
+                <tr>
+                    <td class="td_top_1">序号</td>
+                    <td class="td_top_1">楼号</td>
+                    <td class="td_top_1">单元</td>
+                    <td class="td_top_1">房号</td>
+                    <td class="td_top_1">居室</td>
+                    <td class="td_top_1">建筑面积（㎡）</td>
+                    <td class="td_top_1">补助价格（元）</td>
+                </tr>
+
+                <tr>
+                    <td class="td_top_1">1</td>
+                    <td class="td_top_1">&nbsp;1-03号楼&nbsp;</td>
+                    <td class="td_top_1">&nbsp;2&nbsp;</td>
+                    <td class="td_top_1">&nbsp;1102&nbsp;</td>
+                    <td class="td_top_1">&nbsp;一居&nbsp;</td>
+                    <td class="td_top_1">&nbsp;66.41&nbsp;</td>
+                    <td class="td_content_2">&nbsp;&nbsp;
+                        796920.00
+                        &nbsp;&nbsp;</td>
+                </tr>
+
+            </table>
+            <p class="left">上述首套奖励房源补助标准为12000元/建筑平米。购房补助款合计为<u>&nbsp;796920.00&nbsp;</u>元。(注：所有楼号、房号均为施工号，建筑物地名以主管部门审批为准。所选房屋建筑面积均以最终实测建筑面积为准，进行核算。)</p>
+
+            <p class="leftTitle2">第八条&nbsp;&nbsp;（代扣款项）</p>
+            <p class="left">乙方确认最终发放金额中应扣减下述乙方应另行交纳的费用：</p>
+
+            <p class="left">1.公有平房住宅房改售房价人民币 <u>&nbsp;0.00&nbsp;</u>元。</p>
+
+            <p class="left">2.乙方选择的奖励房屋房款总价人民币<u>&nbsp;1447738.00&nbsp;</u>元。</p>
+            <p class="left">以上代扣款项合计人民币<u>&nbsp;1447738.00&nbsp;</u>元。</p>
+
+
+            <p class="leftTitle2">第九条&nbsp;&nbsp;（最终结算金额）</p>
+            <p class="left">丙方向乙方最终结算金额为：本补充协议第五条的金额 + 本补充协议第七条安置房购房补助金额 -临时安置补偿费-本补充协议第八条扣除金额，最终结算金额为<u>&nbsp;1291256.87&nbsp;</u>元。</p>
+
+            <p class="leftTitle2">第十条&nbsp;&nbsp;（其他）</p>
+            <p class="left">本补充协议生效后，即成为原协议不可分割的组成部分，与原协议具有同等的法律效力。除本协议中明确所作修改的内容外，原协议的其余部分应完全继续有效。</p>
+            <p class="left">本协议一式<u>&nbsp;5&nbsp;</u>份，甲方执<u>&nbsp;1&nbsp;</u>份，乙方执<u>&nbsp;1&nbsp;</u>份，丙方执<u>&nbsp;1&nbsp;</u>份，存档 <u>&nbsp;1&nbsp;</u>份，备案 <u>&nbsp;1&nbsp;</u>份。</p>
+
+
+            <table border="0" width="100%" style="margin-top: 10px;">
+                <tr>
+                    <td width="300" style="text-align: left;text-indent:2em;line-height: 32px; font-size: 16px;">
+                        <p class="p2">甲方（盖章）：</p>
+                    </td>
+                    <td style="text-align: left;text-indent:2em;line-height: 32px; font-size: 16px;">
+                        <p class="p2">乙方 （签字）：</p>
+                    </td>
+                </tr>
+            </table>
+            <p class="left" style="margin-top: 110px;">丙方（盖章）： </p>
+            <p class="left" style="margin-top: 110px;">经办人（签字）：</p>
+            <p class="left" style="margin-top: 10px;">签约日期：<u>&nbsp;2016年06月28日&nbsp;</u></p>
+        </div>
+    </div>
+</center>
+<script type="text/javascript">
+    function toPrint() {
+        $(".printHide").hide();
+        $(".title").hide();
+        window.print();
+        $(".title").show();
+        $(".printHide").show();
+    }
+</script>
+</body>
+</html>

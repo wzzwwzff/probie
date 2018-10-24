@@ -1,0 +1,346 @@
+package com.app.cq.service;
+
+import com.app.common.model.DataDict;
+import com.app.common.service.DataDictService;
+import com.app.cq.en.IsValid;
+import com.app.cq.model.Family;
+import com.app.cq.utils.BigDecimalUtils;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.utils.StringUtils;
+import com.sqds.web.ParamUtils;
+import org.apache.logging.log4j.util.Strings;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.*;
+
+/**
+ * 综合数据统计查询
+ * Created by lsh on 2018/5/10.
+ */
+@Service
+public class StatisticsService extends HibernateDao<Family> {
+
+    @Resource
+    private DataDictService dataDictService;
+
+    private String getParamString(String param) {
+        String[] array = param.split(",");
+        StringBuffer paramSb = new StringBuffer();
+        for (String s : array) {
+            paramSb.append("'" + s + "'").append(",");
+        }
+        paramSb.deleteCharAt(paramSb.lastIndexOf(","));
+        return paramSb.toString();
+    }
+
+    /**
+     * 查询条件的处理
+     *
+     * @param request
+     * @return
+     */
+    private String getSearchString(HttpServletRequest request) {
+        StringBuffer resultString = new StringBuffer();
+        Enumeration<String> paramsArray = request.getParameterNames();
+        while (paramsArray.hasMoreElements()) {
+            String name = paramsArray.nextElement();
+            String value = ParamUtils.getString(request, name, "");
+            //多选的处理
+            if (name.endsWith("Array")) {
+                if (Strings.isNotEmpty(value)) {
+                    if (name.indexOf("_string") > 0) {
+                        value = this.getParamString(value);
+                    }
+                    String newName = name.substring(name.indexOf("_") + 1);
+                    String columnName = newName.substring(0, newName.indexOf("_"));
+                    resultString.append(" and f." + columnName + " in (" + value + ")");
+                }
+            }
+            //大于小于的处理
+            if (name.indexOf("_ge") > 0) {
+                if (StringUtils.isNotEmpty(value)) {
+                    String gtName = name.substring(name.lastIndexOf("_") + 1);
+                    resultString.append(" and " + gtName + ">='" + value + "'");
+                }
+            }
+            if (name.indexOf("_le") > 0) {
+                if (StringUtils.isNotEmpty(value)) {
+                    String gtName = name.substring(name.lastIndexOf("_") + 1);
+                    resultString.append(" and " + gtName + "<='" + value + "'");
+                }
+            }
+            //单选的处理
+            if (name.indexOf("_status") > 0) {
+                if (StringUtils.isNotEmpty(value)) {
+                    String oneName = name.substring(name.lastIndexOf("_") + 1);
+                    resultString.append(" and " + oneName + "=" + value);
+                }
+            }
+
+            //单选框的处理
+
+            if (name.indexOf("like") > 0) {
+                if (StringUtils.isNotEmpty(value)) {
+                    String inputName = name.substring(name.lastIndexOf("_") + 1);
+                    resultString.append(" and " + inputName + " like '%" + value + "%'");
+                }
+            }
+        }
+        return resultString.toString();
+    }
+
+    /**
+     * 综合统计查询方法
+     *
+     * @param pageInfo
+     */
+    public PageInfo<Family> getListForCompositeSearch(PageInfo<Family> pageInfo, HttpServletRequest request) {
+        StringBuffer hql = new StringBuffer(" from Family f where f.isValid = " + IsValid.YES.getIndex() + " ");   //and len(f.idCode) = 10
+        Enumeration<String> paramsArray = request.getParameterNames();
+        while (paramsArray.hasMoreElements()) {
+            String name = paramsArray.nextElement();
+            if (name.endsWith("Array")) {
+                String value = ParamUtils.getString(request, name, "");
+                if (Strings.isNotEmpty(value)) {
+                    if (name.indexOf("_string") > 0) {
+                        value = this.getParamString(value);
+                    }
+                    String newName = name.substring(name.indexOf("_") + 1);
+                    String columnName = newName.substring(0, newName.indexOf("_"));
+                    hql.append(" and f." + columnName + " in (" + value + ")");
+                }
+            }
+        }
+        hql.append(" order by f.bdCode,familyCode ");
+        return this.list(pageInfo, hql.toString());
+    }
+
+    //得到已选房数据倒序（选房顺序号不为空）
+    public PageInfo<Family> xfNumberShow(PageInfo<Family> pageInfo) {
+        String sql = "from Family f where f.isValid = ? and f.signNum is not null order by f.signNum desc";
+        return this.list(pageInfo,sql,IsValid.YES.getIndex());
+    }
+
+    //得到已有号户数（选房顺序号不为空）
+    public Long getCountShow() {
+        String sql = "select count(*) from Family f where signNum is not null and f.isValid = 1";
+        return findLong(sql);
+    }
+
+    /**
+     * 片区，签约状态，数量
+     * @return
+     */
+    public Map<String, Map> getStatisticsByBd() {
+        Map<String, Map> resultMap = Maps.newLinkedHashMap();
+        StringBuffer sql = new StringBuffer("select bdCode,count(id) as familyCount,");
+        sql.append("SUM(case when signStatus = 1 then 1 else 0 end) as noSignCount,");
+        sql.append("SUM(case when signStatus = 2 then 1 else 0 end) as signCount,");
+        sql.append("SUM(case when jfStatus = 2 then 1 else 0 end) as jfCount,");
+        sql.append("SUM(case when jfStatus = 1 then 1 else 0 end) as noJfCount ");
+        sql.append("from family   where isValid="+ IsValid.YES.getIndex()+"  group by bdCode order by bdCode");
+        List<Map> list = (List<Map>) this.getSession().createSQLQuery(sql.toString()).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        if (Collections3.isNotEmpty(list)) {
+            for (Map map : list) {
+                String bdCode = map.get("bdCode").toString();
+                resultMap.put(bdCode, map);
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 通过分指获取总家庭数、已签约、已交房、已拆除家庭数
+     *
+     * @return
+     */
+    public Map<String, Integer> getCountByBd() {
+        StringBuffer sql = new StringBuffer("select count(id) as familyCount,sum(case when signStatus = 2 then 1 else 0 end) as signCount,");
+        sql.append("sum(case when jfStatus = 2 then 1 else 0 end) as jfCount ");
+        sql.append(" from family   where isValid="+ IsValid.YES.getIndex()+" ");
+        List<Map> mapList = (List<Map>) this.getSession().createSQLQuery(sql.toString()).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String, Integer> resultMap = Maps.newHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (Map map : mapList) {
+                Integer familyCount = map.get("familyCount") == null ? 0 : Integer.valueOf(map.get("familyCount").toString());
+                Integer signCount = map.get("signCount") == null ? 0 : Integer.valueOf(map.get("signCount").toString());
+                Integer jfCount = map.get("jfCount") == null ? 0 : Integer.valueOf(map.get("jfCount").toString());
+                resultMap.put("familyCount", familyCount);
+                resultMap.put("signCount", signCount);
+                resultMap.put("jfCount", jfCount);
+            }
+        }
+        return resultMap;
+    }
+
+    //得到今日签约（入户，拆除，交房），累计签约（入户，拆除，交房）
+    public List<Map> getData(String paramName, String paramDate) {
+        String sql = "select bdCode ," ;
+        if (paramName.equals("")) {
+            sql = sql + "count(*) as signCount," +
+                    "sum(case when DATEDIFF(f.signDate,now())=0 then 1 else 0 end) as todayCount";
+        }else {
+            sql = sql + "count(*) as allCount," +
+                    "sum(case when "+paramName+" = 2 then 1 else 0 end ) as signCount," +
+                    "sum(case when DATEDIFF(f."+paramDate+",now())=0 and "+paramName+" = 2 then 1 else 0 end) as todayCount";
+        }
+        sql = sql + " from family f where f.isValid="+ IsValid.YES.getIndex()+"   group by bdCode";
+        return this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+    }
+
+
+    /**
+     * 片区，签约状态，数量   分组
+     * @return
+     */
+    public Map<String, Map> getStatisticsByGroup(String bdCode) {
+        Map<String, Map> resultMap = Maps.newLinkedHashMap();
+        StringBuffer sql = new StringBuffer("select groupCode,count(id) as familyCount,");
+        sql.append("SUM(case when signStatus = 1 then 1 else 0 end) as noSignCount,");
+        sql.append("SUM(case when signStatus = 2 then 1 else 0 end) as signCount,");
+        sql.append("SUM(case when jfStatus = 2 then 1 else 0 end) as jfCount,");
+        sql.append("SUM(case when jfStatus = 1 then 1 else 0 end) as noJfCount ");
+        sql.append("from family   where isValid="+ IsValid.YES.getIndex()+" and bdCode = " + bdCode + "  group by groupCode order by groupCode");
+        List<Map> list = (List<Map>) this.getSession().createSQLQuery(sql.toString()).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        if (Collections3.isNotEmpty(list)) {
+            for (Map map : list) {
+                String groupCode = map.get("groupCode").toString();
+                resultMap.put(groupCode, map);
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 通过组别获取总家庭数、已签约、已交房、已拆除家庭数
+     *
+     * @return
+     */
+    public Map<String, Integer> getCountByGroup(String bdCode) {
+        StringBuffer sql = new StringBuffer("select count(id) as familyCount,sum(case when signStatus = 2 then 1 else 0 end) as signCount,");
+        sql.append("sum(case when jfStatus = 2 then 1 else 0 end) as jfCount ");
+        sql.append(" from family   where isValid="+ IsValid.YES.getIndex()+" and bdCode = " + bdCode);
+        List<Map> mapList = (List<Map>) this.getSession().createSQLQuery(sql.toString()).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String, Integer> resultMap = Maps.newHashMap();
+        if (Collections3.isNotEmpty(mapList)) {
+            for (Map map : mapList) {
+                Integer familyCount = map.get("familyCount") == null ? 0 : Integer.valueOf(map.get("familyCount").toString());
+                Integer signCount = map.get("signCount") == null ? 0 : Integer.valueOf(map.get("signCount").toString());
+                Integer jfCount = map.get("jfCount") == null ? 0 : Integer.valueOf(map.get("jfCount").toString());
+                resultMap.put("familyCount", familyCount);
+                resultMap.put("signCount", signCount);
+                resultMap.put("jfCount", jfCount);
+            }
+        }
+        return resultMap;
+    }
+
+    //得到今日签约（入户，拆除，交房），累计签约（入户，拆除，交房）  分组
+    public List<Map> getDataByGroup(String paramName, String paramDate,String bdCode) {
+        String sql = "select groupCode ," ;
+        if (paramName.equals("")) {
+            sql = sql + "count(*) as signCount," +
+                    "sum(case when DATEDIFF(f.signDate,now())=0 then 1 else 0 end) as todayCount";
+        }else {
+            sql = sql + "count(*) as allCount," +
+                    "sum(case when "+paramName+" = 2 then 1 else 0 end ) as signCount," +
+                    "sum(case when DATEDIFF(f."+paramDate+",now())=0 and "+paramName+" = 2 then 1 else 0 end) as todayCount";
+        }
+        sql = sql + " from family f where f.isValid="+ IsValid.YES.getIndex()+" and bdCode = " + bdCode + "   group by groupCode";
+        return this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+    }
+
+    //签约情况统计
+    public Map<String,Map<String, Map<String, String>>> qyqkSignMap(String date) {
+        String sql = "select groupCode,type," +
+                "sum(case when datediff(d,addDate,'" + date + "') >= 0 then 1 else 0 end) as allCount," +  //截至当日已经登记的总户数
+                "sum(case when qyState = 2 and datediff(d,qyDate,'" + date + "') >= 0 then 1 else 0 end) as qyCount," +  //截至当日已签约户数
+                "sum(case when qyState = 2 and datediff(d,qyDate,'" + date + "') = 0 then 1 else 0 end) as todayQyCount" +   //当日已签约户数
+                " from family";
+        sql = sql + " group by groupCode,type order by groupCode,type";
+        List<Map> list = this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String,Map<String, Map<String, String>>> map = new HashMap<>();
+        if (list != null) {
+            for (Map value : list) {
+                String groupCode = String.valueOf(value.get("groupCode"));
+                String type = String.valueOf(value.get("type"));
+                Map<String,Map<String,String>> valueMap = map.get(groupCode) == null ? new HashMap<String, Map<String, String>>():map.get(groupCode);
+                valueMap.put(type,value);
+                Map<String,Map<String,String>> allMap = map.get("all") == null?new HashMap<String, Map<String, String>>():map.get("all");
+                for (Object key:value.keySet()){
+                    if (String.valueOf(key).endsWith("Count")){
+                        Map<String,String> allValueMap = allMap.get(type) == null?new HashMap<String, String>():allMap.get(type);
+                        Integer pa = allValueMap.get(key) == null?0:Integer.valueOf(allValueMap.get(key));
+                        pa = pa+Integer.valueOf(String.valueOf(value.get(key)));
+                        allValueMap.put(String.valueOf(key),String.valueOf(pa));
+                        allMap.put(type,allValueMap);
+                    }
+                }
+                map.put("all",allMap);
+                map.put(groupCode, valueMap);
+            }
+        }
+        return map;
+    }
+
+
+    //安置房整体情况统计
+    public Map<String,Map<String,Map<String,Map>>> houseMap() {
+        String sql = "select p.projectName,h.buildNum,h.houseType," +
+                "count(h.id) as totalCount," +//全部房源数量
+                "sum(h.buildArea) as totalArea," +//全部房源面积
+                "sum(case when h.houseStatus = 2 or h.houseStatus = 3 then 1 else 0 end) as checkedCount," +//已选房源数量
+                "sum(case when h.houseStatus = 2 or h.houseStatus = 3 then h.buildArea else 0 end) as checkedArea," +//已选房源面积
+                "sum(case when h.houseStatus = 1 then 1 else 0 end) as noCheckCount," +//未选房源数量
+                "sum(case when h.houseStatus = 1 then h.buildArea else 0 end) as noCheckArea " +//未选房源面积
+                " from house h,project p " +
+                " where h.projectid = p.id " +
+                " GROUP BY p.projectName,h.buildnum,h.houseType";
+        List<Map> mapList = this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String,Map<String,Map<String,Map>>> totalMap = new LinkedHashMap<>();
+        for (Map m:mapList){
+            String projectName = String.valueOf(m.get("projectName"));
+            String buildNum = String.valueOf(m.get("buildNum"));
+            String houseType = String.valueOf(m.get("houseType"));
+            Map<String,Map<String,Map>> buildNumMap = totalMap.get(projectName) == null ? new LinkedHashMap<String, Map<String, Map>>() : totalMap.get(projectName);
+            Map<String,Map> houseTypeMap = buildNumMap.get(buildNum) == null?new LinkedHashMap<String, Map>() : buildNumMap.get(buildNum);
+            houseTypeMap.put(houseType,m);
+            buildNumMap.put(buildNum,houseTypeMap);
+            totalMap.put(projectName,buildNumMap);
+        }
+        return totalMap;
+    }
+
+    //安置房整体情况统计(总计)
+    public List houseStatistics() {
+        String sql = "select sum(case when houseType = '11' then 1 else 0 end)," +//全部一居房源数量
+                "sum(case when housetype = '11' then buildArea else 0 end)," +//全部一居房源面积
+                "sum(case when houseType = '21' then 1 else 0 end)," +//全部二居房源数量
+                "sum(case when housetype = '21' then buildArea else 0 end)," +//全部二居房源面积
+                "sum(case when houseType = '31' then 1 else 0 end)," +//全部三居房源数量
+                "sum(case when housetype = '31' then buildArea else 0 end)," +//全部三居房源面积
+                "sum(case when houseType = '11' and houseStatus in (2,3) then 1 else 0 end)," +//已选一居房源数量
+                "sum(case when housetype = '11' and houseStatus in (2,3) then buildArea else 0 end)," +//已选一居房源面积
+                "sum(case when houseType = '21' and houseStatus in (2,3) then 1 else 0 end)," +//已选二居房源数量
+                "sum(case when housetype = '21' and houseStatus in (2,3) then buildArea else 0 end)," +//已选二居房源面积
+                "sum(case when houseType = '31' and houseStatus in (2,3) then 1 else 0 end)," +//已选三居房源数量
+                "sum(case when housetype = '31' and houseStatus in (2,3) then buildArea else 0 end)," +//已选三居房源面积
+                "sum(case when houseType = '11' and houseStatus = 1 then 1 else 0 end)," +//剩余一居房源数量
+                "sum(case when housetype = '11' and houseStatus = 1 then buildArea else 0 end)," +//剩余一居房源面积
+                "sum(case when houseType = '21' and houseStatus = 1 then 1 else 0 end)," +//剩余二居房源数量
+                "sum(case when housetype = '21' and houseStatus = 1 then buildArea else 0 end)," +//剩余二居房源面积
+                "sum(case when houseType = '31' and houseStatus = 1 then 1 else 0 end)," +//剩余三居房源数量
+                "sum(case when housetype = '31' and houseStatus = 1 then buildArea else 0 end)" +//剩余三居房源面积
+                " from house";
+        return this.getSession().createSQLQuery(sql).list();
+
+    }
+}

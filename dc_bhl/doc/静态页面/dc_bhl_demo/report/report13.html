@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        table {
+            borde: 1px;
+        }
+    </style>
+</head>
+<body>
+<div class="title"><h4>住宅统计日报表</h4></div>
+<div class="content">
+    <form class="form-inline">
+        <table class="table table-bordered">
+            <tr>
+                <td rowspan="7" style="vertical-align: middle;text-align:center; width: 10%; font-weight: bold">自然情况
+                </td>
+                <td class="fieldName" style="width: 10%">补偿方式：（多选）</td>
+                <td>全部&nbsp;&nbsp;&nbsp;外迁&nbsp;&nbsp;&nbsp;回迁&nbsp;&nbsp;&nbsp;货币</td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">补偿协议签订状态：</td>
+                <td>全部&nbsp;&nbsp;&nbsp;已签订&nbsp;&nbsp;&nbsp;未签订</td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">所属分指：（多选）</td>
+                <td>全部&nbsp;&nbsp;&nbsp;一标&nbsp;&nbsp;&nbsp;二标&nbsp;&nbsp;&nbsp;三标&nbsp;&nbsp;&nbsp;四标
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">组别：（多选）</td>
+                <td>全部&nbsp;&nbsp;&nbsp;一组&nbsp;&nbsp;&nbsp;二组&nbsp;&nbsp;&nbsp;三组&nbsp;&nbsp;&nbsp;四组
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">被拆迁人：</td>
+                <td><input class="form-control" type="text" size="25"></td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">身份证号：</td>
+                <td><input class="form-control" type="text" size="25"></td>
+
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">地址门牌：</td>
+                <td><input class="form-control" type="text" size="25"></td>
+            </tr>
+            <tr>
+                <td rowspan="4" style="vertical-align: middle;text-align: center;center;font-weight: bold">房屋情况</td>
+                <td class="fieldName" style="width: 10%">产别：</td>
+
+                <td>全部&nbsp;&nbsp;&nbsp;直管公房&nbsp;&nbsp;&nbsp;自管公房&nbsp;&nbsp;&nbsp;文革产&nbsp;&nbsp;&nbsp;私房</td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">房屋类型：</td>
+                <td>全部&nbsp;&nbsp;&nbsp;平房&nbsp;&nbsp;&nbsp;简易楼&nbsp;&nbsp;&nbsp;成套</td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">使用面积：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control" type="text" size="10">&nbsp;平米
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">建筑面积：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control" type="text" size="10">&nbsp;平米
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="6" style="vertical-align: middle;text-align: center;font-weight: bold">附属物情况</td>
+                <td class="fieldName" style="width: 10%">电话：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control" type="text" size="10">&nbsp;部
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">空调：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;台
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">数据终端：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;部
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">热水器：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;台
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="width: 10%">有线电视终端：</td>
+                <td><input class="form-control" type="text" size="10">&nbsp;至&nbsp;<input class="form-control"
+                                                                                          type="text" size="10">&nbsp;端
+                </td>
+            </tr>
+        </table>
+        <div class="footer">
+            <button class="btn btn-primary" type="button" onclick="location.href='report131.html';"><i class="fa fa-search"></i>&nbsp;查询
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

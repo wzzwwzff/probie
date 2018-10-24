@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <link rel="stylesheet" href="static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/style/style.css">
+    <link rel="stylesheet" href="static/style/sea.css">
+
+    <link rel="stylesheet" href="static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="static/plugin/jquery-validation/1.11.1/validate.css">
+
+    <script src="static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="static/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+    <script src="static/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="static/plugin/jquery-validation/1.11.1/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="static/plugin/jquery-validation/1.11.1/messages_bs_zh.js" type="text/javascript"></script>
+    <script src="static/js/common.js"></script>
+
+    <style>
+        html, body {
+            margin: 0px;
+            font-family: '微软雅黑'
+        }
+    </style>
+    <script>
+        var open = true;
+        function menu() {
+            if (open) {
+                parent.menu.cols = "0,*";
+                open = false;
+            } else {
+                parent.menu.cols = "220,*";
+                open = 220;
+                open = true;
+            }
+
+        }
+    </script>
+
+</head>
+
+<body>
+<div id="content">
+
+    <div class="main_header">
+        <div class="col-xs-6">
+            <div class="logo-title">
+                东城区宝华里危改项目签约选房管理系统
+            </div>
+        </div>
+        <div class="col-xs-6 text-right">
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">欢迎您：管理员（管理系统）</span>
+                </li>
+                <li>
+                    <a href="login.html" target="_parent">
+                        <i class="fa fa-sign-out"></i> 退出系统
+                    </a>
+                </li>
+                <li style="margin-right: 0px;">
+                    <a href="javascript:menu();">
+                        <i class="fa fa-tasks"></i>
+                    </a>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

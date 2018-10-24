@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>打印</title>
+
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/docs.min.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/style/printStyle.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        function toPrint() {
+            $("#printDiv").hide();
+            $(".title").hide();
+            $(".content").hide();
+            window.print();
+            $("#printDiv").show();
+            $(".title").show();
+            $(".content").show();
+        }
+    </script>
+</head>
+<body>
+<div class="title"><h4>【张三】房屋拆迁补偿协议</h4>
+    <div style="position: absolute;top: 8px;right: 15px;" id="printDiv">
+        <input type="button" class="btn btn-primary" value="打印" onclick="javascript:toPrint()"/>
+        <input type="button" class="btn btn-primary" value="返回" onclick="location.href='list.html';"/>
+    </div>
+</div>
+<div class="content">
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="print2.html">补偿协议</a>
+        </li>
+        <li class="active">
+            <a href="printNumber2.html">签约结果告知单</a>
+        </li>
+    </ul>
+    </br>
+</div>
+<center>
+    <div style="margin-left: auto;margin-right: auto;width:750px;">
+        <div class="printContent" style="float:left;">
+            <p class="bold printTitle"style="margin-top: 40px;">东城区宝华里危改项目</p>
+            <p class="bold printTitle">签约结果告知单</p>
+            <p style="margin-top: 30px;">被拆迁人：<u>刘士学&nbsp;</u>，身份号码为：<u>&nbsp;110105193710021815&nbsp;</u>，房屋地址：<u>&nbsp;60号&nbsp;</u></p>
+            <p>您已于<u>&nbsp;2018年08月06日&nbsp;</u>签订了房屋拆迁补偿协议，并在<u>&nbsp;14时33分23.417秒&nbsp;</u>签约顺序号：<u>&nbsp;054&nbsp;</u>号。</p>
+            <p style="margin-top: 50px;margin-left: 0px;">被拆迁人签字（摁手印）:<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;东城区宝华里危改项目指挥部</p>
+            <p style="margin-top: 20px;margin-left: 400px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018年08月06日</p>
+        </div>
+        <div class="printContent" style="float:left;"> -----------------------------------------------------------------------------------</div>
+        <div class="printContent" style="float:left;">
+            <p class="bold printTitle"style="margin-top: 40px;">东城区宝华里危改项目</p>
+            <p class="bold printTitle">签约结果告知单</p>
+            <p style="margin-top: 30px;">被拆迁人：<u>刘士学&nbsp;</u>，身份号码为：<u>&nbsp;110105193710021815&nbsp;</u>，房屋地址：<u>&nbsp;60号&nbsp;</u></p>
+            <p>您已于<u>&nbsp;2018年08月06日&nbsp;</u>签订了房屋拆迁补偿协议，并在<u>&nbsp;14时33分23.417秒&nbsp;</u>签约顺序号：<u>&nbsp;054&nbsp;</u>号。</p>
+            <p style="margin-top: 50px;margin-left: 0px;">被拆迁人签字（摁手印）:<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;东城区宝华里危改项目指挥部</p>
+            <p style="margin-top: 20px;margin-left: 400px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018年08月06日</p>
+        </div>
+    </div>
+</center>
+</body>
+</html>

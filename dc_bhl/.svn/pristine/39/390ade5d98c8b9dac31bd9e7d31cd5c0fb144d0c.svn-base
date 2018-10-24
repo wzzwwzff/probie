@@ -1,0 +1,416 @@
+package com.app.cq.service;
+
+import com.app.common.service.DataDictService;
+import com.app.cq.aop.Response;
+import com.app.cq.en.HouseStatus;
+import com.app.cq.model.Family;
+import com.app.cq.model.FamilyPerson;
+import com.app.cq.model.House;
+import com.app.cq.model.OperationInfo;
+import com.app.cq.utils.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sqds.hibernate.HibernateDao;
+import com.sqds.page.PageInfo;
+import com.sqds.utils.Collections3;
+import com.sqds.utils.DateUtils;
+import com.sqds.web.ParamUtils;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 房源业务层
+ * Created by ZYK on 2018/3/12.
+ */
+@Service
+public class HouseService extends HibernateDao<House> {
+
+    @Autowired
+    private DataDictService dataDictService;
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private HistoryInfoService historyInfoService;
+    @Autowired
+    private OperationInfoService operationInfoService;
+
+    /**
+     * 通过houseId联合查询house、project
+     *
+     * @param houseId
+     * @return
+     */
+    public House getHouse(Integer houseId) {
+        return this.findUnique(" from House h inner join fetch h.project p where h.id = ? ", houseId);
+    }
+
+    /**
+     * 根据项目id得到某一项目所有房源
+     *
+     * @param pageInfo
+     * @return
+     */
+    public PageInfo<House> getHouseListByProjectId(PageInfo<House> pageInfo,Integer projectId) {
+        String hql = "from House h inner join fetch h.project p where p.id = ? order by h.buildNum,h.unitNum,h.houseNum";
+        return this.list(pageInfo,hql,projectId);
+    }
+
+
+    /**
+     * 按安置项目、楼号、单元、房号 查找房源
+     */
+    public House getHouseByAll(Integer projectId,String buildNum,String unitNum,String houseNum) {
+        String hql = "from House where project.id = ? and buildNum = ? and unitNum = ? and houseNum = ?";
+        return findUnique(hql, projectId,buildNum,unitNum,houseNum);
+    }
+
+    /**
+     * 获取已选房list
+     * @param familyId
+     * @return
+     */
+    public List<House> getChooseHouseById(Integer familyId) {
+        String hql = "from House h inner join fetch h.project p where h.houseStatus = ? and h.family.id = ? order by p.id,h.buildNum,h.unitNum,h.houseNum";
+        return this.list(hql, 2, familyId);
+    }
+
+
+    /**
+     * 按照项目，楼号信息
+     */
+    public List getHouseNumInfo(int projectId) {
+        String sql = "select distinct buildNum from House where projectId='" + projectId +"' order by id,buildNum";
+        List<List> list = super.getSession().createSQLQuery(sql).list();
+        return list;
+    }
+
+    /**
+     * 得到家庭选择房源
+     * @param familyId
+     * @return
+     */
+    public List<House> getHouseListByFamilyId(Integer familyId) {
+        String hql = "from House h inner join fetch h.project where h.family.id = ? order by h.id";
+        return this.list(hql, familyId);
+    }
+
+    /**
+     * 获取各项目楼号
+     * @return
+     */
+    public Map<Integer, List<String>> getBuildNum(){
+        Map<Integer, List<String>> map = Maps.newLinkedHashMap();
+        String sql = "select projectId,buildNum from House group by projectId,buildNum order by projectId,buildNum";
+        List<Map> list = this.getSession().createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        if (Collections3.isNotEmpty(list)) {
+            List<String> strList = null;
+            for (Map m : list) {
+                Integer projectId = Integer.valueOf(m.get("projectId").toString());
+                String buildNum = m.get("buildNum").toString();
+                strList = map.get(projectId);
+                strList = Collections3.isNotEmpty(strList) ? strList : Lists.<String>newArrayList();
+                strList.add(buildNum);
+                map.put(projectId, strList);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 获取特定项目的所有楼号
+     *
+     * @return
+     */
+    public Map<Integer, List<String>> getHouseBuildNum(List<Integer> projectIdList) {
+        Map<Integer, List<String>> map = Maps.newLinkedHashMap();
+        String sql = "select projectId,buildNum from House where projectId in (:projectIdList) group by projectId,buildNum order by projectId,buildNum";
+        List<Map> list = this.getSession().createSQLQuery(sql).setParameterList("projectIdList",projectIdList).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        if (Collections3.isNotEmpty(list)) {
+            List<String> strList = null;
+            for (Map m : list) {
+                Integer projectId = Integer.valueOf(m.get("projectId").toString());
+                String buildNum = m.get("buildNum").toString();
+                strList = map.get(projectId);
+                strList = Collections3.isNotEmpty(strList) ? strList : Lists.<String>newLinkedList();
+                strList.add(buildNum);
+                map.put(projectId, strList);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 取得单元
+     *
+     * @param projectId
+     * @param buildNum
+     * @return
+     */
+    public List<String> distinctUnit(Integer projectId, String buildNum) {
+        String hql = "select distinct h.unitNum from House h where h.project.id=:projectId and h.buildNum=:buildNum order by h.unitNum desc";
+        return this.getSession().createQuery(hql).setInteger("projectId", projectId).setString("buildNum", buildNum).list();
+    }
+
+    /**
+     * 取得单元最大的房号
+     *
+     * @param projectId
+     * @param buildNum
+     * @return
+     */
+    public Map<String, String> getMaxRoomByUnit(Integer projectId, String buildNum) {
+        String hql = "select h.unitNum as unitNum, max(substring(h.houseNum,3,2)) as maxRoom from House h where h.project.id = ? and h.buildNum = ? group by h.unitNum";
+        Query query = this.getSession().createQuery(hql);
+        query.setInteger(0, projectId);
+        query.setString(1, buildNum);
+        query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map> list = query.list();
+        Map<String, String> resultMap = Maps.newHashMap();
+        if (Collections3.isNotEmpty(list)) {
+            for (Map map : list) {
+                String unitNum = map.get("unitNum").toString();
+                String maxRoom = map.get("maxRoom").toString();
+                resultMap.put(unitNum, maxRoom);
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取最大单元号
+     *
+     * @param projectId
+     * @param buildingNum
+     * @return
+     */
+    public String getMaxUnit(Integer projectId, String buildingNum) {
+        String sql = "select max(unitNum) from House h where h.projectId = ? and h.buildNum = ?";
+        List maxUnitList = this.getSession().createSQLQuery(sql).setInteger(0, projectId).setString(1, buildingNum).list();
+        String maxUnit = (String) maxUnitList.get(0);
+        return maxUnit;
+    }
+
+    /**
+     * 获取最大房间号(楼层)
+     *
+     * @param projectId
+     * @param buildingNum
+     * @return
+     */
+    public int getMaxFloor(Integer projectId, String buildingNum) {
+        String sql = "select max(substring(h.houseNum,1,2)) from House h where h.projectId = ? and h.buildNum = ?";
+        List list = this.getSession().createSQLQuery(sql).setInteger(0, projectId).setString(1, buildingNum).list();
+        int maxFh = 0;
+        if (Collections3.isNotEmpty(list) && list.size() > 0) {
+            Object o = list.get(0);
+            if (o != null) {
+                maxFh = Integer.valueOf(String.valueOf(o));
+            }
+        }
+        return maxFh;
+    }
+
+    /**
+     * 根据项目、楼号查询该楼下的所有房源数据
+     *
+     * @param projectId
+     * @param buildNum
+     * @return
+     */
+    public List<House> listHouse(Integer projectId, String buildNum) {
+        return list("from House h inner join fetch h.project p where p.id = ? and h.buildNum = ? order by h.buildNum,h.unitNum,h.houseNum", projectId, buildNum);
+    }
+
+    /**
+     * 单元、房号、居室
+     *
+     * @param projectId
+     * @param buildNum
+     * @return
+     */
+    public Map<String, Map<String, String>> getHouseTypeByProjectIdAndBuildNum(Integer projectId, String buildNum) {
+        String sql = "select distinct unitNum,SUBSTRING(houseNum,4,3) as num,houseType,houseHold from House where projectId =:projectId and buildNum = :buildNum group by buildNum,unitNum,houseNum,houseType ";
+        Query query = this.getSession().createSQLQuery(sql).setInteger("projectId", projectId).setString("buildNum", buildNum);
+        List<Map> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        Map<String, Map<String, String>> map = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(list)) {
+            Map<String, String> childItemMap = null;
+            for (Map m : list) {
+                String unitNum = m.get("unitNum").toString();
+                String num = m.get("num").toString();
+                String houseType = m.get("houseType").toString();
+                String houseHold = m.get("houseHold").toString();
+                childItemMap = map.get(unitNum);
+                childItemMap = Collections3.isEmpty(childItemMap) ? Maps.<String, String>newLinkedHashMap() : childItemMap;
+
+                childItemMap.put(num, houseHold);
+
+                map.put(unitNum, childItemMap);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 得到所有入户/房源<主表id,List<家庭成员>>
+     *
+     * @return
+     */
+    public Map<Integer, List<House>> getHouseMap() {
+        String hql = "from House h inner join fetch h.family f inner join fetch h.project order by f.id,h.id";
+        Query query = this.getSession().createQuery(hql);
+        List<House> houseList = query.list();
+        Map<Integer, List<House>> familyPersonMap = Maps.newLinkedHashMap();
+        if (Collections3.isNotEmpty(houseList)) {
+            for (House house : houseList) {
+                List<House> itemList = familyPersonMap.get(house.getFamily().getId()) == null ? new ArrayList<House>() : familyPersonMap.get(house.getFamily().getId());
+                itemList.add(house);
+                familyPersonMap.put(house.getFamily().getId(), itemList);
+            }
+        }
+        return familyPersonMap;
+    }
+
+
+    /**
+     * 保存所选房源
+     */
+    public synchronized Response saveBuildInfo(HttpServletRequest request){
+        Response response = new Response();
+        Integer familyId = ParamUtils.getInt(request, "familyUuid",0);
+        Integer houseUuid = ParamUtils.getInt(request, "houseUuid", 0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "1111", "数据错误！");
+        List<FamilyPerson> familyPersonList = familyPersonService.getPersonListByFamilyId(family.getId());
+        Precondition.checkAjaxArguement(family.getXfStatus() != 2 ,"2211","该户选房信息已锁定，填写选房退回申请退回后后可重新选房");
+        //保存房源验证
+        House house = this.get(houseUuid);
+        Precondition.checkAjaxArguement(house != null, "3333", "找不到所选安置房源!");
+        //Precondition.checkAjaxArguement(house.getHouseStatus() == 2, "4444", "该房源已经被选择，请选择其他房源!");
+        if(house.getHouseStatus() == 2){
+            response.setCode("4444");
+            response.setMessage("该房源已经被选择，请选择其他房源!");
+        }
+
+        //保存房源
+        String userName = GetCurrentUser.getLoginUser(request).getRealName();
+        Date currentDate = new Date();
+        house.setChooseDate(currentDate);
+        house.setChoosePerson(userName);   //保存操作人员姓名
+        house.setHouseStatus(2);//状态设置为已选择
+        house.sethPerson(family.getName());
+        house.sethIdCard(family.getIdCard());
+        house.setFamily(family);
+        this.save(house);
+
+//        List<House> houseList = this.getChooseHouseById(family.getId());
+//        int type = 2;//标记为修改
+//        historyInfoService.histroySave(request,family,familyPersonList,type);
+        OperationInfo operationInfo = new OperationInfo();
+        operationInfo.setFamilyId(family.getId());
+        operationInfo.setOperatePerson(GetCurrentUser.getLoginUser(request).getUsername());
+        operationInfo.setOperateDate(new Date());
+        operationInfo.setMemo("选房");
+        operationInfoService.save(operationInfo);
+
+        //保存选房日期
+        if (family.getXfDate() == null) {//保存选房日期，第一次保存
+            family.setXfDate(currentDate);
+            family.setXfDateLong(System.currentTimeMillis());
+        }
+        this.familyService.save(family);
+        //更新选房面积、购房款等家庭数据
+        //this.calculateHouseMoney(family.getId());
+        return response;
+    }
+
+    /**
+     * 删除房源
+     */
+    public synchronized Response delHouseInfo(HttpServletRequest request){
+        Response response = new Response();
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        Family family = this.familyService.get(familyId);
+        House house = this.get(houseId);
+        if(family == null || house == null){
+            response.setCode("1111");
+            response.setMessage("数据错误！");
+        }
+        if(house.getHouseStatus() == HouseStatus.SIGNED.getIndex()){
+            response.setCode("3333");
+            response.setMessage("该房源还未被选，暂不需要撤销！");
+        }
+        house.setChooseDate(null);
+        house.setChoosePerson(null);   //保存操作人员姓名
+        house.setHouseStatus(HouseStatus.ALLOW.getIndex());//状态设置为可选状态
+        house.setFamily(null);
+        this.save(house);
+        List<House> houseList = this.listByProperty("family.id", family.getId());
+        if (Collections3.isEmpty(houseList)) {
+            family.setXfDate(null);
+            this.familyService.save(family);
+        }
+        //更新选房面积、购房款等家庭数据
+//        this.calculateHouseMoney(family.getId());
+        return response;
+    }
+
+
+
+    /**
+     * 平移房源
+     */
+    public synchronized Response changeHouseInfo(HttpServletRequest request){
+        Response response = new Response();
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Integer houseId = ParamUtils.getInt(request, "houseId", 0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkAjaxArguement(family != null, "1111", "数据错误！");
+
+        List<FamilyPerson> familyPersonList = familyPersonService.getPersonListByFamilyId(family.getId());
+        House house = this.get(houseId);
+        Precondition.checkAjaxArguement(house != null, "2222", "找不到所选安置房源!");
+
+
+        Precondition.checkAjaxArguement(house.getHouseStatus() == HouseStatus.SIGNED.getIndex(), "3333", "该房源还未被选，暂不需要撤销！");
+        //旧楼号加1
+        String newBuildNum = String.valueOf(Integer.valueOf(house.getBuildNum()) + 1);
+        House newHouse = this.getHouseByAll(house.getProject().getId(),newBuildNum,house.getUnitNum(),house.getHouseNum());
+        Precondition.checkAjaxArguement(newHouse.getHouseStatus() == HouseStatus.ALLOW.getIndex(), "4444", "该房源已经被选择，请选择其他房源!");
+
+        //清除旧的房源信息
+        house.setChooseDate(null);
+        house.setChoosePerson(null);   //保存操作人员姓名
+        house.setHouseStatus(HouseStatus.ALLOW.getIndex());//状态设置为可选状态
+        house.setFamily(null);
+        this.save(house);
+
+        //保存新的房源信息
+        newHouse.setChooseDate(new Date());
+        newHouse.setChoosePerson(GetCurrentUser.getLoginUser(request).getRealName());   //保存操作人员姓名
+        newHouse.setHouseStatus(HouseStatus.SIGNED.getIndex());//状态设置为已选择
+        newHouse.setFamily(family);
+        this.save(newHouse);
+
+        //保存历史记录
+        List<House> houseList = this.getChooseHouseById(family.getId());
+//        int type = 2;//标记为修改
+//        historyInfoService.histroySave(request,family,familyPersonList,type);
+        //更新选房面积、购房款等家庭数据
+//        this.calculateHouseMoney(family.getId());
+        return response;
+    }
+
+}

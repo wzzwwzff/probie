@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实时签约比例公示</title>
+    <meta http-equiv="refresh" content="5">
+    <LINK href="static/style/style.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <script src="static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="static/plugin/highcharts/highcharts.js"></script>
+    <style>
+        html, body {
+            font-family: '微软雅黑';
+        }
+
+        .chart_content div {
+            float: left;
+            width: 48%;
+            height: 370px;
+            margin-top: 15px;
+        }
+
+        .chart_content .div_ul {
+            list-style: none;
+
+        }
+
+        .chart_content .div_ul li {
+            line-height: 60px;
+            font-weight: bold;
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center;font-size: 45px;font-weight: bold;">东城区宝华里危改项目入户情况展示</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 text-center">
+            <div id="chart1"></div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <div id="chart2"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 text-center">
+            <div id="chart3"></div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <div id="chart4"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#chart3').highcharts({
+            chart: {
+                type: 'column'
+            },
+            style: {
+                overflow: "none"
+            },
+            title: {
+                text: '各分指入户情况',
+                x: 0,
+                y: 10,
+                style: {
+                    color: "#000",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                }
+            },
+            colors: ['lightgray', '#ff5151'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['一标', '二标', '三标', '四标', "五标", "六标"]
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: ''
+                }
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '未入户',
+                data: [250, 189, 240, 310, 158]
+            }, {
+                name: '已入户',
+                data: [150, 89, 167, 210, 120]
+            }]
+        });
+        $('#chart4').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: '入户情况',
+                x: 0,
+                y: 10,
+                style: {
+                    color: "#000",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                }
+            },
+            colors: ['lightgray', '#ff5151'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                pointFormat: '{series.name}:{point.percentage:.1f}%'
+            },
+            plotOptions: {
+                pie: {
+                    //   size:'60%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        distance:'1',
+                        formatter: function () {
+                            //'{point.name}: {point.percentage:.1f} %'
+
+                            return this.point.name + this.point.percentage.toFixed(2) + "%";
+                        }
+                    },
+                    showInLegend: false
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '',
+                data: [
+                    ['剩余', 90],
+                    ['已入户', 990]
+
+                ]
+            }]
+        });
+    });
+</script>
+</body>
+</html>

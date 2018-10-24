@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="tz_kywg:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="tz_kywg_mysql-1.0.war">
+      <element id="artifact" artifact-name="tz_kywg:war exploded" />
+    </root>
+  </artifact>
+</component>

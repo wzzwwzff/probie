@@ -1,0 +1,117 @@
+
+<html>
+<head>
+    <title>交房验收单</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        .printContent {
+            margin: 0px;
+            padding: 0px;
+            width: 600px;
+            font-size: 16px;
+            clear: both;
+        }
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            font-size: 16px;
+            text-align: justify;
+            text-indent: 2em;
+            line-height: 24px;
+        }
+        .printContent .printTitler {
+            clear: both;
+            text-indent: 2em;
+            font-size: 28px;
+            font-family: 黑体;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bolder;
+        }
+        .border{
+            border-bottom: 1px solid #000000;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .padding-right{
+            padding-right: 65px;
+        }
+    </style>
+    <script type="text/javascript">
+        function toPrint() {
+            $(".printHide").hide();
+            window.print();
+            $(".printHide").show();
+        }
+    </script>
+</head>
+<body style="overflow: auto;">
+<div class="title printHide"><h4>交房验收单</h4>
+    <div style="position: absolute;top: 8px;right: 15px;" id="printDiv">
+        <button class="btn btn-primary" onclick="javascript:toPrint()"><i class="fa fa-print"></i>&nbsp;打印</button>
+        <button class="btn btn-white btn-sm" type="button" onclick="history.back()"><i class="fa fa-backward"></i>&nbsp;返回</button>
+    </div>
+</div>
+<center>
+    <div class="printContent">
+        <div style="height: 315px;">
+            <table  width="100%">
+                <tr>
+                    <td><p style="text-indent: 0em;font-size: 14px;font-family: 楷体;"><span class="padding-right">拆除单位留存</span><span class="padding-right">NO:</span><span class="padding-right">合同编号：</span></p></td>
+                    <td rowspan="2" style="text-align: right;"><img src="../static/image/QRcode.png"  WIDTH="80px" height="80px"/></td>
+                </tr>
+                <tr>
+                    <td><p class="printTitler">东城宝华里项目交房验收单</p></td>
+                </tr>
+            </table>
+            <p>被拆迁单位名称<span class="border"></span>承租/所有的房屋位于<span class="border"></span>，建筑面积<span class="border">㎡</span>，未登记房屋<span class="border">&nbsp;</span>处，具体位置信息详见附件。</p>
+            <p>已于<span class="border">&nbsp;</span>年<span class="border">&nbsp;</span>月<span class="border">&nbsp;</span>日<span class="border">&nbsp;&nbsp;</span>时交房，经以下肆方验收完毕，并同意将正式房屋及相关未登记房屋及其附属建筑物拆除。</p>
+            <p style="text-indent: 0em;">验收时间：<span class="border">&nbsp;</span>年<span class="border">&nbsp;</span> 月<span class="border">&nbsp;</span>日<span class="border">&nbsp;</span>时</p>
+            <p style="text-indent: 0em;">被拆迁单位法定代表人（委托代理人）：</p>
+            <p style="text-indent: 0em;"><span class="padding-right">拆迁公司：</span><span class="padding-right">拆除公司：</span><span class="padding-right">社区工作人员：</span></p>
+        </div>
+        <p style="text-indent: 0em;width: 100%;text-align: center;">………………………………………骑缝章……………………………………………</p>
+        <div style="height: 315px;">
+            <table  width="100%">
+                <tr>
+                    <td><p style="text-indent: 0em;font-size: 14px;font-family: 楷体;"><span class="padding-right">拆除单位留存</span><span class="padding-right">NO:</span><span class="padding-right">合同编号：</span></p></td>
+                    <td rowspan="2" style="text-align: right;"><img src="../static/image/QRcode.png" WIDTH="80px" height="80px" /></td>
+                </tr>
+                <tr>
+                    <td><p class="printTitler">东城宝华里项目交房验收单</p></td>
+                </tr>
+            </table>
+            <p>被拆迁单位名称<span class="border"></span>承租/所有的房屋位于<span class="border"></span>，建筑面积<span class="border">㎡</span>，未登记房屋<span class="border">&nbsp;</span>处，具体位置信息详见附件。</p>
+            <p>已于<span class="border">&nbsp;</span>年<span class="border">&nbsp;</span>月<span class="border">&nbsp;</span>日<span class="border">&nbsp;&nbsp;</span>时交房，经以下肆方验收完毕，并同意将正式房屋及相关未登记房屋及其附属建筑物拆除。</p>
+            <p style="text-indent: 0em;">验收时间：<span class="border">&nbsp;</span>年<span class="border">&nbsp;</span> 月<span class="border">&nbsp;</span>日<span class="border">&nbsp;</span>时</p>
+            <p style="text-indent: 0em;">被拆迁单位法定代表人（委托代理人）：</p>
+            <p style="text-indent: 0em;"><span class="padding-right">拆迁公司：</span><span class="padding-right">拆除公司：</span><span class="padding-right">社区工作人员：</span></p>
+        </div>
+        <p style="text-indent: 0em;width: 100%;text-align: center;">………………………………………骑缝章……………………………………………</p>
+        <div style="height: 315px;">
+            <table  width="100%">
+                <tr>
+                    <td><p style="text-indent: 0em;font-size: 14px;font-family: 楷体;"><span class="padding-right">拆除单位留存</span><span class="padding-right">NO:</span><span class="padding-right">合同编号：</span></p></td>
+                    <td rowspan="2" style="text-align: right;"><img src="../static/image/QRcode.png" WIDTH="80px" height="80px" /></td>
+                </tr>
+                <tr>
+                    <td><p class="printTitler">东城宝华里项目交房验收单</p></td>
+                </tr>
+            </table>
+            <p>被拆迁单位名称<span class="border"></span>承租/所有的房屋位于<span class="border"></span>，建筑面积<span class="border">㎡</span>，未登记房屋<span class="border">&nbsp;</span>处，具体位置信息详见附件。</p>
+            <p>已于<span class="border">&nbsp;</span>年<span class="border">&nbsp;</span>月<span class="border">&nbsp;</span>日<span class="border">&nbsp;&nbsp;</span>时交房，经以下肆方验收完毕，并同意将正式房屋及相关未登记房屋及其附属建筑物拆除。</p>
+            <p style="text-indent: 0em;">验收时间：<span class="border">&nbsp;</span>年<span class="border">&nbsp;</span> 月<span class="border">&nbsp;</span>日<span class="border">&nbsp;</span>时</p>
+            <p style="text-indent: 0em;">被拆迁单位法定代表人（委托代理人）：</p>
+            <p style="text-indent: 0em;"><span class="padding-right">拆迁公司：</span><span class="padding-right">拆除公司：</span><span class="padding-right">社区工作人员：</span></p>
+        </div>
+    </div>
+</center>
+</body>
+</html>

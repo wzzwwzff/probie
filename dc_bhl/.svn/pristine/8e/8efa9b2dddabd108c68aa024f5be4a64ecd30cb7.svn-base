@@ -1,0 +1,55 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>项目房源管理列表</title>
+    <%@include file="/static/common/common.jsp" %>
+</head>
+<body>
+<div class="title resizeLayout"><h4>项目房源管理列表</h4></div>
+<div class="content">
+    <div class="search_content resizeLayout">
+        <form class="form-inline" role="form" id="search">
+            <div class="form-group">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">项目编号</div>
+                    <tags:searchInput name="p.projectCode" fieldType="string" operator="like" className="form-control"/>
+                </div>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">项目名称</div>
+                    <tags:searchInput name="p.projectName" size="50" fieldType="string" operator="like" className="form-control"/>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search"></i>&nbsp;查询</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="location.href='projectForm'"><i class="glyphicon glyphicon-plus"></i>&nbsp;登记</button>
+            </div>
+        </form>
+    </div>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+            <tr>
+                <th width="3%">序号</th>
+                <th>项目编号</th>
+                <th>项目名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="project" items="${pageInfo.result}" varStatus="status">
+                <tr>
+                    <td>${status.count+(pageInfo.pageNo-1)*pageInfo.pageSize}</td>
+                    <td>${project.projectCode}</td>
+                    <td>${project.projectName}</td>
+                    <td>
+                        <a title="修改" href="projectForm?projectId=${project.id}&<tags:searchParams/>"><i class="fa fa-edit"></i>&nbsp;修改</a>&nbsp;&nbsp;
+                        <a title="项目房源管理" href="houseList?projectId=${project.id}&<tags:searchParams/>"><i class="fa fa-edit"></i>&nbsp;项目房源管理</a>&nbsp;&nbsp;
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+</div>
+<div class="footer resizeLayout"><tags:pageInfo/></div>
+</body>
+</html>

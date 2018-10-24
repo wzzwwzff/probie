@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="title"><h5>基本情况调查表</h5></div>
+<form class="form-inline">
+    <fieldset>
+        <legend>一、被拆迁人信息</legend>
+        <table class="table table-bordered">
+            <tr>
+                <td class="fieldName">编号</td>
+                <td class="fieldValue" colspan="3"><input type="text" class="form-control" placeholder="必填项" value=""/><span class="require">*</span></td>
+            </tr>
+            <tr>
+                <td class="fieldName">分指</td>
+                <td class="fieldValue">
+                    <select class="form-control">
+                        <option>--请选择--</option>
+                        <option>一标</option>
+                        <option>二标</option>
+                        <option>三标</option>
+                        <option>四标</option>
+                    </select>
+                </td>
+                <td class="fieldName">组别</td>
+                <td class="fieldValue">
+                    <select class="form-control">
+                        <option>--请选择--</option>
+                        <option>一组</option>
+                        <option>二组</option>
+                        <option>三组</option>
+                        <option>四组</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="fieldName">被拆迁人</td>
+                <td class="fieldValue"><input type="text" class="form-control" placeholder="必填项" value=""/><span class="require">*</span></td>
+                <td class="fieldName">联系电话</td>
+                <td class="fieldValue"><input type="text" class="form-control"  value=""/></td>
+            </tr>
+            <tr>
+                <td class="fieldName">身份证号</td>
+                <td class="fieldValue"><input type="text" class="form-control" size="50" value=""/></td>
+                <td class="fieldName">婚姻状况</td>
+                <td class="fieldValue">
+                    <select class="form-control">
+                        <option>--请选择--</option>
+                        <option>离异</option>
+                        <option>丧偶</option>
+                        <option>未婚</option>
+                        <option>已婚</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>二、房屋基本信息</legend>
+        <table class="table table-bordered">
+            <tr>
+                <td class="fieldName">地址门牌</td>
+                <td class="fieldValue" colspan="3"><input type="text" size="50" class="form-control" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fieldName">产别</td>
+                <td class="fieldValue">
+                    <div class="radio">
+                        <label class="radio-inline"><input type="radio" name="fz" value="" checked/>直管公房</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>单位自管</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>文革产</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>私房</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>独立自建</label>
+                    </div>
+                </td>
+                <td class="fieldName">产权单位</td>
+                <td class="fieldValue"><input type="text" class="form-control" size="50" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fieldName">房屋类型</td>
+                <td class="fieldValue">
+                    <div class="radio">
+                        <label class="radio-inline"><input type="radio" name="fz" value="" checked/>成套</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>简易楼</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>平房</label>
+                    </div>
+                </td>
+                <td class="fieldName">间数</td>
+                <td class="fieldValue"><input type="text" class="form-control" size="5" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fieldName">使用面积</td>
+                <td class="fieldValue"><input type="text" class="form-control" value=""/>㎡</td>
+                <td class="fieldName">建筑面积</td>
+                <td class="fieldValue"><input type="text" class="form-control" value=""/>㎡</td>
+            </tr>
+            <tr>
+                <td class="fieldName">用途</td>
+                <td class="fieldValue">
+                    <div class="radio">
+                        <label class="radio-inline"><input type="radio" name="fz" value="" checked/>出租经营</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>出租居住</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>自营</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>自住</label>
+                    </div>
+                </td>
+                <td class="fieldName">营业执照号</td>
+                <td class="fieldValue"><input type="text" class="form-control" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fieldName">自建房间数</td>
+                <td class="fieldValue"><input type="text" class="form-control" value=""/></td>
+                <td class="fieldName">自建房面积</td>
+                <td class="fieldValue"><input type="text" class="form-control" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fieldName">是否有标准自建房</td>
+                <td class="fieldValue" colspan="3">
+                    <div class="radio">
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>是</label>
+                        <label class="radio-inline"><input type="radio" name="fz" value=""/>否</label>
+                    </div>　　　　　　【<span class="require">如存在标准自建房，请在列表中点击登记标准自建房</span>】
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>三、家庭成员</legend>
+        <table class="table table-bordered">
+            <tr>
+                <td class="fieldName" style="width: 16.66%;">户籍数</td>
+                <td class="fieldValue" style="width: 16.66%;"><input type="text" class="form-control" value=""/></td>
+                <td class="fieldName" style="width: 16.66%;">户籍人数</td>
+                <td class="fieldValue" style="width: 16.66%;"><input type="text" class="form-control" value=""/></td>
+                <td class="fieldName" style="width: 16.66%;">现居住人数</td>
+                <td class="fieldValue" style="width: 16.66%;"><input type="text" class="form-control" value=""/></td>
+            </tr>
+        </table>
+        <table class="table table-bordered">
+            <tr>
+                <td class="fieldName" style="text-align: center;" colspan="7">户籍在本址</td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="text-align: center;width: 15%">姓名</td>
+                <td class="fieldName" style="text-align: center;width: 8%">性别</td>
+                <td class="fieldName" style="text-align: center;width: 20%">身份证号</td>
+                <td class="fieldName" style="text-align: center;width: 13%">与户主/现居住人关系</td>
+                <td class="fieldName" style="text-align: center;width: 15%">户主与承租人或产权人/现居住人关系</td>
+                <td class="fieldName" style="text-align: center;width: 18%">工作单位</td>
+                <td class="fieldName" style="text-align: center;width: 11%">是否长期住在未登记房屋内</td>
+            </tr>
+                <tr>
+                    <td style="text-align: center;"><input type="text" class="form-control"/></td>
+                    <td style="text-align: center;">
+                        <select class="form-control">
+                            <option>--请选择--</option>
+                            <option>男</option>
+                            <option>女</option>
+                        </select>
+                    </td>
+                    <td style="text-align: center;"><input type="text" size="40" class="form-control"/></td>
+                    <td style="text-align: center;"><input type="text" class="form-control"/></td>
+                    <td style="text-align: center;"><input type="text" class="form-control"/></td>
+                    <td style="text-align: center;"><input type="text" size="30" class="form-control"/></td>
+                    <td style="text-align: center;">
+                        <select class="form-control">
+                            <option>--请选择--</option>
+                            <option>是</option>
+                            <option>否</option>
+                            <option>不确定</option>
+                        </select>
+                    </td>
+                </tr>
+        </table>
+        <div align="center"><input type="button" class="btn btn-sm btn-primary" value="添加新行"/></div>
+        <hr/>
+        <table class="table table-bordered">
+            <tr>
+                <td class="fieldName" style="text-align: center;" colspan="7">户籍不在本址</td>
+            </tr>
+            <tr>
+                <td class="fieldName" style="text-align: center;width: 15%">姓名</td>
+                <td class="fieldName" style="text-align: center;width: 8%">性别</td>
+                <td class="fieldName" style="text-align: center;width: 20%">身份证号</td>
+                <td class="fieldName" style="text-align: center;width: 13%">与承租人或产权人/现居住人关系</td>
+                <td class="fieldName" style="text-align: center;width: 13%">户口所在地</td>
+                <td class="fieldName" style="text-align: center;width: 15%">户口所在地承租人或产权人/现居住人</td>
+                <td class="fieldName" style="text-align: center;width: 18%">工作单位</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><input type="text" class="form-control"/></td>
+                <td style="text-align: center;">
+                    <select class="form-control">
+                        <option>--请选择--</option>
+                        <option>男</option>
+                        <option>女</option>
+                    </select>
+                </td>
+                <td style="text-align: center;"><input type="text" size="40" class="form-control"/></td>
+                <td style="text-align: center;"><input type="text" class="form-control"/></td>
+                <td style="text-align: center;"><input type="text" class="form-control"/></td>
+                <td style="text-align: center;"><input type="text" class="form-control"/></td>
+                <td style="text-align: center;"><input type="text" size="30" class="form-control"/></td>
+            </tr>
+        </table>
+        <div align="center"><input type="button" class="btn btn-sm btn-primary" value="添加新行"/></div>
+    </fieldset>
+    <fieldset>
+        <legend>四、生活困难情况</legend>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="fieldName" style="width: 10%;">低保(证)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="dbNum" size="8"/></td>
+                <td class="fieldName" style="width: 10%;">残疾(证)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="cjNum" size="8"/></td>
+                <td class="fieldName" style="width: 10%;">大病(证)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="dabNum" size="8"/></td>
+                <td class="fieldName" style="width: 10%;">低收入家庭救助(证)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="cjNum" size="8"/></td>
+                <td class="fieldName" style="width: 10%;">现役军人(人)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="dabNum" size="8"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>五、移机信息</legend>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td class="fieldName" style="width: 10%;">电话(部)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="dbNum" size="8"/></td>
+                <td class="fieldName" style="width: 10%;">空调(台)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="cjNum" size="8"/></td>
+                <td class="fieldName" style="width: 10%;">有线电视(端)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="dabNum" size="8"/></td>
+                <td class="fieldName" style="width: 10%;">宽带(端)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="cjNum" size="8"/></td>
+                <td class="fieldName" style="width: 10%;">热水器(台)</td>
+                <td class="fieldValue" style="width: 10%;"><input class="form-control" type="text" name="dabNum" size="8"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>六、房改数据</legend>
+        <table class="table table-bordered">
+            <tr>
+                <td class="fieldName" style="width: 15%;">房改售房代扣款</td>
+                <td class="fieldValue" style="width: 85%;"><input type="text" class="form-control" value=""/></td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>七、其他信息</legend>
+        <table class="table table-bordered">
+            <tr>
+                <td class="fieldName">登记人</td>
+                <td class="fieldValue"><input type="text" class="form-control" readonly value="当前用户"></td>
+                <td class="fieldName">登记日期</td>
+                <td class="fieldValue"><input type="text" class="form-control" readonly value="2018-04-24"/></td>
+            </tr>
+            <tr>
+                <td class="fieldName">备注</td>
+                <td class="fieldValue" colspan="3"><textarea class="form-control" type="text" name="bz" cols="120" rows="4"></textarea></td>
+            </tr>
+        </table>
+    </fieldset>
+    <br/><br/><br/>
+    <div class="footer">
+        <button class="btn btn-primary" type="button" onclick="location.href='list.html';"><i class="fa fa-save"></i>&nbsp;保存</button>
+        <button class="btn btn-white" type="button" onclick="history.back()"><i class="fa fa-backward"></i>返回</button>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表</title>
+    <link rel="stylesheet" href="../static/bootstrap-3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style/style.css">
+    <link rel="stylesheet" href="../static/style/sea.css">
+    <link rel="stylesheet" href="../static/plugin/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/plugin/datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="../static/plugin/jquery-validation/1.11.1/validate.css">
+    <script src="../static/data.js"></script>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <style>
+        html, body {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="title"><h4>家庭成员台账</h4></div>
+<div class="content">
+    <div class="search_content">
+        <form>
+            被拆迁人：<input type="text" size="20">
+            身份证号：<input type="text" size="20">
+            地址门牌号：<input type="text" size="20">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;查询</button>
+            <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-export"></i>&nbsp;导出</button>
+        </form>
+    </div>
+    <table class="table table-bordered table-hover" style="width: 2500px">
+        <thead>
+        <tr>
+            <td style="vertical-align: middle" rowspan="2" class="text-center" width="2%">序号</td>
+            <td colspan="4" class="text-center" >基本信息</td>
+            <td colspan="5" class="text-center" >户籍登记情况</td>
+            <td colspan="6" class="text-center" >户籍不在本址的现居住人情况</td>
+        </tr>
+        <tr>
+            <td class="text-center">档案编号</td>
+            <td class="text-center">承租人或产权人</td>
+            <td class="text-center">身份证号</td>
+            <td class="text-center">地址门牌号</td>
+            <td class="text-center">姓名</td>
+            <td class="text-center">性别</td>
+            <td class="text-center">身份证号</td>
+            <td class="text-center">与户主关系</td>
+            <td class="text-center">户主与承租人或产权人关系</td>
+            <td class="text-center">姓名</td>
+            <td class="text-center">性别</td>
+            <td class="text-center">身份证号</td>
+            <td class="text-center">与承租人或产权人关系</td>
+            <td class="text-center">户口所在地</td>
+            <td class="text-center">户口所在地承租人或产权人</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td rowspan="2" class="text-center">1</td>
+            <td rowspan="2" class="text-center">1-2-2-0300</td>
+            <td rowspan="2" class="text-center">尹铁友</td>
+            <td rowspan="2" class="text-center">110110195612124585</td>
+            <td rowspan="2" class="text-center">崇文区桃杨路27号</td>
+            <td class="text-center">伊达木</td>
+            <td class="text-center">男</td>
+            <td class="text-center">142602195107020046</td>
+            <td class="text-center">之子</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">刘颖</td>
+            <td class="text-center">女</td>
+            <td class="text-center">110103191705071832</td>
+            <td class="text-center">妻</td>
+            <td class="text-center">本人</td>
+        </tr>
+        <tr>
+            <td rowspan="3" class="text-center">2</td>
+            <td rowspan="3" class="text-center">1-2-2-0301</td>
+            <td rowspan="3" class="text-center">李文远</td>
+            <td rowspan="3" class="text-center">110102195804061535</td>
+            <td rowspan="3" class="text-center">崇文区桃杨路北里5楼2层29号</td>
+            <td class="text-center">李文远</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110102195804061535</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">李薇薇</td>
+            <td class="text-center">女</td>
+            <td class="text-center">110103195102021877</td>
+            <td class="text-center">之妻</td>
+            <td class="text-center">本人</td>
+        </tr>
+        <tr>
+            <td class="text-center">李大壮</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110103196312011831</td>
+            <td class="text-center">之子</td>
+            <td class="text-center">本人</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">3</td>
+            <td rowspan="2" class="text-center">2-3-3-0847</td>
+            <td rowspan="2" class="text-center">陈秋影</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-3</td>
+            <td class="text-center">陈秋影</td>
+            <td class="text-center">女</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">王治郅</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110103195102021877</td>
+            <td class="text-center"></td>
+            <td class="text-center">河北石家庄</td>
+            <td class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">陈烨</td>
+            <td class="text-center">女</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之女</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">王格</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110103195102021877</td>
+            <td class="text-center"></td>
+            <td class="text-center">安徽合肥</td>
+            <td class="text-center"></td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">4</td>
+            <td rowspan="2" class="text-center">2-3-3-0848</td>
+            <td rowspan="2" class="text-center">白原野</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-4</td>
+            <td class="text-center">白原野</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">陈秋影</td>
+            <td class="text-center">女</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之妻</td>
+            <td class="text-center">本人</td>
+        </tr>
+        <tr>
+            <td rowspan="3" class="text-center">5</td>
+            <td rowspan="3" class="text-center">2-3-3-1566</td>
+            <td rowspan="3" class="text-center">李秀琴</td>
+            <td rowspan="3" class="text-center">110105197108243149</td>
+            <td rowspan="3" class="text-center">崇文区侯庄12号院6-3</td>
+            <td class="text-center">李秀琴</td>
+            <td class="text-center">女</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+            <td rowspan="3" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">陈秋影</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之父</td>
+            <td class="text-center">本人</td>
+        </tr> <tr>
+            <td class="text-center">陈大成</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之子</td>
+            <td class="text-center">本人</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">6</td>
+            <td rowspan="2" class="text-center">2-3-3-1567</td>
+            <td rowspan="2" class="text-center">高起云</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区侯庄12号院6-3</td>
+            <td class="text-center">高起云</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">陈秋影</td>
+            <td class="text-center">女</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之妻</td>
+            <td class="text-center">本人</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">7</td>
+            <td rowspan="2" class="text-center">2-3-3-1567</td>
+            <td rowspan="2" class="text-center">殷燕华</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-3</td>
+            <td class="text-center">殷燕华</td>
+            <td class="text-center">女</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">陈秋影</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之父</td>
+            <td class="text-center">本人</td>
+        </tr>
+        <tr>
+            <td rowspan="2" class="text-center">8</td>
+            <td rowspan="2" class="text-center">5-3-1-1433</td>
+            <td rowspan="2" class="text-center">张玉林</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-3</td>
+            <td class="text-center">张玉林</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">张铁林</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之子</td>
+            <td class="text-center">本人</td>
+        </tr>
+
+        <tr>
+            <td rowspan="2" class="text-center">9</td>
+            <td rowspan="2" class="text-center">5-3-1-1433</td>
+            <td rowspan="2" class="text-center">何子桥</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-3</td>
+            <td class="text-center">何子桥</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">何进</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之子</td>
+            <td class="text-center">本人</td>
+        </tr>
+
+        <tr>
+            <td rowspan="2" class="text-center">10</td>
+            <td rowspan="2" class="text-center">4-3-1-1242</td>
+            <td rowspan="2" class="text-center">贾克勤</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-3</td>
+            <td class="text-center">贾克勤</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">贾似道</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之子</td>
+            <td class="text-center">本人</td>
+        </tr>
+
+        <tr>
+            <td rowspan="2" class="text-center">11</td>
+            <td rowspan="2" class="text-center">2-8-3-1987</td>
+            <td rowspan="2" class="text-center">宋建新</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-3</td>
+            <td class="text-center">宋建新</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">宋国忠</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之子</td>
+            <td class="text-center">本人</td>
+        </tr>
+
+        <tr>
+            <td rowspan="2" class="text-center">12</td>
+            <td rowspan="2" class="text-center">4-3-1-1243</td>
+            <td rowspan="2" class="text-center">李金忠</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-3</td>
+            <td class="text-center">李金忠</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">李佳明</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之子</td>
+            <td class="text-center">本人</td>
+        </tr>
+
+        <tr>
+            <td rowspan="2" class="text-center">13</td>
+            <td rowspan="2" class="text-center">4-3-3-1567</td>
+            <td rowspan="2" class="text-center">周鑫</td>
+            <td rowspan="2" class="text-center">110105197108243149</td>
+            <td rowspan="2" class="text-center">崇文区杨家园6号-3</td>
+            <td class="text-center">周鑫</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">本人</td>
+            <td class="text-center">本人</td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+            <td rowspan="2" class="text-center"></td>
+        </tr>
+        <tr>
+            <td class="text-center">周能</td>
+            <td class="text-center">男</td>
+            <td class="text-center">110105197108243149</td>
+            <td class="text-center">之父</td>
+            <td class="text-center">本人</td>
+        </tr>
+
+
+        </tbody>
+    </table>
+    <div class="col-xs-4 text-left">
+        当前第1页，共13页，共条200记录
+    </div>
+    <div class="col-xs-8 text-right">
+        <div class="" id="editable_paginate">
+            <ul class="pagination">
+                <li class="disabled"><a href="#">首 页</a></li>
+                <li class="disabled"><a href="#">上一页</a></li>
+                <li class="active"><a href="?_pageNo=1&_orderField=&_orderType=desc&">1</a></li>
+                <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">2</a></li>
+                <li><a href="?_pageNo=3&_orderField=&_orderType=desc&">3</a></li>
+                <li><a href="?_pageNo=4&_orderField=&_orderType=desc&">4</a></li>
+                <li><a href="?_pageNo=5&_orderField=&_orderType=desc&">5</a></li>
+                <li><a href="?_pageNo=6&_orderField=&_orderType=desc&">6</a></li>
+                <li><a href="?_pageNo=7&_orderField=&_orderType=desc&">7</a></li>
+                <li><a href="?_pageNo=8&_orderField=&_orderType=desc&">8</a></li>
+                <li><a href="?_pageNo=9&_orderField=&_orderType=desc&">9</a></li>
+                <li><a href="?_pageNo=10&_orderField=&_orderType=desc&">10</a></li>
+                <li><a href="?_pageNo=2&_orderField=&_orderType=desc&">下一页</a></li>
+                <li><a href="?_pageNo=1334&_orderField=&_orderType=desc&">末 页</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

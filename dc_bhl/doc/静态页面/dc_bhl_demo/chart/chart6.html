@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>重点人员签约情况</title>
+    <meta http-equiv="refresh" content="5">
+    <LINK href="styles/styles.css" type="text/css" rel="stylesheet"/>
+    <script src="../static/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../static/plugin/highcharts/highcharts.js"></script>
+    <style>
+        html, body {
+            font-family: '微软雅黑';
+        }
+
+        .chart_content div {
+            float: left;
+            width: 33%;
+            height: 480px;
+            margin-top: 15px;
+        }
+
+    </style>
+</head>
+<body>
+<div style="text-align: center;font-size: 45px;font-weight: bold;">东城区宝华里危改项目重点人员签约情况</div>
+<div style="width: 100%">
+    <div style="float: left;width: 60%;height: 480px;margin-top: 15px" id="chart1"></div>
+    <div style="float: left;width: 36%;height: 480px;margin-top: 15px" id="chart2"></div>
+</div>
+<div style="width: 100%;" class="chart_content">
+    <div id="chart3"></div>
+    <div id="chart4"></div>
+    <div id="chart5"></div>
+</div>
+<script>
+    $(function () {
+        $('#chart1').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '区内'
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['区公安分局', '区教委','区环卫','街道','区税务局','区纪检','区法院','区人大','区委'],
+                title: {
+                    text: '单位'}
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [150, 89,100,58,45,98,56,45,28],
+            }, {
+                name: '未签约',
+                data: [250,189,123,125,148,68,145,187,98],
+            }]
+        });
+        $('#chart2').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '国资委管理系统'
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['首开集团', '城建集团','首旅集团','地铁公司'],
+                title: {
+                    text: '单位'
+                }
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [110, 189,158,169],
+            }, {
+                name: '未签约',
+                data: [350, 289,256,300],
+            }]
+        });
+        $('#chart3').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '金融系统'
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['中央银行', '北京银行','中国银行'],
+                title: {
+                    text: '单位'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [189, 150,23],
+            }, {
+                name: '未签约',
+                data: [289, 340,46],
+            }]
+        });
+        $('#chart4').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '中央单位'
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['政协', '外交部','公安部'],
+                title: {
+                    text: '单位'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [189, 150,100],
+            }, {
+                name: '未签约',
+                data: [289, 340,200],
+            }]
+        });
+        $('#chart5').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '市属机关'
+            },
+            colors: ['#84C1FF', '#ff4330'],
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            xAxis: {
+                categories: ['市体委', '市公安局','市市政'],
+                title: {
+                    text: '单位'
+                }
+            },
+            credits: {//去掉右下角标识
+                text: ''
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '总户数'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            '共: ' + this.point.stackTotal + "户";
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000'
+                    }
+                }
+            },
+            series: [{
+                name: '已签约',
+                data: [18, 15,10],
+            }, {
+                name: '未签约',
+                data: [28, 34,20],
+            }]
+        });
+    });
+</script>
+</body>
+</html>

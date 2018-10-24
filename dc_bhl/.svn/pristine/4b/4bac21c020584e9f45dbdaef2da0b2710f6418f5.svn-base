@@ -1,0 +1,70 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: jmdf
+  Date: 2018/10/8
+  Time: 14:28
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>修改购房人</title>
+    <%@include file="/static/common/common.jsp"%>
+</head>
+<body>
+<div class="title">
+    <h5>修改购房人</h5>
+</div>
+<form id="form" class="form-inline" method="post" action="editSave?<tags:searchParams/>">
+                    <div class="modal-body" id="modalBodyCs">
+                        <input type="hidden" name="familyId" value="${family.id}">
+                        <input type="hidden" name="houseId" value="${house.id}">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="active text-right" style="width: 20%;">修改购房人：</td>
+                                <td>
+                                    姓名：<input name="familyName" class="form-control" value="${house.hPerson}" readonly />
+                                    身份证号：<input name="familyIdCard" class="form-control" value="${house.hIdCard}" readonly />
+                                    修改为:
+                                    <select prefix="请选择" class="form-control" name="select" id="select">
+                                        <option value="">-全部-</option>
+                                        <c:forEach items="${familyPersonList}" var="familyPerson">
+                                            <option name="familyPersonBName" value="${familyPerson.name}">${familyPerson.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div><br/><br/><br/>
+    <div class="footer resizeLayout">
+        <button type="button" class="btn btn-primary btn-sm" onclick="submitData('${family.id}')">保存</button>
+        &nbsp;&nbsp;
+        <button class="btn btn-white btn-sm" type="button" onclick="history.back()"><i class="fa fa-backward"></i>&nbsp;返回</button>
+    </div>
+</form>
+</body>
+</html>
+<script>
+    function submitData(familyId) {
+        var type = $('#select option:selected').val();
+                $.ajax({
+                    url: "editSave",
+                    method: "post",
+                    data: {
+                        familyId:${family.id},
+                        houseId:${house.id},
+                        familyPersonBName:type
+                    },
+                    success: function (data) {
+                        window.location.href = "chooseHouse?familyId=" + familyId;
+                    }
+                });
+    }
+</script>

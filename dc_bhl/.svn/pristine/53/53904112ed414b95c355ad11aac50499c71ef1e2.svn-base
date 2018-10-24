@@ -1,0 +1,290 @@
+package com.app.cq.web.cq.checkIfno;
+
+
+import com.app.cq.en.CheckState;
+import com.app.cq.en.Type;
+import com.app.cq.model.*;
+import com.app.cq.service.*;
+
+import com.app.cq.utils.GetCurrentUser;
+import com.app.cq.utils.Precondition;
+import com.sqds.page.PageInfo;
+
+import com.sqds.utils.Collections3;
+import com.sqds.web.ParamUtils;
+import com.sqds.web.Servlets;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+
+@Controller
+@RequestMapping("/cq/checkInfo/*")
+public class CheckInfoController {
+
+
+    @Autowired
+    private FamilyService familyService;
+    @Autowired
+    private FamilyPersonService familyPersonService;
+    @Autowired
+    private OperationInfoService operationInfoService;
+    @Autowired
+    private FamilyHouseService familyHouseService;
+    @Autowired
+    private FamilyHousePersonService familyHousePersonService;
+    @Autowired
+    private BackInfoService backInfoService;
+
+    /**
+     * 数据初审列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("list")
+    public void list(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = familyService.getFamilyList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 数据初审表单
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("form")
+    public void form(HttpServletRequest request, ModelMap modelMap){
+        Integer familyId = ParamUtils.getInt(request, "familyId", 0);
+        Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null,"未找到数据");
+        List<FamilyPerson> familyPersonList1 =   null;
+        List<FamilyPerson> familyPersonList2 =null;
+        List<FamilyHouse> familyHouseList = null;
+        List<FamilyHousePerson> familyHousePersonList = null;
+        Map<Integer,List<FamilyHousePerson>> familyHousePersonMap = null;
+        //家庭成员列表
+        familyPersonList1 = this.familyPersonService.getPersonListByFamilyId(family.getId(), Type.YES.getIndex());  //在本址
+        familyPersonList2 = this.familyPersonService.getPersonListByFamilyId(family.getId(), Type.NO.getIndex());   //不在本址
+
+        //如果该家庭存在标准自建房
+        if (family.getHouseStatus() != null && family.getHouseStatus() == Type.YES.getIndex()){
+            familyHouseList = this.familyHouseService.getFamilyHouseListByFamilyId(family.getId());   //标准自建房列表
+            if (Collections3.isNotEmpty(familyHouseList)){
+                for (FamilyHouse familyHouse : familyHouseList){
+                    familyHousePersonList = this.familyHousePersonService.getFamilyHousePersonListByFamilyId(familyHouse.getId());
+                    familyHousePersonMap.put(familyHouse.getId(),familyHousePersonList);
+                }
+            }
+        }
+
+        modelMap.addAttribute("family", family);
+        modelMap.addAttribute("familyPersonList1", familyPersonList1);
+        modelMap.addAttribute("familyPersonList2", familyPersonList2);
+        modelMap.addAttribute("familyHouseList", familyHouseList);
+        modelMap.addAttribute("familyHousePersonMap", familyHousePersonMap);
+    }
+
+    /**
+     * 初审、终审数据通过
+     */
+    @RequestMapping("handUp")
+    public String handUp(HttpServletRequest request, ModelMap modelMap) {
+        Integer familyId = ParamUtils.getInteger(request, "familyId", 0);
+        String type = ParamUtils.getString(request, "type", "");
+        Family family = this.familyService.get(familyId);
+
+        Precondition.checkSqdsArguement(family != null, "数据错误，请重试！");
+        if(type.equals("first")){
+            //初审数据通过
+            family.setFirstCheckStatus(CheckState.FIRSTCHECK.getIndex());
+            //拆评测数据设置为已审核
+            OperationInfo operationInfo = new OperationInfo();
+            operationInfo.setFamilyId(familyId);
+            operationInfo.setOperateDate(new Date());
+            operationInfo.setOperatePerson(GetCurrentUser.getLoginUser(request).getUsername());
+            operationInfo.setMemo("数据初审通过");
+            operationInfoService.save(operationInfo);
+        }
+        if(type.equals("last")){
+            //初审数据通过
+            family.setLastCheckStatus(2);
+            //拆评测数据设置为已审核
+            OperationInfo operationInfo = new OperationInfo();
+            operationInfo.setFamilyId(familyId);
+            operationInfo.setOperateDate(new Date());
+            operationInfo.setOperatePerson(GetCurrentUser.getLoginUser(request).getUsername());
+            operationInfo.setMemo("数据终审通过");
+            operationInfoService.save(operationInfo);
+        }
+
+        String line = "";
+        if (type.equals("first")){
+            line = "redirect:/cq/checkInfo/list?" + request.getAttribute("searchParams");
+        }
+        if (type.equals("last")){
+            line = "redirect:/cq/checkInfo/lastCheckList?" + request.getAttribute("searchParams");
+        }
+
+        this.familyService.save(family);
+        return line;
+    }
+
+    /**
+     * 初审退回
+     */
+   @RequestMapping("backData")
+    public String backData(HttpServletRequest request) {
+        Integer familyId = ParamUtils.getInteger(request, "familyId", 0);
+        String problem = ParamUtils.getString(request, "problem", "");
+       String company = ParamUtils.getString(request, "company", "");
+
+       Family family = this.familyService.get(familyId);
+        Precondition.checkSqdsArguement(family != null, "数据错误，请重试！");
+
+       //设置family表的退回状态
+       if (company.contains("拆迁数据")){
+           Precondition.checkAjaxArguement(family.getSureStatus() == 1,"0002","拆迁数据未锁定，不用退回");
+           family.setSureStatus(1);
+       }else if(company.contains("评估数据")){
+           Precondition.checkAjaxArguement(family.getSurePgStatus() == 1,"0003","评估数据未锁定，不用退回");
+           family.setSurePgStatus(1);
+       }else if(company.contains("测绘数据")){
+           Precondition.checkAjaxArguement(family.getSureChStatus() == 1,"0004","测绘数据未锁定，不用退回");
+           family.setSureChStatus(1);
+       }else {
+           family.setSureStatus(1);
+           family.setSurePgStatus(1);
+           family.setSureChStatus(1);
+       }
+            //初审数据退回
+            BackInfo backInfo = new BackInfo();
+            backInfo.setBackDate(new Date());
+            backInfo.setFamily(family);
+            backInfo.setBackIp(GetCurrentUser.getIpAddr(request));
+            backInfo.setCompany(company);
+            backInfo.setBackPerson(GetCurrentUser.getLoginUser(request).getRealName());
+            backInfo.setProblem(problem);
+            backInfoService.save(backInfo);
+
+            family.setFirstCheckStatus(CheckState.FIRSTBACK.getIndex());
+            familyService.save(family);
+
+            OperationInfo operationInfo = new OperationInfo();
+            operationInfo.setFamilyId(familyId);
+            operationInfo.setOperateDate(new Date());
+            operationInfo.setOperatePerson(GetCurrentUser.getLoginUser(request).getUsername());
+            operationInfo.setMemo("数据初审退回" + company);
+            operationInfoService.save(operationInfo);
+       return "redirect:/cq/checkInfo/list?" + request.getAttribute("searchParams");
+   }
+
+
+    /**
+     * 退回列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("backList")
+    public void backList(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<BackInfo> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = this.backInfoService.getList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+
+    /**
+     * 数据终审列表
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("lastCheckList")
+    public void lastCheckList(HttpServletRequest request, ModelMap modelMap){
+        PageInfo<Family> pageInfo = new PageInfo<>();
+        Servlets.initPageInfo(request,pageInfo);
+        pageInfo = familyService.getLastCheckList(pageInfo);
+        modelMap.addAttribute("pageInfo",pageInfo);
+    }
+
+    /**
+     * 数据终审表单
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("lastCheckForm")
+    public void lastCheckForm(HttpServletRequest request, ModelMap modelMap){
+        this.form(request,modelMap);
+    }
+
+    /**
+     * 批量初审
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("checkBoxTrue")
+    public String checkBoxTrue(HttpServletRequest request, ModelMap modelMap){
+        String familyIdString = ParamUtils.getString(request,"idItems","");
+        String[] familyIdItemsString = familyIdString.split(",");
+        List<Integer> familyIdItems = new ArrayList<Integer>();
+        for (int i = 0; i <familyIdItemsString.length ; i++) {
+            familyIdItems.add(Integer.valueOf(familyIdItemsString[i]));
+        }
+        for (int i = 0; i <familyIdItems.size() ; i++) {
+            Family family = this.familyService.get(familyIdItems.get(i));
+            Precondition.checkSqdsArguement(family != null, "数据错误，请重试！");
+            if (family.getSureStatus() == 2){
+                //初审数据通过
+                family.setFirstCheckStatus(CheckState.FIRSTCHECK.getIndex());
+                //拆评测数据设置为已审核
+                OperationInfo operationInfo = new OperationInfo();
+                operationInfo.setFamilyId(family.getId());
+                operationInfo.setOperateDate(new Date());
+                operationInfo.setOperatePerson(GetCurrentUser.getLoginUser(request).getUsername());
+                operationInfo.setMemo("数据初审通过");
+                operationInfoService.save(operationInfo);
+                familyService.save(family);
+            }
+        }
+        return  "redirect:/cq/checkInfo/list?" + request.getAttribute("searchParams");
+    }
+
+    /**
+     * 批量终审
+     * @param request
+     * @param modelMap
+     */
+    @RequestMapping("checkBoxTrueFinal")
+    public String checkBoxTrueFinal(HttpServletRequest request, ModelMap modelMap){
+        String familyIdString = ParamUtils.getString(request,"idItems","");
+        String[] familyIdItemsString = familyIdString.split(",");
+        List<Integer> familyIdItems = new ArrayList<Integer>();
+        for (int i = 0; i <familyIdItemsString.length ; i++) {
+            familyIdItems.add(Integer.valueOf(familyIdItemsString[i]));
+        }
+        for (int i = 0; i <familyIdItems.size() ; i++) {
+            Family family = this.familyService.get(familyIdItems.get(i));
+            Precondition.checkSqdsArguement(family != null, "数据错误，请重试！");
+                //初审数据通过
+                family.setLastCheckStatus(2);
+                //拆评测数据设置为已审核
+                OperationInfo operationInfo = new OperationInfo();
+                operationInfo.setFamilyId(family.getId());
+                operationInfo.setOperateDate(new Date());
+                operationInfo.setOperatePerson(GetCurrentUser.getLoginUser(request).getUsername());
+                operationInfo.setMemo("数据终审通过");
+                operationInfoService.save(operationInfo);
+                familyService.save(family);
+        }
+        return  "redirect:/cq/checkInfo/lastCheckList?" + request.getAttribute("searchParams");
+    }
+}

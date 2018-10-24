@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        /*@page {*/
+        /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            /*margin: 6.6mm 12.6mm 6.6mm 12.6mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        .printTable tr td {
+
+            border: 1px solid #000000;
+            text-align: center;
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+
+</head>
+<body>
+<div class="printContent">
+    <!--<p style="text-align:center;line-height: 26px;margin: 20px ;"><span style="font-weight: bold">意向签约通知单</span></p>-->
+    <div style="float:left;text-align: center;height: 100%;margin-left:10% ">
+        <!--<div style="font-size: 17px;margin-top: 60px;margin-left: 350px;"><b>协议编号：<span class="span">${family.familyCode}</span></b></div>-->
+        <div style="font-size: 35px;margin-top: 20px;"><b>宝华里房改带危改一级开发项目</b></div>
+        <div style="font-size: 35px;margin-top: 30px;"><b>意向签约通知单</b></div>
+    </div>
+    <div style="float:left;margin-top: 20px;">
+        <b>所在分指：</b>${bdCodeName?default("")}<b style="margin-left: 35%;">编号：</b>${family.familyCode?default("")}<br/>
+        <b>被拆迁人：</b>${family.name?default("")}<br/>
+        <b>地址门牌：</b>${family.address?default("")}<br/>
+    </div>
+    <div style="float:left;margin-top: 20px;width: 96%;">
+        <p>
+            该家庭拟同意按照《宝华里危改项目房屋拆迁补偿方案》预签协议，意向签约顺序号为<span class="span">${family.signNum?default("")}</span>，请您于<span class="span">${signYxDate?default("")}</span>到宝华里危改项目总指挥部等待签约，您选择的安置方式如下（三选一）：
+        </p>
+    </div>
+    <div style="float: left;margin-left: 15%;width: 50%">
+        □ 就地安置                     (请打√)<br/>
+        □ 货币补偿                     (请打√)<br/>
+        □ 货币补偿+异地奖励房源        (请打√)<br/>
+    </div>
+    <b style="float: left;width: 100%;margin-top: 40px;">
+        说明：以上选择安置方式以实际签订结果为准！
+    </b>
+    <div style="float: left;width: 100%;margin-top: 20px;">
+        被拆迁人（签字）                <div style="float: right;margin-right: 35%">日期：</div><br/><br/>
+
+        经办人（签字）                  <div style="float: right;margin-right: 35%">日期：</div><br/><br/>
+
+        见证人 （签字）                 <div style="float: right;margin-right: 35%">日期：</div><br/><br/>
+    </div>
+</div>
+</body>
+</html>

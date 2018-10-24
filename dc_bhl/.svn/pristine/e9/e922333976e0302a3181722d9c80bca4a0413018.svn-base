@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 30px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        /*@page {*/
+        /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            /*margin: 6.6mm 12.6mm 6.6mm 12.6mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        .printTable tr td {
+
+            border: 1px solid #000000;
+            text-align: center;
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+
+</head>
+<body>
+<div class="printContent">
+    <div style="float:left;text-align: center;height: 100%;margin-left:10% ">
+        <div style="font-size: 35px;margin-top: 20px;"><b>宝华里房改带危改一级开发项目</b></div>
+        <div style="font-size: 35px;margin-top: 30px;"><b>选房确认单</b></div>
+    </div>
+    <div style="float:left;margin-top: 3%;">
+        <b>被拆迁人：</b>${family.name?default("")}<br/>
+        <b>身份证号：</b>${family.idCard?default("")}<br/>
+        <b>地址门牌：</b>${family.address?default("")}<br/>
+    </div>
+    <div style="float:left;margin-top: 20px;width: 96%;">
+        <p>
+            请被拆迁人及奖励房源购买人于<span class="span">2018年12月01日 11:32</span>参加了宝华里危改项目选房，选房结果如下：
+        </p>
+        <p>
+            该家庭可购买奖励房源<span class="span"></span>套，购房人信息如下：
+        </p>
+        <p>
+            1.购房人:        ，身份证号:          ，所购奖励房源位置:             ，   号楼    单元    ，户型为:      ，建筑面积:        ㎡；
+        </p>
+        <p>
+            2.购房人:        ，身份证号:          ，所购奖励房源位置:             ，   号楼    单元    ，户型为:      ，建筑面积:        ㎡；
+        </p>
+        <p>
+            3.购房人:        ，身份证号:          ，所购奖励房源位置:             ，   号楼    单元    ，户型为:      ，建筑面积:        ㎡；
+        </p>
+    </div>
+    <div style="float: left;width: 100%;margin-top: 1%;">
+        <p>注：</p>
+        <p>1、建筑物地名、楼号、房号均以主管部门审批为准。</p>
+        <p>2、所选房屋建筑面积均以最终实测建筑面积为准，并与建设单位进行核算。</p>
+        <p>3、该确认单在被拆迁人及购房人最终通过购房资格审批并提交全部符合要</p>
+        <p>求的购房申请资料后生效。</p>
+    </div>
+    <div style="float: left;margin-top: 5%;width: 100%">
+        <p>购房人签字并捺印：</p>
+        <p>日期：</p>
+    </div>
+    <div style="float: right;width: 100%">
+        <p style="width: 95%;text-align: right;">宝华里危改项目总指挥部</p>
+        <p style="width: 95%;text-align: right;">2018 年 11 月 20 日</p>
+    </div>
+    <div style="float: left;width: 100%;margin-top: 8%;margin-left: 2%;">
+        备注：一式<span class="span">贰</span>份，被拆迁人执<span class="span">壹</span>份，指挥部留存<span class="span">壹</span>份
+    </div>
+</div>
+</body>
+</html>

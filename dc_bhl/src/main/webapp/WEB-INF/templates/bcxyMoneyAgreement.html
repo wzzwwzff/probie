@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>打印</title>
+    <style type="text/css">
+        .printContent {
+            margin: 20px;
+            padding: 0px;
+            width: 90%;
+            height: 100%;
+            font-size: 18px;
+            clear: both;
+        }
+
+        .printContent p {
+            margin: 5px 0;
+            padding: 0px;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 26px;
+        }
+
+        .span {
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #000
+        }
+
+        .fix_span {
+            border-bottom: 1px solid #000;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        /*@page {*/
+        /*margin: 18.6mm 18.6mm 18.6mm 18.6mm*/
+        /*}*/
+
+        body {
+            font-family: SimSun;
+            font-size: 4.32mm;
+            line-height: 200%;
+        }
+
+        .p {
+            padding-right: 15mm;
+            text-align: left;
+            text-indent: 2em;
+            line-height: 38px; /*行内间距*/
+            margin: 0 0 0px;
+        }
+
+        #footer {
+            position: running(footer);
+            text-align: center;
+        }
+
+        @page {
+            /*size:297mm 210mm;*/
+            /*size:210mm 297mm;*/
+            /*margin: 6.6mm 12.6mm 6.6mm 12.6mm;*/
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        @page {
+            @bottom-right {
+                content: element(footer);
+            }
+        }
+
+        .printTable tr td {
+            border: 1px solid #000000;
+            text-align: center;
+        }
+
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table td{
+            text-align: center;
+            border: 1px solid #000000;
+            height: 25px;
+        }
+
+        #pagenumber:before {
+            content: counter(page);
+        }
+
+        #pagecount:before {
+            content: counter(pages);
+        }
+    </style>
+
+</head>
+<body>
+<div class="printContent">
+    <div style="margin-left:10%;width:90%;font-size: 25px;">
+        <b>北京市东城区宝华里危改项目货币补偿安置意向书</b>
+        <div style="text-align: center;width: 100%"><b>（放弃奖励房源）</b></div>
+    </div>
+    <div style="float: right;margin-top: 2%;">
+        <b style="margin-left: 35%;"> 编号：BH-${family.bdCode?default("")}-${family.groupCode?default("")}-${family.signNum?default("")}</b>
+    </div>
+    <div style="float:left;margin-top: 3%;margin-left: 5%;line-height: 27px;width: 100%;">
+        <b>甲 方：</b>北京宝华地产有限公司<br/>
+        <b>乙 方：</b>${family.name?default("")}<br/>
+        <b>身份证号：</b>${family.idCard?default("")}<br/>
+        <b style="float: left">联系方式：</b><div style="float: left;width: 80%;">${family.tel?default("")}</div>
+    </div>
+    <div style="float:left;margin-top: 20px;">
+        <p>
+            依据《北京市东城区宝华里危改项目拆迁补偿安置实施办法》（以下简称“实施办法”）相关规定，经甲乙双方协商一致，达成货币补偿安置意向如下：
+        </p>
+        <p>
+            一、乙方在宝华里危改项目范围内原住址为<span class="span">${family.address?default("")}</span>，有${ctType}正式住房<span class="span">${family.houseNum?default("0")}</span>间（居室），房屋性质<span class="span">${fwcb?default("")}</span>，建筑面积<span class="span">${family.buildArea?default("0")}</span>平方米；有违章建筑<span class="span">${zjfNum?default("0")}</span>处；有正式户口<span class="span">${personListSize?default("0")}</span>人，分别为<span class="span">${personListStr?default("")}</span>。
+        </p>
+        <p>
+            二、乙方自愿选择货币补偿安置，放弃其他安置方式，且放弃奖励房源。
+        </p>
+        <p>
+            三、被拆迁房屋评估款
+        </p>
+        <p>
+            以2018年    月   日为评估时点，经<span class="span">${family.pgCompany?default("")}</span>评估，最终确定被拆迁房屋评估款为¥<span class="span">${pgMoneyTotal?default("0")}</span> 元（实际评估款以签订的正式协议为准）包括：<br/>
+            <div>
+                （1）被拆迁房屋价值¥<span class="span">${family.houseMoney?default("0")}</span>元(含被征收房屋重置成新价为<span class="span">${family.houseNewMoney?default("0")}</span>元)；
+            </div>
+            <div>
+                （2）被拆迁房屋装修、设备及附属物评估价值¥<span class="span">${family.fitPgMoney?default("0")}</span> 元。
+            </div>
+        </p>
+        <p>
+            四、甲方应支付乙方的补偿款、补助款及给予乙方的奖励如下:
+        </p>
+        <p>
+            4.1 补偿<br/>
+        <table>
+            <tr>
+                <td style="width: 10%;">
+                    序号
+                </td>
+                <td style="width: 28%;">
+                    补偿名称
+                </td>
+                <td style="width: 23%;">
+                    费用标准
+                </td>
+                <td style="width: 15%;">
+                    数量
+                </td>
+                <td style="width: 24%;">
+                    金额（元）
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    1
+                </td>
+                <td>
+                    搬迁费
+                </td>
+                <td>
+                    40元/平方米
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    ${family.bqMoney?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    2
+                </td>
+                <td>
+                    空调移机费
+                </td>
+                <td>
+                    400元/台
+                </td>
+                <td>
+                    ${family.ktNum?default("0")}
+                </td>
+                <td>
+                    ${family.ktFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    3
+                </td>
+                <td>
+                    热水器移机费
+                </td>
+                <td>
+                    400元/台
+                </td>
+                <td>
+                    ${family.rsqNum?default("0")}
+                </td>
+                <td>
+                    ${family.rsqFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    有线电视安装费
+                </td>
+                <td>
+                    350元/端
+                </td>
+                <td>
+                    ${family.yxNum?default("0")}
+                </td>
+                <td>
+                    ${family.tvFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    5
+                </td>
+                <td>
+                    数据终端安装费
+                </td>
+                <td>
+                    300元/端
+                </td>
+                <td>
+                    ${family.kdNum?default("0")}
+                </td>
+                <td>
+                    ${family.kdFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    6
+                </td>
+                <td>
+                    固定电话移机费
+                </td>
+                <td>
+                    235元/部
+                </td>
+                <td>
+                    ${family.dhNum?default("0")}
+                </td>
+                <td>
+                    ${family.dhFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    7
+                </td>
+                <td>
+                    煤改电专用电暖器
+                </td>
+                <td>
+                    400元/台
+                </td>
+                <td>
+                    ${family.dnqNum?default("0")}
+                </td>
+                <td>
+                    ${family.dnqFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    8
+                </td>
+                <td>
+                    停产停业损失补偿
+                </td>
+                <td>
+                    3000元/平方米
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    ${family.tctyFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    9
+                </td>
+                <td>
+                    未登记房屋停产停业损失补偿
+                </td>
+                <td>
+                    20000元/证
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    ${family.zjfTctyFee?default("0")}
+                </td>
+            </tr>
+        </table>
+        <table style="margin-top: 35px;">
+            <tr>
+                <td colspan="4">
+                    小计
+                </td>
+                <td style="width: 24%">
+                    ${bcMoneyTotal?default(0)}
+                </td>
+            </tr>
+        </table>
+        </p>
+        <p>
+            4.2 补助<br/>
+        <table>
+            <tr>
+                <td width="10%">
+                    序号
+                </td>
+                <td width="28%">
+                    补助名称
+                </td>
+                <td width="23%">
+                    费用标准
+                </td>
+                <td width="15%">
+                    数量
+                </td>
+                <td width="24%">
+                    金额（元）
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="2">
+                    1
+                </td>
+                <td rowspan="2">
+                    综合困难补助
+                </td>
+                <td>
+                    35万元/户（非成套）
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <#if family.houseStyle?default(" ")==2 || family.houseStyle?default(" ")==3 >${family.zhknMoney?default("0")}<#else />0</#if>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    20万元/户（成套）
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <#if family.houseStyle?default(" ")==1  >${family.zhknMoney?default("0")}<#else />0</#if>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    2
+                </td>
+                <td>
+                    住宅房屋专项补助
+                </td>
+                <td>
+                    1万元/平方米
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    ${family.sfpfFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    3
+                </td>
+                <td>
+                    低保家庭补助
+                </td>
+                <td style="color: red;">
+                    4万元/证（人）
+                </td>
+                <td>
+                    ${family.dbNum?default("0")}
+                </td>
+                <td>
+                    ${family.dbFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    残疾补助
+                </td>
+                <td>
+                    4万元/证
+                </td>
+                <td>
+                    ${family.cjNum?default("0")}
+                </td>
+                <td>
+                    ${family.cjFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    5
+                </td>
+                <td>
+                    货币补偿综合补助
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    ${family.hbbcMoney?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    6
+                </td>
+                <td>
+                    外迁奖励房源购房补助
+                </td>
+                <td>
+                    5500元/平方米
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    ${family.ydjlfyMoney?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    小计
+                </td>
+                <td>
+                    ${bzMoneyTotal?default("0")}
+                </td>
+            </tr>
+        </table>
+        </p>
+        <p>
+            4.3 奖励<br/>
+        <table>
+            <tr>
+                <td>
+                    序号
+                </td>
+                <td>
+                    奖励名称
+                </td>
+                <td>
+                    金额（元）
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    1
+                </td>
+                <td>
+                    签约速度奖
+                </td>
+                <td>
+                    ${family.qysdFee?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    2
+                </td>
+                <td>
+                    工程配合奖
+                </td>
+                <td>
+                    ${family.gcphMoney?default("0")}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    小计
+                </td>
+                <td>
+                    ${jlMoneyTotal?default(0)}
+                </td>
+            </tr>
+        </table>
+        </p>
+        <p>
+            以上4.1、4.2、4.3三项合计<span class="span">${totalMoney?default("0")}</span>元，大写人民币<span class="span">${moneyUtils(totalMoney)}</span>。
+        </p>
+        <p>
+            五、乙方应当在签订本意向书同时将被拆迁房屋权属文件包括但不限于《房屋所有权证》、《公有住宅租赁合同》等（原件）交甲方。待签订货币补偿安置协议（放弃奖励房源）后，甲方报有关部门办理房屋注销登记手续。
+        </p>
+        <p>
+            六、甲方应按照货币补偿安置协议（放弃奖励房源）的约定及时间支付相关款项。
+        </p>
+        <p>
+            七、乙方应在本意向书签订之日起<span class="span">15</span>日内将被拆迁房屋及全部相关未登记房屋及附属物（含非本人实际居住使用的未登记房屋及附属物）腾空后完整移交甲方后，本意向书方可生效。
+        </p>
+        <p>
+            八、本意向书一式叁份，甲方执壹份，乙方执壹份，存档壹份。
+        </p>
+    </div>
+    <div style="float: left;width: 100%;margin-top: 20px;margin-left: 3%;">
+        甲方（盖章）：<br/><br/>
+        乙方（签字并摁手印）：<br/><br/>
+    </div>
+    <div style="float: left;width: 100%;margin-top: 30px;margin-left: 3%;">
+        签订日期：<span class="span"></span>年<span class="span"></span>月<span class="span"></span>日<span class="span"></span>分<span class="span"></span>秒<span class="span"></span>分秒。
+    </div>
+</div>
+</body>
+</html>
